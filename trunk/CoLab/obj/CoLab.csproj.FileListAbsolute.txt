@@ -1,0 +1,7 @@
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\bin\Debug\CoLab.exe
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\bin\Debug\CoLab.pdb
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\obj\Debug\ResolveAssemblyReference.cache
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\obj\Debug\CoLab.Properties.Resources.resources
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\obj\Debug\CoLab.csproj.GenerateResource.Cache
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\obj\Debug\CoLab.exe
+E:\My Documents\CS 3300\CoLab\CoLab\CoLab\obj\Debug\CoLab.pdb

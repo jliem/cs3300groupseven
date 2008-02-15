@@ -1,4 +1,4 @@
-package colab.common;
+package colab.channel;
 
 import java.util.Stack;
 

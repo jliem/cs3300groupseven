@@ -1,4 +1,4 @@
-package colab.common;
+package colab.user;
 
 /**
  * Represents a User

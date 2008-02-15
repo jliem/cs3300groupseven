@@ -1,7 +1,8 @@
-package colab.common;
+package colab.channel;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
+import colab.user.User;
 
 /**
  * Represents a channel in the system, including data, usernames and metadata.

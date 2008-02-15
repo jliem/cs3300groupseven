@@ -1,4 +1,5 @@
-package colab.common;
+package colab.user;
+
 
 public class UserWithPassword extends User {
 

@@ -1,17 +1,18 @@
-package colab.common;
+package colab.channel;
 
-import java.util.Date;
+import colab.user.User;
 
 public class ChatChannelData extends ChannelData {
 
-	private String text;
+	//private String text;
 	
 	public ChatChannelData(String text, User creator) {
-		this.text = text;
+
+		//this.text = text;
 		this.creator = creator;
 		
-		
 		// TODO: Set timestamp
+
 	}
 
 	

@@ -1,13 +1,16 @@
 package colab.identity;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class IdentitySet<K extends Identifier, V extends Identifiable<K>>
-		implements Collection<V> {
+		implements Collection<V>, Serializable {
 
+	public static final long serialVersionUID = 1L;
+	
 	private Map<K, V> map;
 
 	public IdentitySet() {

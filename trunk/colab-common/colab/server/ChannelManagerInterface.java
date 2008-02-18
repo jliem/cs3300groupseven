@@ -1,6 +1,9 @@
-package colab.channel;
+package colab.server;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+import colab.channel.Channel;
 
 /**
  * A remote class based in the server application.
@@ -10,6 +13,6 @@ import java.rmi.Remote;
  */
 public interface ChannelManagerInterface extends Remote {
 
-	public Channel getChannel(String channelName);
+	public Channel getChannel(String channelName) throws RemoteException;
 	
 }

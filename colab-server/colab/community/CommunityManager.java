@@ -1,5 +1,7 @@
 package colab.community;
 
+import java.util.Collection;
+
 import colab.identity.IdentitySet;
 
 /**
@@ -16,11 +18,15 @@ public class CommunityManager implements CommunityManagerInterface {
 		communities = new IdentitySet<CommunityName, Community>();
 		
 	}
-
+	
 	public Community get(final CommunityName name) {
 		return communities.get(name);
 	}
 
+	public Collection<Community> getAll() {
+		return communities;
+	}
+	
 	public void add(final Community community) {
 		communities.add(community);
 	}

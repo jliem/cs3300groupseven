@@ -7,29 +7,33 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 import colab.community.Community;
+import colab.user.User;
 
 public class ColabServer implements ServerInterface, Serializable {
 
 	public static final long serialVersionUID = 1L;
 	
-	private final CommunityManager communityManager;
+	private final UserManager userManager;
 
 	public ColabServer() {
-		communityManager = new CommunityManager();
+		userManager = new UserManager();
 	}
 	
 	public Connection connect() throws RemoteException {
-		return new Connection();
+		return new Connection(this);
+	}
+
+	public UserManager getUserManager() {
+		return userManager;
 	}
 	
 	public static void main(String[] args) {
 		
 		// Assign a security manager, in the event
 		// that dynamic classes are loaded
-		if (System.getSecurityManager() == null) {
-			//System.setSecurityManager(new RMISecurityManager());
-			System.setSecurityManager(null);
-		}
+		//if (System.getSecurityManager() == null) {
+		//	System.setSecurityManager(new RMISecurityManager());
+		//}
 		
 		// Create a server
 		ColabServer server = new ColabServer();
@@ -46,10 +50,16 @@ public class ColabServer implements ServerInterface, Serializable {
 			re.printStackTrace();
 		}
 		
-		// For test purposes, populate a few communities
-		server.communityManager.add(new Community("Group Seven"));
-		server.communityManager.add(new Community("Team Awesome"));
+		// Populate a few test communities
+		server.userManager.addCommunity(new Community("Group Seven"));
+		server.userManager.addCommunity(new Community("Team Awesome"));
 		
+		// Populate a few test users
+		server.userManager.addUser(new User("Johannes", "pass1"));
+		server.userManager.addUser(new User("Pamela", "pass2"));
+		server.userManager.addUser(new User("Matthew", "pass3"));
+		server.userManager.addUser(new User("Chris", "pass4"));
+
 	}
 	
 }

@@ -1,9 +1,11 @@
-package colab.community;
+package colab.server;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Collection;
 
-import colab.channel.ChannelManagerInterface;
+import colab.community.Community;
+import colab.community.CommunityName;
 
 /**
  * A remote class based in the server application.
@@ -12,8 +14,8 @@ import colab.channel.ChannelManagerInterface;
  */
 public interface CommunityManagerInterface extends Remote {
 
-	public Community get(final CommunityName name);
+	public Community get(final CommunityName name) throws RemoteException;
 
-	public Collection<Community> getAll();
+	public Collection<Community> getAll() throws RemoteException;
 	
 }

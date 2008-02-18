@@ -6,7 +6,8 @@ public class ChatChannel extends Channel {
 
 	protected Stack<ChatChannelData> channelData;
 	
-	public ChatChannel() {
+	public ChatChannel(final ChannelName name) {
+		super(name);
 		channelData = new Stack<ChatChannelData>();
 	}
 	

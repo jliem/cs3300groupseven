@@ -3,7 +3,7 @@ package colab.community;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import colab.identifier.Identifiable;
+import colab.identity.Identifiable;
 import colab.user.User;
 
 public class Community implements Identifiable<CommunityName> {

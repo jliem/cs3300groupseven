@@ -9,16 +9,21 @@ import colab.user.User;
 public class Community implements Identifiable<CommunityName> {
 
 	private final CommunityName name;
+
 	private final Collection<User> members;
-	
+
 	public Community(final CommunityName name) {
-		
+
 		// Set the community name
 		this.name = name;
-		
+
 		// Create an empty collection of users
 		members = new ArrayList<User>();
-		
+
+	}
+
+	public Community(final String name) {
+		this(new CommunityName(name));
 	}
 	
 	/**
@@ -34,5 +39,5 @@ public class Community implements Identifiable<CommunityName> {
 	public Collection<User> getMembers() {
 		return members;
 	}
-	
+
 }

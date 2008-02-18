@@ -1,30 +1,37 @@
 package colab.user;
 
+import colab.identity.Identifiable;
+
 /**
- * Represents a User
- * 
- * @author JL
- *
+ * Represents a User.
  */
-public class User {
+public class User implements Identifiable<UserName> {
 
-	protected String name;
-	
-	public User() {
-		this(null);
-	}
-	
-	public User(String name) {
-		
+	private final UserName name;
+	private Password pass;
+
+	public User(final UserName name, final Password pass) {
 		this.name = name;
+		this.pass = pass;
+	}
+	
+	public User(final String name, final String pass) {
+		this(new UserName(name), new Password(pass));
 	}
 
-	public String getName() {
+	public void setPassword(final Password pass) {
+		this.pass = pass;
+	}
+
+	public boolean checkPassword(final String attempt) {
+		return pass.checkPassword(attempt);
+	}
+	
+	/**
+	 * @return the name of this user
+	 */
+	public UserName getId() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 }

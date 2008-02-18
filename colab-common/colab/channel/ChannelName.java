@@ -1,6 +1,6 @@
 package colab.channel;
 
-import colab.community.StringIdentifier;
+import colab.identity.StringIdentifier;
 
 public class ChannelName extends StringIdentifier {
 

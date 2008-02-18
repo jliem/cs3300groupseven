@@ -1,4 +1,4 @@
-package colab.identifier;
+package colab.identity;
 
 public interface Identifiable<T extends Identifier> {
 

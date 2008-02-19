@@ -1,14 +1,19 @@
 package colab.server;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import colab.channel.Channel;
 
 
-public class ChannelManager implements ChannelManagerInterface, Serializable {
+public class ChannelManager extends UnicastRemoteObject
+		implements ChannelManagerInterface {
 
 	public static final long serialVersionUID = 1L;
+	
+	public ChannelManager() throws RemoteException {
+		
+	}
 	
 	/** {@inheritDoc} */
 	public Channel getChannel(String channelName) throws RemoteException {

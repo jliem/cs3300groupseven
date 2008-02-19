@@ -24,7 +24,7 @@ public class IdentitySet<K extends Identifier, V extends Identifiable<K>>
 	/** {@inheritDoc} */
 	public boolean add(V obj) {
 		K id = obj.getId();
-		boolean changed = map.containsKey(id) && map.get(id) == obj;
+		boolean changed = !(map.containsKey(id) && map.get(id) == obj);
 		if (changed) {
 			map.put(id, obj);
 		}

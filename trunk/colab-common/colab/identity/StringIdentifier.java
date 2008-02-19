@@ -11,4 +11,9 @@ public abstract class StringIdentifier extends Identifier<String> {
 		super(str);
 	}
 	
+	@Override
+	public String toString() {
+		return value;
+	}
+	
 }

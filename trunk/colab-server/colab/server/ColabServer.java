@@ -1,55 +1,53 @@
 package colab.server;
 
-import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 
 import colab.community.Community;
 import colab.user.User;
 
-public class ColabServer implements ServerInterface, Serializable {
+public class ColabServer extends UnicastRemoteObject implements ServerInterface {
 
 	public static final long serialVersionUID = 1L;
 	
 	private final UserManager userManager;
 
-	public ColabServer() {
-		userManager = new UserManager();
+	public ColabServer() throws RemoteException {
+
+		// Create the manager objects
+		this.userManager = new UserManager();
+//		System.out.println(this.userManager);
+		
 	}
 	
-	public Connection connect() throws RemoteException {
+	public ConnectionInterface connect() throws RemoteException {
 		return new Connection(this);
 	}
 
-	public UserManager getUserManager() {
-		return userManager;
+	public UserManagerInterface getUserManager() throws RemoteException {
+		//System.out.println(this.userManager);
+		return this.userManager;
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws Exception {
 		
 		// Assign a security manager, in the event
 		// that dynamic classes are loaded
 		//if (System.getSecurityManager() == null) {
 		//	System.setSecurityManager(new RMISecurityManager());
 		//}
+
+		int port = 9040;
 		
 		// Create a server
 		ColabServer server = new ColabServer();
-
-		final int port = 9040;
 		
 		// Create the rmi registry, add the server to it
-		try {
-			LocateRegistry.createRegistry(port);
-			Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
-		} catch (MalformedURLException me) {
-			me.printStackTrace();
-		} catch (final RemoteException re) {
-			re.printStackTrace();
-		}
-		
+		LocateRegistry.createRegistry(port);
+		Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
+
 		// Populate a few test communities
 		server.userManager.addCommunity(new Community("Group Seven"));
 		server.userManager.addCommunity(new Community("Team Awesome"));
@@ -60,6 +58,8 @@ public class ColabServer implements ServerInterface, Serializable {
 		server.userManager.addUser(new User("Matthew", "pass3"));
 		server.userManager.addUser(new User("Chris", "pass4"));
 
+		System.out.println("Server initialized");
+	
 	}
 	
 }

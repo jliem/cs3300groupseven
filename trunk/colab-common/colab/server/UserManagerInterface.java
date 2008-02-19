@@ -6,6 +6,8 @@ import java.util.Collection;
 
 import colab.community.Community;
 import colab.community.CommunityName;
+import colab.user.User;
+import colab.user.UserName;
 
 /**
  * A remote class based in the server application.
@@ -17,5 +19,7 @@ public interface UserManagerInterface extends Remote {
 	public Community getCommunity(final CommunityName name) throws RemoteException;
 
 	public Collection<Community> getAllCommunities() throws RemoteException;
+	
+	public User getUser(UserName name) throws RemoteException;
 	
 }

@@ -2,12 +2,10 @@ package colab.client;
 import java.awt.*;
 import javax.swing.*;
 
-public class LoginPanel extends JPanel{
+public class LoginPanel extends JPanel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
 	private JLabel usernameLabel, passwordLabel, serverLabel;
 	private JPasswordField password;
 	private JTextField username, serverIP;

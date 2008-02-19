@@ -2,9 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/colab-client"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/colab-server"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/colab-common"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/colab"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

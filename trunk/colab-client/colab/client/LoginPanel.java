@@ -44,11 +44,12 @@ public class LoginPanel extends JPanel{
 	}
 	
 	public static void main(String[] args){
-		Frame f = new Frame("CoLab Login");
+		JFrame f = new JFrame("CoLab Login");
 		LoginPanel loginPanel = new LoginPanel();
 
 		f.add(loginPanel);
 
+		f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
 		f.setSize(400, 100);
 		f.setVisible(true);
 		

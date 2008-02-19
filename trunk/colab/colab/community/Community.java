@@ -1,14 +1,16 @@
 package colab.community;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import colab.identity.Identifiable;
 import colab.user.User;
-import colab.user.UserName;
 
-public class Community implements Identifiable<CommunityName> {
+public class Community implements Identifiable<CommunityName>, Serializable {
 
+	public static final long serialVersionUID = 1L;
+	
 	private final CommunityName name;
 
 	private final Collection<User> members;

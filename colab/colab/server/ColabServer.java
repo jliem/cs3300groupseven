@@ -8,7 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import colab.community.Community;
 import colab.user.User;
 
-public class ColabServer extends UnicastRemoteObject implements ServerInterface {
+public class ColabServer extends UnicastRemoteObject implements ColabServerInterface {
 
 	public static final long serialVersionUID = 1L;
 	

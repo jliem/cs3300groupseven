@@ -49,8 +49,8 @@ public class ColabServer extends UnicastRemoteObject implements ColabServerInter
 		Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
 
 		// Populate a few test communities
-		server.userManager.addCommunity(new Community("Group Seven"));
-		server.userManager.addCommunity(new Community("Team Awesome"));
+		server.userManager.addCommunity(new Community("Group Seven", "sevenPass"));
+		server.userManager.addCommunity(new Community("Team Awesome", "awesomePass"));
 		
 		// Populate a few test users
 		server.userManager.addUser(new User("Johannes", "pass1"));

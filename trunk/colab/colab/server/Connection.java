@@ -3,6 +3,8 @@ package colab.server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import colab.community.Community;
+import colab.community.CommunityName;
 import colab.user.User;
 import colab.user.UserName;
 
@@ -37,6 +39,7 @@ public class Connection extends UnicastRemoteObject implements ConnectionInterfa
 	private final ColabServer server;
 	
 	private User user;
+	private Community community;
 	
 	public Connection(final ColabServer server) throws RemoteException {
 		
@@ -54,6 +57,7 @@ public class Connection extends UnicastRemoteObject implements ConnectionInterfa
 		return this.state;
 	}
 	
+	/** {@inheritDoc} */
 	public boolean logIn(final UserName username, final String password)
 			throws RemoteException {
 		
@@ -68,6 +72,24 @@ public class Connection extends UnicastRemoteObject implements ConnectionInterfa
 		
 		return correct;
 		
+	}
+	
+	/** {@inheritDoc} */
+	public boolean logIn(final CommunityName communityName, final String password)
+			throws RemoteException {
+		
+		UserManagerInterface userManager = server.getUserManager();
+		Community communityAttempt = userManager.getCommunity(communityName);
+		boolean correct = communityAttempt.getMembers().contains(this.user)
+			| communityAttempt.checkPassword(password);
+		
+		if (correct) {
+			this.community = communityAttempt;
+			this.state = STATE.ACTIVE;
+		}
+		
+		return correct;
+			
 	}
 	
 }

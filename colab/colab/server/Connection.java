@@ -50,6 +50,10 @@ public class Connection extends UnicastRemoteObject implements ConnectionInterfa
 		return this.user;
 	}
 	
+	public STATE getState() {
+		return this.state;
+	}
+	
 	public boolean logIn(final UserName username, final String password)
 			throws RemoteException {
 		

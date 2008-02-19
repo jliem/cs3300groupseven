@@ -47,7 +47,7 @@ public class LoginPanel extends JPanel {
 
 		f.add(loginPanel);
 
-		f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(400, 100);
 		f.setVisible(true);
 		

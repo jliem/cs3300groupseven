@@ -1,11 +1,12 @@
 package colab.server;
 
-import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 import colab.user.User;
 import colab.user.UserName;
 
-public class Connection implements ConnectionInterface, Serializable {
+public class Connection extends UnicastRemoteObject implements ConnectionInterface {
 	
 	public static final long serialVersionUID = 1L;
 	
@@ -37,7 +38,7 @@ public class Connection implements ConnectionInterface, Serializable {
 	
 	private User user;
 	
-	public Connection(final ColabServer server) {
+	public Connection(final ColabServer server) throws RemoteException {
 		
 		this.server = server;
 		
@@ -45,14 +46,24 @@ public class Connection implements ConnectionInterface, Serializable {
 		
 	}
 	
-	public boolean logIn(final UserName username, final String password) {
-		User userAttempt = server.getUserManager().getUser(username);
+	public User getUser() throws RemoteException {
+		return this.user;
+	}
+	
+	public boolean logIn(final UserName username, final String password)
+			throws RemoteException {
+		
+		UserManagerInterface userManager = server.getUserManager();
+		User userAttempt = userManager.getUser(username);
 		boolean correct = userAttempt.checkPassword(password);
+
 		if (correct) {
 			this.user = userAttempt;
 			this.state = STATE.LOGGED_IN;
 		}
+		
 		return correct;
+		
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import colab.identity.Identifiable;
 import colab.user.User;
+import colab.user.UserName;
 
 public class Community implements Identifiable<CommunityName> {
 
@@ -32,7 +33,7 @@ public class Community implements Identifiable<CommunityName> {
 	public CommunityName getId() {
 		return name;
 	}
-
+	
 	/**
 	 * @return a collection containing every user of this community
 	 */

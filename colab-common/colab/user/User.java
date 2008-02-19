@@ -1,12 +1,16 @@
 package colab.user;
 
+import java.io.Serializable;
+
 import colab.identity.Identifiable;
 
 /**
  * Represents a User.
  */
-public class User implements Identifiable<UserName> {
+public class User implements Identifiable<UserName>, Serializable {
 
+	public static final long serialVersionUID = 1L;
+	
 	private final UserName name;
 	private Password pass;
 

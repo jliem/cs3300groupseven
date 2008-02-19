@@ -1,6 +1,8 @@
 package colab.identity;
 
-public abstract class Identifier<T> {
+import java.io.Serializable;
+
+public abstract class Identifier<T> implements Serializable {
 
 	protected final T value;
 
@@ -16,18 +18,20 @@ public abstract class Identifier<T> {
 		return value;
 	}
 
+	@Override
 	public int hashCode() {
-		return value.hashCode();
+		return (value == null) ? 0 : value.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 
-		if (!(obj instanceof StringIdentifier)) {
+		if (!(obj instanceof Identifier)) {
 			return false;
 		}
 
-		StringIdentifier other = (StringIdentifier) obj;
-		return other.value == this.value;
+		Identifier other = (Identifier) obj;
+		return other.value.equals(this.value);
 
 	}
 

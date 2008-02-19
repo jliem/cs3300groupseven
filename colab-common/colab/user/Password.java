@@ -1,11 +1,14 @@
 package colab.user;
 
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-public final class Password {
+public final class Password implements Serializable {
 
+	public static final long serialVersionUID = 1L;
+	
 	private final byte[] hash;
 	
 	private static MessageDigest digest;

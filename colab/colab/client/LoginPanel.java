@@ -29,7 +29,9 @@ public class LoginPanel extends JPanel {
         serverIP = new JTextField(32);
         loginButton = new JButton("Login");
 
-        loginButton.addActionListener(new ColabLogin(username.getText(), password.getPassword(), serverIP.getText()));
+        ColabLogin login = new ColabLogin(
+                username.getText(), password.getPassword(), serverIP.getText());
+        loginButton.addActionListener(login);
 
         setLayout(new GridLayout(2, 3));
 
@@ -41,14 +43,9 @@ public class LoginPanel extends JPanel {
         add(serverIP);
         add(loginButton);
 
-
-
-
-
-
     }
 
-    public static void main(String[] args){
+    public static void main(final String[] args) {
         JFrame f = new JFrame("CoLab Login");
         LoginPanel loginPanel = new LoginPanel();
 
@@ -59,8 +56,5 @@ public class LoginPanel extends JPanel {
         f.setVisible(true);
 
     }
-
-
-
 
 }

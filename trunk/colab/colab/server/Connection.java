@@ -42,9 +42,24 @@ public class Connection extends UnicastRemoteObject
          */
         ACTIVE(true, true);
 
-        public final boolean userLogin;
-        public final boolean communityLogin;
+        /**
+         * Indicates whether this is a state in which
+         * a user is logged in.
+         */
+        private final boolean userLogin;
 
+        /**
+         * Indicates whether this is a state in which
+         * the a user has logged in to a community.
+         */
+        private final boolean communityLogin;
+
+        /**
+         * Constructs a state.
+         *
+         * @param userLogin whether a user has logged in
+         * @param communityLogin whether a user has logged in to a community
+         */
         private STATE(final boolean userLogin, final boolean communityLogin) {
             this.userLogin = userLogin;
             this.communityLogin = communityLogin;
@@ -52,11 +67,32 @@ public class Connection extends UnicastRemoteObject
 
     }
 
+    /**
+     * The server which created this connection.
+     */
     private final ColabServer server;
+
+    /**
+     * The current state of the connection.
+     */
     private STATE state;
+
+    /**
+     * The user that has logged in on this connection (if any).
+     */
     private User user;
+
+    /**
+     * The community that has been logged into on this connection (if any).
+     */
     private Community community;
 
+    /**
+     * Constructs a new Connection.
+     *
+     * @param server the server to which the client is connected
+     * @throws RemoteException if an rmi error occurs
+     */
     public Connection(final ColabServer server) throws RemoteException {
 
         // Keep a reference to the server
@@ -72,7 +108,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return true is a user is logged in, false otherwise
      */
-    public boolean hasUserLogin() {
+    public final boolean hasUserLogin() {
         return this.state.userLogin;
     }
 
@@ -82,7 +118,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return true if the user has logged into a community, false otherwise
      */
-    public boolean hasCommunityLogin() {
+    public final boolean hasCommunityLogin() {
         return this.state.communityLogin;
     }
 
@@ -91,15 +127,16 @@ public class Connection extends UnicastRemoteObject
      *
      * @return the state object representing the connection's login status
      */
-    public STATE getState() {
+    public final STATE getState() {
         return this.state;
     }
 
     /**
      * Returns the user that is logged in.
      *
+     * Throws IllegalStateException if no user is logged in.
+     *
      * @return a user that has authenticated on this connection
-     * @throws IllegalStateException if no user is logged in
      */
     public final User getUser() {
 
@@ -137,7 +174,7 @@ public class Connection extends UnicastRemoteObject
         }
 
         // Check the validity of login credentials
-        UserManagerInterface userManager = server.getUserManager();
+        UserManager userManager = server.getUserManager();
         User userAttempt = userManager.getUser(username);
         boolean correct =
             userAttempt != null // user exists
@@ -164,7 +201,7 @@ public class Connection extends UnicastRemoteObject
         }
 
         // Check the validity of login credentials
-        UserManagerInterface userManager = server.getUserManager();
+        UserManager userManager = server.getUserManager();
         Community communityAttempt = userManager.getCommunity(communityName);
         boolean correct =
             communityAttempt != null // community exists
@@ -181,7 +218,7 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public Collection<CommunityName> getAllCommunityNames()
+    public final Collection<CommunityName> getAllCommunityNames()
             throws RemoteException {
 
         Collection<Community> communities = getAllCommunities();
@@ -198,7 +235,7 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public Collection<CommunityName> getMyCommunityNames()
+    public final Collection<CommunityName> getMyCommunityNames()
             throws RemoteException {
 
         if (!hasUserLogin()) {
@@ -220,8 +257,14 @@ public class Connection extends UnicastRemoteObject
 
     }
 
+    /**
+     * Retrieves all of the communities on the server.
+     *
+     * @return a collection containing every community
+     * @throws RemoteException if an rmi error occurs
+     */
     private Collection<Community> getAllCommunities() throws RemoteException {
-        UserManagerInterface userManager = server.getUserManager();
+        UserManager userManager = server.getUserManager();
         Collection<Community> communities = userManager.getAllCommunities();
         return communities;
     }

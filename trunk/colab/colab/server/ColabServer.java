@@ -48,7 +48,7 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @return the user manager for this server instance
      */
-    public final UserManagerInterface getUserManager() {
+    public final UserManager getUserManager() {
         return this.userManager;
     }
 

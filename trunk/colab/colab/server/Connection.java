@@ -5,8 +5,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import colab.channel.ChannelName;
 import colab.community.Community;
 import colab.community.CommunityName;
+import colab.server.remote.ChannelInterface;
+import colab.server.remote.ConnectionInterface;
 import colab.user.User;
 import colab.user.UserName;
 
@@ -257,6 +260,17 @@ public class Connection extends UnicastRemoteObject
 
     }
 
+    /** {@inheritDoc} */
+    public final ChannelInterface getChannel(final ChannelName channelName)
+            throws RemoteException {
+
+        ChannelManager channelManager = this.server.getChannelManager();
+        ChannelInterface channel =
+            channelManager.getChannel(this.community.getId(), channelName);
+        return channel;
+
+    }
+
     /**
      * Retrieves all of the communities on the server.
      *
@@ -264,9 +278,11 @@ public class Connection extends UnicastRemoteObject
      * @throws RemoteException if an rmi error occurs
      */
     private Collection<Community> getAllCommunities() throws RemoteException {
-        UserManager userManager = server.getUserManager();
+
+        UserManager userManager = this.server.getUserManager();
         Collection<Community> communities = userManager.getAllCommunities();
         return communities;
+
     }
 
 }

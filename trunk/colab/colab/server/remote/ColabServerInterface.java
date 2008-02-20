@@ -1,7 +1,8 @@
-package colab.server;
+package colab.server.remote;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+
 
 /**
  * The server interface is the first point of contact that the client

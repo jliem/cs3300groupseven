@@ -1,15 +1,16 @@
 package colab.server;
 
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 
-import colab.channel.Channel;
+import colab.channel.ChannelName;
+import colab.community.CommunityName;
 
 /**
- * Server implementation of ChannelManagerInterface.
+ * A channel manager provides channels.  This implementation
+ * does not load any channel data into memory until a channel
+ * is joined by one or more users.
  */
-public class ChannelManager extends UnicastRemoteObject
-        implements ChannelManagerInterface {
+public class ChannelManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -23,9 +24,18 @@ public class ChannelManager extends UnicastRemoteObject
 
     }
 
-    /** {@inheritDoc} */
-    public final Channel getChannel(final String channelName)
-            throws RemoteException {
+    /**
+     * Retrieves a channel.
+     * The channel will be created if it does not exist.
+     *
+     * @param communityName the name of the community to which
+     *                      the channel belongs
+     * @param channelName the name of the channel requested
+     * @return a remote reference to the requested channel
+     * @throws RemoteException if an rmi error occurs
+     */
+    public final ServerChannel getChannel(final CommunityName communityName,
+            final ChannelName channelName) throws RemoteException {
 
         // TODO Auto-generated method stub
         return null;

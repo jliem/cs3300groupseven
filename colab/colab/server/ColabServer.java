@@ -6,6 +6,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
 import colab.community.Community;
+import colab.server.remote.ColabServerInterface;
+import colab.server.remote.ConnectionInterface;
 import colab.user.User;
 
 /**
@@ -27,6 +29,12 @@ public class ColabServer extends UnicastRemoteObject
     private final UserManager userManager;
 
     /**
+     * The manager object that keeps track of channels
+     * for this server instance.
+     */
+    private final ChannelManager channelManager;
+
+    /**
      * Constructs an instance of the server application.
      *
      * @throws RemoteException if an rmi error occurs
@@ -35,6 +43,7 @@ public class ColabServer extends UnicastRemoteObject
 
         // Create the manager objects
         this.userManager = new UserManager();
+        this.channelManager = new ChannelManager();
 
     }
 
@@ -50,6 +59,15 @@ public class ColabServer extends UnicastRemoteObject
      */
     public final UserManager getUserManager() {
         return this.userManager;
+    }
+
+    /**
+     * Returns the channel manager.
+     *
+     * @return the channel for this server instance
+     */
+    public final ChannelManager getChannelManager() {
+        return this.channelManager;
     }
 
     /**

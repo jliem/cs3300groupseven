@@ -1,9 +1,10 @@
-package colab.server;
+package colab.server.remote;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 
+import colab.channel.ChannelName;
 import colab.community.CommunityName;
 import colab.user.UserName;
 
@@ -61,6 +62,17 @@ public interface ConnectionInterface extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
     Collection<CommunityName> getMyCommunityNames()
+        throws RemoteException;
+
+    /**
+     * Retrieves a channel.
+     * The channel will be created if it does not exist.
+     *
+     * @param channelName the name of the channel requested
+     * @return a remote reference to the requested channel
+     * @throws RemoteException if an rmi error occurs
+     */
+    ChannelInterface getChannel(ChannelName channelName)
         throws RemoteException;
 
 }

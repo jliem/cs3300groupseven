@@ -2,9 +2,11 @@ package colab.client;
 
 import java.rmi.Naming;
 
+import colab.channel.ChannelName;
 import colab.community.CommunityName;
-import colab.server.ColabServerInterface;
-import colab.server.ConnectionInterface;
+import colab.server.remote.ChannelInterface;
+import colab.server.remote.ColabServerInterface;
+import colab.server.remote.ConnectionInterface;
 import colab.user.UserName;
 
 /**
@@ -47,6 +49,8 @@ public final class ColabClient {
                     new CommunityName("Team Awesome"), "awesomePass");
             if (correct) {
                 System.out.println("Logged into community.");
+                ChannelInterface channel = connection.getChannel(
+                        new ChannelName("Lobby"));
             } else {
                 System.out.println("Community login failed.");
             }

@@ -2,9 +2,19 @@ package colab.identity;
 
 import java.io.Serializable;
 
+/**
+ * An Identifier is an object that serves as the id attribute
+ * of an {@link Identifiable} object.
+ *
+ * @param <T> the underlying type that this identifier represents
+ *            (such  as a string for a name, or an int for an ID number)
+ */
 public abstract class Identifier<T> implements Serializable {
 
-    protected final T value;
+    /**
+     * The identifying data.
+     */
+    private final T value;
 
     public Identifier() {
         this.value = null;
@@ -14,17 +24,28 @@ public abstract class Identifier<T> implements Serializable {
         this.value = value;
     }
 
-    public T getValue() {
+    /**
+     * Returns the value of this identifier.
+     *
+     * @return the data represented by this object
+     */
+    public final T getValue() {
         return value;
     }
 
+    /** {@inheritDoc} */
     @Override
-    public int hashCode() {
-        return (value == null) ? 0 : value.hashCode();
+    public final int hashCode() {
+        if (value == null) {
+            return 0;
+        } else {
+            return value.hashCode();
+        }
     }
 
+    /** {@inheritDoc} */
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
 
         if (!(obj instanceof Identifier)) {
             return false;

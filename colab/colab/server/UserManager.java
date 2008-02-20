@@ -1,7 +1,5 @@
 package colab.server;
 
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import colab.community.Community;
@@ -11,11 +9,9 @@ import colab.user.User;
 import colab.user.UserName;
 
 /**
- * A simple user manager implementation that holds all
- * users and communities in memory.
+ * A simple user manager that holds all users and communities in memory.
  */
-public class UserManager extends UnicastRemoteObject
-        implements UserManagerInterface {
+public class UserManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -32,10 +28,8 @@ public class UserManager extends UnicastRemoteObject
 
     /**
      * Constructs an "empty" user manager with no communities or users.
-     *
-     * @throws RemoteException if an rmi error occurs
      */
-    public UserManager() throws RemoteException {
+    public UserManager() {
 
         // Create an empty set of communities.
         communities = new IdentitySet<CommunityName, Community>();
@@ -45,28 +39,51 @@ public class UserManager extends UnicastRemoteObject
 
     }
 
-    /** {@inheritDoc} */
-    public final Community getCommunity(final CommunityName name)
-            throws RemoteException {
-
+    /**
+     * Retrieves a community.
+     *
+     * @param name the name of the community
+     * @return the community with the given name
+     */
+    public final Community getCommunity(final CommunityName name) {
         return communities.get(name);
-
     }
 
-    public final Collection<Community> getAllCommunities() throws RemoteException {
+    /**
+     * Retrieves all of the communities on the server.
+     *
+     * @return a collection containing every community
+     */
+    public final Collection<Community> getAllCommunities() {
         return communities;
     }
 
-    public boolean addCommunity(final Community community) {
-        return communities.add(community);
+    /**
+     * Adds a new community.
+     *
+     * @param community the new community to add
+     */
+    public final void addCommunity(final Community community) {
+        communities.add(community);
     }
 
-    public User getUser(final UserName name) {
+    /**
+     * Retrieves a user.
+     *
+     * @param name the name of the user to retrieve
+     * @return the user with the given name
+     */
+    public final User getUser(final UserName name) {
         return users.get(name);
     }
 
-    public boolean addUser(final User user) {
-        return users.add(user);
+    /**
+     * Adds a new user.
+     *
+     * @param user the new user to add
+     */
+    public final void addUser(final User user) {
+        users.add(user);
     }
 
 }

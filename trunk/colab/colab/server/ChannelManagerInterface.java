@@ -13,6 +13,6 @@ import colab.channel.Channel;
  */
 public interface ChannelManagerInterface extends Remote {
 
-	public Channel getChannel(String channelName) throws RemoteException;
-	
+    public Channel getChannel(String channelName) throws RemoteException;
+    
 }

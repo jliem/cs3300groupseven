@@ -11,25 +11,25 @@ import colab.user.User;
  */
 public abstract class Channel implements Identifiable<ChannelName> {
 
-	protected final Collection<User> members;
-	protected final ChannelName name;
+    protected final Collection<User> members;
+    protected final ChannelName name;
 
-	public Channel(final ChannelName name) {
-		
-		// Set the channel name
-		this.name = name;
-		
-		// Create an empty collection of users
-		members = new ArrayList<User>();
-		
-	}
+    public Channel(final ChannelName name) {
 
-	public abstract void add(ChannelData data);
+        // Set the channel name
+        this.name = name;
 
-	public abstract boolean remove(ChannelData data);
+        // Create an empty collection of users
+        members = new ArrayList<User>();
 
-	public ChannelName getId() {
-		return name;
-	}
+    }
+
+    public abstract void add(ChannelData data);
+
+    public abstract boolean remove(ChannelData data);
+
+    public ChannelName getId() {
+        return name;
+    }
 
 }

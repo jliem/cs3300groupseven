@@ -16,10 +16,10 @@ import colab.user.UserName;
  */
 public interface UserManagerInterface extends Remote {
 
-	public Community getCommunity(final CommunityName name) throws RemoteException;
+    public Community getCommunity(final CommunityName name) throws RemoteException;
 
-	public Collection<Community> getAllCommunities() throws RemoteException;
-	
-	public User getUser(UserName name) throws RemoteException;
-	
+    public Collection<Community> getAllCommunities() throws RemoteException;
+    
+    public User getUser(UserName name) throws RemoteException;
+    
 }

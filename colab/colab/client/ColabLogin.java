@@ -8,19 +8,19 @@ import java.awt.event.ActionListener;
 
 public class ColabLogin implements ActionListener{
 
-	public ColabLogin(String username, char[] password,
-			String serverIP) {
-		// TODO Auto-generated constructor stub
-	}
+    public ColabLogin(String username, char[] password,
+            String serverIP) {
+        // TODO Auto-generated constructor stub
+    }
 
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	
-	
-	
+    public void actionPerformed(ActionEvent arg0) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    
+    
+    
+    
 
 }

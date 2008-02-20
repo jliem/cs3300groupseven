@@ -7,18 +7,18 @@ import colab.channel.Channel;
 
 
 public class ChannelManager extends UnicastRemoteObject
-		implements ChannelManagerInterface {
+        implements ChannelManagerInterface {
 
-	public static final long serialVersionUID = 1L;
-	
-	public ChannelManager() throws RemoteException {
-		
-	}
-	
-	/** {@inheritDoc} */
-	public Channel getChannel(String channelName) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public static final long serialVersionUID = 1L;
+    
+    public ChannelManager() throws RemoteException {
+        
+    }
+    
+    /** {@inheritDoc} */
+    public Channel getChannel(String channelName) throws RemoteException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

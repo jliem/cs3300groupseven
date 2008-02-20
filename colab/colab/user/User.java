@@ -9,13 +9,14 @@ import colab.identity.Identifiable;
  */
 public class User implements Identifiable<UserName>, Serializable {
 
+    /** Serialization version number. */
     public static final long serialVersionUID = 1L;
-    
+
     /**
      * A unique string identifying this user.
      */
     private final UserName name;
-    
+
     /**
      * The password for this user to log in.
      */
@@ -23,7 +24,7 @@ public class User implements Identifiable<UserName>, Serializable {
 
     /**
      * Constructs a new User.
-     * 
+     *
      * @param name a unique string identifying this user
      * @param pass the password for this user to log in
      */
@@ -31,10 +32,10 @@ public class User implements Identifiable<UserName>, Serializable {
         this.name = name;
         this.pass = pass;
     }
-    
+
     /**
      * Constructs a new User.
-     * 
+     *
      * @param name a unique string identifying this user
      * @param pass the password for this user to log in
      */
@@ -44,30 +45,30 @@ public class User implements Identifiable<UserName>, Serializable {
 
     /**
      * Sets the user's password.
-     * 
+     *
      * @param pass the new password for this user
      */
-    public void setPassword(final Password pass) {
+    public final void setPassword(final Password pass) {
         this.pass = pass;
     }
 
     /**
      * Verifies whether a given password string is correct for this user.
-     * 
+     *
      * @param attempt an input string which may be a correct password
      * @return true if the given password is correct, false otherwise
      */
-    public boolean checkPassword(final String attempt) {
+    public final boolean checkPassword(final String attempt) {
         return pass.checkPassword(attempt);
     }
-    
+
     /**
      * Returns the string which identifies this user.
-     * 
+     *
      * @return the name of this user
      */
-    public UserName getId() {
+    public final UserName getId() {
         return name;
     }
-    
+
 }

@@ -16,10 +16,18 @@ public abstract class Identifier<T> implements Serializable {
      */
     private final T value;
 
+    /**
+     * Constructs an identifier with a null value.
+     */
     public Identifier() {
         this.value = null;
     }
 
+    /**
+     * Constructs an identifier with a given value.
+     *
+     * @param value the value of the identifier
+     */
     public Identifier(final T value) {
         this.value = value;
     }

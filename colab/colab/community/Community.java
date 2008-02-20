@@ -31,6 +31,12 @@ public class Community implements Identifiable<CommunityName>, Serializable {
      */
     private Password password;
 
+    /**
+     * Constructs a new community with the given name and password.
+     *
+     * @param name the name identifying the community
+     * @param password the password required to join the community
+     */
     public Community(final CommunityName name, final Password password) {
 
         // Set the community name
@@ -59,7 +65,7 @@ public class Community implements Identifiable<CommunityName>, Serializable {
      *
      * @return the name of this community
      */
-    public CommunityName getId() {
+    public final CommunityName getId() {
         return name;
     }
 
@@ -68,7 +74,7 @@ public class Community implements Identifiable<CommunityName>, Serializable {
      *
      * @return a collection containing every user of this community
      */
-    public Collection<User> getMembers() {
+    public final Collection<User> getMembers() {
         return members;
     }
 
@@ -78,11 +84,27 @@ public class Community implements Identifiable<CommunityName>, Serializable {
      * @param attempt an input string which may be a correct password
      * @return true if the given password is correct, false otherwise
      */
-    public boolean checkPassword(final String attempt) {
+    public final boolean checkPassword(final String attempt) {
         return password.checkPassword(attempt);
     }
 
-    public boolean authenticate(final User user, final String passAttempt) {
+    /**
+     * Handles a user attempt to log in to this community.
+     *
+     * If the user is already a member, the authentication is approved.
+     *
+     * If the user is not a member, but provides a correct password, the
+     * user becomes a member of the community, and authentication is approved.
+     *
+     * If neither, authentication is denied.
+     *
+     * @param user the user attempting to log in to the community
+     * @param passAttempt the password that a new user may be using to
+     *                    join the community (may be null)
+     * @return true if the authentication succeeds, false if it fails
+     */
+    public final boolean authenticate(final User user,
+            final String passAttempt) {
 
         // If user is a member of the group, authentication is successful.
         if (members.contains(user)) {

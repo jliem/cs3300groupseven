@@ -1,5 +1,7 @@
 package colab.server;
 
+import java.io.File;
+import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -9,6 +11,7 @@ import colab.community.Community;
 import colab.server.remote.ColabServerInterface;
 import colab.server.remote.ConnectionInterface;
 import colab.user.User;
+import colab.util.FileUtils;
 
 /**
  * Server implementation of ColabServerInterface.
@@ -77,6 +80,14 @@ public class ColabServer extends UnicastRemoteObject
      * @throws Exception if any exception is thrown
      */
     public static void main(final String[] args) throws Exception {
+
+        File dataDirectory;
+        try {
+            dataDirectory = FileUtils.getOrCreateDirectory(args[0]);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            System.exit(1);
+        }
 
         // Assign a security manager, in the event
         // that dynamic classes are loaded

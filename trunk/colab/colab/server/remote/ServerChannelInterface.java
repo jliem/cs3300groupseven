@@ -2,6 +2,6 @@ package colab.server.remote;
 
 import java.rmi.Remote;
 
-public interface ChannelInterface extends Remote {
+public interface ServerChannelInterface extends Remote {
 
 }

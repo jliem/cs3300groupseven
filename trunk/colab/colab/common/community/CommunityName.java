@@ -1,6 +1,6 @@
-package colab.community;
+package colab.common.community;
 
-import colab.identity.StringIdentifier;
+import colab.common.identity.StringIdentifier;
 
 /**
  * The name that uniquely identifies a community.

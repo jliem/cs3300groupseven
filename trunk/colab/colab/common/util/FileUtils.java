@@ -1,4 +1,4 @@
-package colab.util;
+package colab.common.util;
 
 import java.io.File;
 import java.io.IOException;

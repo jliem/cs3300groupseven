@@ -1,4 +1,4 @@
-package colab.identity;
+package colab.common.identity;
 
 import java.io.Serializable;
 

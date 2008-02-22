@@ -2,8 +2,9 @@ package colab.server;
 
 import java.rmi.RemoteException;
 
-import colab.channel.ChannelName;
-import colab.community.CommunityName;
+
+import colab.common.channel.ChannelName;
+import colab.common.community.CommunityName;
 
 /**
  * A channel manager provides channels.  This implementation

@@ -1,4 +1,4 @@
-package colab.identity;
+package colab.common.identity;
 
 /**
  * An Identifier that uses a String as its data field.

@@ -1,4 +1,4 @@
-package colab.util;
+package colab.common.util;
 
 /**
  * A utility class containing methods for dealing with strings.

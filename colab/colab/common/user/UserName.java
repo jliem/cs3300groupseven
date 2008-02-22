@@ -1,6 +1,6 @@
-package colab.user;
+package colab.common.user;
 
-import colab.identity.StringIdentifier;
+import colab.common.identity.StringIdentifier;
 
 /**
  * The name a user uses to log in.

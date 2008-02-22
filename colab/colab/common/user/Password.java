@@ -1,4 +1,4 @@
-package colab.user;
+package colab.common.user;
 
 import java.io.Serializable;
 import java.security.MessageDigest;

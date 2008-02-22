@@ -1,4 +1,4 @@
-package colab.identity;
+package colab.common.identity;
 
 /**
  * An Identifiable class has a unique identifying property,

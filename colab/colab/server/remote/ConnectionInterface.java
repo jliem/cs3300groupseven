@@ -4,9 +4,10 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 
-import colab.channel.ChannelName;
-import colab.community.CommunityName;
-import colab.user.UserName;
+
+import colab.common.channel.ChannelName;
+import colab.common.community.CommunityName;
+import colab.common.user.UserName;
 
 /**
  * A remote object on the server which represents a client's session.
@@ -72,7 +73,7 @@ public interface ConnectionInterface extends Remote {
      * @return a remote reference to the requested channel
      * @throws RemoteException if an rmi error occurs
      */
-    ChannelInterface getChannel(ChannelName channelName)
+    ServerChannelInterface getChannel(ChannelName channelName)
         throws RemoteException;
 
 }

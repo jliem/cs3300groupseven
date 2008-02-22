@@ -2,11 +2,11 @@ package colab.server;
 
 import java.util.Collection;
 
-import colab.community.Community;
-import colab.community.CommunityName;
-import colab.identity.IdentitySet;
-import colab.user.User;
-import colab.user.UserName;
+import colab.common.community.Community;
+import colab.common.community.CommunityName;
+import colab.common.identity.IdentitySet;
+import colab.common.user.User;
+import colab.common.user.UserName;
 
 /**
  * A simple user manager that holds all users and communities in memory.

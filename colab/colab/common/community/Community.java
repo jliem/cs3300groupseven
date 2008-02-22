@@ -1,12 +1,12 @@
-package colab.community;
+package colab.common.community;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import colab.identity.Identifiable;
-import colab.user.Password;
-import colab.user.User;
+import colab.common.identity.Identifiable;
+import colab.common.user.Password;
+import colab.common.user.User;
 
 /**
  * Represents a community which can be joined by users.

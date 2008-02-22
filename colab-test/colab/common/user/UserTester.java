@@ -1,5 +1,6 @@
-package colab.user;
+package colab.common.user;
 
+import colab.common.user.User;
 import junit.framework.TestCase;
 
 public class UserTester extends TestCase {

@@ -4,8 +4,14 @@ import junit.framework.TestCase;
 import colab.common.user.User;
 import colab.common.user.UserName;
 
-public class IdentitySetTester extends TestCase {
+/**
+ * Test cases for {@link IdentitySet}.
+ */
+public final class IdentitySetTester extends TestCase {
 
+    /**
+     * Adds several Users to an IdentitySet and retrieves one of them.
+     */
     public void testUserSet() {
 
         IdentitySet<UserName, User> set = new IdentitySet<UserName, User>();

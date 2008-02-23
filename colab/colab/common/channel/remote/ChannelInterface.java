@@ -1,4 +1,4 @@
-package colab.client.remote;
+package colab.common.channel.remote;
 
 import java.rmi.Remote;
 
@@ -6,6 +6,6 @@ import java.rmi.Remote;
  * A remote object passed to the server, so that
  * the server can send messages to the client.
  */
-public interface ClientChannelInterface extends Remote {
+public interface ChannelInterface extends Remote {
 
 }

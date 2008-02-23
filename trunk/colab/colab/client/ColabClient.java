@@ -49,8 +49,11 @@ public final class ColabClient {
                     new CommunityName("Team Awesome"), "awesomePass");
             if (correct) {
                 System.out.println("Logged into community.");
-                ServerChannelInterface channel = connection.joinChannel(
-                        new ClientChatChannel(new ChannelName("Lobby")));
+                ChannelName channelName = new ChannelName("Lobby");
+                ClientChatChannel clientChannel =
+                    new ClientChatChannel(channelName);
+                ServerChannelInterface serverChannel =
+                    connection.joinChannel(clientChannel, channelName);
             } else {
                 System.out.println("Community login failed.");
             }

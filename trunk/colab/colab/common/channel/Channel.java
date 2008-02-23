@@ -1,5 +1,8 @@
 package colab.common.channel;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
 import colab.common.identity.Identifiable;
 
 /**
@@ -10,7 +13,8 @@ import colab.common.identity.Identifiable;
  * A channel represents content being edited, and the
  * workspace in which the group is dealing with it.
  */
-public abstract class Channel implements Identifiable<ChannelName> {
+public abstract class Channel extends UnicastRemoteObject
+        implements Identifiable<ChannelName> {
 
     /**
      * The name of the channel.
@@ -22,7 +26,7 @@ public abstract class Channel implements Identifiable<ChannelName> {
      *
      * @param name the name of the channel
      */
-    public Channel(final ChannelName name) {
+    public Channel(final ChannelName name) throws RemoteException {
         this.name = name;
     }
 

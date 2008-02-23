@@ -4,7 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 
-import colab.client.ClientChannel;
+import colab.client.remote.ClientChannelInterface;
+import colab.common.channel.ChannelName;
 import colab.common.community.CommunityName;
 import colab.common.user.UserName;
 
@@ -73,7 +74,9 @@ public interface ConnectionInterface extends Remote {
      * @return a remote reference to the requested channel
      * @throws RemoteException if an rmi error occurs
      */
-    ServerChannelInterface joinChannel(ClientChannel clientChannel)
+    ServerChannelInterface joinChannel(
+            ClientChannelInterface clientChannel,
+            ChannelName channelName)
         throws RemoteException;
 
 }

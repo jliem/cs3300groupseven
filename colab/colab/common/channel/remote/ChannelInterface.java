@@ -4,7 +4,6 @@ import java.rmi.Remote;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
-import colab.common.identity.LockIdentifier;
 
 /**
  * A remote object passed to the server, so that
@@ -28,8 +27,11 @@ public interface ChannelInterface extends Remote {
 
     void addAll(List<ChannelData> data);
 
-    boolean getLock(LockIdentifier lockId);
+    void getLock(LockIdentifier lockId);
 
-    boolean releaseLock(LockIdentifier lockId);
-
+    void giveLock(LockIdentifier lockId);
+    
+    void lock(LockIdentifier lockId, String username);
+    
+    void unlock(LockIdentifier lockId, String username);
 }

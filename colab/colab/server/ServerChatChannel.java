@@ -20,7 +20,8 @@ public class ServerChatChannel extends ServerChannel {
         // TODO Auto-generated constructor stub
     }
 
-    public void add(ChannelData data) {
+    public void add(ChannelData data)
+    {
         // TODO Auto-generated method stub
 
     }
@@ -50,7 +51,7 @@ public class ServerChatChannel extends ServerChannel {
         return null;
     }
 
-    public boolean getLock(LockIdentifier lockId) {
+    public void getLock(LockIdentifier lockId) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -65,7 +66,7 @@ public class ServerChatChannel extends ServerChannel {
         return null;
     }
 
-    public boolean releaseLock(LockIdentifier lockId) {
+    public void getLock(LockIdentifier lockId) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -12,6 +12,14 @@ public final class FileUtils {
     private FileUtils() {
     }
 
+    /**
+     * Ensures the existence of a directory at the given path.
+     *
+     * @param pathStr an absolute or relative file path
+     * @return the given directory
+     * @throws IOException if the directory cannot be created,
+     *                     or if a file exists at the specified path
+     */
     public static File getOrCreateDirectory(final String pathStr)
             throws IOException {
 

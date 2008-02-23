@@ -3,6 +3,9 @@ package colab.common.channel;
 import colab.common.identity.Identifiable;
 
 /**
+ * Represents a channel in the system, including data,
+ * usernames and metadata.
+ *
  * Each document or collaborative entity is a channel.
  * A channel represents content being edited, and the
  * workspace in which the group is dealing with it.

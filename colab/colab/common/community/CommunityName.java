@@ -1,6 +1,7 @@
 package colab.common.community;
 
 import colab.common.identity.StringIdentifier;
+import colab.naming.ColabNameRules;
 
 /**
  * The name that uniquely identifies a community.
@@ -17,6 +18,7 @@ public final class CommunityName extends StringIdentifier {
      */
     public CommunityName(final String name) {
         super(name);
+        ColabNameRules.validateCommunityName(name);
     }
 
 }

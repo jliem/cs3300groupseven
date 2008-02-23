@@ -16,7 +16,7 @@ import colab.server.remote.ConnectionInterface;
 /**
  * Server implementation of {@link ConnectionInterface}.
  */
-public class Connection extends UnicastRemoteObject
+public final class Connection extends UnicastRemoteObject
         implements ConnectionInterface {
 
     /** Serialization version number. */
@@ -111,7 +111,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return true is a user is logged in, false otherwise
      */
-    public final boolean hasUserLogin() {
+    public boolean hasUserLogin() {
         return this.state.userLogin;
     }
 
@@ -121,7 +121,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return true if the user has logged into a community, false otherwise
      */
-    public final boolean hasCommunityLogin() {
+    public boolean hasCommunityLogin() {
         return this.state.communityLogin;
     }
 
@@ -130,7 +130,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return the state object representing the connection's login status
      */
-    public final STATE getState() {
+    public STATE getState() {
         return this.state;
     }
 
@@ -141,7 +141,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return a user that has authenticated on this connection
      */
-    public final User getUser() {
+    public User getUser() {
 
         if (!hasUserLogin()) {
             throw new IllegalStateException("Not logged in as user");
@@ -157,7 +157,7 @@ public class Connection extends UnicastRemoteObject
      *
      * @return a community to which the user has joined in this session
      */
-    public final Community getCommunity() {
+    public Community getCommunity() {
 
         if (!hasCommunityLogin()) {
             throw new IllegalStateException("Not logged in to a community");
@@ -168,7 +168,7 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final boolean logIn(final UserName username, final String password)
+    public boolean logIn(final UserName username, final String password)
             throws RemoteException {
 
         // Must be in the Connected (not logged in) state
@@ -195,7 +195,7 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final boolean logIn(final CommunityName communityName,
+    public boolean logIn(final CommunityName communityName,
             final String password) throws RemoteException {
 
         // Must be in the Logged In (not yet in a community) state
@@ -221,7 +221,7 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final Collection<CommunityName> getAllCommunityNames()
+    public Collection<CommunityName> getAllCommunityNames()
             throws RemoteException {
 
         Collection<Community> communities = getAllCommunities();
@@ -238,7 +238,7 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final Collection<CommunityName> getMyCommunityNames()
+    public Collection<CommunityName> getMyCommunityNames()
             throws RemoteException {
 
         if (!hasUserLogin()) {
@@ -261,15 +261,32 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final ChannelInterface joinChannel(
+    public ChannelInterface joinChannel(
             final ChannelInterface clientChannel,
             final ChannelName channelName)
+            throws RemoteException {
+
+        ServerChannel serverChannel = getChannel(channelName);
+        serverChannel.addClient(this.user.getId(), clientChannel);
+        return serverChannel;
+
+    }
+
+    /** {@inheritDoc} */
+    public void leaveChannel(final ChannelName channelName)
+            throws RemoteException {
+
+        ServerChannel serverChannel = getChannel(channelName);
+        serverChannel.removeClient(this.user.getId());
+
+    }
+
+    private ServerChannel getChannel(final ChannelName channelName)
             throws RemoteException {
 
         ChannelManager channelManager = this.server.getChannelManager();
         ServerChannel serverChannel = channelManager.getChannel(
                 this.community.getId(), channelName);
-        serverChannel.addClient(clientChannel);
         return serverChannel;
 
     }

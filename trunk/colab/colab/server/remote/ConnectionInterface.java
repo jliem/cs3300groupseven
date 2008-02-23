@@ -71,12 +71,20 @@ public interface ConnectionInterface extends Remote {
      *
      * @param clientChannel a remote object representing the
      *                      channel on the client side
+     * @param channelName the name of the channel being joined
      * @return a remote reference to the requested channel
      * @throws RemoteException if an rmi error occurs
      */
-    ChannelInterface joinChannel(
-            ChannelInterface clientChannel,
-            ChannelName channelName)
-        throws RemoteException;
+    ChannelInterface joinChannel(ChannelInterface clientChannel,
+            ChannelName channelName) throws RemoteException;
+
+    /**
+     * Indicates that the client has exited from a channel
+     * and should not continue to receive updates from it.
+     *
+     * @param channelName the name of the channel being left
+     * @throws RemoteException if an rmi error occurs
+     */
+    void leaveChannel(ChannelName channelName) throws RemoteException;
 
 }

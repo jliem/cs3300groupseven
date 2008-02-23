@@ -5,17 +5,17 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import colab.client.remote.ClientChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
+import colab.common.channel.remote.ChannelInterface;
 import colab.common.user.User;
 
 /**
  * A client-side remote Channel object.
  */
 public abstract class ClientChannel extends Channel
-        implements ClientChannelInterface, Serializable {
+        implements ChannelInterface, Serializable {
 
     protected final Collection<User> members;
 

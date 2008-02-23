@@ -3,11 +3,11 @@ package colab.client;
 import java.rmi.Naming;
 
 import colab.common.channel.ChannelName;
+import colab.common.channel.remote.ChannelInterface;
 import colab.common.community.CommunityName;
 import colab.common.user.UserName;
 import colab.server.remote.ColabServerInterface;
 import colab.server.remote.ConnectionInterface;
-import colab.server.remote.ServerChannelInterface;
 
 /**
  * The CoLab client application.
@@ -52,7 +52,7 @@ public final class ColabClient {
                 ChannelName channelName = new ChannelName("Lobby");
                 ClientChatChannel clientChannel =
                     new ClientChatChannel(channelName);
-                ServerChannelInterface serverChannel =
+                ChannelInterface serverChannel =
                     connection.joinChannel(clientChannel, channelName);
             } else {
                 System.out.println("Community login failed.");

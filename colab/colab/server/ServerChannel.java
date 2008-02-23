@@ -19,10 +19,6 @@ public abstract class ServerChannel extends Channel
 
         super(name);
 
-        // I suspect the line below is not necessary now that Channel
-        // extends UnicastRemoteObject --J
-        //UnicastRemoteObject.exportObject(this);
-
         this.clients = new ArrayList<ClientChannelInterface>();
 
     }

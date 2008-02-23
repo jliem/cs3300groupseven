@@ -5,14 +5,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
-import colab.common.channel.ChannelName;
+import colab.client.ClientChannel;
 import colab.common.community.Community;
 import colab.common.community.CommunityName;
 import colab.common.user.User;
 import colab.common.user.UserName;
-import colab.server.remote.ServerChannelInterface;
 import colab.server.remote.ConnectionInterface;
+import colab.server.remote.ServerChannelInterface;
 
 /**
  * Server implementation of {@link ConnectionInterface}.
@@ -262,13 +261,14 @@ public class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final ServerChannelInterface getChannel(final ChannelName channelName)
-            throws RemoteException {
+    public final ServerChannelInterface joinChannel(
+            final ClientChannel clientChannel) throws RemoteException {
 
         ChannelManager channelManager = this.server.getChannelManager();
-        ServerChannelInterface channel =
-            channelManager.getChannel(this.community.getId(), channelName);
-        return channel;
+        ServerChannel serverChannel = channelManager.getChannel(
+                this.community.getId(), clientChannel.getId());
+        serverChannel.addClient(clientChannel);
+        return serverChannel;
 
     }
 

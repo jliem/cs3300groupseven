@@ -1,14 +1,17 @@
-package colab.common.channel;
+package colab.client;
 
+import java.rmi.RemoteException;
 import java.util.Stack;
 
-import colab.client.ClientChannel;
+import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelName;
+import colab.common.channel.ChatChannelData;
 
-public class ChatChannel extends ClientChannel {
+public class ClientChatChannel extends ClientChannel {
 
     protected Stack<ChatChannelData> channelData;
 
-    public ChatChannel(final ChannelName name) {
+    public ClientChatChannel(final ChannelName name) throws RemoteException {
         super(name);
         channelData = new Stack<ChatChannelData>();
     }

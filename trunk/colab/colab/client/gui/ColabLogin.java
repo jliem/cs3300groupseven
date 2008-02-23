@@ -1,4 +1,4 @@
-package colab.client;
+package colab.client.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

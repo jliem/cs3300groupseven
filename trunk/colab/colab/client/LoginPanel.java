@@ -21,26 +21,27 @@ public class LoginPanel extends JPanel {
 
     public LoginPanel(){
 
-        usernameLabel = new JLabel("Username: ");
-        passwordLabel = new JLabel("Password: ");
-        serverLabel = new JLabel("Choose server: ");
+        usernameLabel = new JLabel("Username / Desired Username: ");
+        passwordLabel = new JLabel("Password / Desired Password: ");
+        serverLabel = new JLabel("Enter server IP: ");
         username = new JTextField(12);
         password = new JPasswordField(12);
         serverIP = new JTextField(32);
-        loginButton = new JButton("Login");
+        loginButton = new JButton("Submit");
+        
 
         ColabLogin login = new ColabLogin(
                 username.getText(), password.getPassword(), serverIP.getText());
         loginButton.addActionListener(login);
 
-        setLayout(new GridLayout(2, 3));
+        setLayout(new GridLayout(4, 2));
 
+        add(serverLabel);
+        add(serverIP);
         add(usernameLabel);
         add(username);
         add(passwordLabel);
         add(password);
-        add(serverLabel);
-        add(serverIP);
         add(loginButton);
 
     }

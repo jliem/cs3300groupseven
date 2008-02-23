@@ -33,4 +33,25 @@ public final class StringUtils {
         return (str == null) || (str.equals(""));
     }
 
+    /**
+     * Checks whether every character in a string is present
+     * in a valid characters set.
+     *
+     * @param str the string to validate
+     * @param validCharacters a string containing the valid characters
+     * @return true if the string is valid
+     */
+    public static boolean containsOnlyCharacters(
+            final String str, final String validCharacters) {
+
+        for (int i = 0; i < str.length(); i++) {
+            if (validCharacters.indexOf(str.charAt(i)) == -1) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
 }

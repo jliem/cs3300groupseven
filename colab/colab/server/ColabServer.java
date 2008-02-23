@@ -16,7 +16,7 @@ import colab.server.remote.ConnectionInterface;
 /**
  * Server implementation of ColabServerInterface.
  */
-public class ColabServer extends UnicastRemoteObject
+public final class ColabServer extends UnicastRemoteObject
         implements ColabServerInterface {
 
     /** Serialization version number. */
@@ -51,7 +51,7 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final ConnectionInterface connect() throws RemoteException {
+    public ConnectionInterface connect() throws RemoteException {
         return new Connection(this);
     }
 
@@ -60,7 +60,7 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @return the user manager for this server instance
      */
-    public final UserManager getUserManager() {
+    public UserManager getUserManager() {
         return this.userManager;
     }
 
@@ -69,8 +69,12 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @return the channel for this server instance
      */
-    public final ChannelManager getChannelManager() {
+    public ChannelManager getChannelManager() {
         return this.channelManager;
+    }
+
+    private void initialize(final String path) throws IOException {
+        File dataDirectory = FileUtils.getOrCreateDirectory(path);
     }
 
     /**
@@ -81,20 +85,6 @@ public class ColabServer extends UnicastRemoteObject
      */
     public static void main(final String[] args) throws Exception {
 
-        String pathArg;
-        if (args.length >= 1) {
-            pathArg = args[0];
-        } else {
-            pathArg = "data";
-        }
-        File dataDirectory;
-        try {
-            dataDirectory = FileUtils.getOrCreateDirectory(pathArg);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            System.exit(1);
-        }
-
         // Assign a security manager, in the event
         // that dynamic classes are loaded
         //if (System.getSecurityManager() == null) {
@@ -103,6 +93,15 @@ public class ColabServer extends UnicastRemoteObject
 
         // Create a server
         ColabServer server = new ColabServer();
+
+        String pathArg;
+        if (args.length >= 1) {
+            pathArg = args[0];
+        } else {
+            pathArg = "data";
+        }
+
+        server.initialize(pathArg);
 
         // Create the rmi registry, add the server to it
         LocateRegistry.createRegistry(DEFAULT_PORT);

@@ -81,9 +81,15 @@ public class ColabServer extends UnicastRemoteObject
      */
     public static void main(final String[] args) throws Exception {
 
+        String pathArg;
+        if (args.length >= 1) {
+            pathArg = args[0];
+        } else {
+            pathArg = ".";
+        }
         File dataDirectory;
         try {
-            dataDirectory = FileUtils.getOrCreateDirectory(args[0]);
+            dataDirectory = FileUtils.getOrCreateDirectory(pathArg);
         } catch (IOException ioe) {
             ioe.printStackTrace();
             System.exit(1);

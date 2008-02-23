@@ -21,7 +21,7 @@ public final class FileUtils {
 
             // If a relative path was given, prepend the user path
             file = new File(System.getProperty("user.dir")
-                    + File.pathSeparator + pathStr);
+                    + File.separator + pathStr);
 
         }
 

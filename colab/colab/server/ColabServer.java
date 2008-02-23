@@ -85,7 +85,7 @@ public class ColabServer extends UnicastRemoteObject
         if (args.length >= 1) {
             pathArg = args[0];
         } else {
-            pathArg = ".";
+            pathArg = "data";
         }
         File dataDirectory;
         try {

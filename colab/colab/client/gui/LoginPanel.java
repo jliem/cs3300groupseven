@@ -1,4 +1,4 @@
-package colab.client;
+package colab.client.gui;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;

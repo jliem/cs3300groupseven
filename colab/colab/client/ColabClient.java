@@ -20,7 +20,7 @@ public final class ColabClient {
     /**
      * Constructs the client application.
      */
-    private ColabClient() {
+    public ColabClient() {
 
     }
 

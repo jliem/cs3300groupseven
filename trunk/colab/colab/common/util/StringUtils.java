@@ -26,7 +26,7 @@ public final class StringUtils {
     /**
      * Determines whether a string is empty or null.
      *
-     * @param str a stirng
+     * @param str a string
      * @return true if the string is empty or null, false otherwise
      */
     public static boolean isEmptyOrNull(final String str) {

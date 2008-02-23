@@ -42,6 +42,16 @@ public final class Password implements Serializable {
     }
 
     /**
+     * Constructs a new Password representing
+     * the given password character array.
+     *
+     * @param pass a character array
+     */
+    public Password(final char[] pass) {
+        this(new String(pass));
+    }
+
+    /**
      * Constructs a new Password whose hash is equal to
      * the given byte array.
      *

@@ -25,6 +25,7 @@ public abstract class Channel extends UnicastRemoteObject
      * Constructs a new channel.
      *
      * @param name the name of the channel
+     * @throws RemoteException if an rmi error occurs
      */
     public Channel(final ChannelName name) throws RemoteException {
         this.name = name;

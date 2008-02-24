@@ -2,7 +2,7 @@ package colab.common.user;
 
 import colab.common.exception.naming.InvalidUserNameException;
 import colab.common.identity.StringIdentifier;
-import colab.naming.ColabNameRules;
+import colab.common.naming.ColabNameRules;
 
 /**
  * The name a user uses to log in.

@@ -12,7 +12,7 @@ import colab.common.user.UserName;
 /**
  * A client-side remote Channel object.
  */
-public abstract class ClientChannel extends Channel implements ChannelInterface {
+abstract class ClientChannel extends Channel implements ChannelInterface {
 
     protected final Set<UserName> members;
 

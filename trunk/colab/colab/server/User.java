@@ -8,7 +8,7 @@ import colab.common.user.UserName;
 /**
  * Represents a user of the system.
  */
-public class User implements Identifiable<UserName>, Serializable {
+class User implements Identifiable<UserName>, Serializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

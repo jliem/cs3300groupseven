@@ -15,7 +15,7 @@ import colab.common.user.UserName;
 /**
  * Represents a community which can be joined by users.
  */
-public class Community implements Identifiable<CommunityName>, Serializable {
+class Community implements Identifiable<CommunityName>, Serializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

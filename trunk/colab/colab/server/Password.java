@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Represents a string password.  Stores only a hashed version of the string.
  */
-public final class Password implements Serializable {
+final class Password implements Serializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

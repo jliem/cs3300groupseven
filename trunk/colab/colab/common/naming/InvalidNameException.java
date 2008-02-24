@@ -1,4 +1,4 @@
-package colab.naming;
+package colab.common.naming;
 
 /**
  * Indicates that an improperly-formatted string was

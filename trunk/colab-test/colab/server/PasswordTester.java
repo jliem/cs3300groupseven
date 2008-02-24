@@ -1,6 +1,5 @@
-package colab.common.user;
+package colab.server;
 
-import colab.server.Password;
 import junit.framework.TestCase;
 
 /**

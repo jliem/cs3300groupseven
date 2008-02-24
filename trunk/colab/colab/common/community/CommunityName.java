@@ -2,7 +2,7 @@ package colab.common.community;
 
 import colab.common.exception.naming.InvalidCommunityNameException;
 import colab.common.identity.StringIdentifier;
-import colab.naming.ColabNameRules;
+import colab.common.naming.ColabNameRules;
 
 /**
  * The name that uniquely identifies a community.

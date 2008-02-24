@@ -10,7 +10,7 @@ import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
 
-public final class ServerChatChannel extends ServerChannel {
+final class ServerChatChannel extends ServerChannel {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;

@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
-import colab.common.channel.ChannelType;
 import colab.common.community.CommunityName;
 import colab.common.exception.remote.ChannelDoesNotExistException;
 
@@ -17,7 +16,7 @@ import colab.common.exception.remote.ChannelDoesNotExistException;
  * is joined by one or more users.
  *
  */
-public class ChannelManager {
+class ChannelManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

@@ -15,7 +15,7 @@ import colab.server.remote.ConnectionInterface;
 /**
  * Server implementation of ColabServerInterface.
  */
-public final class ColabServer extends UnicastRemoteObject
+final class ColabServer extends UnicastRemoteObject
         implements ColabServerInterface {
 
     /** Serialization version number. */

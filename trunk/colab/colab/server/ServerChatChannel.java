@@ -4,7 +4,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
+import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
 
@@ -46,6 +48,11 @@ public final class ServerChatChannel extends ServerChannel {
 
         return messages.getLast(count);
 
+    }
+
+    @Override
+    public ChannelDescriptor getChannelDescriptor() {
+        return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import colab.client.remote.ChannelInterface;
 import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
 import colab.common.community.Community;
 import colab.common.community.CommunityName;
@@ -251,6 +252,37 @@ public final class Connection extends UnicastRemoteObject
         this.community = communityAttempt;
         this.state = STATE.ACTIVE;
 
+    }
+
+    /**
+     * Return all channels in the currently logged in community.
+     *
+     * @return all the channels of the currently logged in community
+     */
+    public Collection<ChannelDescriptor> getChannels() {
+
+        // Must be in the Connected (not logged in) state
+        if (this.state != STATE.CONNECTED) {
+            System.err.println("[Connection] Attempt to get channels "
+                    + "on connection in '"
+                    + this.state + "' state");
+            throw new IllegalStateException();
+        }
+
+        ChannelManager cm = server.getChannelManager();
+        Collection<ServerChannel> serverChannelColl =
+            cm.getChannelsByCommunity(this.community.getId());
+
+        // Convert to ChannelDescriptor by iterating through and building
+        // a new list
+        ArrayList<ChannelDescriptor> chanDescList =
+            new ArrayList<ChannelDescriptor>();
+
+        for (ServerChannel sc : serverChannelColl) {
+            chanDescList.add(sc.getChannelDescriptor());
+        }
+
+        return chanDescList;
     }
 
     /** {@inheritDoc} */

@@ -27,7 +27,7 @@ public interface ConnectionInterface extends Remote {
      * @return true if the login was performed successfully, false otherwise
      * @throws RemoteException if an rmi error occurs
      */
-    boolean logIn(UserName username, String password)
+    boolean logIn(UserName username, char[] password)
         throws RemoteException;
 
     /**

@@ -47,7 +47,7 @@ public final class ColabServer extends UnicastRemoteObject
 
         // Create the manager objects
         this.userManager = new UserManager();
-        this.channelManager = new ChannelManager();
+        this.channelManager = new ChannelManager(this);
 
     }
 

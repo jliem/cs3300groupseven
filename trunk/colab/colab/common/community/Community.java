@@ -1,12 +1,18 @@
 package colab.common.community;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
+import colab.client.remote.ColabClientInterface;
+import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.identity.Identifiable;
 import colab.common.user.Password;
 import colab.common.user.User;
+import colab.common.user.UserName;
 
 /**
  * Represents a community which can be joined by users.
@@ -30,6 +36,11 @@ public class Community implements Identifiable<CommunityName>, Serializable {
      * The password to join this community.
      */
     private Password password;
+
+    /**
+     * A list of actively connected clients
+     */
+    private Map<UserName, ColabClientInterface> clients;
 
     /**
      * Constructs a new community with the given name and password.
@@ -77,6 +88,28 @@ public class Community implements Identifiable<CommunityName>, Serializable {
     public final Collection<User> getMembers() {
         return members;
     }
+
+    public final void addClient(final UserName username,
+            final ColabClientInterface client) {
+        clients.put(username, client);
+    }
+
+    /**
+     * Tells all clients that a new channel has been added.
+     *
+     * @param channelDescriptor descriptor of the added channel
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void channelAdded(final ChannelDescriptor channelDescriptor) throws RemoteException {
+        for (final UserName userName : this.clients.keySet()) {
+            this.clients.get(userName).channelAdded(channelDescriptor);
+        }
+    }
+
+    public void removeClient(final UserName username) {
+        clients.remove(username);
+    }
+
 
     /**
      * Verifies whether a given password string is correct for this community.

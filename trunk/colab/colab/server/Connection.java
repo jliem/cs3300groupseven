@@ -308,7 +308,7 @@ public final class Connection extends UnicastRemoteObject
 
         ChannelManager cm = server.getChannelManager();
         Collection<ServerChannel> serverChannelColl =
-            cm.getChannelsByCommunity(this.community.getId());
+            cm.getChannels(this.community.getId());
 
         // Convert to ChannelDescriptor by iterating through and building
         // a new list

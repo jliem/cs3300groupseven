@@ -1,11 +1,11 @@
 package colab.client.gui;
 
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import colab.client.ColabClient;
 
@@ -15,6 +15,8 @@ public class ColabClientGUI extends JFrame {
 
     private final LoginPanel loginPanel;
     private final ChooseCommunityPanel commPanel;
+
+    private JPanel activePanel;
 
     public ColabClientGUI(final ColabClient client) {
         super();
@@ -39,21 +41,26 @@ public class ColabClientGUI extends JFrame {
     }
 
     private void gotoUserLoginView() {
-        removeAll();
+        setActivePanel(loginPanel);
         setTitle("CoLab Login");
         setResizable(false);
         setSize(400, 100);
-        add(loginPanel);
         loginPanel.updateUI();
     }
 
     private void gotoCommunityLoginView() {
-        removeAll();
+        setActivePanel(commPanel);
         setTitle("Select Community");
         setResizable(false);
         setSize(400, 100);
-        add(commPanel);
         commPanel.updateUI();
+    }
+
+    private void setActivePanel(final JPanel newActivePanel) {
+        if (activePanel != null) {
+            remove(activePanel);
+        }
+        add(activePanel = newActivePanel);
     }
 
     public ColabClientGUI() throws RemoteException {

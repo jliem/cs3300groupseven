@@ -6,6 +6,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import colab.client.remote.ColabClientInterface;
+import colab.common.channel.ChannelName;
 import colab.common.community.CommunityName;
 import colab.common.exception.network.ConnectionDroppedException;
 import colab.common.exception.network.NetworkException;
@@ -97,6 +98,11 @@ public final class ColabClient extends UnicastRemoteObject
     
     public Collection<CommunityName> getMyCommunityNames() throws RemoteException{
         return connection.getMyCommunityNames();
+    }
+    
+    public ClientChannel joinChannel(ChannelName name){
+        return null;
+        
     }
     
 }

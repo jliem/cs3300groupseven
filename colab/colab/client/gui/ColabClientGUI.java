@@ -27,16 +27,16 @@ public class ColabClientGUI extends JFrame {
         this.client = client;
 
         this.loginPanel = new LoginPanel(client);
-        this.loginPanelWrapper = new FixedSizePanel(
-                loginPanel, new Dimension(420, 120));
+        this.loginPanelWrapper = new FixedSizePanel(loginPanel, new Dimension(
+                420, 120));
 
         this.communityPanel = new ChooseCommunityPanel();
-        this.communityPanelWrapper = new FixedSizePanel(
-                communityPanel, new Dimension(420, 120));
+        this.communityPanelWrapper = new FixedSizePanel(communityPanel,
+                new Dimension(420, 120));
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        gotoUserLoginView();
+        gotoUserLoginView(false);
 
         loginPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -46,28 +46,50 @@ public class ColabClientGUI extends JFrame {
             }
         });
 
-        communityPanel.addActionListener(new ActionListener(){
-           public void actionPerformed(final ActionEvent e) {
-               chatPanel = new ChatPanel(currentUser);
+        communityPanel.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                chatPanel = new ChatPanel(currentUser);
 
-               setTitle(communityPanel.getCurrentCommunityName()
-                          + " Lobby Chat");
-               setActivePanel(chatPanel);
-               setResizable(false);
-               setSize(350, 350);
-               chatPanel.updateUI();
-           }
+                chatPanel.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getActionCommand().equals("Logout!")) {
+                            logout();
+                        }
+                        if (e.getActionCommand().equals("Switch!")) {
+                            gotoCommunityLoginView();
+                        }
+                    }
+                });
+
+                setTitle(communityPanel.getCurrentCommunityName()
+                        + " Lobby Chat");
+                setActivePanel(chatPanel);
+                setResizable(false);
+                setSize(350, 375);
+                chatPanel.updateUI();
+            }
         });
 
     }
 
-    private void gotoUserLoginView() {
+    private void gotoUserLoginView(boolean logout) {
 
-        setActivePanel(loginPanelWrapper);
-        setTitle("CoLab Login");
-        setResizable(false);
-        setSize(500, 200);
-        loginPanel.updateUI();
+        if (!logout) {
+            setActivePanel(loginPanelWrapper);
+            setTitle("CoLab Login");
+            setResizable(false);
+            setSize(500, 200);
+            loginPanel.updateUI();
+        }
+
+        else {
+            loginPanel.clearFields();
+            setActivePanel(loginPanelWrapper);
+            setTitle("CoLab Login");
+            setResizable(false);
+            setSize(500, 200);
+            loginPanel.updateUI();
+        }
 
     }
 
@@ -75,7 +97,7 @@ public class ColabClientGUI extends JFrame {
 
         ArrayList<String> commNames = new ArrayList<String>();
         try {
-            for(CommunityName name: client.getMyCommunityNames()) {
+            for (CommunityName name : client.getMyCommunityNames()) {
                 commNames.add(name.getValue());
             }
         } catch (RemoteException re) {
@@ -104,18 +126,21 @@ public class ColabClientGUI extends JFrame {
         this(new ColabClient());
     }
 
+    public void logout() {
+        // client.logout()?
+        gotoUserLoginView(true);
+    }
+
     public static void main(final String[] args) throws RemoteException {
 
         // Assign a security manager, in the event
         // that dynamic classes are loaded.
-        //if (System.getSecurityManager() == null) {
-        //    System.setSecurityManager(new RMISecurityManager());
-        //}
+        // if (System.getSecurityManager() == null) {
+        // System.setSecurityManager(new RMISecurityManager());
+        // }
 
         new ColabClientGUI();
 
-
     }
-
 
 }

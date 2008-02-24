@@ -1,4 +1,4 @@
-package colab.common.exception.naming;
+package colab.common.naming;
 
 public class InvalidCommunityNameException extends InvalidNameException {
 

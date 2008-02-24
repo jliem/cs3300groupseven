@@ -7,9 +7,9 @@ import java.util.List;
 
 import colab.client.remote.ChannelInterface;
 import colab.common.channel.ChannelData;
-import colab.common.channel.ChannelName;
-import colab.common.community.CommunityName;
-import colab.common.user.UserName;
+import colab.common.naming.ChannelName;
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 
 /**
  * A remote object on the server which represents a client's session.

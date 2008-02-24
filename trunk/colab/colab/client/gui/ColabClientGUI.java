@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import colab.client.ColabClient;
-import colab.common.community.CommunityName;
+import colab.common.naming.CommunityName;
 
 class ColabClientGUI extends JFrame {
 

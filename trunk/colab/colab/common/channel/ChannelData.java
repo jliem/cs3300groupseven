@@ -2,7 +2,7 @@ package colab.common.channel;
 
 import java.util.Date;
 
-import colab.common.user.UserName;
+import colab.common.naming.UserName;
 
 /**
  * Represents some piece of data in a Channel.

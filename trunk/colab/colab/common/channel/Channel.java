@@ -1,6 +1,7 @@
 package colab.common.channel;
 
 import colab.common.identity.Identifiable;
+import colab.common.naming.ChannelName;
 
 /**
  * Represents a channel in the system, including data,

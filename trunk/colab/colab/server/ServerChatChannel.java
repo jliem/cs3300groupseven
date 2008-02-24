@@ -5,10 +5,10 @@ import java.util.List;
 
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelName;
 import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
+import colab.common.naming.ChannelName;
 
 final class ServerChatChannel extends ServerChannel {
 

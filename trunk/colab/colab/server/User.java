@@ -3,7 +3,7 @@ package colab.server;
 import java.io.Serializable;
 
 import colab.common.identity.Identifiable;
-import colab.common.user.UserName;
+import colab.common.naming.UserName;
 
 /**
  * Represents a user of the system.

@@ -1,5 +1,6 @@
 package colab.common.user;
 
+import colab.server.User;
 import junit.framework.TestCase;
 
 /**

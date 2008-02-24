@@ -1,8 +1,9 @@
-package colab.common.user;
+package colab.server;
 
 import java.io.Serializable;
 
 import colab.common.identity.Identifiable;
+import colab.common.user.UserName;
 
 /**
  * Represents a user of the system.

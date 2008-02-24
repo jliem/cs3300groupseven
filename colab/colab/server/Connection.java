@@ -11,13 +11,11 @@ import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
-import colab.common.community.Community;
 import colab.common.community.CommunityName;
 import colab.common.exception.remote.AuthenticationException;
 import colab.common.exception.remote.CommunityDoesNotExistException;
 import colab.common.exception.remote.IncorrectPasswordException;
 import colab.common.exception.remote.UserDoesNotExistException;
-import colab.common.user.User;
 import colab.common.user.UserName;
 import colab.server.remote.ConnectionInterface;
 

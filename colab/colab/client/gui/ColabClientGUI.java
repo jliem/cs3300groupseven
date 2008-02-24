@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import colab.client.ColabClient;
 import colab.common.naming.CommunityName;
+import colab.common.remote.server.ConnectionInterface;
 
 class ColabClientGUI extends JFrame {
 
@@ -56,7 +57,7 @@ class ColabClientGUI extends JFrame {
                             logout();
                         }
                         if (e.getActionCommand().equals("Switch!")) {
-                            gotoCommunityLoginView();
+                            switchCommunity();
                         }
                     }
                 });
@@ -127,8 +128,35 @@ class ColabClientGUI extends JFrame {
     }
 
     public void logout() {
-        // client.logout()?
+
+        // Try to close the connection
+        ConnectionInterface connection = client.getConnection();
+
+        if (connection != null) {
+            try {
+                connection.logOutUser();
+            } catch (RemoteException re) {
+                re.printStackTrace();
+            }
+        }
+
+
         gotoUserLoginView(true);
+    }
+
+    public void switchCommunity() {
+        // Try to log out on the server
+        ConnectionInterface connection = client.getConnection();
+
+        if (connection != null) {
+            try {
+                connection.logOutCommunity();
+            } catch (RemoteException re) {
+                re.printStackTrace();
+            }
+        }
+
+        gotoCommunityLoginView();
     }
 
     public static void main(final String[] args) throws RemoteException {

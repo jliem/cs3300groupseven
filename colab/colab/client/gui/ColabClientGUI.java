@@ -1,26 +1,21 @@
 package colab.client.gui;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import colab.client.ColabClient;
+import colab.common.community.CommunityName;
 
 public class ColabClientGUI extends JFrame {
-
-    /** Serialization version number. */
-    private static final long serialVersionUID = 1L;
 
     private final ColabClient client;
 
     private final LoginPanel loginPanel;
-    private final FixedSizePanel loginPanelWrapper;
-    private final ChooseCommunityPanel communityPanel;
-    private final FixedSizePanel communityPanelWrapper;
+    private ChooseCommunityPanel commPanel;
 
     private JPanel activePanel;
 
@@ -30,13 +25,7 @@ public class ColabClientGUI extends JFrame {
         this.client = client;
 
         this.loginPanel = new LoginPanel(client);
-        this.loginPanelWrapper = new FixedSizePanel(
-                loginPanel, new Dimension(420, 120));
-
-        this.communityPanel = new ChooseCommunityPanel();
-        this.communityPanelWrapper = new FixedSizePanel(
-                communityPanel, new Dimension(420, 120));
-
+        this.commPanel = new ChooseCommunityPanel();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         gotoUserLoginView();
@@ -44,7 +33,17 @@ public class ColabClientGUI extends JFrame {
         loginPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 if (e.getActionCommand().equals("Login Succeeded!")) {
-                    gotoCommunityLoginView();
+                    ArrayList<String> commNames = new ArrayList<String>();
+                    try {
+                        for(CommunityName name: client.getAllCommunityNames())
+                            commNames.add(name.getValue());
+                    } catch (RemoteException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                        
+                    }
+                    
+                    gotoCommunityLoginView(commNames.toArray());
                 }
             }
         });
@@ -52,19 +51,21 @@ public class ColabClientGUI extends JFrame {
     }
 
     private void gotoUserLoginView() {
-        setActivePanel(loginPanelWrapper);
+        setActivePanel(loginPanel);
         setTitle("CoLab Login");
         setResizable(false);
-        setSize(500, 240);
+        setSize(400, 100);
         loginPanel.updateUI();
     }
 
-    private void gotoCommunityLoginView() {
-        setActivePanel(communityPanelWrapper);
+    private void gotoCommunityLoginView(Object[] names){
+       
+        commPanel.setCommunityNames(names);
+        setActivePanel(commPanel);
         setTitle("Select Community");
         setResizable(false);
-        setSize(500, 240);
-        communityPanel.updateUI();
+        setSize(400, 100);
+        commPanel.updateUI();
     }
 
     private void setActivePanel(final JPanel newActivePanel) {
@@ -87,6 +88,7 @@ public class ColabClientGUI extends JFrame {
         //}
 
         new ColabClientGUI();
+        
 
     }
 

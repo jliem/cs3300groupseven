@@ -35,7 +35,7 @@ public class ColabClientGUI extends JFrame {
                 if (e.getActionCommand().equals("Login Succeeded!")) {
                     ArrayList<String> commNames = new ArrayList<String>();
                     try {
-                        for(CommunityName name: client.getAllCommunityNames())
+                        for(CommunityName name: client.getMyCommunityNames())
                             commNames.add(name.getValue());
                     } catch (RemoteException e1) {
                         // TODO Auto-generated catch block

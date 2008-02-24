@@ -111,17 +111,34 @@ public final class ColabServer extends UnicastRemoteObject
         LocateRegistry.createRegistry(DEFAULT_PORT);
         Naming.rebind("//localhost:" + DEFAULT_PORT + "/COLAB_SERVER", server);
 
-        // Populate a few test communities
-        server.userManager.addCommunity(
-                new Community("Group Seven", "sevenPass"));
-        server.userManager.addCommunity(
-                new Community("Team Awesome", "awesomePass"));
-
         // Populate a few test users
-        server.userManager.addUser(new User("Johannes", "pass1"));
-        server.userManager.addUser(new User("Pamela", "pass2"));
-        server.userManager.addUser(new User("Matthew", "pass3"));
-        server.userManager.addUser(new User("Chris", "pass4"));
+
+        User johannes = new User("Johannes", "pass1");
+        server.userManager.addUser(johannes);
+
+        User pamela = new User("Pamela", "pass2");
+        server.userManager.addUser(pamela);
+
+        User matthew = new User("Matthew", "pass3");
+        server.userManager.addUser(matthew);
+
+        User chris = new User("Chris", "pass4");
+        server.userManager.addUser(chris);
+
+        // Populate a few test communities
+        Community groupSeven = new Community("Group Seven", "sevenPass");
+        groupSeven.getMembers().add(johannes);
+        groupSeven.getMembers().add(pamela);
+        groupSeven.getMembers().add(matthew);
+        groupSeven.getMembers().add(chris);
+        server.userManager.addCommunity(groupSeven);
+
+        Community teamAwesome = new Community("Team Awesome", "awesomePass");
+        teamAwesome.getMembers().add(chris);
+        server.userManager.addCommunity(teamAwesome);
+
+        Community noMembers = new Community("The No-Members Community", "abcd");
+        server.userManager.addCommunity(noMembers);
 
         System.out.println("Server initialized");
 

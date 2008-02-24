@@ -88,6 +88,10 @@ public class Community implements Identifiable<CommunityName>, Serializable {
         return password.checkPassword(attempt);
     }
 
+    public final boolean isMember(final User user) {
+        return members.contains(user);
+    }
+
     /**
      * Handles a user attempt to log in to this community.
      *
@@ -106,13 +110,8 @@ public class Community implements Identifiable<CommunityName>, Serializable {
     public final boolean authenticate(final User user,
             final String passAttempt) {
 
-        // If user is a member of the group, authentication is successful.
-        if (members.contains(user)) {
-            return true;
-        }
-
         // If a correct password was provided, the user can join.
-        if (password != null && checkPassword(passAttempt)) {
+        if (passAttempt != null && checkPassword(passAttempt)) {
             members.add(user);
             return true;
         }

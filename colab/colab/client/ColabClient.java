@@ -81,7 +81,9 @@ public final class ColabClient extends UnicastRemoteObject
 
         try {
             this.connection.logIn(new UserName(username), password);
+            System.err.println("Auth success");
         } catch (final AuthenticationException ae) {
+            System.err.println("Auth fail");
             throw ae;
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);

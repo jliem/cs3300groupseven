@@ -1,4 +1,4 @@
-package colab.common.community;
+package colab.server;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -7,11 +7,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import colab.client.remote.ColabClientInterface;
-import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.community.CommunityName;
 import colab.common.identity.Identifiable;
-import colab.common.user.Password;
-import colab.common.user.User;
 import colab.common.user.UserName;
 
 /**

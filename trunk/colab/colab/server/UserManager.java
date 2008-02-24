@@ -2,10 +2,8 @@ package colab.server;
 
 import java.util.Collection;
 
-import colab.common.community.Community;
 import colab.common.community.CommunityName;
 import colab.common.identity.IdentitySet;
-import colab.common.user.User;
 import colab.common.user.UserName;
 
 /**

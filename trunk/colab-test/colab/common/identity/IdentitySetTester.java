@@ -1,8 +1,8 @@
 package colab.common.identity;
 
 import junit.framework.TestCase;
-import colab.common.user.User;
 import colab.common.user.UserName;
+import colab.server.User;
 
 /**
  * Test cases for {@link IdentitySet}.

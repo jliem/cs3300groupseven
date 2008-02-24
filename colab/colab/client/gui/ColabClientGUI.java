@@ -17,19 +17,23 @@ public class ColabClientGUI extends JFrame {
 
     private final LoginPanel loginPanel;
     private final FixedSizePanel loginPanelWrapper;
-    private ChooseCommunityPanel commPanel;
+    private ChooseCommunityPanel communityPanel;
+    private final FixedSizePanel communityPanelWrapper;
     private ChatPanel chatPanel;
     private JPanel activePanel;
     private String currentUser;
     
-
     public ColabClientGUI(final ColabClient client) {
         this.client = client;
 
         this.loginPanel = new LoginPanel(client);
-        this.commPanel = new ChooseCommunityPanel();
         this.loginPanelWrapper = new FixedSizePanel(
                 loginPanel, new Dimension(420, 120));
+        
+        this.communityPanel = new ChooseCommunityPanel();
+        this.communityPanelWrapper = new FixedSizePanel(
+                communityPanel, new Dimension(420, 120));
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         gotoUserLoginView();
@@ -52,12 +56,12 @@ public class ColabClientGUI extends JFrame {
             }
         });
         
-        commPanel.addActionListener(new ActionListener(){
+        communityPanel.addActionListener(new ActionListener(){
            public void actionPerformed(ActionEvent e)
            {
                chatPanel = new ChatPanel(currentUser);
                
-               setTitle(commPanel.getCurrentCommunityName() + " Lobby Chat");
+               setTitle(communityPanel.getCurrentCommunityName() + " Lobby Chat");
                setActivePanel(chatPanel);
                setResizable(false);
                setSize(350, 350);
@@ -78,12 +82,12 @@ public class ColabClientGUI extends JFrame {
     private void gotoCommunityLoginView(Object[] names){
        
         this.currentUser = loginPanel.getCurrentUser();
-        commPanel.setCommunityNames(names);
-        setActivePanel(commPanel);
+        communityPanel.setCommunityNames(names);
+        setActivePanel(communityPanel);
         setTitle("Select Community");
         setResizable(false);
         setSize(400, 100);
-        commPanel.updateUI();
+        communityPanel.updateUI();
     }
 
     private void setActivePanel(final JPanel newActivePanel) {

@@ -106,7 +106,6 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
-    @Override
     public void channelAdded(ChannelDescriptor channelDescriptor) {
         // TODO Auto-generated method stub
 

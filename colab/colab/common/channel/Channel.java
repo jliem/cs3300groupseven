@@ -31,4 +31,5 @@ public abstract class Channel implements Identifiable<ChannelName> {
         return name;
     }
 
+    public abstract ChannelDescriptor getChannelDescriptor();
 }

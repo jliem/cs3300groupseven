@@ -1,8 +1,9 @@
 package colab.server;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-
 
 import colab.common.channel.ChannelName;
 import colab.common.community.CommunityName;
@@ -27,6 +28,33 @@ public class ChannelManager {
      */
     public ChannelManager() {
         channelMap = new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
+    }
+
+    /**
+     * Returns a Collection of a Community's channels.
+     *
+     * @param communityName the Community to look up
+     * @return a non-null Collection of its channels. If there are no channels, the resulting
+     * Collection will have size()==0.
+     */
+    public final Collection<ServerChannel> getChannelsByCommunity(final CommunityName communityName) {
+
+        Collection<ServerChannel> result = null;
+
+        if (channelMap.containsKey(communityName)) {
+            // The community is in the map, so find what channels it has
+            HashMap<ChannelName, ServerChannel> subMap = channelMap.get(communityName);
+
+            // Does this return null if there are no values, or just an empty list?
+            result = subMap.values();
+        }
+
+        if (result == null) {
+            // There are no channels, so return an empty list
+            result = new ArrayList<ServerChannel>();
+        }
+
+        return result;
     }
 
     /**

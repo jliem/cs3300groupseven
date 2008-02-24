@@ -1,39 +1,35 @@
 package colab.common.channel;
 
-enum ChannelType {
-  CHAT{public String toString(){return "Chat";}},
-  WHITE_BOARD{public String toString(){return "White Board";}},
-  DOCUMENT{public String toString(){return "Document";}}
-};
-
 public class ChannelDescriptor {
 
-  private String name;
-  private ChannelType type;
-  
-  public ChannelDescriptor(String name, ChannelType type)
-  {
-    this.name = new String(name);
-    this.type = type;
-  }
+    private ChannelName channelName;
+    private ChannelType channelType;
 
-  public String getName()
-  {
-    return name;
-  }
+    public ChannelDescriptor(ChannelName channelName, ChannelType type) {
+        this.channelName = channelName;
+        this.channelType = type;
+    }
 
-  public void setName(String name)
-  {
-    this.name = name;
-  }
+    public ChannelDescriptor(String name, ChannelType type)
+    {
+        this(new ChannelName(name), type);
+    }
 
-  public ChannelType getType()
-  {
-    return type;
-  }
+    public ChannelName getName() {
+        return channelName;
+    }
 
-  public void setType(ChannelType type)
-  {
-    this.type = type;
-  }
+    public void setName(ChannelName name) {
+        this.channelName = name;
+    }
+
+    public ChannelType getType()
+    {
+        return channelType;
+    }
+
+    public void setType(ChannelType type)
+    {
+        this.channelType = type;
+    }
 }

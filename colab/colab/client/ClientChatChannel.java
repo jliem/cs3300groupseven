@@ -3,13 +3,16 @@ package colab.client;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import colab.client.remote.ChannelInterface;
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
+import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
 import colab.common.identity.LockIdentifier;
 
-public class ClientChatChannel extends ClientChannel {
+public class ClientChatChannel extends ClientChannel implements ChannelInterface {
 
     protected ChatDataCollection messages;
 
@@ -23,57 +26,9 @@ public class ClientChatChannel extends ClientChannel {
         messages.add(chatData);
     }
 
-    public void addAll(List<ChannelData> data) throws RemoteException {
-        for (ChannelData d : data) {
-            add(d);
-        }
-    }
-
-    public int getDataCount() throws RemoteException {
-        return messages.size();
-    }
-
-    public List<ChannelData> getFirst(int count) throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public List<ChannelData> getFrom(int startIndex, int count)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public List<ChannelData> getLast(int count) throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public List<ChannelData> getRange(int startIndex, int endIndex)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public List<ChannelData> getTo(int endIndex, int count)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void getLock(LockIdentifier lockId)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void giveLock(LockIdentifier lockId)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void lock(LockIdentifier lockId, String username)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
-    }
-
-    public void unlock(LockIdentifier lockId, String username)
-            throws RemoteException {
-        throw new UnsupportedOperationException();
+    @Override
+    public ChannelDescriptor getChannelDescriptor() {
+        return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
     }
 
 }

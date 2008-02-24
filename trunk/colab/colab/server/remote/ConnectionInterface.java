@@ -93,4 +93,7 @@ public interface ConnectionInterface extends Remote {
     void add(ChannelName channelName, ChannelData data)
             throws RemoteException;
 
+    Collection<UserName> getActiveUsers(ChannelName channelName)
+            throws RemoteException;
+
 }

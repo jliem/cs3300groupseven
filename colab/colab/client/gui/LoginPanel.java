@@ -1,4 +1,5 @@
 package colab.client.gui;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,22 +46,19 @@ public class LoginPanel extends JPanel {
 
                     currentUser = username.getText();
                     client.loginUser(username.getText(),
-                        password.getPassword(), serverIP.getText());
+                            password.getPassword(), serverIP.getText());
 
-                    fireActionPerformed(new ActionEvent(
-                            this, ActionEvent.ACTION_FIRST,
-                            "Login Succeeded!"));
+                    fireActionPerformed(new ActionEvent(this,
+                            ActionEvent.ACTION_FIRST, "Login Succeeded!"));
 
                 } catch (final Exception e) {
 
-                    fireActionPerformed(new ActionEvent(
-                            this, ActionEvent.ACTION_FIRST,
-                            "Login Failed!"));
+                    fireActionPerformed(new ActionEvent(this,
+                            ActionEvent.ACTION_FIRST, "Login Failed!"));
 
                 }
             }
         };
-
 
         KeyListener k = new KeyAdapter() {
 
@@ -76,7 +74,6 @@ public class LoginPanel extends JPanel {
         username.addKeyListener(k);
         password.addKeyListener(k);
         serverIP.addKeyListener(k);
-
 
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -105,9 +102,16 @@ public class LoginPanel extends JPanel {
     public void addActionListener(final ActionListener listener) {
         listeners.add(listener);
     }
-    
-    public String getCurrentUser(){
+
+    public String getCurrentUser() {
         return currentUser;
+    }
+
+    public void clearFields() {
+        // TODO Auto-generated method stub
+        password.setText("");
+        username.setText("");
+
     }
 
 }

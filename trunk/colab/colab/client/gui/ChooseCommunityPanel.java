@@ -13,61 +13,59 @@ import colab.client.ColabClient;
 
 public class ChooseCommunityPanel extends JPanel {
 
-	private JLabel selectLabel;
-	private JButton selectButton;
-	private JComboBox selectBox;
-	
-	private final ArrayList<ActionListener> listeners;
-	
-	// private
+    private JLabel selectLabel;
+    private JButton selectButton;
+    private JComboBox selectBox;
 
-	public ChooseCommunityPanel() {
-	    
-	    listeners = new ArrayList<ActionListener>();
-	    
-	    selectLabel = new JLabel(
-				"Select the community you wish to visit for this session: ");
+    private final ArrayList<ActionListener> listeners;
 
-		selectButton = new JButton("Select");
-		
-		selectBox = new JComboBox();
+    // private
 
-		selectButton.addActionListener(new ActionListener()
-		{
-		    public void actionPerformed(ActionEvent e){
-		        fireActionPerformed(e);
-		    }
-		});
+    public ChooseCommunityPanel() {
 
-		setLayout(new GridLayout(3, 1));
+        listeners = new ArrayList<ActionListener>();
 
-		add(selectLabel);
-		add(selectBox);
-		add(selectButton);
+        selectLabel = new JLabel(
+                "Select the community you wish to visit for this session: ");
 
-	}
-	
-	public void setCommunityNames(Object[] names){
-	    
-	    for(Object name: names)
-	        selectBox.addItem(name.toString());
-	    
-	}
-	
-	public void addActionListener(ActionListener l) {
-	    listeners.add(l);
-	}
-	
-	public void fireActionPerformed(ActionEvent e)
-	{
-	    for(ActionListener l : listeners) {
-	        l.actionPerformed(e);
-	    }
-	}
-	
-	public String getCurrentCommunityName(){
-	    return selectBox.getSelectedItem().toString();
-	}
-	
+        selectButton = new JButton("Select");
+
+        selectBox = new JComboBox();
+
+        selectButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                fireActionPerformed(e);
+            }
+        });
+
+        setLayout(new GridLayout(3, 1));
+
+        add(selectLabel);
+        add(selectBox);
+        add(selectButton);
+
+    }
+
+    public void setCommunityNames(Object[] names) {
+        selectBox.removeAllItems();
+
+        for (Object name : names)
+            selectBox.addItem(name.toString());
+
+    }
+
+    public void addActionListener(ActionListener l) {
+        listeners.add(l);
+    }
+
+    public void fireActionPerformed(ActionEvent e) {
+        for (ActionListener l : listeners) {
+            l.actionPerformed(e);
+        }
+    }
+
+    public String getCurrentCommunityName() {
+        return selectBox.getSelectedItem().toString();
+    }
 
 }

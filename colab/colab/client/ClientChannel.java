@@ -6,8 +6,8 @@ import java.util.Set;
 
 import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
-import colab.common.channel.ChannelName;
-import colab.common.user.UserName;
+import colab.common.naming.ChannelName;
+import colab.common.naming.UserName;
 
 /**
  * A client-side remote Channel object.

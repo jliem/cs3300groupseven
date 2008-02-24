@@ -7,13 +7,13 @@ import java.util.Collection;
 
 import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelName;
-import colab.common.community.CommunityName;
 import colab.common.exception.network.ConnectionDroppedException;
 import colab.common.exception.network.NetworkException;
 import colab.common.exception.network.UnableToConnectException;
 import colab.common.exception.remote.AuthenticationException;
-import colab.common.user.UserName;
+import colab.common.naming.ChannelName;
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 import colab.server.remote.ColabServerInterface;
 import colab.server.remote.ConnectionInterface;
 

@@ -4,7 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import colab.common.channel.ChannelData;
-import colab.common.user.UserName;
+import colab.common.naming.UserName;
 
 public interface ChannelInterface extends Remote {
 

@@ -1,5 +1,7 @@
 package colab.common.channel;
 
+import colab.common.naming.ChannelName;
+
 public class ChannelDescriptor {
 
     private ChannelName channelName;

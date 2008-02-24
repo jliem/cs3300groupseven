@@ -8,9 +8,9 @@ import java.util.Map;
 
 import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.community.CommunityName;
 import colab.common.identity.Identifiable;
-import colab.common.user.UserName;
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 
 /**
  * Represents a community which can be joined by users.

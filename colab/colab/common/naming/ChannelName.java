@@ -1,5 +1,6 @@
-package colab.common.channel;
+package colab.common.naming;
 
+import colab.common.channel.Channel;
 import colab.common.identity.StringIdentifier;
 
 /**

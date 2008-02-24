@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
+import colab.common.channel.ChannelType;
 import colab.common.community.CommunityName;
+import colab.common.exception.remote.ChannelDoesNotExistException;
 
 /**
  * A channel manager provides channels.  This implementation
@@ -22,11 +25,15 @@ public class ChannelManager {
     /** Map of all channels, indexed by community name, then channel name */
     private HashMap<CommunityName, HashMap<ChannelName, ServerChannel>> channelMap;
 
+    private ColabServer server;
+
     /**
      * Constructs a new channel manager.
      *
      */
-    public ChannelManager() {
+    public ChannelManager(ColabServer server) {
+        this.server = server;
+
         channelMap = new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
     }
 
@@ -37,7 +44,7 @@ public class ChannelManager {
      * @return a non-null Collection of its channels. If there are no channels, the resulting
      * Collection will have size()==0.
      */
-    public final Collection<ServerChannel> getChannelsByCommunity(final CommunityName communityName) {
+    public final Collection<ServerChannel> getChannels(final CommunityName communityName) {
 
         Collection<ServerChannel> result = null;
 
@@ -58,56 +65,125 @@ public class ChannelManager {
     }
 
     /**
-     * Retrieves a channel.
-     * The channel will be created if it does not exist.
+     * Adds a new channel or returns the channel if it already existed.
      *
-     * @param communityName the name of the community to which
-     *                      the channel belongs
-     * @param channelName the name of the channel requested
-     * @return a remote reference to the requested channel
-     * @throws RemoteException if an rmi error occurs
+     * @param communityName community name
+     * @param channelDescriptor descriptor of the channel to add
+     * @return the newly added channel, or the previously existing channel
+     *
+     * @throws RemoteException if an rmi error occurred
      */
-    public final ServerChannel getChannel(final CommunityName communityName,
-            final ChannelName channelName) throws RemoteException {
+    public ServerChannel addChannel(final CommunityName communityName,
+            final ChannelDescriptor channelDescriptor) throws RemoteException {
 
-        ServerChannel result = null;
+        // Check whether channel exists
+        ChannelName channelName = channelDescriptor.getName();
 
-        HashMap<ChannelName, ServerChannel> subMap;
+        if (channelExists(communityName, channelName)) {
+            return getChannel(communityName, channelName);
+        }
 
-        // Check for community entry
+        // Create the new channel
+        ServerChannel channel = null;
+
+        switch (channelDescriptor.getType()) {
+
+            case CHAT:
+                channel = new ServerChatChannel(channelName);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Channel type was unsupported: "
+                        + channelDescriptor.getType());
+        }
+
+        // Check whether a community entry exists
+        HashMap<ChannelName, ServerChannel> subMap = null;
+
         if (channelMap.containsKey(communityName)) {
-
             subMap = channelMap.get(communityName);
-
         } else {
 
-            // The community did not exist in the map, so create an entry
+            // No community entry, add it
             subMap = new HashMap<ChannelName, ServerChannel>();
 
             channelMap.put(communityName, subMap);
         }
 
-        // Check for channel entry
-        if (subMap.containsKey(channelName)) {
-            result = subMap.get(channelName);
+        // Make sure channel entry doesn't exist
+        if (subMap.containsKey(channelName) == false) {
+            subMap.put(channelName, channel);
+        } else {
+            // If the channel entry did exist, something is really wrong
+            // since this method already checked whether it exists
+            throw new IllegalStateException("channelExists returned false,"+
+                    " but the channel already exists!");
+        }
 
+        // Because a new channel was added, notify all clients
+        server.getUserManager().getCommunity(communityName).channelAdded(channelDescriptor);
+
+        return channel;
+    }
+
+    /**
+     * Retrieves a channel.
+     *
+     * @param communityName the name of the community to which
+     *                      the channel belongs
+     * @param channelName the name of the channel requested
+     * @return a remote reference to the requested channel
+     * @throws ChannelDoesNotExistException if the channel does not exist
+     * @throws RemoteException if an rmi error occurs
+     */
+    public final ServerChannel getChannel(final CommunityName communityName,
+            final ChannelName channelName)
+        throws ChannelDoesNotExistException, RemoteException {
+
+        ServerChannel result = null;
+
+        // Check if it exists
+        if (channelExists(communityName, channelName)) {
+            HashMap<ChannelName, ServerChannel> subMap = channelMap.get(communityName);
+
+            result = subMap.get(channelName);
         } else {
 
-            // Channel not found, create and add to map
-            result = createChannel(channelName);
-            subMap.put(channelName, result);
-
+            throw new ChannelDoesNotExistException("Channel '" +
+                channelName.toString() + "' did not exist");
         }
+
+        // Result should be non-null at this point
+        if (result == null) throw new IllegalStateException("Got an unexpected null when looking for "
+                + "a channel named " + channelName.getValue());
 
         return result;
 
     }
 
+    /**
+     * Checks whether a channel exists in a given community.
+     *
+     * @param communityName community name
+     * @param channelName channel name
+     * @return true if the community and channel both exist and both are not null,
+     * false otherwise
+     */
+    public boolean channelExists(final CommunityName communityName,
+            final ChannelName channelName) {
 
-    // TODO: This method needs to know the type of channel to create. Right now
-    // it just creates a chat channel!
-    private final ServerChannel createChannel(final ChannelName channelName) throws RemoteException {
-        return new ServerChatChannel(channelName);
+        if (channelMap.containsKey(communityName)) {
+            HashMap<ChannelName, ServerChannel> subMap = channelMap.get(communityName);
+
+            if (subMap != null &&
+                    subMap.containsKey(channelName) &&
+                    (subMap.get(channelName) != null)) {
+
+                return true;
+
+            }
+        }
+
+        return false;
     }
-
 }

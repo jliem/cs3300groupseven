@@ -25,27 +25,23 @@ public class TestLaunch {
 
         ColabServerInterface server = (ColabServerInterface) Naming.lookup(url);
         ConnectionInterface connection = server.connect(client);
-        boolean correct = connection.logIn(
-                new UserName("Chris"), "pass4".toCharArray());
-        if (correct) {
-            System.out.println("User logged in.");
-            CommunityName communityName = new CommunityName("Team Awesome");
-            correct = connection.logIn(communityName, "awesomePass");
-            if (correct) {
-                System.out.println("Logged into community.");
-                ChannelName channelName = new ChannelName("Lobby");
-                ClientChatChannel clientChannel =
-                    new ClientChatChannel(channelName);
-                //ChannelInterface serverChannel =
-                    //connection.joinChannel(clientChannel, channelName);
-                //System.out.println("Channle!~~!~~!~!@~bbqzomg");
-                //serverChannel.add(new ChatChannelData("hi all", ));
-            } else {
-                System.out.println("Community login failed.");
-            }
-        } else {
-            System.out.println("Login failed.");
-        }
+        connection.logIn(new UserName("Chris"), "pass4".toCharArray());
+
+        System.out.println("User logged in.");
+
+        CommunityName communityName = new CommunityName("Team Awesome");
+        connection.logIn(communityName, "awesomePass");
+
+        System.out.println("Logged into community.");
+
+        ChannelName channelName = new ChannelName("Lobby");
+        ClientChatChannel clientChannel =
+            new ClientChatChannel(channelName);
+
+        //ChannelInterface serverChannel =
+            //connection.joinChannel(clientChannel, channelName);
+        //System.out.println("Channle!~~!~~!~!@~bbqzomg");
+        //serverChannel.add(new ChatChannelData("hi all", ));
 
     }
 

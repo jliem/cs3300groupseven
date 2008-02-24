@@ -24,10 +24,9 @@ public interface ConnectionInterface extends Remote {
      * @param username the name of the user attempting to log in
      * @param password the password that the client is attempting to use;
      *                 may be null, but authentication will fail
-     * @return true if the login was performed successfully, false otherwise
      * @throws RemoteException if an rmi error occurs
      */
-    boolean logIn(UserName username, char[] password)
+    void logIn(UserName username, char[] password)
         throws RemoteException;
 
     /**
@@ -39,10 +38,9 @@ public interface ConnectionInterface extends Remote {
      * @param password the password that the client is attempting to use;
      *                 ignored if the user is already a member of the
      *                 community, may be null
-     * @return true if the login was performed successfully, false otherwise
      * @throws RemoteException if an rmi error occurs
      */
-    boolean logIn(CommunityName communityName, String password)
+    void logIn(CommunityName communityName, String password)
         throws RemoteException;
 
     /**

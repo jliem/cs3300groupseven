@@ -12,6 +12,10 @@ import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
 import colab.common.community.Community;
 import colab.common.community.CommunityName;
+import colab.common.exception.remote.AuthenticationException;
+import colab.common.exception.remote.CommunityDoesNotExistException;
+import colab.common.exception.remote.IncorrectPasswordException;
+import colab.common.exception.remote.UserDoesNotExistException;
 import colab.common.user.User;
 import colab.common.user.UserName;
 import colab.server.remote.ConnectionInterface;
@@ -178,7 +182,7 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public boolean logIn(final UserName username, final char[] password)
+    public void logIn(final UserName username, final char[] password)
             throws RemoteException {
 
         // Must be in the Connected (not logged in) state
@@ -189,23 +193,23 @@ public final class Connection extends UnicastRemoteObject
         // Check the validity of login credentials
         UserManager userManager = server.getUserManager();
         User userAttempt = userManager.getUser(username);
-        boolean correct =
-            userAttempt != null // user exists
-            && password != null // password was provided
-            && userAttempt.checkPassword(password); // password is correct
 
-        // Advance to the next state if correct
-        if (correct) {
-            this.user = userAttempt;
-            this.state = STATE.LOGGED_IN;
+        if (userAttempt == null) {
+            throw new UserDoesNotExistException();
         }
 
-        return correct;
+        if (password == null || !userAttempt.checkPassword(password)) {
+            throw new IncorrectPasswordException();
+        }
+
+        // Advance to the next state if correct
+        this.user = userAttempt;
+        this.state = STATE.LOGGED_IN;
 
     }
 
     /** {@inheritDoc} */
-    public boolean logIn(final CommunityName communityName,
+    public void logIn(final CommunityName communityName,
             final String password) throws RemoteException {
 
         // Must be in the Logged In (not yet in a community) state
@@ -216,17 +220,20 @@ public final class Connection extends UnicastRemoteObject
         // Check the validity of login credentials
         UserManager userManager = server.getUserManager();
         Community communityAttempt = userManager.getCommunity(communityName);
-        boolean correct =
-            communityAttempt != null // community exists
-            && communityAttempt.authenticate(this.user, password);
 
-        // Advance to the next state if correct
-        if (correct) {
-            this.community = communityAttempt;
-            this.state = STATE.ACTIVE;
+        if (communityAttempt == null) {
+            throw new CommunityDoesNotExistException();
         }
 
-        return correct;
+        if (!communityAttempt.isMember(this.user)) {
+            if (!communityAttempt.authenticate(this.user, password)) {
+                throw new AuthenticationException();
+            }
+        }
+
+        // Advance to the next state if correct
+        this.community = communityAttempt;
+        this.state = STATE.ACTIVE;
 
     }
 

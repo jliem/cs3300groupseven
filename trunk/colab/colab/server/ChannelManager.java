@@ -12,7 +12,6 @@ import colab.common.community.CommunityName;
  * does not load any channel data into memory until a channel
  * is joined by one or more users.
  *
- * JL: removed RMI exceptions, added channel map, finished getChannel method
  */
 public class ChannelManager {
 
@@ -43,7 +42,6 @@ public class ChannelManager {
     public final ServerChannel getChannel(final CommunityName communityName,
             final ChannelName channelName) throws RemoteException {
 
-        // Check if desired channel exists already
         ServerChannel result = null;
 
         HashMap<ChannelName, ServerChannel> subMap;

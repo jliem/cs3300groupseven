@@ -4,9 +4,12 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import colab.client.remote.ChannelInterface;
+import colab.client.remote.ColabClientInterface;
+import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
-import colab.common.channel.remote.ChannelInterface;
 import colab.common.community.Community;
 import colab.common.community.CommunityName;
 import colab.common.user.User;
@@ -76,6 +79,11 @@ public final class Connection extends UnicastRemoteObject
     private final ColabServer server;
 
     /**
+     * A remote reference to the connected client.
+     */
+    private final ColabClientInterface client;
+
+    /**
      * The current state of the connection.
      */
     private STATE state;
@@ -96,10 +104,12 @@ public final class Connection extends UnicastRemoteObject
      * @param server the server to which the client is connected
      * @throws RemoteException if an rmi error occurs
      */
-    public Connection(final ColabServer server) throws RemoteException {
+    public Connection(final ColabServer server,
+            final ColabClientInterface client) throws RemoteException {
 
-        // Keep a reference to the server
+        // Keep a reference to the server and client
         this.server = server;
+        this.client = client;
 
         // Put the connection into the initial state
         this.state = STATE.CONNECTED;
@@ -261,14 +271,11 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public ChannelInterface joinChannel(
-            final ChannelInterface clientChannel,
-            final ChannelName channelName)
-            throws RemoteException {
+    public void joinChannel(final ChannelInterface clientChannel,
+            final ChannelName channelName) throws RemoteException {
 
         ServerChannel serverChannel = getChannel(channelName);
         serverChannel.addClient(this.user.getId(), clientChannel);
-        return serverChannel;
 
     }
 
@@ -302,6 +309,24 @@ public final class Connection extends UnicastRemoteObject
         UserManager userManager = this.server.getUserManager();
         Collection<Community> communities = userManager.getAllCommunities();
         return communities;
+
+    }
+
+    /** {@inheritDoc} */
+    public void add(final ChannelName channelName, final ChannelData data)
+            throws RemoteException {
+
+        ServerChannel channel = getChannel(channelName);
+        channel.add(data);
+
+    }
+
+    /** {@inheritDoc} */
+    public List<ChannelData> getLastData(final ChannelName channelName,
+            final int count) throws RemoteException {
+
+        ServerChannel channel = getChannel(channelName);
+        return channel.getLastData(count);
 
     }
 

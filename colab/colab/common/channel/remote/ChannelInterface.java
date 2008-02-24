@@ -1,9 +1,11 @@
 package colab.common.channel.remote;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.identity.LockIdentifier;
 
 /**
  * A remote object passed to the server, so that
@@ -11,27 +13,37 @@ import colab.common.channel.ChannelData;
  */
 public interface ChannelInterface extends Remote {
 
-    int getDataCount();
+    int getDataCount() throws RemoteException;
 
-    List<ChannelData> getLast(int count);
+    List<ChannelData> getLast(int count)
+        throws RemoteException;
 
-    List<ChannelData> getFirst(int count);
+    List<ChannelData> getFirst(int count)
+        throws RemoteException;
 
-    List<ChannelData> getFrom(int startIndex, int count);
+    List<ChannelData> getFrom(int startIndex, int count)
+        throws RemoteException;
 
-    List<ChannelData> getTo(int endIndex, int count);
+    List<ChannelData> getTo(int endIndex, int count)
+        throws RemoteException;
 
-    List<ChannelData> getRange(int startIndex, int endIndex);
+    List<ChannelData> getRange(int startIndex, int endIndex)
+        throws RemoteException;
 
-    void add(ChannelData data);
+    void add(ChannelData data) throws RemoteException;
 
-    void addAll(List<ChannelData> data);
+    void addAll(List<ChannelData> data)
+        throws RemoteException;
 
-    void getLock(LockIdentifier lockId);
+    void getLock(LockIdentifier lockId)
+        throws RemoteException;
 
-    void giveLock(LockIdentifier lockId);
-    
-    void lock(LockIdentifier lockId, String username);
-    
-    void unlock(LockIdentifier lockId, String username);
+    void giveLock(LockIdentifier lockId)
+        throws RemoteException;
+
+    void lock(LockIdentifier lockId, String username)
+        throws RemoteException;
+
+    void unlock(LockIdentifier lockId, String username)
+        throws RemoteException;
 }

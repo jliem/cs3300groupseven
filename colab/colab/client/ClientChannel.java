@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import colab.common.channel.Channel;
-import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
 import colab.common.channel.remote.ChannelInterface;
 import colab.common.user.User;
@@ -27,9 +26,5 @@ public abstract class ClientChannel extends Channel
         members = new ArrayList<User>();
 
     }
-
-    public abstract void add(ChannelData data);
-
-    public abstract boolean remove(ChannelData data);
 
 }

@@ -14,13 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class ChatPanel extends JPanel{
+public class ChatPanel extends JPanel {
+
   private ArrayList<ActionListener> listeners;
   private final String user;
   private final JTextArea textArea, textbox;
   private LinkedList <String> pendingMessages;
 
-  public ChatPanel(String username){
+  public ChatPanel(String username) {
     listeners = new ArrayList<ActionListener>();
 
     textArea = new JTextArea(10, 30);
@@ -93,7 +94,6 @@ public class ChatPanel extends JPanel{
    * Displays a ChatPanel.
    * @param args standard
    */
-
   public static void main(final String[] args) {
     ChatPanel p = new ChatPanel("test!");
     JFrame f = new JFrame();

@@ -20,10 +20,31 @@ public final class ColabNameRules {
 
     /** Characters that can be used in a community name. */
     private static final String COMMUNITY_CHARACTERS =
-        ALPHANUMERIC + " _.:,";
+        ALPHANUMERIC + " _.-:,";
 
     /** The maximum length of a community name. */
     private static final int COMMUNITY_MAX_LENGTH = 50;
+
+    /**
+     * @return the maximum length of a community name
+     */
+    public static int getCommunityMaxLength() {
+        return COMMUNITY_MAX_LENGTH;
+    }
+
+    /** Characters than can be used in a user name. */
+    private static final String USER_CHARACTERS =
+        ALPHANUMERIC + "._-";
+
+    /** The maximum length of a user name. */
+    private static final int USER_MAX_LENGTH = 25;
+
+    /**
+     * @return the maximum length of a user name
+     */
+    public static int getUserMaxLength() {
+        return USER_MAX_LENGTH;
+    }
 
     /**
      * Determines whether a string is a valid community name.
@@ -31,10 +52,21 @@ public final class ColabNameRules {
      * @param str a potential community name
      * @return true if the name is valid, false otherwise
      */
-    public static boolean validateCommunityName(final String str) {
+    public static boolean isValidCommunityName(final String str) {
         return
                str.length() < COMMUNITY_MAX_LENGTH
             && StringUtils.containsOnlyCharacters(str, COMMUNITY_CHARACTERS);
+    }
+
+    /**
+     * Determines whether a string is a valid user name.
+     *
+     * @param str a potential user name
+     * @return true if the name is valid, false otherwise
+     */
+    public static boolean isValidUserName(final String str) {
+        return str.length() < USER_MAX_LENGTH
+            && StringUtils.containsOnlyCharacters(str, USER_CHARACTERS);
     }
 
 }

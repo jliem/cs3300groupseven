@@ -2,6 +2,7 @@ package colab.client.gui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -27,10 +28,8 @@ public class LoginPanel extends JPanel {
 
     private ArrayList<ActionListener> listeners;
 
-    private static int eventID = 1;
+    public LoginPanel(final ColabClient client) {
 
-    public LoginPanel(final ColabClient client)
-    {
         usernameLabel = new JLabel("Username / Desired Username: ");
         passwordLabel = new JLabel("Password / Desired Password: ");
         serverLabel = new JLabel("Enter server IP: ");
@@ -41,29 +40,35 @@ public class LoginPanel extends JPanel {
 
         listeners = new ArrayList<ActionListener>();
 
+        final Runnable loginTask = new Runnable() {
+            public void run() {
+                try {
 
+                    client.loginUser(username.getText(),
+                        password.getPassword(), serverIP.getText());
 
-        KeyListener k = new KeyListener()
-        {
+                    fireActionPerformed(new ActionEvent(
+                            this, ActionEvent.ACTION_FIRST,
+                            "Login Succeeded!"));
 
-            public void keyPressed(KeyEvent arg0) {
-                // TODO Auto-generated method stub
-                if(arg0.getKeyChar() == KeyEvent.VK_ENTER){
-                    if(client.loginUser(username.getText(), password.getPassword(), serverIP.getText()))
-                        fireActionPerformed(new ActionEvent(this, eventID++, "Login Succeeded!"));
-                    else
-                        fireActionPerformed(new ActionEvent(this, eventID++, "Login Failed!"));
+                } catch (final Exception e) {
+
+                    fireActionPerformed(new ActionEvent(
+                            this, ActionEvent.ACTION_FIRST,
+                            "Login Failed!"));
+
                 }
             }
+        };
 
-            public void keyReleased(KeyEvent arg0) {
-                // TODO Auto-generated method stub
 
-            }
+        KeyListener k = new KeyAdapter() {
 
-            public void keyTyped(KeyEvent arg0) {
-                // TODO Auto-generated method stub
+            public void keyPressed(final KeyEvent arg0) {
 
+                if (arg0.getKeyChar() == KeyEvent.VK_ENTER) {
+                    loginTask.run();
+                }
 
             }
         };
@@ -73,14 +78,9 @@ public class LoginPanel extends JPanel {
         serverIP.addKeyListener(k);
 
 
-        loginButton.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                if(client.loginUser(username.getText(), password.getPassword(), serverIP.getText()))
-                    fireActionPerformed(new ActionEvent(this, eventID++, "Login Succeeded!"));
-                else
-                    fireActionPerformed(new ActionEvent(this, eventID++, "Login Failed!"));
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                loginTask.run();
             }
         });
 
@@ -94,17 +94,16 @@ public class LoginPanel extends JPanel {
         add(password);
         add(loginButton);
 
-
     }
 
-    protected void fireActionPerformed(ActionEvent e)
-    {
-        for(ActionListener l:listeners)
+    protected void fireActionPerformed(final ActionEvent e) {
+        for (ActionListener l : listeners) {
             l.actionPerformed(e);
+        }
     }
 
-    public void addActionListener(ActionListener listener)
-    {
+    public void addActionListener(final ActionListener listener) {
         listeners.add(listener);
     }
+
 }

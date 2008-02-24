@@ -5,7 +5,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import colab.client.remote.ColabClientInterface;
-import colab.common.exception.AuthenticationException;
+import colab.common.exception.network.ConnectionDroppedException;
+import colab.common.exception.network.NetworkException;
+import colab.common.exception.network.UnableToConnectException;
+import colab.common.exception.remote.AuthenticationException;
 import colab.common.user.UserName;
 import colab.server.remote.ColabServerInterface;
 import colab.server.remote.ConnectionInterface;
@@ -38,9 +41,10 @@ public final class ColabClient extends UnicastRemoteObject
      * connect to the server.
      *
      * @param serverAddress the address of the server
-     * @return whether the client connected successfully
+     * @throws UnableToConnectException if connection fails
      */
-    public boolean connect(final String serverAddress) {
+    public void connect(final String serverAddress)
+            throws UnableToConnectException {
 
         ConnectionInterface connection;
         try {
@@ -48,12 +52,10 @@ public final class ColabClient extends UnicastRemoteObject
                     "//" + serverAddress + "/COLAB_SERVER");
             connection = server.connect(this);
         } catch (final Exception e) {
-            return false;
+            throw new UnableToConnectException();
         }
 
         this.connection = connection;
-
-        return true;
 
     }
 
@@ -67,26 +69,23 @@ public final class ColabClient extends UnicastRemoteObject
      * @param username received from the GUI text field
      * @param password received from the GUI password field
      * @param serverAddress address received from the GUI text field
-     * @return whether or not the user is logged in
+     * @throws NetworkException if connection fails
+     * @throws AuthenticationException if user credentials are wrong
      */
 
-    public boolean loginUser(final String username, final char[] password,
-            final String serverAddress) {
-/*
-        if (!connect(serverAddress)) {
-            return false;
-        }
+    public void loginUser(final String username, final char[] password,
+            final String serverAddress) throws NetworkException,
+            AuthenticationException {
+
+        connect(serverAddress);
 
         try {
-            this.connection.logIn(userName, password);
-        } catch (AuthenticationException ae) {
+            this.connection.logIn(new UserName(username), password);
+        } catch (final AuthenticationException ae) {
             throw ae;
-        } catch (RemoteException re) {
-            re.printStackTrace();
-            return false;
+        } catch (final RemoteException re) {
+            throw new ConnectionDroppedException(re);
         }
-*/
-        return true;
 
     }
 

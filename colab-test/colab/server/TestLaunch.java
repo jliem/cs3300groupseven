@@ -1,13 +1,11 @@
-package colab.test;
+package colab.server;
 
 import java.rmi.Naming;
 
-import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelName;
 import colab.common.community.CommunityName;
 import colab.common.user.UserName;
-import colab.server.ColabServer;
 import colab.server.remote.ColabServerInterface;
 import colab.server.remote.ConnectionInterface;
 
@@ -35,8 +33,8 @@ public class TestLaunch {
         System.out.println("Logged into community.");
 
         ChannelName channelName = new ChannelName("Lobby");
-        ClientChatChannel clientChannel =
-            new ClientChatChannel(channelName);
+        //ClientChatChannel clientChannel =
+        //    new ClientChatChannel(channelName);
 
         //ChannelInterface serverChannel =
             //connection.joinChannel(clientChannel, channelName);

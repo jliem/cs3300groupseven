@@ -2,16 +2,14 @@ package colab.client;
 
 import java.rmi.RemoteException;
 
-import colab.client.remote.ChannelInterface;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
 import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
-import colab.common.user.UserName;
 
-public class ClientChatChannel extends ClientChannel {
+class ClientChatChannel extends ClientChannel {
 
     protected ChatDataCollection messages;
 

@@ -9,7 +9,7 @@ import colab.common.user.UserName;
 /**
  * A simple user manager that holds all users and communities in memory.
  */
-public class UserManager {
+class UserManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

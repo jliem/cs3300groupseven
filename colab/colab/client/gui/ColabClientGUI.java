@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import colab.client.ColabClient;
 import colab.common.community.CommunityName;
 
-public class ColabClientGUI extends JFrame {
+class ColabClientGUI extends JFrame {
 
     private final ColabClient client;
 

@@ -1,4 +1,4 @@
-package colab.common.user;
+package colab.server;
 
 import colab.server.User;
 import junit.framework.TestCase;

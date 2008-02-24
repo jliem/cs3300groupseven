@@ -15,7 +15,7 @@ import javax.swing.ListSelectionModel;
 
 import colab.common.channel.ChannelDescriptor;
 
-public class ChannelPanel extends JPanel {
+class ChannelPanel extends JPanel {
 
     private final ArrayList<ActionListener> listeners;
 

@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class ChatPanel extends JPanel {
+class ChatPanel extends JPanel {
 
     private ArrayList<ActionListener> listeners;
     private final String user;

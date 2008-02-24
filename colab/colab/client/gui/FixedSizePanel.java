@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  * Wraps a fixed-size panel so it can be placed in the middle
  * of a container without being resized.
  */
-public class FixedSizePanel extends JPanel {
+class FixedSizePanel extends JPanel {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;

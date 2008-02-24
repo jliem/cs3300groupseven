@@ -22,7 +22,7 @@ import colab.server.remote.ConnectionInterface;
 /**
  * Server implementation of {@link ConnectionInterface}.
  */
-public final class Connection extends UnicastRemoteObject
+final class Connection extends UnicastRemoteObject
         implements ConnectionInterface {
 
     /** Serialization version number. */

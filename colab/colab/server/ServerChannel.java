@@ -11,10 +11,9 @@ import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
-import colab.common.channel.ChatChannelData;
 import colab.common.user.UserName;
 
-public abstract class ServerChannel extends Channel {
+abstract class ServerChannel extends Channel {
 
     private Map<UserName, ChannelInterface> clients;
 

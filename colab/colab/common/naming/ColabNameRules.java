@@ -1,4 +1,4 @@
-package colab.naming;
+package colab.common.naming;
 
 import colab.common.util.StringUtils;
 

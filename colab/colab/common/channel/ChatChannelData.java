@@ -2,7 +2,7 @@ package colab.common.channel;
 
 import java.util.Date;
 
-import colab.server.User;
+import colab.common.user.UserName;
 
 /**
  * Represents a message posted to a chat channel.
@@ -18,7 +18,7 @@ public final class ChatChannelData extends ChannelData {
      * @param text the text of the message
      * @param creator the user who posted the message
      */
-    public ChatChannelData(final String text, final User creator) {
+    public ChatChannelData(final String text, final UserName creator) {
         super(creator, new Date());
         this.text = text;
     }

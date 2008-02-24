@@ -6,7 +6,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import colab.client.ColabClient;
 
 public class ChooseCommunityPanel extends JPanel {
@@ -15,9 +17,13 @@ public class ChooseCommunityPanel extends JPanel {
 	private JButton selectButton;
 	private JComboBox selectBox;
 	
+	private final ArrayList<ActionListener> listeners;
+	
 	// private
 
 	public ChooseCommunityPanel() {
+	    
+	    listeners = new ArrayList<ActionListener>();
 	    
 	    selectLabel = new JLabel(
 				"Select the community you wish to visit for this session: ");
@@ -26,7 +32,12 @@ public class ChooseCommunityPanel extends JPanel {
 		
 		selectBox = new JComboBox();
 
-		// selectButton.addActionListener(login);
+		selectButton.addActionListener(new ActionListener()
+		{
+		    public void actionPerformed(ActionEvent e){
+		        fireActionPerformed(e);
+		    }
+		});
 
 		setLayout(new GridLayout(3, 1));
 
@@ -42,5 +53,21 @@ public class ChooseCommunityPanel extends JPanel {
 	        selectBox.addItem(name.toString());
 	    
 	}
+	
+	public void addActionListener(ActionListener l) {
+	    listeners.add(l);
+	}
+	
+	public void fireActionPerformed(ActionEvent e)
+	{
+	    for(ActionListener l : listeners) {
+	        l.actionPerformed(e);
+	    }
+	}
+	
+	public String getCurrentCommunityName(){
+	    return selectBox.getSelectedItem().toString();
+	}
+	
 
 }

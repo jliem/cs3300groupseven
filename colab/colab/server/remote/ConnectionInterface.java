@@ -30,6 +30,13 @@ public interface ConnectionInterface extends Remote {
         throws RemoteException;
 
     /**
+     * Logs out the user.
+     *
+     * @throws RemoteException if an rmi error occurs
+     */
+    void logOutUser() throws RemoteException;
+
+    /**
      * Attempts to log into a community, using the name and optional password.
      *
      * Throws IllegalStateException is the connection is in the wrong state.
@@ -42,6 +49,13 @@ public interface ConnectionInterface extends Remote {
      */
     void logIn(CommunityName communityName, String password)
         throws RemoteException;
+
+    /**
+     * Logs out of the community.
+     *
+     * @throws RemoteException if an rmi error occurs
+     */
+    void logOutCommunity() throws RemoteException;
 
     /**
      * Retrieves the names of every community on the server.

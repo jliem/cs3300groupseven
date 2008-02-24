@@ -7,6 +7,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+import colab.client.remote.ColabClientInterface;
 import colab.common.community.Community;
 import colab.common.user.User;
 import colab.common.util.FileUtils;
@@ -51,8 +52,11 @@ public final class ColabServer extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public ConnectionInterface connect() throws RemoteException {
-        return new Connection(this);
+    public ConnectionInterface connect(final ColabClientInterface client)
+            throws RemoteException {
+
+        return new Connection(this, client);
+
     }
 
     /**

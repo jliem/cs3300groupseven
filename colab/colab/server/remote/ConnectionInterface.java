@@ -3,9 +3,11 @@ package colab.server.remote;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
+import java.util.List;
 
+import colab.client.remote.ChannelInterface;
+import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
-import colab.common.channel.remote.ChannelInterface;
 import colab.common.community.CommunityName;
 import colab.common.user.UserName;
 
@@ -75,7 +77,7 @@ public interface ConnectionInterface extends Remote {
      * @return a remote reference to the requested channel
      * @throws RemoteException if an rmi error occurs
      */
-    ChannelInterface joinChannel(ChannelInterface clientChannel,
+    void joinChannel(ChannelInterface clientChannel,
             ChannelName channelName) throws RemoteException;
 
     /**
@@ -86,5 +88,11 @@ public interface ConnectionInterface extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
     void leaveChannel(ChannelName channelName) throws RemoteException;
+
+    List<ChannelData> getLastData(ChannelName channelName, int count)
+            throws RemoteException;
+
+    void add(ChannelName channelName, ChannelData data)
+            throws RemoteException;
 
 }

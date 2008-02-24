@@ -2,6 +2,7 @@ package colab.client.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
 
@@ -10,14 +11,20 @@ import colab.client.ColabClient;
 public class ColabClientGUI extends JFrame {
 
     private ColabClient client;
-	
-	public ColabClientGUI(final ColabClient client) {
-    	
-		this.client = client;
+
+    public ColabClientGUI(final ColabClient client) {
+
+        this.client = client;
     }
 
-    public static void main(final String[] args)
-    {
+    public static void main(final String[] args) throws RemoteException {
+
+        // Assign a security manager, in the event
+        // that dynamic classes are loaded.
+        //if (System.getSecurityManager() == null) {
+        //    System.setSecurityManager(new RMISecurityManager());
+        //}
+
         ColabClient client = new ColabClient();
         final LoginPanel loginPanel = new LoginPanel(client);
         final ColabClientGUI gui = new ColabClientGUI(client);
@@ -26,7 +33,7 @@ public class ColabClientGUI extends JFrame {
         gui.setVisible(true);
         gui.setSize(400, 100);
         gui.add(loginPanel);
-        
+
         loginPanel.addActionListener(new ActionListener()
         {
            public void actionPerformed(ActionEvent e)
@@ -37,11 +44,11 @@ public class ColabClientGUI extends JFrame {
                    gui.add(commPanel);
                    gui.setTitle("Select Community");
                    commPanel.updateUI();
-                   
+
                }
            }
         });
     }
-    
+
 
 }

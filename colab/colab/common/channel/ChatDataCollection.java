@@ -12,13 +12,13 @@ public final class ChatDataCollection extends TreeSet<ChatChannelData> {
         super(new Comparator<ChatChannelData>() {
             public int compare(final ChatChannelData arg0,
                     final ChatChannelData arg1) {
-                return arg0.getTimestamp().compareTo(arg1.getTimestamp());
+                return arg1.getTimestamp().compareTo(arg0.getTimestamp());
             }
         });
     }
 
     public List<ChannelData> getLast(final int count) {
-        Iterator<ChatChannelData> it = descendingIterator();
+        Iterator<ChatChannelData> it = iterator();
         List<ChannelData> result = new ArrayList<ChannelData>(count);
         while (it.hasNext()) {
             result.add(0, it.next());

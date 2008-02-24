@@ -58,7 +58,7 @@ public class User implements Identifiable<UserName>, Serializable {
      * @param attempt an input string which may be a correct password
      * @return true if the given password is correct, false otherwise
      */
-    public final boolean checkPassword(final String attempt) {
+    public final boolean checkPassword(final char[] attempt) {
         return pass.checkPassword(attempt);
     }
 

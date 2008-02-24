@@ -14,7 +14,9 @@ import colab.server.remote.ConnectionInterface;
 public class TestLaunch {
 
     public static void main(String[] args) throws Exception {
+
         ColabServer.main(new String[]{});
+
         Thread.sleep(1000L);
 
         ColabClient client = new ColabClient();
@@ -23,7 +25,8 @@ public class TestLaunch {
 
         ColabServerInterface server = (ColabServerInterface) Naming.lookup(url);
         ConnectionInterface connection = server.connect(client);
-        boolean correct = connection.logIn(new UserName("Chris"), "pass4");
+        boolean correct = connection.logIn(
+                new UserName("Chris"), "pass4".toCharArray());
         if (correct) {
             System.out.println("User logged in.");
             CommunityName communityName = new CommunityName("Team Awesome");

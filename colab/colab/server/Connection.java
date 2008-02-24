@@ -178,7 +178,7 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public boolean logIn(final UserName username, final String password)
+    public boolean logIn(final UserName username, final char[] password)
             throws RemoteException {
 
         // Must be in the Connected (not logged in) state

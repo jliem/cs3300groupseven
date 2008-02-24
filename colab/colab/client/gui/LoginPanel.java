@@ -24,11 +24,11 @@ public class LoginPanel extends JPanel {
     private JTextField username, serverIP;
     private JButton loginButton;
     protected boolean loginOK;
-    
+
     private ArrayList<ActionListener> listeners;
-    
+
     private static int eventID = 1;
-    
+
     public LoginPanel(final ColabClient client)
     {
         usernameLabel = new JLabel("Username / Desired Username: ");
@@ -38,14 +38,14 @@ public class LoginPanel extends JPanel {
         password = new JPasswordField(12);
         serverIP = new JTextField(32);
         loginButton = new JButton("Submit");
-      
+
         listeners = new ArrayList<ActionListener>();
-        
-       
-        
+
+
+
         KeyListener k = new KeyListener()
         {
-            
+
             public void keyPressed(KeyEvent arg0) {
                 // TODO Auto-generated method stub
                 if(arg0.getKeyChar() == KeyEvent.VK_ENTER){
@@ -58,21 +58,21 @@ public class LoginPanel extends JPanel {
 
             public void keyReleased(KeyEvent arg0) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             public void keyTyped(KeyEvent arg0) {
                 // TODO Auto-generated method stub
-                
-                
+
+
             }
         };
-        
+
         username.addKeyListener(k);
         password.addKeyListener(k);
         serverIP.addKeyListener(k);
-        
-        
+
+
         loginButton.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -93,8 +93,8 @@ public class LoginPanel extends JPanel {
         add(passwordLabel);
         add(password);
         add(loginButton);
-        
-       
+
+
     }
 
     protected void fireActionPerformed(ActionEvent e)
@@ -102,7 +102,7 @@ public class LoginPanel extends JPanel {
         for(ActionListener l:listeners)
             l.actionPerformed(e);
     }
-    
+
     public void addActionListener(ActionListener listener)
     {
         listeners.add(listener);

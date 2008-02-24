@@ -254,6 +254,43 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+    /** {@inheritDoc} */
+    public void logOutUser() throws RemoteException {
+
+        // If logged into a community, log out of it first
+        if (hasCommunityLogin()) {
+            logOutCommunity();
+        }
+
+        // If not logged in as a user, can't log out
+        if (!hasUserLogin()) {
+            System.err.println("[Connection] Attempt to perform user "
+                    + "login on connection without any user login");
+            throw new IllegalStateException();
+        }
+
+        // Log out of user
+        this.user = null;
+        this.state = STATE.CONNECTED;
+
+    }
+
+    /** {@inheritDoc} */
+    public void logOutCommunity() throws RemoteException {
+
+        // If not logged in to a community, can't log out
+        if (!hasCommunityLogin()) {
+            System.err.println("[Connection] Attempt to log out of community "
+                    + "when not logged in to any community");
+            throw new IllegalStateException();
+        }
+
+        // Log out of community
+        this.community = null;
+        this.state = STATE.LOGGED_IN;
+
+    }
+
     /**
      * Return all channels in the currently logged in community.
      *
@@ -386,7 +423,6 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
-    @Override
     public Collection<UserName> getActiveUsers(ChannelName channelName)
             throws RemoteException {
 

@@ -10,8 +10,14 @@ public class ChannelManagerTester extends TestCase {
 
     private ChannelManager cm;
 
+    private ColabServer server;
+
+    public void setUp() throws RemoteException {
+        server = new ColabServer();
+    }
+
     public void testCreateChannelAndCommunity() throws RemoteException {
-        cm = new ChannelManager();
+        cm = new ChannelManager(server);
 
         ServerChannel channel = cm.getChannel(new CommunityName("NewCommunity"),
                 new ChannelName("NewChannel"));
@@ -20,7 +26,7 @@ public class ChannelManagerTester extends TestCase {
     }
 
     public void testCreateChannel() throws RemoteException {
-        cm = new ChannelManager();
+        cm = new ChannelManager(server);
 
         ServerChannel channel = cm.getChannel(new CommunityName("Community1"),
                 new ChannelName("Channel1"));

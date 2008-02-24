@@ -1,5 +1,6 @@
 package colab.common.community;
 
+import colab.common.exception.naming.InvalidCommunityNameException;
 import colab.common.identity.StringIdentifier;
 import colab.naming.ColabNameRules;
 
@@ -18,7 +19,9 @@ public final class CommunityName extends StringIdentifier {
      */
     public CommunityName(final String name) {
         super(name);
-        ColabNameRules.validateCommunityName(name);
+        if (!ColabNameRules.isValidCommunityName(name)) {
+            throw new InvalidCommunityNameException();
+        }
     }
 
 }

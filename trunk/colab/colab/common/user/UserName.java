@@ -1,6 +1,8 @@
 package colab.common.user;
 
+import colab.common.exception.naming.InvalidUserNameException;
 import colab.common.identity.StringIdentifier;
+import colab.naming.ColabNameRules;
 
 /**
  * The name a user uses to log in.
@@ -17,6 +19,9 @@ public class UserName extends StringIdentifier {
      */
     public UserName(final String name) {
         super(name);
+        if (!ColabNameRules.isValidUserName(name)) {
+            throw new InvalidUserNameException();
+        }
     }
 
 }

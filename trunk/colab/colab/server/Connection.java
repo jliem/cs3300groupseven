@@ -38,19 +38,21 @@ public final class Connection extends UnicastRemoteObject
          * Client has a connection to the server,
          * but no authentication has taken place.
          */
-        CONNECTED(false, false),
+        CONNECTED("connected", false, false),
 
         /**
          * User has been authenticated, but no
          * community has been joined.
          */
-        LOGGED_IN(true, false),
+        LOGGED_IN("logged in", true, false),
 
         /**
          * The user is logged into a community and
          * can actively use the system.
          */
-        ACTIVE(true, true);
+        ACTIVE("active", true, true);
+
+        private final String str;
 
         /**
          * Indicates whether this is a state in which
@@ -70,9 +72,17 @@ public final class Connection extends UnicastRemoteObject
          * @param userLogin whether a user has logged in
          * @param communityLogin whether a user has logged in to a community
          */
-        private STATE(final boolean userLogin, final boolean communityLogin) {
+        private STATE(final String str,
+                final boolean userLogin, final boolean communityLogin) {
+            this.str = str;
             this.userLogin = userLogin;
             this.communityLogin = communityLogin;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public String toString() {
+            return str;
         }
 
     }
@@ -187,6 +197,9 @@ public final class Connection extends UnicastRemoteObject
 
         // Must be in the Connected (not logged in) state
         if (this.state != STATE.CONNECTED) {
+            System.err.println("[Connection] Attempt to perform user "
+                    + "login on connection in '"
+                    + this.state + "' state");
             throw new IllegalStateException();
         }
 
@@ -214,6 +227,9 @@ public final class Connection extends UnicastRemoteObject
 
         // Must be in the Logged In (not yet in a community) state
         if (this.state != STATE.LOGGED_IN) {
+            System.err.println("[Connection] Attempt to perform community "
+                    + "login on connection in '"
+                    + this.state + "' state");
             throw new IllegalStateException();
         }
 

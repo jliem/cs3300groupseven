@@ -1,14 +1,15 @@
 package colab.server;
 
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
-import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelName;
 import colab.common.user.UserName;
 
@@ -32,6 +33,14 @@ public abstract class ServerChannel extends Channel
 
     public void removeClient(final UserName username) {
         clients.remove(username);
+    }
+
+    /**
+     *
+     * @return a list of users in this Channel
+     */
+    public Collection<UserName> getUsers() {
+        return new HashSet<UserName>(clients.keySet());
     }
 
     public abstract List<ChannelData> getLastData(int count);

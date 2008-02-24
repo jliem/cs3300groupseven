@@ -325,6 +325,7 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+
     /** {@inheritDoc} */
     public void joinChannel(final ChannelInterface clientChannel,
             final ChannelName channelName) throws RemoteException {
@@ -383,6 +384,25 @@ public final class Connection extends UnicastRemoteObject
         ServerChannel channel = getChannel(channelName);
         return channel.getLastData(count);
 
+    }
+
+    @Override
+    public Collection<UserName> getActiveUsers(ChannelName channelName)
+            throws RemoteException {
+
+        // Must be in the Connected (not logged in) state
+        if (this.state != STATE.CONNECTED) {
+            System.err.println("[Connection] Attempt to get active users "
+                    + "on connection in '"
+                    + this.state + "' state");
+            throw new IllegalStateException();
+        }
+
+        ChannelManager cm = server.getChannelManager();
+        ServerChannel servChan = cm.getChannel(this.community.getId(),
+                channelName);
+
+        return servChan.getUsers();
     }
 
 }

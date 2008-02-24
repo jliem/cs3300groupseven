@@ -1,5 +1,6 @@
 package colab.client.gui;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
@@ -11,10 +12,15 @@ import colab.client.ColabClient;
 
 public class ColabClientGUI extends JFrame {
 
+    /** Serialization version number. */
+    private static final long serialVersionUID = 1L;
+
     private final ColabClient client;
 
     private final LoginPanel loginPanel;
-    private final ChooseCommunityPanel commPanel;
+    private final FixedSizePanel loginPanelWrapper;
+    private final ChooseCommunityPanel communityPanel;
+    private final FixedSizePanel communityPanelWrapper;
 
     private JPanel activePanel;
 
@@ -24,7 +30,12 @@ public class ColabClientGUI extends JFrame {
         this.client = client;
 
         this.loginPanel = new LoginPanel(client);
-        this.commPanel = new ChooseCommunityPanel();
+        this.loginPanelWrapper = new FixedSizePanel(
+                loginPanel, new Dimension(420, 120));
+
+        this.communityPanel = new ChooseCommunityPanel();
+        this.communityPanelWrapper = new FixedSizePanel(
+                communityPanel, new Dimension(420, 120));
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -41,19 +52,19 @@ public class ColabClientGUI extends JFrame {
     }
 
     private void gotoUserLoginView() {
-        setActivePanel(loginPanel);
+        setActivePanel(loginPanelWrapper);
         setTitle("CoLab Login");
         setResizable(false);
-        setSize(400, 100);
+        setSize(500, 240);
         loginPanel.updateUI();
     }
 
     private void gotoCommunityLoginView() {
-        setActivePanel(commPanel);
+        setActivePanel(communityPanelWrapper);
         setTitle("Select Community");
         setResizable(false);
-        setSize(400, 100);
-        commPanel.updateUI();
+        setSize(500, 240);
+        communityPanel.updateUI();
     }
 
     private void setActivePanel(final JPanel newActivePanel) {

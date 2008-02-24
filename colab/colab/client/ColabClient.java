@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
-import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.network.ConnectionDroppedException;
 import colab.common.exception.network.NetworkException;
@@ -14,8 +13,9 @@ import colab.common.exception.remote.AuthenticationException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.server.remote.ColabServerInterface;
-import colab.server.remote.ConnectionInterface;
+import colab.common.remote.client.ColabClientInterface;
+import colab.common.remote.server.ColabServerInterface;
+import colab.common.remote.server.ConnectionInterface;
 
 /**
  * The CoLab client application.

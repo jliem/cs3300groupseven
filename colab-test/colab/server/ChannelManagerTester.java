@@ -2,8 +2,8 @@ package colab.server;
 
 import java.rmi.RemoteException;
 
-import colab.common.channel.ChannelName;
-import colab.common.community.CommunityName;
+import colab.common.naming.ChannelName;
+import colab.common.naming.CommunityName;
 import junit.framework.TestCase;
 
 public class ChannelManagerTester extends TestCase {

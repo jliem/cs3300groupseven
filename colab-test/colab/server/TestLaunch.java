@@ -3,11 +3,11 @@ package colab.server;
 import java.rmi.Naming;
 
 import colab.client.ColabClient;
-import colab.common.channel.ChannelName;
-import colab.common.community.CommunityName;
-import colab.common.user.UserName;
-import colab.server.remote.ColabServerInterface;
-import colab.server.remote.ConnectionInterface;
+import colab.common.naming.ChannelName;
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
+import colab.common.remote.server.ColabServerInterface;
+import colab.common.remote.server.ConnectionInterface;
 
 public class TestLaunch {
 

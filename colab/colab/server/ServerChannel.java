@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
+import colab.common.remote.client.ChannelInterface;
 
 abstract class ServerChannel extends Channel {
 

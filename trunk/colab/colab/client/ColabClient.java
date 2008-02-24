@@ -93,6 +93,10 @@ public final class ColabClient extends UnicastRemoteObject
 
     public Collection<CommunityName> getAllCommunityNames() throws RemoteException{
         return connection.getAllCommunityNames();
-        
+     }
+    
+    public Collection<CommunityName> getMyCommunityNames() throws RemoteException{
+        return connection.getMyCommunityNames();
     }
+    
 }

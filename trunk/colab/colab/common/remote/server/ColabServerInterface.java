@@ -1,9 +1,9 @@
-package colab.server.remote;
+package colab.common.remote.server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import colab.client.remote.ColabClientInterface;
+import colab.common.remote.client.ColabClientInterface;
 
 
 /**

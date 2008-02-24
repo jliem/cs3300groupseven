@@ -1,15 +1,15 @@
-package colab.server.remote;
+package colab.common.remote.server;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
 
-import colab.client.remote.ChannelInterface;
 import colab.common.channel.ChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
+import colab.common.remote.client.ChannelInterface;
 
 /**
  * A remote object on the server which represents a client's session.

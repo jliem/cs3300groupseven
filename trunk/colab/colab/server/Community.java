@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.identity.Identifiable;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
+import colab.common.remote.client.ColabClientInterface;
 
 /**
  * Represents a community which can be joined by users.

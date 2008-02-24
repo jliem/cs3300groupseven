@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import colab.client.remote.ChannelInterface;
-import colab.client.remote.ColabClientInterface;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.remote.AuthenticationException;
@@ -17,7 +15,9 @@ import colab.common.exception.remote.UserDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.server.remote.ConnectionInterface;
+import colab.common.remote.client.ChannelInterface;
+import colab.common.remote.client.ColabClientInterface;
+import colab.common.remote.server.ConnectionInterface;
 
 /**
  * Server implementation of {@link ConnectionInterface}.

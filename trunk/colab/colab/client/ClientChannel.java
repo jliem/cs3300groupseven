@@ -4,10 +4,10 @@ import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 
-import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
+import colab.common.remote.client.ChannelInterface;
 
 /**
  * A client-side remote Channel object.

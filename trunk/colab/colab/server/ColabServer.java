@@ -7,10 +7,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import colab.client.remote.ColabClientInterface;
+import colab.common.remote.client.ColabClientInterface;
+import colab.common.remote.server.ColabServerInterface;
+import colab.common.remote.server.ConnectionInterface;
 import colab.common.util.FileUtils;
-import colab.server.remote.ColabServerInterface;
-import colab.server.remote.ConnectionInterface;
 
 /**
  * Server implementation of ColabServerInterface.

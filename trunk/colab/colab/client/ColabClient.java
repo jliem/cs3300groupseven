@@ -63,6 +63,10 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
+    public ConnectionInterface getConnection() {
+        return this.connection;
+    }
+
     /**
      * Receives the username and password from the GUI fields and checks to
      * see if there is an existing corresponding pair.  If the username

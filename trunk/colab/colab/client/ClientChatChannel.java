@@ -1,34 +1,21 @@
 package colab.client;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
 
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
 import colab.common.channel.ChatChannelData;
+import colab.common.channel.ChatDataCollection;
 import colab.common.identity.LockIdentifier;
 
 public class ClientChatChannel extends ClientChannel {
 
-    protected TreeSet<ChatChannelData> messages;
+    protected ChatDataCollection messages;
 
     public ClientChatChannel(final ChannelName name) throws RemoteException {
-
         super(name);
-
-        messages = new TreeSet<ChatChannelData>(
-            new Comparator<ChatChannelData>() {
-                public int compare(final ChatChannelData arg0,
-                        final ChatChannelData arg1) {
-                    return arg0.getTimestamp().compareTo(arg1.getTimestamp());
-                }
-            }
-        );
-
+        messages = new ChatDataCollection();
     }
 
     public void add(final ChannelData data) throws RemoteException {

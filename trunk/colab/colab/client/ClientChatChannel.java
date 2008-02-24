@@ -9,8 +9,9 @@ import colab.common.channel.ChannelName;
 import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
+import colab.common.user.UserName;
 
-public class ClientChatChannel extends ClientChannel implements ChannelInterface {
+public class ClientChatChannel extends ClientChannel {
 
     protected ChatDataCollection messages;
 

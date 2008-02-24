@@ -11,10 +11,10 @@ import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelName;
+import colab.common.channel.ChatChannelData;
 import colab.common.user.UserName;
 
-public abstract class ServerChannel extends Channel
-        implements ChannelInterface {
+public abstract class ServerChannel extends Channel {
 
     private Map<UserName, ChannelInterface> clients;
 
@@ -25,6 +25,10 @@ public abstract class ServerChannel extends Channel
         this.clients = new HashMap<UserName, ChannelInterface>();
 
     }
+
+    public abstract void add(final ChannelData data) throws RemoteException;
+
+    public abstract List<ChannelData> getLastData(final int count);
 
     public final void addClient(final UserName username,
             final ChannelInterface client) {
@@ -42,8 +46,6 @@ public abstract class ServerChannel extends Channel
     public Collection<UserName> getUsers() {
         return new HashSet<UserName>(clients.keySet());
     }
-
-    public abstract List<ChannelData> getLastData(int count);
 
     protected void sendToAll(final ChannelData data) throws RemoteException {
         for (final UserName userName : this.clients.keySet()) {

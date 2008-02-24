@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 
+import colab.client.remote.ChannelInterface;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelName;
 import colab.common.user.UserName;
@@ -11,7 +12,7 @@ import colab.common.user.UserName;
 /**
  * A client-side remote Channel object.
  */
-public abstract class ClientChannel extends Channel {
+public abstract class ClientChannel extends Channel implements ChannelInterface {
 
     protected final Set<UserName> members;
 
@@ -24,4 +25,16 @@ public abstract class ClientChannel extends Channel {
 
     }
 
+
+    public void userJoined(UserName userName) throws RemoteException {
+        members.add(userName);
+    }
+
+    public void userLeft(UserName userName) throws RemoteException {
+        boolean result = members.remove(userName);
+
+        // Check that remove was successful
+        if (result == false) throw new IllegalStateException("Could not remove user " +
+                userName.toString() + " from members list in ClientChannel");
+    }
 }

@@ -3,8 +3,10 @@ package colab.client;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 
 import colab.client.remote.ColabClientInterface;
+import colab.common.community.CommunityName;
 import colab.common.exception.network.ConnectionDroppedException;
 import colab.common.exception.network.NetworkException;
 import colab.common.exception.network.UnableToConnectException;
@@ -89,4 +91,8 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
+    public Collection<CommunityName> getAllCommunityNames() throws RemoteException{
+        return connection.getAllCommunityNames();
+        
+    }
 }

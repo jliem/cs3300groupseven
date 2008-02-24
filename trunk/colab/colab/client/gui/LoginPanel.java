@@ -24,8 +24,7 @@ public class LoginPanel extends JPanel {
     private JPasswordField password;
     private JTextField username, serverIP;
     private JButton loginButton;
-    protected boolean loginOK;
-
+    private String currentUser;
     private ArrayList<ActionListener> listeners;
 
     public LoginPanel(final ColabClient client) {
@@ -44,6 +43,7 @@ public class LoginPanel extends JPanel {
             public void run() {
                 try {
 
+                    currentUser = username.getText();
                     client.loginUser(username.getText(),
                         password.getPassword(), serverIP.getText());
 
@@ -104,6 +104,10 @@ public class LoginPanel extends JPanel {
 
     public void addActionListener(final ActionListener listener) {
         listeners.add(listener);
+    }
+    
+    public String getCurrentUser(){
+        return currentUser;
     }
 
 }

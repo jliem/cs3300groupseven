@@ -1,4 +1,4 @@
-package colab.common.exception.remote;
+package colab.common.remote.exception;
 
 import java.rmi.RemoteException;
 

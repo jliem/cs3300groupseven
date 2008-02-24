@@ -6,9 +6,9 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import colab.common.channel.ChannelDescriptor;
-import colab.common.exception.remote.ChannelDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
+import colab.common.remote.exception.ChannelDoesNotExistException;
 
 /**
  * A channel manager provides channels.  This implementation

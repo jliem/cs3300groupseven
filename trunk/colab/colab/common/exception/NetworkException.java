@@ -1,4 +1,4 @@
-package colab.common.exception.network;
+package colab.common.exception;
 
 public class NetworkException extends Exception {
 

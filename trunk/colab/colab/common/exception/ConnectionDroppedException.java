@@ -1,4 +1,4 @@
-package colab.common.exception.network;
+package colab.common.exception;
 
 /**
  * Indicates that the connection has been lost entirely.

@@ -17,10 +17,10 @@ public final class ChatDataCollection extends TreeSet<ChatChannelData> {
         });
     }
 
-    public List<ChatChannelData> getLast(final int count) {
+    public List<ChatChannelData> getLast(int count) {
         Iterator<ChatChannelData> it = iterator();
         List<ChatChannelData> result = new ArrayList<ChatChannelData>(count);
-        while (it.hasNext()) {
+        while (it.hasNext() && count-- > 0) {
             result.add(0, it.next());
         }
         return result;

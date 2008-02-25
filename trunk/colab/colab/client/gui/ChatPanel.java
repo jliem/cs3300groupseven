@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,16 +41,19 @@ class ChatPanel extends JPanel {
         textbox.addKeyListener(new KeyAdapter() {
             public void keyPressed(final KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (e.isShiftDown())
+                    if (e.isShiftDown()) {
                         textbox.append("\n");
-                    else {
-                        writeMessage(user + ": " + textbox.getText());
-                        pendingMessages
-                                .addLast(user + ": " + textbox.getText());
-                        textbox.setText("");
-                        fireActionPerformed(new ActionEvent(this,
-                                ActionEvent.ACTION_FIRST, "Message Sent"));
+                    } else {
+                        if (!textbox.getText().matches("\\A\\s*\\z")) {
+                            writeMessage(user + ": " + textbox.getText());
+                            pendingMessages
+                                    .addLast(user + ": " + textbox.getText());
+                            textbox.setText("");
+                            fireActionPerformed(new ActionEvent(this,
+                                    ActionEvent.ACTION_FIRST, "Message Sent"));
+                        }
                     }
+                    e.consume();
                 }
             }
         });
@@ -65,7 +67,7 @@ class ChatPanel extends JPanel {
 
         add(textScroll);
         add(sendScroll);
-        
+
     }
 
     /**

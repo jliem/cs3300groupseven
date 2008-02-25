@@ -34,4 +34,8 @@ public class ChannelDescriptor {
     {
         this.channelType = type;
     }
+
+    public String toString() {
+        return this.channelName.toString() + ": " + this.channelType.toString();
+    }
 }

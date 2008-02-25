@@ -214,6 +214,8 @@ final class Connection extends UnicastRemoteObject
             throw new IncorrectPasswordException();
         }
 
+        System.err.println("User " + userAttempt + " logged in");
+
         // Advance to the next state if correct
         this.user = userAttempt;
         this.state = STATE.LOGGED_IN;
@@ -249,6 +251,9 @@ final class Connection extends UnicastRemoteObject
         }
 
         server.logIn(communityName, this.user.getId(), client);
+
+        System.err.println("User " + this.user.getId()
+                + " logged in to community " + communityName);
 
         // Advance to the next state if correct
         this.community = communityAttempt;
@@ -298,6 +303,7 @@ final class Connection extends UnicastRemoteObject
      *
      * @return all the channels of the currently logged in community
      */
+    /*
     public Collection<ChannelDescriptor> getChannels() {
 
         // Must be in the Connected (not logged in) state
@@ -323,6 +329,7 @@ final class Connection extends UnicastRemoteObject
 
         return chanDescList;
     }
+*/
 
     /** {@inheritDoc} */
     public Collection<CommunityName> getAllCommunityNames()
@@ -381,8 +388,11 @@ final class Connection extends UnicastRemoteObject
                     channelDescriptor);
         }
 
-        if (serverChannel == null) throw new IllegalStateException("Could not create"
-                + " or join channel named " + channelName + " in Connection");
+        if (serverChannel == null) {
+            throw new IllegalStateException(
+                "Could not create or join channel named "
+                + channelName + " in Connection");
+        }
 
         serverChannel.addClient(this.user.getId(), clientChannel);
 

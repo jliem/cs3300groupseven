@@ -30,12 +30,17 @@ abstract class ServerChannel extends Channel {
     public abstract List<ChannelData> getLastData(final int count);
 
     public final void addClient(final UserName username,
-            final ChannelInterface client) {
+            final ChannelInterface client) throws RemoteException {
+
         clients.put(username, client);
+
+        userJoin(username);
     }
 
-    public void removeClient(final UserName username) {
+    public void removeClient(final UserName username) throws RemoteException {
         clients.remove(username);
+
+        userLeft(username);
     }
 
     /**
@@ -44,6 +49,34 @@ abstract class ServerChannel extends Channel {
      */
     public Collection<UserName> getUsers() {
         return new HashSet<UserName>(clients.keySet());
+    }
+
+    /**
+     * Informs all clients that a user has joined this channel.
+     *
+     * @param userName the username of the user who joined.
+     * @throws RemoteException if an rmi error occurs
+     */
+    protected void userJoin(UserName userName) throws RemoteException {
+        for (final UserName un : this.clients.keySet()) {
+            if (!un.equals(userName)) {
+                this.clients.get(un).userJoined(userName);
+            }
+        }
+    }
+
+    /**
+     * Informs all clients that a user has left this channel.
+     *
+     * @param userName the username of the user who left
+     * @throws RemoteException if an rmi error occurs
+     */
+    protected void userLeft(UserName userName) throws RemoteException {
+        for (final UserName un : this.clients.keySet()) {
+            if (!un.equals(userName)) {
+                this.clients.get(un).userLeft(userName);
+            }
+        }
     }
 
     protected void sendToAll(final ChannelData data) throws RemoteException {

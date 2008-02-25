@@ -32,14 +32,10 @@ class ChannelManagerPanel extends JPanel {
 
     private final JList channelList;
     
-    private final JMenuBar menuBar;
-    
-    private final JMenu menu;
-    
-    private final JMenuItem logoutItem, changeCommunityItem;
+    private final JMenuItem changeCommunityItem;
     
 
-    public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel) {
+    public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel, JMenu menu) {
 
         listeners = new ArrayList<ActionListener>();
 
@@ -48,15 +44,12 @@ class ChannelManagerPanel extends JPanel {
 
         channelList = new JList(channels);
         
-        menuBar = new JMenuBar();
-        menu = new JMenu("File");
-        menuBar.add(menu);
-        logoutItem = new JMenuItem("Logout");
+        
+        
         changeCommunityItem = new JMenuItem("Change Community");
               
        menu.add(changeCommunityItem);
-       menu.add(logoutItem);
-        
+              
         channelList.setPreferredSize(new Dimension(100, 230));
         JScrollPane scrollChan = new JScrollPane(channelList);
         scrollChan.setPreferredSize(new Dimension(110, 240));
@@ -80,20 +73,14 @@ class ChannelManagerPanel extends JPanel {
 
             public void actionPerformed(final ActionEvent e) {
 
-                if (e.getSource() == logoutItem) {
-                	fireActionPerformed(new ActionEvent(this,
-                            ActionEvent.ACTION_FIRST, "Logout!"));
-                }
-                
-                else if (e.getSource() == changeCommunityItem) {
                 	fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Change!"));
                 }
 
-            }
+            
         };
         
-        logoutItem.addActionListener(al);
+        
         changeCommunityItem.addActionListener(al);
 
         add(scrollChan);
@@ -121,8 +108,6 @@ class ChannelManagerPanel extends JPanel {
         }
     }
     
-    public JMenuBar getMenuBar(){
-    	return menuBar;
-    }
+    
 
 }

@@ -248,7 +248,7 @@ final class Connection extends UnicastRemoteObject
             }
         }
 
-        server.getUserManager().logIn(communityName, this.user.getId(), client);
+        server.logIn(communityName, this.user.getId(), client);
 
         // Advance to the next state if correct
         this.community = communityAttempt;

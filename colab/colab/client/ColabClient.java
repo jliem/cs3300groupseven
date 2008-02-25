@@ -138,7 +138,6 @@ public final class ColabClient extends UnicastRemoteObject
     /** {@inheritDoc} */
     public void channelAdded(final ChannelDescriptor channelDescriptor)
             throws RemoteException {
-        System.err.println("zomg");
         channels.add(channelDescriptor);
     }
 

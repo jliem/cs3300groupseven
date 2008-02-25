@@ -1,7 +1,5 @@
 package colab.server;
 
-import java.rmi.RemoteException;
-
 import junit.framework.TestCase;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
@@ -15,54 +13,51 @@ public class ChannelManagerTester extends TestCase {
 
     private ColabServer server;
 
-    public void setUp() throws RemoteException {
-        server = new ColabServer();
+    public void setUp() throws Exception {
+        server = new MockColabServer();
     }
 
-    public void testCreateChannelAndCommunity() throws RemoteException {
+    public void testCreateChannelAndCommunity() throws Exception {
         cm = new ChannelManager(server);
 
-        ServerChannel channel = cm.addChannel(new CommunityName("NewCommunity"),
+        ServerChannel channel = cm.addChannel(new CommunityName("Group Seven"),
                 new ChannelDescriptor("NewChannel", ChannelType.CHAT));
 
         assertNotNull(channel);
     }
 
-    public void testCreateChannel() throws RemoteException {
+    public void testCreateChannel() throws Exception {
         cm = new ChannelManager(server);
 
-        ServerChannel channel = cm.addChannel(new CommunityName("Community1"),
+        ServerChannel channel = cm.addChannel(new CommunityName("Team Awesome"),
                 new ChannelDescriptor("Channel1", ChannelType.CHAT));
 
         assertNotNull(channel);
 
         // Now that community exists, try again for a non-existing channel
+        ChannelDoesNotExistException ce = null;
         try {
-            channel = cm.getChannel(new CommunityName("Community1"),
+            channel = cm.getChannel(new CommunityName("Team Awesome"),
                 new ChannelName("Channel2"));
-        } catch (ChannelDoesNotExistException ce) {
-            assertNotNull(ce);
+        } catch (ChannelDoesNotExistException e) {
+            ce = e;
         }
+        assertNotNull(ce);
 
     }
 
-    public void testGetChannel() throws RemoteException {
+    public void testGetChannel() throws Exception {
         cm = new ChannelManager(server);
 
-        ServerChannel channel = cm.addChannel(new CommunityName("Community1"),
+        ServerChannel channel = cm.addChannel(new CommunityName("Team Awesome"),
                 new ChannelDescriptor("Channel1", ChannelType.CHAT));
 
         assertNotNull(channel);
 
         // Make sure we can get it again
         ServerChannel channel2 = null;
-        try {
-            channel2 = cm.getChannel(new CommunityName("Community1"),
-                new ChannelName("Channel1"));
-        } catch (ChannelDoesNotExistException ce) {
-            // If we get an exception here, we fail
-            assertNull(ce);
-        }
+        channel2 = cm.getChannel(new CommunityName("Team Awesome"),
+            new ChannelName("Channel1"));
 
         assertEquals(channel, channel2);
 

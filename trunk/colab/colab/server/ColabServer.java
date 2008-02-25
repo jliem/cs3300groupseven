@@ -15,7 +15,7 @@ import colab.common.remote.server.ConnectionInterface;
 /**
  * Server implementation of ColabServerInterface.
  */
-final class ColabServer extends UnicastRemoteObject
+class ColabServer extends UnicastRemoteObject
         implements ColabServerInterface {
 
     /** Serialization version number. */
@@ -25,13 +25,13 @@ final class ColabServer extends UnicastRemoteObject
      * The manager object that keeps track of users
      * and communities for this server instance.
      */
-    private final UserManager userManager;
+    protected final UserManager userManager;
 
     /**
      * The manager object that keeps track of channels
      * for this server instance.
      */
-    private final ChannelManager channelManager;
+    protected final ChannelManager channelManager;
 
     /**
      * Constructs an instance of the server application.
@@ -41,7 +41,7 @@ final class ColabServer extends UnicastRemoteObject
     public ColabServer() throws RemoteException {
 
         // Create the manager objects
-        this.userManager = new UserManager();
+        this.userManager = new UserManager(this);
         this.channelManager = new ChannelManager(this);
 
     }
@@ -120,42 +120,6 @@ final class ColabServer extends UnicastRemoteObject
         // Create the rmi registry, add the server to it
         LocateRegistry.createRegistry(port);
         Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
-
-        // Populate a few test users
-
-        User johannes = new User("Johannes", "pass1");
-        server.userManager.addUser(johannes);
-
-        User pamela = new User("Pamela", "pass2");
-        server.userManager.addUser(pamela);
-
-        User matthew = new User("Matthew", "pass3");
-        server.userManager.addUser(matthew);
-
-        User chris = new User("Chris", "pass4");
-        server.userManager.addUser(chris);
-
-        // Populate a few test communities
-        Community groupSeven = new Community("Group Seven", "sevenPass");
-        groupSeven.getMembers().add(johannes);
-        groupSeven.getMembers().add(pamela);
-        groupSeven.getMembers().add(matthew);
-        groupSeven.getMembers().add(chris);
-        server.userManager.addCommunity(groupSeven);
-
-        Community teamAwesome = new Community("Team Awesome", "awesomePass");
-        teamAwesome.getMembers().add(chris);
-        server.userManager.addCommunity(teamAwesome);
-
-        Community noMembers = new Community("The No-Members Community", "abcd");
-        server.userManager.addCommunity(noMembers);
-
-        ChannelDescriptor lobbyDesc = new ChannelDescriptor(
-                "Lobby", ChannelType.CHAT);
-
-        server.channelManager.addChannel(groupSeven.getId(), lobbyDesc);
-        server.channelManager.addChannel(teamAwesome.getId(), lobbyDesc);
-        server.channelManager.addChannel(noMembers.getId(), lobbyDesc);
 
         System.out.println("Server initialized");
 

@@ -9,6 +9,7 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.remote.exception.ChannelDoesNotExistException;
+import colab.common.remote.exception.CommunityDoesNotExistException;
 
 /**
  * A channel manager provides channels.  This implementation
@@ -30,7 +31,7 @@ class ChannelManager {
      * Constructs a new channel manager.
      *
      */
-    public ChannelManager(ColabServer server) {
+    public ChannelManager(final ColabServer server) {
         this.server = server;
 
         channelMap = new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
@@ -110,17 +111,22 @@ class ChannelManager {
         }
 
         // Make sure channel entry doesn't exist
-        if (subMap.containsKey(channelName) == false) {
+        if (!subMap.containsKey(channelName)) {
             subMap.put(channelName, channel);
         } else {
             // If the channel entry did exist, something is really wrong
             // since this method already checked whether it exists
-            throw new IllegalStateException("channelExists returned false,"+
-                    " but the channel already exists!");
+            throw new IllegalStateException("channelExists returned false,"
+                    + " but the channel already exists!");
         }
 
         // Because a new channel was added, notify all clients
-        server.getUserManager().getCommunity(communityName).channelAdded(channelDescriptor);
+        UserManager userManager = server.getUserManager();
+        Community community = userManager.getCommunity(communityName);
+        if (community == null) {
+            throw new CommunityDoesNotExistException();
+        }
+        community.channelAdded(channelDescriptor);
 
         return channel;
     }

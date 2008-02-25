@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 import colab.common.remote.server.ConnectionInterface;
 
 class ColabClientGUI extends JFrame {
@@ -24,7 +26,7 @@ class ColabClientGUI extends JFrame {
     private final FixedSizePanel communityPanelWrapper;
     private ChannelManagerPanel channelPanel;
     private JPanel activePanel;
-    private String currentUser;
+    private UserName currentUser;
 
     public ColabClientGUI(final ColabClient client) {
         this.client = client;
@@ -65,11 +67,15 @@ class ColabClientGUI extends JFrame {
                 channelPanel.addActionListener(new ActionListener() {
                     public void actionPerformed(final ActionEvent e) {
                         ChannelDescriptor cd;
+
                         while((cd = channelPanel.dequeueJoinedChannel()) != null) {
                             try {
-                                client.joinChannel(cd);
+                                // TODO: this is a hack, rewrite with more protocol handling
+                                ChatChannelFrame f = new ChatChannelFrame(
+                                        (ClientChatChannel) client.joinChannel(cd), currentUser);
+                                f.setVisible(true);
                             } catch(RemoteException ex) {
-                                // The christopher martin experience: enjoy!
+                                System.err.println(ex);
                             }
                         }
                     }
@@ -109,7 +115,7 @@ class ColabClientGUI extends JFrame {
             re.printStackTrace();
         }
 
-        this.currentUser = loginPanel.getCurrentUser();
+        this.currentUser = new UserName(loginPanel.getCurrentUser());
         communityPanel.setCommunityNames(commNames.toArray());
         setActivePanel(communityPanelWrapper);
         setTitle("Select Community");

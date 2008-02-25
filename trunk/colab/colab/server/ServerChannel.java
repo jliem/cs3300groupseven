@@ -13,16 +13,26 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelInterface;
 
-abstract class ServerChannel extends Channel {
+abstract class ServerChannel implements Channel {
+
+    /**
+     * The name of the channel.
+     */
+    private final ChannelName name;
 
     private Map<UserName, ChannelInterface> clients;
 
     public ServerChannel(final ChannelName name) throws RemoteException {
 
-        super(name);
+        this.name = name;
 
         this.clients = new HashMap<UserName, ChannelInterface>();
 
+    }
+
+    /** {@inheritDoc} */
+    public final ChannelName getId() {
+        return name;
     }
 
     public abstract void add(final ChannelData data) throws RemoteException;

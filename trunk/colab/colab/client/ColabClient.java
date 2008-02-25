@@ -126,9 +126,10 @@ public final class ColabClient extends UnicastRemoteObject
 
     public ClientChannel joinChannel(ChannelDescriptor desc) throws RemoteException{
         ClientChannel channel = null;
-        switch(desc.getType()){
+        switch (desc.getType()) {
         case CHAT:
-            connection.joinChannel(new ClientChatChannel(desc.getName()), desc);
+            channel = new ClientChatChannel(desc.getName());
+            connection.joinChannel(channel, desc);
             break;
         }
         return channel;

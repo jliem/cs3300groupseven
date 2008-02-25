@@ -91,6 +91,17 @@ public class LoginPanel extends JPanel {
         add(password);
         add(loginButton);
 
+        // TODO: Remove this before real demo
+        populateLogin();
+    }
+
+    /**
+     * Populate login information for testing purposes
+     */
+    private void populateLogin() {
+        serverIP.setText("localhost:9040");
+        username.setText("Chris");
+        password.setText("pass4");
     }
 
     protected void fireActionPerformed(final ActionEvent e) {

@@ -222,7 +222,9 @@ final class Connection extends UnicastRemoteObject
 
     /** {@inheritDoc} */
     public void logIn(final CommunityName communityName,
-            final String password) throws RemoteException {
+            final char[] password) throws RemoteException {
+
+        System.err.println("LOG ME IN");
 
         // Must be in the Logged In (not yet in a community) state
         if (this.state != STATE.LOGGED_IN) {

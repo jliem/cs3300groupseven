@@ -93,7 +93,8 @@ class ChannelManager {
                 break;
 
             default:
-                throw new IllegalArgumentException("Channel type was unsupported: "
+                throw new IllegalArgumentException(
+                        "Channel type was unsupported: "
                         + channelDescriptor.getType());
         }
 

@@ -92,10 +92,16 @@ final class UserManager {
 
     public void logIn(final CommunityName communityName, final UserName userName,
             final ColabClientInterface client) throws RemoteException {
+
         this.getCommunity(communityName).addClient(userName, client);
-        for (ServerChannel channel : server.getChannelManager().getChannels(communityName)) {
+        ChannelManager channelManager = server.getChannelManager();
+        Collection<ServerChannel> channels =
+            channelManager.getChannels(communityName);
+        for (ServerChannel channel : channels) {
+            System.err.println("Sending shit to the client");
             client.channelAdded(channel.getChannelDescriptor());
         }
+
     }
 
 }

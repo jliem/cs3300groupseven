@@ -27,7 +27,7 @@ public final class ColabClient extends UnicastRemoteObject
 
     private ArrayList <ActionListener> listeners;
     private Vector <ChannelDescriptor> channels;
-    
+
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
@@ -103,6 +103,19 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
+    public void loginCommmunity(final CommunityName communityName)
+            throws NetworkException, AuthenticationException {
+
+        try {
+            this.connection.logIn(communityName, null);
+        } catch (final AuthenticationException ae) {
+            throw ae;
+        } catch (final RemoteException re) {
+            throw new ConnectionDroppedException(re);
+        }
+
+    }
+
     public Collection<CommunityName> getAllCommunityNames() throws RemoteException{
         return connection.getAllCommunityNames();
      }
@@ -118,13 +131,16 @@ public final class ColabClient extends UnicastRemoteObject
             connection.joinChannel(new ClientChatChannel(desc.getName()), desc);
             break;
         }
-        return channel; 
+        return channel;
     }
 
-    public void channelAdded(ChannelDescriptor channelDescriptor) {
+    /** {@inheritDoc} */
+    public void channelAdded(final ChannelDescriptor channelDescriptor)
+            throws RemoteException {
+        System.err.println("zomg");
         channels.add(channelDescriptor);
     }
-    
+
     public Vector <ChannelDescriptor> getChannels() {
         return channels;
     }

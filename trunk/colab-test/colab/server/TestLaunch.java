@@ -28,7 +28,7 @@ public class TestLaunch {
         System.out.println("User logged in.");
 
         CommunityName communityName = new CommunityName("Team Awesome");
-        connection.logIn(communityName, "awesomePass");
+        connection.logIn(communityName, "awesomePass".toCharArray());
 
         System.out.println("Logged into community.");
 

@@ -1,13 +1,15 @@
 package colab.common.exception;
 
-public class NetworkException extends Exception {
+import java.rmi.RemoteException;
+
+public class NetworkException extends RemoteException {
 
     public NetworkException() {
         super();
     }
 
     public NetworkException(final Throwable cause) {
-        super(cause);
+        super("Network error", cause);
     }
 
 }

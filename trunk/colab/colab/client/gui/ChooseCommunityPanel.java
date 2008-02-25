@@ -10,6 +10,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import colab.common.naming.CommunityName;
+
 class ChooseCommunityPanel extends JPanel {
 
     private JLabel selectLabel;
@@ -63,8 +65,9 @@ class ChooseCommunityPanel extends JPanel {
         }
     }
 
-    public String getCurrentCommunityName() {
-        return selectBox.getSelectedItem().toString();
+    public CommunityName getCurrentCommunityName() {
+        String name = selectBox.getSelectedItem().toString();
+        return new CommunityName(name);
     }
 
 }

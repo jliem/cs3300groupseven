@@ -1,5 +1,7 @@
 package colab.server;
 
+import java.util.Collection;
+
 import junit.framework.TestCase;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
@@ -11,13 +13,10 @@ public class ChannelManagerTester extends TestCase {
 
     private ChannelManager cm;
 
-    private ColabServer server;
-
-    public void setUp() throws Exception {
-        server = new MockColabServer();
-    }
-
     public void testCreateChannelAndCommunity() throws Exception {
+
+        ColabServer server = new MockColabServer();
+
         cm = new ChannelManager(server);
 
         ServerChannel channel = cm.addChannel(new CommunityName("Group Seven"),
@@ -27,6 +26,9 @@ public class ChannelManagerTester extends TestCase {
     }
 
     public void testCreateChannel() throws Exception {
+
+        ColabServer server = new MockColabServer();
+
         cm = new ChannelManager(server);
 
         ServerChannel channel = cm.addChannel(new CommunityName("Team Awesome"),
@@ -47,6 +49,9 @@ public class ChannelManagerTester extends TestCase {
     }
 
     public void testGetChannel() throws Exception {
+
+        ColabServer server = new MockColabServer();
+
         cm = new ChannelManager(server);
 
         ServerChannel channel = cm.addChannel(new CommunityName("Team Awesome"),
@@ -63,5 +68,15 @@ public class ChannelManagerTester extends TestCase {
 
     }
 
+    public void testGetChannels() throws Exception {
+
+        ColabServer server = new MockColabServer();
+
+        Collection<ServerChannel> channels = server.channelManager.getChannels(
+                new CommunityName("Team Awesome"));
+
+        assertEquals(channels.size(), 1);
+
+    }
 
 }

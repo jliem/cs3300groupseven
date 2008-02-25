@@ -1,6 +1,8 @@
 package colab.server;
 
+import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
@@ -48,6 +50,49 @@ public class MockColabServer extends ColabServer {
         channelManager.addChannel(groupSeven.getId(), lobbyDesc);
         channelManager.addChannel(teamAwesome.getId(), lobbyDesc);
         channelManager.addChannel(noMembers.getId(), lobbyDesc);
+
+    }
+
+    public static void main(final String[] args) throws Exception {
+
+        // Assign a security manager, in the event
+        // that dynamic classes are loaded
+        //if (System.getSecurityManager() == null) {
+        //    System.setSecurityManager(new RMISecurityManager());
+        //}
+
+        // Create a server
+        ColabServer server = new MockColabServer();
+
+        /*
+        String pathArg;
+        if (args.length >= 1) {
+            pathArg = args[0];
+        } else {
+            pathArg = "data";
+        }
+
+        server.initialize(pathArg);
+        */
+
+        Integer port = null;
+        if (args.length == 0) {
+            System.err.println("No port specified");
+            System.exit(1);
+        } else {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (final NumberFormatException nfe) {
+                System.err.println("Port must be an integer");
+                System.exit(1);
+            }
+        }
+
+        // Create the rmi registry, add the server to it
+        LocateRegistry.createRegistry(port);
+        Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
+
+        System.out.println("Server initialized");
 
     }
 

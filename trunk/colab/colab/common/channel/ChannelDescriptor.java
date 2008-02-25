@@ -1,8 +1,13 @@
 package colab.common.channel;
 
+import java.io.Serializable;
+
 import colab.common.naming.ChannelName;
 
-public class ChannelDescriptor {
+public class ChannelDescriptor implements Serializable {
+
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private ChannelName channelName;
     private ChannelType channelType;

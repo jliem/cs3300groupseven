@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import colab.common.channel.ChannelDescriptor;
@@ -38,7 +39,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
     /**
      * A list of actively connected clients
      */
-    private Map<UserName, ColabClientInterface> clients;
+    private final Map<UserName, ColabClientInterface> clients;
 
     /**
      * Constructs a new community with the given name and password.
@@ -55,7 +56,9 @@ class Community implements Identifiable<CommunityName>, Serializable {
         this.password = password;
 
         // Create an empty collection of users
-        members = new ArrayList<User>();
+        this.members = new ArrayList<User>();
+
+        this.clients = new HashMap<UserName, ColabClientInterface>();
 
     }
 

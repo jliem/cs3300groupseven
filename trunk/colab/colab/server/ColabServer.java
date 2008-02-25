@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.ChannelType;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
@@ -147,6 +149,13 @@ final class ColabServer extends UnicastRemoteObject
 
         Community noMembers = new Community("The No-Members Community", "abcd");
         server.userManager.addCommunity(noMembers);
+
+        ChannelDescriptor lobbyDesc = new ChannelDescriptor(
+                "Lobby", ChannelType.CHAT);
+
+        server.channelManager.addChannel(groupSeven.getId(), lobbyDesc);
+        server.channelManager.addChannel(teamAwesome.getId(), lobbyDesc);
+        server.channelManager.addChannel(noMembers.getId(), lobbyDesc);
 
         System.out.println("Server initialized");
 

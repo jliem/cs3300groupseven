@@ -21,14 +21,11 @@ class ChatPanel extends JPanel {
 
     private ArrayList<ActionListener> listeners;
     private final String user;
-    private final JButton logoutButton, switchButton;
     private final JTextArea textArea, textbox;
     private LinkedList<String> pendingMessages;
 
     public ChatPanel(UserName name) {
         listeners = new ArrayList<ActionListener>();
-        logoutButton = new JButton("Logout");
-        switchButton = new JButton("Switch Communities");
         textArea = new JTextArea(10, 30);
         textbox = new JTextArea(2, 20);
 
@@ -68,8 +65,7 @@ class ChatPanel extends JPanel {
 
         add(textScroll);
         add(sendScroll);
-        add(logoutButton);
-        add(switchButton);
+        
     }
 
     /**

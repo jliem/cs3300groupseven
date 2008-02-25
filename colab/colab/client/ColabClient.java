@@ -1,15 +1,17 @@
 package colab.client;
 
+import java.awt.event.ActionListener;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
-import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
@@ -23,6 +25,9 @@ import colab.common.remote.server.ConnectionInterface;
 public final class ColabClient extends UnicastRemoteObject
         implements ColabClientInterface {
 
+    private ArrayList <ActionListener> listeners;
+    private Vector <ChannelDescriptor> channels;
+    
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
@@ -37,7 +42,8 @@ public final class ColabClient extends UnicastRemoteObject
      * @throws RemoteException if an rmi error occurs
      */
     public ColabClient() throws RemoteException {
-
+        listeners = new ArrayList <ActionListener>();
+        channels = new Vector <ChannelDescriptor>();
     }
 
     /**
@@ -105,14 +111,21 @@ public final class ColabClient extends UnicastRemoteObject
         return connection.getMyCommunityNames();
     }
 
-    public ClientChannel joinChannel(ChannelName name){
-        return null;
-
+    public ClientChannel joinChannel(ChannelDescriptor desc) throws RemoteException{
+        ClientChannel channel = null;
+        switch(desc.getType()){
+        case CHAT:
+            connection.joinChannel(new ClientChatChannel(desc.getName()), desc);
+            break;
+        }
+        return channel; 
     }
 
     public void channelAdded(ChannelDescriptor channelDescriptor) {
-        // TODO Auto-generated method stub
-
+        channels.add(channelDescriptor);
     }
-
+    
+    public Vector <ChannelDescriptor> getChannels() {
+        return channels;
+    }
 }

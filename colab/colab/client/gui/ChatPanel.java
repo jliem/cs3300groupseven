@@ -11,26 +11,24 @@ import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import colab.common.naming.UserName;
 
 class ChatPanel extends JPanel {
 
     private ArrayList<ActionListener> listeners;
-    private final String user;
-    private final JButton logoutButton, switchButton;
+    private final UserName user;
     private final JTextArea textArea, textbox;
     private LinkedList<String> pendingMessages;
 
-    public ChatPanel(String username) {
+    public ChatPanel(UserName name) {
         listeners = new ArrayList<ActionListener>();
-        logoutButton = new JButton("Logout");
-        switchButton = new JButton("Switch Communities");
         textArea = new JTextArea(10, 30);
         textbox = new JTextArea(2, 20);
 
-        user = new String(username);
+        user = new UserName(name.toString());
         pendingMessages = new LinkedList<String>();
 
         JScrollPane textScroll = new JScrollPane(textArea);
@@ -63,24 +61,8 @@ class ChatPanel extends JPanel {
         setPreferredSize(new Dimension(300, 275));
         setLayout(new FlowLayout());
 
-        logoutButton.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent e){
-                fireActionPerformed(new ActionEvent(this,
-                        ActionEvent.ACTION_FIRST, "Logout!"));
-            }
-        });
-
-        switchButton.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent e){
-                fireActionPerformed(new ActionEvent(this,
-                        ActionEvent.ACTION_FIRST, "Switch!"));
-            }
-        });
-
         add(textScroll);
         add(sendScroll);
-        add(logoutButton);
-        add(switchButton);
     }
 
     /**
@@ -90,6 +72,13 @@ class ChatPanel extends JPanel {
      */
     public final void writeMessage(final String mess) {
         textArea.append(mess + "\n");
+    }
+    
+    public final String dequeuePendingMessage() {
+        if(pendingMessages.size()>0){
+            return pendingMessages.removeFirst();
+        }
+        return null;
     }
 
     /**
@@ -118,7 +107,7 @@ class ChatPanel extends JPanel {
      *            standard
      */
     public static void main(final String[] args) {
-        ChatPanel p = new ChatPanel("test!");
+        ChatPanel p = new ChatPanel(new UserName("test!"));
         JFrame f = new JFrame();
         f.add(p);
         f.setSize(350, 355);

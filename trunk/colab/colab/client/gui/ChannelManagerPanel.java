@@ -31,11 +31,9 @@ class ChannelManagerPanel extends JPanel {
     private final Vector<ChannelDescriptor> channels;
 
     private final JList channelList;
-    
-    private final JMenuItem changeCommunityItem;
-    
 
-    public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel, JMenu menu) {
+
+    public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel) {
 
         listeners = new ArrayList<ActionListener>();
 
@@ -43,13 +41,10 @@ class ChannelManagerPanel extends JPanel {
         channels = channelListModel;
 
         channelList = new JList(channels);
-        
-        
-        
-        changeCommunityItem = new JMenuItem("Change Community");
-              
-       menu.add(changeCommunityItem);
-              
+
+
+       //menu.add(changeCommunityItem);
+
         channelList.setPreferredSize(new Dimension(100, 230));
         JScrollPane scrollChan = new JScrollPane(channelList);
         scrollChan.setPreferredSize(new Dimension(110, 240));
@@ -68,20 +63,18 @@ class ChannelManagerPanel extends JPanel {
                 }
             }
         });
-        
+
         ActionListener al = new ActionListener() {
 
             public void actionPerformed(final ActionEvent e) {
 
-                	fireActionPerformed(new ActionEvent(this,
+                    fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Change!"));
                 }
 
-            
+
         };
-        
-        
-        changeCommunityItem.addActionListener(al);
+
 
         add(scrollChan);
     }
@@ -92,7 +85,7 @@ class ChannelManagerPanel extends JPanel {
         }
         return null;
     }
-    
+
 
     public void addActionListener(ActionListener l) {
         listeners.add(l);
@@ -107,7 +100,7 @@ class ChannelManagerPanel extends JPanel {
             l.actionPerformed(e);
         }
     }
-    
-    
+
+
 
 }

@@ -5,7 +5,10 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
@@ -68,6 +71,20 @@ class ColabServer extends UnicastRemoteObject
      */
     public ChannelManager getChannelManager() {
         return this.channelManager;
+    }
+
+    public void logIn(final CommunityName communityName,
+            final UserName userName, final ColabClientInterface client)
+            throws RemoteException {
+
+        Community community = userManager.getCommunity(communityName);
+        community.addClient(userName, client);
+        Collection<ServerChannel> channels =
+            channelManager.getChannels(communityName);
+        for (final ServerChannel channel : channels) {
+            client.channelAdded(channel.getChannelDescriptor());
+        }
+
     }
 
     private void initialize(final String path) throws IOException {

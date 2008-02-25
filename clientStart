@@ -1,2 +1,1 @@
-cd bin
-java colab.client.ColabClient
+java -cp colab/bin:colab-test/bin colab.client.gui.ColabClientGUI

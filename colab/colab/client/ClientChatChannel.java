@@ -23,7 +23,6 @@ public class ClientChatChannel extends ClientChannel {
         messages.add(chatData);
     }
 
-    @Override
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
     }

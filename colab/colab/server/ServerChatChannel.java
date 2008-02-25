@@ -50,7 +50,6 @@ final class ServerChatChannel extends ServerChannel {
 
     }
 
-    @Override
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
     }

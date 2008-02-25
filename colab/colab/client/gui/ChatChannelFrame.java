@@ -17,7 +17,7 @@ public class ChatChannelFrame extends JFrame {
     public ChatChannelFrame(ClientChatChannel clientChannel, final UserName name) {
         channel = clientChannel;
         chatPanel = new ChatPanel(name);
-        
+
         chatPanel.addActionListener(new ActionListener() {
            public void actionPerformed(ActionEvent e) {
                String mess;
@@ -32,14 +32,14 @@ public class ChatChannelFrame extends JFrame {
 //                       ~ <(^.^)> ~
                    }
                }
-               
+
            }
         });
-        
+
         setTitle(channel.getId().toString());
-        setSize((int)(chatPanel.getPreferredSize().getWidth()+10), (int)(chatPanel.getPreferredSize().getHeight()+10));
+        setSize(300, 300);
         setResizable(false);
-        
+
         setLayout(new FlowLayout());
         add(chatPanel);
     }

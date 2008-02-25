@@ -11,26 +11,8 @@ import colab.common.naming.ChannelName;
  * A channel represents content being edited, and the
  * workspace in which the group is dealing with it.
  */
-public abstract class Channel implements Identifiable<ChannelName> {
+public interface Channel extends Identifiable<ChannelName> {
 
-    /**
-     * The name of the channel.
-     */
-    private final ChannelName name;
+    ChannelDescriptor getChannelDescriptor();
 
-    /**
-     * Constructs a new channel.
-     *
-     * @param name the name of the channel
-     */
-    public Channel(final ChannelName name) {
-        this.name = name;
-    }
-
-    /** {@inheritDoc} */
-    public final ChannelName getId() {
-        return name;
-    }
-
-    public abstract ChannelDescriptor getChannelDescriptor();
 }

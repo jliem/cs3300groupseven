@@ -87,11 +87,6 @@ class Community implements Identifiable<CommunityName>, Serializable {
         return members;
     }
 
-    public final void addClient(final UserName username,
-            final ColabClientInterface client) {
-        clients.put(username, client);
-    }
-
     /**
      * Tells all clients that a new channel has been added.
      *
@@ -102,6 +97,11 @@ class Community implements Identifiable<CommunityName>, Serializable {
         for (final UserName userName : this.clients.keySet()) {
             this.clients.get(userName).channelAdded(channelDescriptor);
         }
+    }
+
+    public final void addClient(final UserName username,
+            final ColabClientInterface client) {
+        clients.put(username, client);
     }
 
     public void removeClient(final UserName username) {

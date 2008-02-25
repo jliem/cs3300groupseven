@@ -3,6 +3,7 @@ package colab.client;
 import java.awt.event.ActionListener;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.rmi.ServerException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -97,6 +98,13 @@ public final class ColabClient extends UnicastRemoteObject
             this.connection.logIn(new UserName(username), password);
         } catch (final AuthenticationException ae) {
             throw ae;
+        } catch (final ServerException se) {
+        	
+        	if (se.getCause() instanceof AuthenticationException)
+        		throw new AuthenticationException(se.getCause());
+        	
+        	throw new ConnectionDroppedException(se);
+        	
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);
         }

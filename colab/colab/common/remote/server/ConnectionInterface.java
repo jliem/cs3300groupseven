@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
@@ -85,12 +86,12 @@ public interface ConnectionInterface extends Remote {
      *
      * @param clientChannel a remote object representing the
      *                      channel on the client side
-     * @param channelName the name of the channel being joined
+     * @param channelDescriptor the dsecriptor of the channel being joined
      * @return a remote reference to the requested channel
      * @throws RemoteException if an rmi error occurs
      */
     void joinChannel(ChannelInterface clientChannel,
-            ChannelName channelName) throws RemoteException;
+            ChannelDescriptor channelDescriptor) throws RemoteException;
 
     /**
      * Indicates that the client has exited from a channel

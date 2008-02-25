@@ -363,9 +363,23 @@ final class Connection extends UnicastRemoteObject
 
     /** {@inheritDoc} */
     public void joinChannel(final ChannelInterface clientChannel,
-            final ChannelName channelName) throws RemoteException {
+            final ChannelDescriptor channelDescriptor) throws RemoteException {
 
-        ServerChannel serverChannel = getChannel(channelName);
+        // If the channel doesn't exist, we need to create it
+        ChannelManager channelManager = this.server.getChannelManager();
+        ServerChannel serverChannel = null;
+        ChannelName channelName = channelDescriptor.getName();
+
+        if (channelManager.channelExists(this.community.getId(), channelName)) {
+            serverChannel = getChannel(channelName);
+        } else {
+            serverChannel = channelManager.addChannel(this.community.getId(),
+                    channelDescriptor);
+        }
+
+        if (serverChannel == null) throw new IllegalStateException("Could not create"
+                + " or join channel named " + channelName + " in Connection");
+
         serverChannel.addClient(this.user.getId(), clientChannel);
 
     }

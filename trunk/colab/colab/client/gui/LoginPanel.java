@@ -10,11 +10,13 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import colab.client.ColabClient;
+import colab.common.remote.exception.AuthenticationException;
 
 public class LoginPanel extends JPanel {
 
@@ -28,8 +30,14 @@ public class LoginPanel extends JPanel {
     private String currentUser;
     private ArrayList<ActionListener> listeners;
 
+    /** Instance variable pointing to this panel so loginTask
+     * can pop up dialog in center
+     */
+    private LoginPanel loginPanel;
+    
     public LoginPanel(final ColabClient client) {
 
+    	
         usernameLabel = new JLabel("Username / Desired Username: ");
         passwordLabel = new JLabel("Password / Desired Password: ");
         serverLabel = new JLabel("Enter server IP: ");
@@ -40,6 +48,9 @@ public class LoginPanel extends JPanel {
 
         listeners = new ArrayList<ActionListener>();
 
+        // Get a reference to this panel
+    	loginPanel = this;
+    	
         final Runnable loginTask = new Runnable() {
             public void run() {
                 try {
@@ -51,10 +62,18 @@ public class LoginPanel extends JPanel {
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Succeeded!"));
 
-                } catch (final Exception e) {
+                } catch (AuthenticationException ae) {
+                	
+                	fireActionPerformed(new ActionEvent(this,
+                            ActionEvent.ACTION_FIRST, "Login Failed!"));
 
+                	JOptionPane.showMessageDialog(loginPanel, "Invalid username and/or password");
+                	
+                } catch (final Exception e) {
+                
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));
+                    
 
                 }
             }

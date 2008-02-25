@@ -51,21 +51,25 @@ class ColabClientGUI extends JFrame {
 
         communityPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
+                try {
+                    client.loginCommmunity(
+                            communityPanel.getCurrentCommunityName());
+                } catch (final RemoteException re) {
+                    // The christopher martin experience: enjoy!
+                }
+
                 channelPanel = new ChannelManagerPanel(client.getChannels());
 
                 gotoChannelView();
-                
+
                 channelPanel.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
+                    public void actionPerformed(final ActionEvent e) {
                         ChannelDescriptor cd;
                         while((cd = channelPanel.dequeueJoinedChannel()) != null) {
-                            try
-                            {
+                            try {
                                 client.joinChannel(cd);
-                            }
-                            catch(RemoteException ex)
-                            {
-                                //The christopher martin experience: enjoy!
+                            } catch(RemoteException ex) {
+                                // The christopher martin experience: enjoy!
                             }
                         }
                     }
@@ -83,9 +87,7 @@ class ColabClientGUI extends JFrame {
             setResizable(false);
             setSize(500, 200);
             loginPanel.updateUI();
-        }
-
-        else {
+        } else {
             loginPanel.clearFields();
             setActivePanel(loginPanelWrapper);
             setTitle("CoLab Login");

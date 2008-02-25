@@ -118,7 +118,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
      * @param attempt an input string which may be a correct password
      * @return true if the given password is correct, false otherwise
      */
-    public final boolean checkPassword(final String attempt) {
+    public final boolean checkPassword(final char[] attempt) {
         return password.checkPassword(attempt);
     }
 
@@ -142,7 +142,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
      * @return true if the authentication succeeds, false if it fails
      */
     public final boolean authenticate(final User user,
-            final String passAttempt) {
+            final char[] passAttempt) {
 
         // If a correct password was provided, the user can join.
         if (passAttempt != null && checkPassword(passAttempt)) {

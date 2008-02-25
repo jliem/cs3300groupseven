@@ -48,7 +48,7 @@ public interface ConnectionInterface extends Remote {
      *                 community, may be null
      * @throws RemoteException if an rmi error occurs
      */
-    void logIn(CommunityName communityName, String password)
+    void logIn(CommunityName communityName, char[] password)
         throws RemoteException;
 
     /**

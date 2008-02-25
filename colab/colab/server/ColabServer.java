@@ -6,8 +6,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;

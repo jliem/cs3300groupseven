@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.naming.CommunityName;
+import colab.common.remote.server.ConnectionInterface;
 
 class ColabClientGUI extends JFrame {
 
@@ -21,8 +22,7 @@ class ColabClientGUI extends JFrame {
     private final FixedSizePanel loginPanelWrapper;
     private ChooseCommunityPanel communityPanel;
     private final FixedSizePanel communityPanelWrapper;
-    private ChannelPanel channelPanel;
-    private ChatPanel chatPanel;
+    private ChannelManagerPanel channelPanel;
     private JPanel activePanel;
     private String currentUser;
 
@@ -36,7 +36,7 @@ class ColabClientGUI extends JFrame {
         this.communityPanel = new ChooseCommunityPanel();
         this.communityPanelWrapper = new FixedSizePanel(communityPanel,
                 new Dimension(420, 120));
-        
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         gotoUserLoginView(false);
@@ -51,23 +51,25 @@ class ColabClientGUI extends JFrame {
 
         communityPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                channelPanel = new ChannelPanel(client.getChannels());
+                channelPanel = new ChannelManagerPanel(client.getChannels());
 
+                gotoChannelView();
+                
                 channelPanel.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         ChannelDescriptor cd;
-                        while((cd = channelPanel.popJoinedChannel()) != null) {
-                            
+                        while((cd = channelPanel.dequeueJoinedChannel()) != null) {
+                            try
+                            {
+                                client.joinChannel(cd);
+                            }
+                            catch(RemoteException ex)
+                            {
+                                //The christopher martin experience: enjoy!
+                            }
                         }
                     }
                 });
-
-                setTitle(communityPanel.getCurrentCommunityName()
-                        + " Lobby Chat");
-                setActivePanel(chatPanel);
-                setResizable(false);
-                setSize(350, 375);
-                chatPanel.updateUI();
             }
         });
 
@@ -114,9 +116,13 @@ class ColabClientGUI extends JFrame {
         communityPanel.updateUI();
 
     }
-    
+
     private void gotoChannelView() {
-        
+        setActivePanel(channelPanel);
+        setTitle("");
+        setResizable(false);
+        setSize(120, 300);
+        channelPanel.updateUI();
     }
 
     private void setActivePanel(final JPanel newActivePanel) {
@@ -132,8 +138,35 @@ class ColabClientGUI extends JFrame {
     }
 
     public void logout() {
-        // client.logout()?
+
+        // Try to close the connection
+        ConnectionInterface connection = client.getConnection();
+
+        if (connection != null) {
+            try {
+                connection.logOutUser();
+            } catch (RemoteException re) {
+                re.printStackTrace();
+            }
+        }
+
+
         gotoUserLoginView(true);
+    }
+
+    public void switchCommunity() {
+        // Try to log out on the server
+        ConnectionInterface connection = client.getConnection();
+
+        if (connection != null) {
+            try {
+                connection.logOutCommunity();
+            } catch (RemoteException re) {
+                re.printStackTrace();
+            }
+        }
+
+        gotoCommunityLoginView();
     }
 
     public static void main(final String[] args) throws RemoteException {

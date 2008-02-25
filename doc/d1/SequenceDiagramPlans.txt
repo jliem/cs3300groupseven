@@ -1,0 +1,7 @@
+Scenario ideas
+---
+user login
+community login
+channel join
+chat send
+chat receive

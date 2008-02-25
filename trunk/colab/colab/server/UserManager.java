@@ -1,12 +1,13 @@
 package colab.server;
 
-import java.rmi.RemoteException;
 import java.util.Collection;
 
 import colab.common.identity.IdentitySet;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ColabClientInterface;
+import colab.common.remote.exception.AuthenticationException;
+import colab.common.remote.exception.IncorrectPasswordException;
+import colab.common.remote.exception.UserDoesNotExistException;
 
 /**
  * A simple user manager that holds all users and communities in memory.
@@ -88,6 +89,21 @@ final class UserManager {
      */
     public void addUser(final User user) {
         users.add(user);
+    }
+
+    public void checkPassword(final UserName username,
+            final char[] password) throws AuthenticationException {
+
+        User userAttempt = getUser(username);
+
+        if (userAttempt == null) {
+            throw new UserDoesNotExistException();
+        }
+
+        if (password == null || !userAttempt.checkPassword(password)) {
+            throw new IncorrectPasswordException();
+        }
+
     }
 
 }

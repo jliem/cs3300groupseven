@@ -37,7 +37,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
     private Password password;
 
     /**
-     * A list of actively connected clients
+     * A list of actively connected clients.
      */
     private final Map<UserName, ColabClientInterface> clients;
 

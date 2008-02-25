@@ -99,12 +99,12 @@ public final class ColabClient extends UnicastRemoteObject
         } catch (final AuthenticationException ae) {
             throw ae;
         } catch (final ServerException se) {
-        	
-        	if (se.getCause() instanceof AuthenticationException)
-        		throw new AuthenticationException(se.getCause());
-        	
-        	throw new ConnectionDroppedException(se);
-        	
+
+            if (se.getCause() instanceof AuthenticationException)
+                throw new AuthenticationException(se.getCause());
+
+            throw new ConnectionDroppedException(se);
+
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);
         }
@@ -146,6 +146,8 @@ public final class ColabClient extends UnicastRemoteObject
     /** {@inheritDoc} */
     public void channelAdded(final ChannelDescriptor channelDescriptor)
             throws RemoteException {
+        System.err.println("Channel added: "
+                + channelDescriptor.getName());
         channels.add(channelDescriptor);
     }
 

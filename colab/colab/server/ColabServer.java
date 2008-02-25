@@ -51,6 +51,7 @@ class ColabServer extends UnicastRemoteObject
     public ConnectionInterface connect(final ColabClientInterface client)
             throws RemoteException {
 
+        System.err.println("New connection made.");
         return new Connection(this, client);
 
     }
@@ -82,6 +83,8 @@ class ColabServer extends UnicastRemoteObject
         Collection<ServerChannel> channels =
             channelManager.getChannels(communityName);
         for (final ServerChannel channel : channels) {
+            System.err.println("Channel added: "
+                       + channel.getChannelDescriptor().getName());
             client.channelAdded(channel.getChannelDescriptor());
         }
 

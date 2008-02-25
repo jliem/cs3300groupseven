@@ -7,6 +7,9 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import colab.client.ClientChatChannel;
@@ -28,6 +31,9 @@ class ColabClientGUI extends JFrame {
     private ChannelManagerPanel channelPanel;
     private JPanel activePanel;
     private UserName currentUser;
+    private JMenuBar menuBar;
+    private JMenu menu;
+    private JMenuItem logoutItem, changeCommItem;
 
     public ColabClientGUI(final ColabClient client) {
         this.client = client;
@@ -40,9 +46,45 @@ class ColabClientGUI extends JFrame {
         this.communityPanelWrapper = new FixedSizePanel(communityPanel,
                 new Dimension(420, 120));
 
+        menuBar = new JMenuBar();
+        menu = new JMenu("File");
+        menuBar.add(menu);
+        logoutItem = new JMenuItem("Logout");
+        changeCommItem = new JMenuItem("Change Communities");
+
+        ActionListener menuListener = new ActionListener(){
+                public void actionPerformed(ActionEvent e){
+                    if(e.getSource() == logoutItem){
+                        gotoUserLoginView(true);
+                        try {
+                            client.logOutUser();
+
+                        } catch (ConnectionDroppedException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+
+                    }
+                    if(e.getSource() == changeCommItem){
+                        try {
+                            client.logOutCommunity();
+                        } catch (ConnectionDroppedException e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        gotoCommunityLoginView();
+                    }
+
+                }};
+
+
+        logoutItem.addActionListener(menuListener);
+        changeCommItem.addActionListener(menuListener);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         gotoUserLoginView(false);
+        this.setJMenuBar(menuBar);
 
         loginPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -109,9 +151,13 @@ class ColabClientGUI extends JFrame {
             }
         });
 
+
+
     }
 
     private void gotoUserLoginView(boolean logout) {
+
+        menu.removeAll();
 
         if(logout)
             loginPanel.clearFields();
@@ -125,7 +171,8 @@ class ColabClientGUI extends JFrame {
     }
 
     private void gotoCommunityLoginView() {
-
+        menu.removeAll();
+        menu.add(logoutItem);
         ArrayList<String> commNames = new ArrayList<String>();
         try {
             for (CommunityName name : client.getMyCommunityNames()) {
@@ -146,9 +193,10 @@ class ColabClientGUI extends JFrame {
     }
 
     private void gotoChannelView() {
+        menu.add(changeCommItem);
+        menu.add(logoutItem);
         channelPanel = new ChannelManagerPanel(client.getChannels());
         setActivePanel(channelPanel);
-        this.setJMenuBar(channelPanel.getMenuBar());
         setTitle("");
         setResizable(false);
         setSize(120, 300);

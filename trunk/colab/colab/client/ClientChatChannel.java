@@ -9,7 +9,7 @@ import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataCollection;
 import colab.common.naming.ChannelName;
 
-class ClientChatChannel extends ClientChannel {
+public class ClientChatChannel extends ClientChannel {
 
     protected ChatDataCollection messages;
 

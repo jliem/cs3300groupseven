@@ -26,5 +26,4 @@ public final class ChannelName extends StringIdentifier {
     public ChannelName(final String name) {
         super(name);
     }
-
 }

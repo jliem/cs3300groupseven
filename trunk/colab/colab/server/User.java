@@ -72,4 +72,7 @@ class User implements Identifiable<UserName>, Serializable {
         return name;
     }
 
+    public String toString() {
+        return getId().toString();
+    }
 }

@@ -11,11 +11,12 @@ import java.util.Vector;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import colab.common.channel.ChannelDescriptor;
 
-class ChannelPanel extends JPanel {
+class ChannelManagerPanel extends JPanel {
 
     private final ArrayList<ActionListener> listeners;
 
@@ -25,16 +26,19 @@ class ChannelPanel extends JPanel {
 
     private final JList channelList;
 
-    public ChannelPanel() {
+    public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel) {
+
         listeners = new ArrayList<ActionListener>();
 
         pendingJoins = new LinkedList<ChannelDescriptor>();
-        channels = new Vector<ChannelDescriptor>();
+        channels = channelListModel;
 
         channelList = new JList(channels);
 
         channelList.setPreferredSize(new Dimension(100, 230));
-        setPreferredSize(new Dimension(100, 275));
+        JScrollPane scrollChan = new JScrollPane(channelList);
+        scrollChan.setPreferredSize(new Dimension(110, 240));
+        setPreferredSize(new Dimension(115, 275));
 
         channelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         channelList.addMouseListener(new MouseAdapter() {
@@ -50,18 +54,10 @@ class ChannelPanel extends JPanel {
             }
         });
 
-        add(channelList);
+        add(scrollChan);
     }
 
-    public void addChannel(ChannelDescriptor chan) {
-        channels.add(chan);
-    }
-
-    public void removeChannel(ChannelDescriptor chan) {
-        channels.remove(chan);
-    }
-
-    public ChannelDescriptor popJoinedChannel() {
+    public ChannelDescriptor dequeueJoinedChannel() {
         if (pendingJoins.size() > 0) {
             return pendingJoins.removeFirst();
         }

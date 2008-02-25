@@ -29,7 +29,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
     /**
      * The users which have joined this community and can log in to it.
      */
-    private final Collection<User> members;
+    private final Collection<UserName> members;
 
     /**
      * The password to join this community.
@@ -56,7 +56,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
         this.password = password;
 
         // Create an empty collection of users
-        this.members = new ArrayList<User>();
+        this.members = new ArrayList<UserName>();
 
         this.clients = new HashMap<UserName, ColabClientInterface>();
 
@@ -86,7 +86,7 @@ class Community implements Identifiable<CommunityName>, Serializable {
      *
      * @return a collection containing every user of this community
      */
-    public final Collection<User> getMembers() {
+    public final Collection<UserName> getMembers() {
         return members;
     }
 
@@ -122,8 +122,8 @@ class Community implements Identifiable<CommunityName>, Serializable {
         return password.checkPassword(attempt);
     }
 
-    public final boolean isMember(final User user) {
-        return members.contains(user);
+    public final boolean isMember(final UserName username) {
+        return members.contains(username);
     }
 
     /**
@@ -136,17 +136,17 @@ class Community implements Identifiable<CommunityName>, Serializable {
      *
      * If neither, authentication is denied.
      *
-     * @param user the user attempting to log in to the community
+     * @param username the user attempting to log in to the community
      * @param passAttempt the password that a new user may be using to
      *                    join the community (may be null)
      * @return true if the authentication succeeds, false if it fails
      */
-    public final boolean authenticate(final User user,
+    public final boolean authenticate(final UserName username,
             final char[] passAttempt) {
 
         // If a correct password was provided, the user can join.
         if (passAttempt != null && checkPassword(passAttempt)) {
-            members.add(user);
+            members.add(username);
             return true;
         }
 

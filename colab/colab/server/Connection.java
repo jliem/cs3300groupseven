@@ -51,6 +51,9 @@ final class Connection extends UnicastRemoteObject
          */
         ACTIVE("active", true, true);
 
+        /**
+         * A string representation of this state.
+         */
         private final String str;
 
         /**
@@ -104,7 +107,7 @@ final class Connection extends UnicastRemoteObject
     /**
      * The user that has logged in on this connection (if any).
      */
-    private User user;
+    private UserName username;
 
     /**
      * The community that has been logged into on this connection (if any).
@@ -115,6 +118,7 @@ final class Connection extends UnicastRemoteObject
      * Constructs a new Connection.
      *
      * @param server the server to which the client is connected
+     * @param client a remote reference to the client object
      * @throws RemoteException if an rmi error occurs
      */
     public Connection(final ColabServer server,
@@ -164,13 +168,13 @@ final class Connection extends UnicastRemoteObject
      *
      * @return a user that has authenticated on this connection
      */
-    public User getUser() {
+    public UserName getUsername() {
 
         if (!hasUserLogin()) {
             throw new IllegalStateException("Not logged in as user");
         }
 
-        return this.user;
+        return this.username;
 
     }
 
@@ -204,20 +208,12 @@ final class Connection extends UnicastRemoteObject
 
         // Check the validity of login credentials
         UserManager userManager = server.getUserManager();
-        User userAttempt = userManager.getUser(username);
+        userManager.checkPassword(username, password);
 
-        if (userAttempt == null) {
-            throw new UserDoesNotExistException();
-        }
-
-        if (password == null || !userAttempt.checkPassword(password)) {
-            throw new IncorrectPasswordException();
-        }
-
-        System.err.println("User " + userAttempt + " logged in");
+        System.err.println("User " + username + " logged in");
 
         // Advance to the next state if correct
-        this.user = userAttempt;
+        this.username = username;
         this.state = STATE.LOGGED_IN;
 
     }
@@ -244,15 +240,15 @@ final class Connection extends UnicastRemoteObject
             throw new CommunityDoesNotExistException();
         }
 
-        if (!communityAttempt.isMember(this.user)) {
-            if (!communityAttempt.authenticate(this.user, password)) {
+        if (!communityAttempt.isMember(this.username)) {
+            if (!communityAttempt.authenticate(this.username, password)) {
                 throw new AuthenticationException();
             }
         }
 
-        server.logIn(communityName, this.user.getId(), client);
+        server.logIn(communityName, this.username, client);
 
-        System.err.println("User " + this.user.getId()
+        System.err.println("User " + this.username
                 + " logged in to community " + communityName);
 
         // Advance to the next state if correct
@@ -277,7 +273,7 @@ final class Connection extends UnicastRemoteObject
         }
 
         // Log out of user
-        this.user = null;
+        this.username = null;
         this.state = STATE.CONNECTED;
 
     }
@@ -362,7 +358,7 @@ final class Connection extends UnicastRemoteObject
             new ArrayList<CommunityName>(communities.size());
 
         for (Community c : communities) {
-            if (c.getMembers().contains(this.user)) {
+            if (c.getMembers().contains(this.username)) {
                 communityNames.add(c.getId());
             }
         }
@@ -394,7 +390,7 @@ final class Connection extends UnicastRemoteObject
                 + channelName + " in Connection");
         }
 
-        serverChannel.addClient(this.user.getId(), clientChannel);
+        serverChannel.addClient(this.username, clientChannel);
 
     }
 
@@ -403,7 +399,7 @@ final class Connection extends UnicastRemoteObject
             throws RemoteException {
 
         ServerChannel serverChannel = getChannel(channelName);
-        serverChannel.removeClient(this.user.getId());
+        serverChannel.removeClient(this.username);
 
     }
 

@@ -29,14 +29,14 @@ public class MockColabServer extends ColabServer {
         // Populate a few test communities
 
         Community groupSeven = new Community("Group Seven", "sevenPass");
-        groupSeven.getMembers().add(johannes);
-        groupSeven.getMembers().add(pamela);
-        groupSeven.getMembers().add(matthew);
-        groupSeven.getMembers().add(chris);
+        groupSeven.getMembers().add(johannes.getId());
+        groupSeven.getMembers().add(pamela.getId());
+        groupSeven.getMembers().add(matthew.getId());
+        groupSeven.getMembers().add(chris.getId());
         userManager.addCommunity(groupSeven);
 
         Community teamAwesome = new Community("Team Awesome", "awesomePass");
-        teamAwesome.getMembers().add(chris);
+        teamAwesome.getMembers().add(chris.getId());
         userManager.addCommunity(teamAwesome);
 
         Community noMembers = new Community("The No-Members Community", "abcd");

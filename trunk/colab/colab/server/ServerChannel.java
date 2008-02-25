@@ -42,9 +42,12 @@ abstract class ServerChannel implements Channel {
     public final void addClient(final UserName username,
             final ChannelInterface client) throws RemoteException {
 
+        System.err.println("User " + username + " joined; "
+                + "there are " + this.clients.size() + " clients connected");
+
         clients.put(username, client);
 
-        userJoin(username);
+        userJoined(username);
     }
 
     public void removeClient(final UserName username) throws RemoteException {
@@ -67,7 +70,8 @@ abstract class ServerChannel implements Channel {
      * @param userName the username of the user who joined.
      * @throws RemoteException if an rmi error occurs
      */
-    protected void userJoin(UserName userName) throws RemoteException {
+    protected void userJoined(final UserName userName)
+            throws RemoteException {
         for (final UserName un : this.clients.keySet()) {
             if (!un.equals(userName)) {
                 this.clients.get(un).userJoined(userName);

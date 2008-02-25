@@ -9,6 +9,9 @@ import colab.common.naming.UserName;
  */
 public final class ChatChannelData extends ChannelData {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     /** The text of the message. */
     private String text;
 

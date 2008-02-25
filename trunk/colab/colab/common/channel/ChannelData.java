@@ -1,5 +1,6 @@
 package colab.common.channel;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import colab.common.naming.UserName;
@@ -7,7 +8,10 @@ import colab.common.naming.UserName;
 /**
  * Represents some piece of data in a Channel.
  */
-public abstract class ChannelData {
+public abstract class ChannelData implements Serializable {
+
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     /**
      * The user from whom this piece of data originated.

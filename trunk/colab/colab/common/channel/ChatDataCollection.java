@@ -17,9 +17,9 @@ public final class ChatDataCollection extends TreeSet<ChatChannelData> {
         });
     }
 
-    public List<ChannelData> getLast(final int count) {
+    public List<ChatChannelData> getLast(final int count) {
         Iterator<ChatChannelData> it = iterator();
-        List<ChannelData> result = new ArrayList<ChannelData>(count);
+        List<ChatChannelData> result = new ArrayList<ChatChannelData>(count);
         while (it.hasNext()) {
             result.add(0, it.next());
         }

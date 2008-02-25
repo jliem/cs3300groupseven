@@ -1,6 +1,7 @@
 package colab.server;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
@@ -46,8 +47,11 @@ final class ServerChatChannel extends ServerChannel {
     /** {@inheritDoc} */
     public List<ChannelData> getLastData(final int count) {
 
-        return messages.getLast(count);
-
+        List<ChannelData> list = new ArrayList<ChannelData>();
+        for(ChatChannelData ccd : messages.getLast(count)) {
+            list.add(ccd);
+        }
+        return list;
     }
 
     public ChannelDescriptor getChannelDescriptor() {

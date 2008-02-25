@@ -8,23 +8,27 @@ import java.rmi.RemoteException;
 import javax.swing.JFrame;
 
 import colab.client.ClientChatChannel;
+import colab.client.ColabClient;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.UserName;
 
 public class ChatChannelFrame extends JFrame {
+    private final ColabClient client;
     private final ClientChatChannel channel;
     private final ChatPanel chatPanel;
-    public ChatChannelFrame(ClientChatChannel clientChannel, final UserName name) {
+    public ChatChannelFrame(final ColabClient client,
+            ClientChatChannel clientChannel, final UserName name) {
+        this.client = client;
         channel = clientChannel;
         chatPanel = new ChatPanel(name);
 
         chatPanel.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent e) {
+           public void actionPerformed(final ActionEvent e) {
                String mess;
                while((mess = chatPanel.dequeuePendingMessage()) != null) {
                    try
                    {
-                       channel.add(new ChatChannelData(mess, name));
+                       client.add(channel.getId(), new ChatChannelData(mess, name));
                    }
                    catch(RemoteException ex)
                    {
@@ -33,6 +37,14 @@ public class ChatChannelFrame extends JFrame {
                    }
                }
 
+           }
+        });
+
+        channel.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               for(String mess : channel.getNewMessages()) {
+                   chatPanel.writeMessage(mess);
+               }
            }
         });
 

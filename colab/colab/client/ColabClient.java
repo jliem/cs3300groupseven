@@ -7,12 +7,15 @@ import java.rmi.ServerException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
+import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
+import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
@@ -153,6 +156,20 @@ public final class ColabClient extends UnicastRemoteObject
         return channels;
     }
 
+    public void add(final ChannelName channelName,
+            final ChannelData data) throws RemoteException {
+
+        connection.add(channelName, data);
+
+    }
+
+    public List<ChannelData> getLastData(final ChannelName channelName,
+            final int count) throws RemoteException {
+
+        return connection.getLastData(channelName, count);
+
+    }
+
 	public void logOutUser() throws ConnectionDroppedException{
 		// TODO Auto-generated method stub
 		try {
@@ -173,4 +190,5 @@ public final class ColabClient extends UnicastRemoteObject
 		}
 		
 	}
+
 }

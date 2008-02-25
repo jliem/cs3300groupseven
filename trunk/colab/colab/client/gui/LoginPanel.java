@@ -57,12 +57,19 @@ public class LoginPanel extends JPanel {
 
                 } catch (AuthenticationException ae) {
 
+                    // Bad username and/or password
+
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));
 
                     showErrorBox("Invalid username and/or password", "Unable to log in");
 
+                    password.setText("");
+
                 } catch (UnableToConnectException ue) {
+
+                    // Server didn't connect for some reason, probably because
+                    // it wasn't running
 
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));

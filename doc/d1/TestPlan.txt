@@ -1,7 +1,0 @@
-Test Plan Overview
-
-The test plan will cover unit testing and integration testing through a combination of whitebox and blackbox techniques. Whitebox methods will be used to ensure the tests have complete statement coverage of the code, and blackbox methods will be used to check that the tests produce the correct values. Both unit tests and integration tests will be conducted by all developers.
-
-JUnit will be used to faciliate the running of unit test cases. Unit test cases will be written for functionality that can be tested in such a manner, but some components depend heavily on others and must be checked using integration testing. In addition, the front-end GUI cannot be easily tested using unit tests and will be verified through integrated usability tests by the developers.
-
-System integration will be checked in two ways. First, test cases will be written which rely on a variety of components and will require correct values from each separate component in order to pass. Second, developers will manually verify that the application is working by running the GUI and looking for reasonable values at each step.

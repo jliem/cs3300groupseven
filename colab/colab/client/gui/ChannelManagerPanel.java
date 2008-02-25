@@ -77,4 +77,5 @@ class ChannelManagerPanel extends JPanel {
             l.actionPerformed(e);
         }
     }
+
 }

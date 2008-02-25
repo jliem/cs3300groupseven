@@ -1,15 +1,17 @@
 package colab.server;
 
+import java.rmi.RemoteException;
 import java.util.Collection;
 
 import colab.common.identity.IdentitySet;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
+import colab.common.remote.client.ColabClientInterface;
 
 /**
  * A simple user manager that holds all users and communities in memory.
  */
-class UserManager {
+final class UserManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -24,10 +26,14 @@ class UserManager {
      */
     private final IdentitySet<UserName, User> users;
 
+    private ColabServer server;
+
     /**
      * Constructs an "empty" user manager with no communities or users.
      */
-    public UserManager() {
+    public UserManager(final ColabServer server) {
+
+        this.server = server;
 
         // Create an empty set of communities.
         communities = new IdentitySet<CommunityName, Community>();
@@ -43,7 +49,7 @@ class UserManager {
      * @param name the name of the community
      * @return the community with the given name
      */
-    public final Community getCommunity(final CommunityName name) {
+    public Community getCommunity(final CommunityName name) {
         return communities.get(name);
     }
 
@@ -52,7 +58,7 @@ class UserManager {
      *
      * @return a collection containing every community
      */
-    public final Collection<Community> getAllCommunities() {
+    public Collection<Community> getAllCommunities() {
         return communities;
     }
 
@@ -61,7 +67,7 @@ class UserManager {
      *
      * @param community the new community to add
      */
-    public final void addCommunity(final Community community) {
+    public void addCommunity(final Community community) {
         communities.add(community);
     }
 
@@ -71,7 +77,7 @@ class UserManager {
      * @param name the name of the user to retrieve
      * @return the user with the given name
      */
-    public final User getUser(final UserName name) {
+    public User getUser(final UserName name) {
         return users.get(name);
     }
 
@@ -80,8 +86,16 @@ class UserManager {
      *
      * @param user the new user to add
      */
-    public final void addUser(final User user) {
+    public void addUser(final User user) {
         users.add(user);
+    }
+
+    public void logIn(final CommunityName communityName, final UserName userName,
+            final ColabClientInterface client) throws RemoteException {
+        this.getCommunity(communityName).addClient(userName, client);
+        for (ServerChannel channel : server.getChannelManager().getChannels(communityName)) {
+            client.channelAdded(channel.getChannelDescriptor());
+        }
     }
 
 }

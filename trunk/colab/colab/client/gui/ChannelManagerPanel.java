@@ -3,6 +3,9 @@ package colab.client.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -10,6 +13,9 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -25,6 +31,13 @@ class ChannelManagerPanel extends JPanel {
     private final Vector<ChannelDescriptor> channels;
 
     private final JList channelList;
+    
+    private final JMenuBar menuBar;
+    
+    private final JMenu menu;
+    
+    private final JMenuItem logoutItem, changeCommunityItem;
+    
 
     public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel) {
 
@@ -34,7 +47,16 @@ class ChannelManagerPanel extends JPanel {
         channels = channelListModel;
 
         channelList = new JList(channels);
-
+        
+        menuBar = new JMenuBar();
+        menu = new JMenu("File");
+        menuBar.add(menu);
+        logoutItem = new JMenuItem("Logout");
+        changeCommunityItem = new JMenuItem("Change Community");
+              
+       menu.add(changeCommunityItem);
+       menu.add(logoutItem);
+        
         channelList.setPreferredSize(new Dimension(100, 230));
         JScrollPane scrollChan = new JScrollPane(channelList);
         scrollChan.setPreferredSize(new Dimension(110, 240));
@@ -53,6 +75,26 @@ class ChannelManagerPanel extends JPanel {
                 }
             }
         });
+        
+        ActionListener al = new ActionListener() {
+
+            public void actionPerformed(final ActionEvent e) {
+
+                if (e.getSource() == logoutItem) {
+                	fireActionPerformed(new ActionEvent(this,
+                            ActionEvent.ACTION_FIRST, "Logout!"));
+                }
+                
+                else if (e.getSource() == changeCommunityItem) {
+                	fireActionPerformed(new ActionEvent(this,
+                            ActionEvent.ACTION_FIRST, "Change!"));
+                }
+
+            }
+        };
+        
+        logoutItem.addActionListener(al);
+        changeCommunityItem.addActionListener(al);
 
         add(scrollChan);
     }
@@ -63,6 +105,7 @@ class ChannelManagerPanel extends JPanel {
         }
         return null;
     }
+    
 
     public void addActionListener(ActionListener l) {
         listeners.add(l);
@@ -76,6 +119,10 @@ class ChannelManagerPanel extends JPanel {
         for (ActionListener l : listeners) {
             l.actionPerformed(e);
         }
+    }
+    
+    public JMenuBar getMenuBar(){
+    	return menuBar;
     }
 
 }

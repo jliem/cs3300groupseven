@@ -1,6 +1,5 @@
 package colab.server;
 
-import java.io.File;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -10,7 +9,6 @@ import java.rmi.server.UnicastRemoteObject;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
-import colab.common.util.FileUtils;
 
 /**
  * Server implementation of ColabServerInterface.
@@ -20,9 +18,6 @@ final class ColabServer extends UnicastRemoteObject
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
-
-    /** The default port. */
-    public static final int DEFAULT_PORT = 9040;
 
     /**
      * The manager object that keeps track of users
@@ -76,7 +71,7 @@ final class ColabServer extends UnicastRemoteObject
     }
 
     private void initialize(final String path) throws IOException {
-        File dataDirectory = FileUtils.getOrCreateDirectory(path);
+        //File dataDirectory = FileUtils.getOrCreateDirectory(path);
     }
 
     /**
@@ -96,6 +91,7 @@ final class ColabServer extends UnicastRemoteObject
         // Create a server
         ColabServer server = new ColabServer();
 
+        /*
         String pathArg;
         if (args.length >= 1) {
             pathArg = args[0];
@@ -104,10 +100,24 @@ final class ColabServer extends UnicastRemoteObject
         }
 
         server.initialize(pathArg);
+        */
+
+        Integer port = null;
+        if (args.length == 0) {
+            System.err.println("No port specified");
+            System.exit(1);
+        } else {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (final NumberFormatException nfe) {
+                System.err.println("Port must be an integer");
+                System.exit(1);
+            }
+        }
 
         // Create the rmi registry, add the server to it
-        LocateRegistry.createRegistry(DEFAULT_PORT);
-        Naming.rebind("//localhost:" + DEFAULT_PORT + "/COLAB_SERVER", server);
+        LocateRegistry.createRegistry(port);
+        Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
 
         // Populate a few test users
 

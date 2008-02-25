@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 
 import colab.client.ColabClient;
 
-class LoginPanel extends JPanel {
+public class LoginPanel extends JPanel {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;

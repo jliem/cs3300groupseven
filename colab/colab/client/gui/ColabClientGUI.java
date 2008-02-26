@@ -18,7 +18,6 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.server.ConnectionInterface;
 
 class ColabClientGUI extends JFrame {
 

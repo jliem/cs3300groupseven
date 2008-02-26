@@ -1,7 +1,9 @@
 package colab.client.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -27,6 +29,8 @@ class ChatPanel extends JPanel {
     private final JTextArea textArea, textbox;
     private LinkedList<String> pendingMessages;
 
+    private Dimension lastSize;
+    
     public ChatPanel(UserName name) {
         listeners = new ArrayList<ActionListener>();
         textArea = new JTextArea(10, 30);
@@ -46,7 +50,7 @@ class ChatPanel extends JPanel {
             public void keyPressed(final KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (e.isShiftDown()) {
-                        writeMessage("\n");
+                        textbox.append("\n");
                     } else {
                         if (!textbox.getText().matches("\\A\\s*\\z")) {
                             writeMessage(user + ": " + textbox.getText());
@@ -62,9 +66,9 @@ class ChatPanel extends JPanel {
             }
         });
 
-        chatScroll.setPreferredSize(new Dimension(300, 200));
+        chatScroll.setPreferredSize(new Dimension(300, 235));
         sendScroll.setPreferredSize(new Dimension(300, 25));
-
+        
         setPreferredSize(new Dimension(300, 275));
         setLayout(new FlowLayout());
 
@@ -72,6 +76,8 @@ class ChatPanel extends JPanel {
         add(chatScroll);
         add(sendScroll);
 
+        
+        lastSize = getSize();
     }
 
     /**
@@ -90,6 +96,14 @@ class ChatPanel extends JPanel {
         }
     }
 
+    public String dequeuePendingMessage()
+    {
+        if(pendingMessages.size()>0){
+            return pendingMessages.removeFirst();
+        }
+        return null;
+    }
+    
     /**
      * Adds an ActionListener of a certain type to an element.
      * @param l
@@ -110,13 +124,21 @@ class ChatPanel extends JPanel {
         }
     }
 
-    public String dequeuePendingMessage()
-    {
-        if(pendingMessages.size()>0){
-            return pendingMessages.removeFirst();
-        }
-        return null;
+    public void paint(Graphics g) {
+    	Dimension size;
+    	if(!(size = getSize()).equals(lastSize)){
+    		lastSize = size;
+    		
+    		Dimension chatSize = new Dimension((int)(size.getWidth()), (int)(size.getHeight()-40)),
+    			sendSize = new Dimension((int)(size.getWidth()), 25);
+    		
+    		chatScroll.setPreferredSize(chatSize);
+    		sendScroll.setPreferredSize(sendSize);
+    	}
+    	
+    	super.paint(g);
     }
+    
 
     /**
      * Displays a ChatPanel.
@@ -124,11 +146,11 @@ class ChatPanel extends JPanel {
      *            standard
      */
     public static void main(final String[] args) {
-        ChatPanel p = new ChatPanel(new UserName("test!"));
+        ChatPanel p = new ChatPanel(new UserName("test"));
         JFrame f = new JFrame();
-        f.add(p);
-        f.setSize(350, 355);
-        f.setResizable(false);
+        f.setLayout(new BorderLayout());
+        f.add(p, BorderLayout.CENTER);
+        f.setSize(320, 300);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

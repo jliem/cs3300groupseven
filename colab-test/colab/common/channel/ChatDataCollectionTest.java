@@ -1,14 +1,13 @@
-package colab.server;
+package colab.common.channel;
 
 import java.rmi.RemoteException;
 
-import junit.framework.TestCase;
+import colab.common.naming.ChannelName;
+import colab.common.naming.UserName;
 import colab.server.ServerChatChannel;
-import colab.common.naming.*;
-import colab.common.channel.*;
+import junit.framework.TestCase;
 
-public class ServerChatChannelTest extends TestCase {
-
+public class ChatDataCollectionTest extends TestCase {
 	public void testServerChatChannelCreationandAddition() throws RemoteException{
 		ServerChatChannel scChannel = new ServerChatChannel(new ChannelName("TestChatChannel"));
 		
@@ -29,6 +28,5 @@ public class ServerChatChannelTest extends TestCase {
 		
 		assertEquals(data.getText(), "Text2");
 	}
-	
-	
+
 }

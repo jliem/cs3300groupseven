@@ -53,7 +53,7 @@ public class ClientChatChannel extends ClientChannel {
     }
 
     public List<String> getNewMessages() {
-        System.err.println("Getting new messages");
+        //System.err.println("Getting new messages");
         ArrayList <String> list = new ArrayList <String>();
 
         List <ChatChannelData> channelDataList = messages.getLast(newMessages);

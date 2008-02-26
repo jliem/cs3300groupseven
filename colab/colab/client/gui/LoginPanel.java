@@ -120,7 +120,7 @@ public class LoginPanel extends JPanel {
         add(loginButton);
 
         // TODO: Remove this before real demo
-        populateLogin();
+        //populateLogin();
     }
 
     /**

@@ -49,6 +49,7 @@ public class LoginPanel extends JPanel {
                 try {
 
                     currentUser = username.getText();
+                    client.connect(serverIP.getText());
                     client.loginUser(username.getText(),
                             password.getPassword(), serverIP.getText());
 

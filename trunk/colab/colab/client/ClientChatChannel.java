@@ -34,17 +34,17 @@ public class ClientChatChannel extends ClientChannel {
                 this, ActionEvent.ACTION_FIRST, "Message Added"));
     }
 
-    protected void fireActionPerformed(ActionEvent e) {
+    protected void fireActionPerformed(final ActionEvent e) {
         for(ActionListener l : listeners) {
             l.actionPerformed(e);
         }
     }
 
-    public void addActionListener(ActionListener l) {
+    public void addActionListener(final ActionListener l) {
         listeners.add(l);
     }
 
-    public void removeActionListener(ActionListener l) {
+    public void removeActionListener(final ActionListener l) {
         listeners.remove(l);
     }
 

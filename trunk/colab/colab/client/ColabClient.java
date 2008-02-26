@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import colab.common.ConnectionState;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ConnectionDroppedException;
@@ -29,16 +30,19 @@ import colab.common.remote.server.ConnectionInterface;
 public final class ColabClient extends UnicastRemoteObject
         implements ColabClientInterface {
 
-    private ArrayList <ActionListener> listeners;
-    private Vector <ChannelDescriptor> channels;
-
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
     /** The default port. */
     public static final int DEFAULT_PORT = 9040;
 
+    private final ArrayList<ActionListener> listeners;
+
+    private final Vector<ChannelDescriptor> channels;
+
     private ConnectionInterface connection;
+
+    private ConnectionState connectionState;
 
     /**
      * Constructs the client application.
@@ -46,8 +50,9 @@ public final class ColabClient extends UnicastRemoteObject
      * @throws RemoteException if an rmi error occurs
      */
     public ColabClient() throws RemoteException {
-        listeners = new ArrayList <ActionListener>();
-        channels = new Vector <ChannelDescriptor>();
+        listeners = new ArrayList<ActionListener>();
+        channels = new Vector<ChannelDescriptor>();
+        connectionState = ConnectionState.DISCONNECTED;
     }
 
     /**
@@ -67,8 +72,11 @@ public final class ColabClient extends UnicastRemoteObject
             connection = server.connect(this);
         } catch (final Exception e) {
             throw new UnableToConnectException();
+        } finally {
+            this.connectionState = ConnectionState.DISCONNECTED;
         }
 
+        this.connectionState = ConnectionState.CONNECTED;
         this.connection = connection;
 
     }
@@ -95,6 +103,14 @@ public final class ColabClient extends UnicastRemoteObject
             final String serverAddress) throws NetworkException,
             AuthenticationException {
 
+        // Must be in the Connected (not logged in) state
+        if (this.connectionState != ConnectionState.CONNECTED) {
+            System.err.println("[ColabClient] Attempt to perform user "
+                    + "login on connection in '"
+                    + this.connectionState + "' state");
+            throw new IllegalStateException();
+        }
+
         connect(serverAddress);
 
         try {
@@ -102,20 +118,33 @@ public final class ColabClient extends UnicastRemoteObject
         } catch (final AuthenticationException ae) {
             throw ae;
         } catch (final ServerException se) {
-        	
-        	if (se.getCause() instanceof AuthenticationException)
-        		throw new AuthenticationException(se.getCause());
-        	
-        	throw new ConnectionDroppedException(se);
-        	
+
+            if (se.getCause() instanceof AuthenticationException) {
+                throw new AuthenticationException(se.getCause());
+            }
+
+            throw new ConnectionDroppedException(se);
+
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);
+        } finally {
+            this.connectionState = ConnectionState.CONNECTED;
         }
+
+        this.connectionState = ConnectionState.LOGGED_IN;
 
     }
 
     public void loginCommmunity(final CommunityName communityName)
             throws NetworkException, AuthenticationException {
+
+        // Must be in the Logged In (not yet in a community) state
+        if (this.connectionState != ConnectionState.LOGGED_IN) {
+            System.err.println("[Connection] Attempt to perform community "
+                    + "login on connection in '"
+                    + this.connectionState + "' state");
+            throw new IllegalStateException();
+        }
 
         try {
             this.connection.logIn(communityName, null);
@@ -123,7 +152,11 @@ public final class ColabClient extends UnicastRemoteObject
             throw ae;
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);
+        } finally {
+            this.connectionState = ConnectionState.LOGGED_IN;
         }
+
+        this.connectionState = ConnectionState.ACTIVE;
 
     }
 
@@ -170,25 +203,25 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
-	public void logOutUser() throws ConnectionDroppedException{
-		// TODO Auto-generated method stub
-		try {
-			connection.logOutUser();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			throw new ConnectionDroppedException(e);
-		}
-	}
+    public void logOutUser() throws ConnectionDroppedException{
+        // TODO Auto-generated method stub
+        try {
+            connection.logOutUser();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            throw new ConnectionDroppedException(e);
+        }
+    }
 
-	public void logOutCommunity() throws ConnectionDroppedException{
-		// TODO Auto-generated method stub
-		try {
-			connection.logOutCommunity();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			throw new ConnectionDroppedException(e);
-		}
-		
-	}
+    public void logOutCommunity() throws ConnectionDroppedException{
+        // TODO Auto-generated method stub
+        try {
+            connection.logOutCommunity();
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            throw new ConnectionDroppedException(e);
+        }
+
+    }
 
 }

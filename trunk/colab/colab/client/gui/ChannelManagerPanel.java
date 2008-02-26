@@ -53,7 +53,7 @@ class ChannelManagerPanel extends JPanel {
         channelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         channelList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() > 1) {
+                if (e.getClickCount() > 1 && !channelList.isSelectionEmpty()) {
                     // adds the currently selected channel descriptor to our
                     // pending join channel list
                     pendingJoins.add(channels.elementAt(channelList

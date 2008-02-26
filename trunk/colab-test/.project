@@ -3,6 +3,7 @@
 	<name>colab-test</name>
 	<comment></comment>
 	<projects>
+		<project>colab</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

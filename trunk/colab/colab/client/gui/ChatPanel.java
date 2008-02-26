@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -18,8 +19,11 @@ import colab.common.naming.UserName;
 
 class ChatPanel extends JPanel {
 
+	public static final long serialVersionUID = 1;
+	
     private ArrayList<ActionListener> listeners;
     private final String user;
+    private final JScrollPane chatScroll, sendScroll;
     private final JTextArea textArea, textbox;
     private LinkedList<String> pendingMessages;
 
@@ -31,18 +35,18 @@ class ChatPanel extends JPanel {
         user = new String(name.toString());
         pendingMessages = new LinkedList<String>();
 
-        JScrollPane textScroll = new JScrollPane(textArea);
+        chatScroll = new JScrollPane(textArea);
         textArea.setLineWrap(true);
         textArea.setEditable(false);
 
-        JScrollPane sendScroll = new JScrollPane(textbox);
+        sendScroll = new JScrollPane(textbox);
         textbox.setLineWrap(true);
 
         textbox.addKeyListener(new KeyAdapter() {
             public void keyPressed(final KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (e.isShiftDown()) {
-                        textbox.append("\n");
+                        writeMessage("\n");
                     } else {
                         if (!textbox.getText().matches("\\A\\s*\\z")) {
                             writeMessage(user + ": " + textbox.getText());
@@ -58,14 +62,14 @@ class ChatPanel extends JPanel {
             }
         });
 
-        textScroll.setPreferredSize(new Dimension(300, 200));
+        chatScroll.setPreferredSize(new Dimension(300, 200));
         sendScroll.setPreferredSize(new Dimension(300, 25));
 
         setPreferredSize(new Dimension(300, 275));
         setLayout(new FlowLayout());
 
 
-        add(textScroll);
+        add(chatScroll);
         add(sendScroll);
 
     }
@@ -77,6 +81,13 @@ class ChatPanel extends JPanel {
      */
     public final void writeMessage(final String mess) {
         textArea.append(mess + "\n");
+        
+        JScrollBar bar = chatScroll.getVerticalScrollBar();
+        boolean autoScroll = ((bar.getValue() + bar.getVisibleAmount()) == bar.getMaximum());
+
+        if( autoScroll ) {
+        	textArea.setCaretPosition( textArea.getDocument().getLength() );
+        }
     }
 
     /**

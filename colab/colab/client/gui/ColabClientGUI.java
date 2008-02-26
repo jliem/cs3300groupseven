@@ -32,7 +32,7 @@ class ColabClientGUI extends JFrame {
     private UserName currentUser;
     private JMenuBar menuBar;
     private JMenu menu;
-    private JMenuItem logoutItem, changeCommItem;
+    private JMenuItem logoutItem, changeCommItem, quitItem;
 
     public ColabClientGUI(final ColabClient client) {
         this.client = client;
@@ -50,6 +50,7 @@ class ColabClientGUI extends JFrame {
         menuBar.add(menu);
         logoutItem = new JMenuItem("Logout");
         changeCommItem = new JMenuItem("Change Communities");
+        quitItem = new JMenuItem("Quit");
 
         ActionListener menuListener = new ActionListener(){
                 public void actionPerformed(ActionEvent e){
@@ -73,12 +74,17 @@ class ColabClientGUI extends JFrame {
                         }
                         gotoCommunityLoginView();
                     }
+                    
+                   // if(e.getSource() == quitItem){
+                    //	System.e
+                    //}
 
                 }};
 
 
         logoutItem.addActionListener(menuListener);
         changeCommItem.addActionListener(menuListener);
+        quitItem.addActionListener(menuListener);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);

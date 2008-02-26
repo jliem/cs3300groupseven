@@ -14,8 +14,7 @@ public interface ChannelInterface extends Remote {
      * @param data the piece of data
      * @throws RemoteException if an rmi error occurs
      */
-    void add(ChannelData data)
-            throws RemoteException;
+    void add(ChannelData data) throws RemoteException;
 
     /**
      * Informs the client that a user has joined (been added to) the channel.
@@ -32,4 +31,5 @@ public interface ChannelInterface extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
     void userLeft(UserName userName) throws RemoteException;
+
 }

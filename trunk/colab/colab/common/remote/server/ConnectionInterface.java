@@ -87,7 +87,6 @@ public interface ConnectionInterface extends Remote {
      * @param clientChannel a remote object representing the
      *                      channel on the client side
      * @param channelDescriptor the dsecriptor of the channel being joined
-     * @return a remote reference to the requested channel
      * @throws RemoteException if an rmi error occurs
      */
     void joinChannel(ChannelInterface clientChannel,

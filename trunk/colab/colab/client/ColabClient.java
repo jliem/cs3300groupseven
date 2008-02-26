@@ -81,10 +81,6 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
-    public ConnectionInterface getConnection() {
-        return this.connection;
-    }
-
     /**
      * Receives the username and password from the GUI fields and checks to
      * see if there is an existing corresponding pair.  If the username
@@ -204,17 +200,14 @@ public final class ColabClient extends UnicastRemoteObject
     }
 
     public void logOutUser() throws ConnectionDroppedException{
-        // TODO Auto-generated method stub
         try {
             connection.logOutUser();
         } catch (RemoteException e) {
-            // TODO Auto-generated catch block
             throw new ConnectionDroppedException(e);
         }
     }
 
     public void logOutCommunity() throws ConnectionDroppedException{
-        // TODO Auto-generated method stub
         try {
             connection.logOutCommunity();
         } catch (RemoteException e) {

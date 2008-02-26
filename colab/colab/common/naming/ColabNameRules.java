@@ -54,7 +54,7 @@ public final class ColabNameRules {
      */
     public static boolean isValidCommunityName(final String str) {
         return
-               str.length() < COMMUNITY_MAX_LENGTH
+               str.length() <= COMMUNITY_MAX_LENGTH
             && StringUtils.containsOnlyCharacters(str, COMMUNITY_CHARACTERS);
     }
 
@@ -65,7 +65,7 @@ public final class ColabNameRules {
      * @return true if the name is valid, false otherwise
      */
     public static boolean isValidUserName(final String str) {
-        return str.length() < USER_MAX_LENGTH
+        return str.length() <= USER_MAX_LENGTH
             && StringUtils.containsOnlyCharacters(str, USER_CHARACTERS);
     }
 

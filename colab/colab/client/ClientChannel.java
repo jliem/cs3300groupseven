@@ -53,4 +53,7 @@ abstract class ClientChannel extends UnicastRemoteObject
 
     }
 
+    public final Set<UserName> getMembers() {
+        return this.members;
+    }
 }

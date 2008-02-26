@@ -155,4 +155,11 @@ class Community implements Identifiable<CommunityName>, Serializable {
 
     }
 
+	/**
+	 * @return the clients
+	 */
+	public Map<UserName, ColabClientInterface> getClients() {
+		return clients;
+	}
+
 }

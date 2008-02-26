@@ -49,8 +49,7 @@ public class ChatChannelFrame extends JFrame {
         });
 
         setTitle(channel.getId().toString());
-        setSize(300, 300);
-        setResizable(false);
+        setSize(320, 300);
 
         setLayout(new FlowLayout());
         add(chatPanel);

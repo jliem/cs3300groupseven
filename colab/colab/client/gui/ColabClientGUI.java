@@ -211,39 +211,44 @@ class ColabClientGUI extends JFrame {
         add(activePanel);
     }
 
+    /**
+     * Constructs a new client gui.
+     *
+     * @throws RemoteException if an rmi error occurs
+     */
     public ColabClientGUI() throws RemoteException {
         this(new ColabClient());
     }
 
+    /**
+     * Logs out and returns to the user login view.
+     */
     public void logout() {
 
-        // Try to close the connection
-        ConnectionInterface connection = client.getConnection();
-
-        if (connection != null) {
-            try {
-                connection.logOutUser();
-            } catch (RemoteException re) {
-                re.printStackTrace();
-            }
+        try {
+            client.logOutUser();
+        } catch (final ConnectionDroppedException e) {
+            e.printStackTrace();
         }
 
         gotoUserLoginView(true);
+
     }
 
+    /**
+     * Logs out of the community and moves into the
+     * community selection view.
+     */
     public void switchCommunity() {
-        // Try to log out on the server
-        ConnectionInterface connection = client.getConnection();
 
-        if (connection != null) {
-            try {
-                connection.logOutCommunity();
-            } catch (RemoteException re) {
-                re.printStackTrace();
-            }
+        try {
+            client.logOutCommunity();
+        } catch (final ConnectionDroppedException e) {
+            e.printStackTrace();
         }
 
         gotoCommunityLoginView();
+
     }
 
     public static void main(final String[] args) throws RemoteException {

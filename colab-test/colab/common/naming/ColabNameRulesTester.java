@@ -22,7 +22,6 @@ public class ColabNameRulesTester extends TestCase {
             s.append('a');
         }
 
-        System.out.println(s.toString().length());
         assertTrue(ColabNameRules.isValidCommunityName(s.toString()));
 
         // Valid length + 1

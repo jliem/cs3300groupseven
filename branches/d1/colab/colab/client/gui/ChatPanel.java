@@ -22,7 +22,7 @@ import colab.common.naming.UserName;
 class ChatPanel extends JPanel {
 
 	public static final long serialVersionUID = 1;
-	
+
     private ArrayList<ActionListener> listeners;
     private final String user;
     private final JScrollPane chatScroll, sendScroll;
@@ -30,7 +30,7 @@ class ChatPanel extends JPanel {
     private LinkedList<String> pendingMessages;
 
     private Dimension lastSize;
-    
+
     public ChatPanel(UserName name) {
         listeners = new ArrayList<ActionListener>();
         textArea = new JTextArea(10, 30);
@@ -68,15 +68,15 @@ class ChatPanel extends JPanel {
 
         chatScroll.setPreferredSize(new Dimension(300, 235));
         sendScroll.setPreferredSize(new Dimension(300, 25));
-        
+
         setPreferredSize(new Dimension(300, 275));
-        setLayout(new FlowLayout());
+        setLayout(new BorderLayout());
 
 
-        add(chatScroll);
-        add(sendScroll);
+        add(chatScroll, BorderLayout.CENTER);
+        add(sendScroll, BorderLayout.SOUTH);
 
-        
+
         lastSize = getSize();
     }
 
@@ -87,7 +87,7 @@ class ChatPanel extends JPanel {
      */
     public final void writeMessage(final String mess) {
         textArea.append(mess + "\n");
-        
+
         JScrollBar bar = chatScroll.getVerticalScrollBar();
         boolean autoScroll = ((bar.getValue() + bar.getVisibleAmount()) == bar.getMaximum());
 
@@ -103,7 +103,7 @@ class ChatPanel extends JPanel {
         }
         return null;
     }
-    
+
     /**
      * Adds an ActionListener of a certain type to an element.
      * @param l
@@ -128,17 +128,17 @@ class ChatPanel extends JPanel {
     	Dimension size;
     	if(!(size = getSize()).equals(lastSize)){
     		lastSize = size;
-    		
+
     		Dimension chatSize = new Dimension((int)(size.getWidth()), (int)(size.getHeight()-40)),
     			sendSize = new Dimension((int)(size.getWidth()), 25);
-    		
+
     		chatScroll.setPreferredSize(chatSize);
     		sendScroll.setPreferredSize(sendSize);
     	}
-    	
+
     	super.paint(g);
     }
-    
+
 
     /**
      * Displays a ChatPanel.

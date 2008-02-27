@@ -3,9 +3,10 @@ package colab.client.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -65,6 +66,18 @@ class ChatPanel extends JPanel {
                 }
             }
         });
+        
+        addComponentListener(new ComponentAdapter(){
+        	public void componentResized(ComponentEvent e){
+        		Dimension size = getSize();
+            	
+        		Dimension chatSize = new Dimension((int)(size.getWidth()-10), (int)(size.getHeight()-40)),
+        			sendSize = new Dimension((int)(size.getWidth()-10), 25);
+        		
+        		chatScroll.setPreferredSize(chatSize);
+        		sendScroll.setPreferredSize(sendSize);
+        	}
+        });
 
         chatScroll.setPreferredSize(new Dimension(300, 235));
         sendScroll.setPreferredSize(new Dimension(300, 25));
@@ -123,23 +136,7 @@ class ChatPanel extends JPanel {
             l.actionPerformed(e);
         }
     }
-
-    public void paint(Graphics g) {
-    	Dimension size;
-    	if(!(size = getSize()).equals(lastSize)){
-    		lastSize = size;
-    		
-    		Dimension chatSize = new Dimension((int)(size.getWidth()), (int)(size.getHeight()-40)),
-    			sendSize = new Dimension((int)(size.getWidth()), 25);
-    		
-    		chatScroll.setPreferredSize(chatSize);
-    		sendScroll.setPreferredSize(sendSize);
-    	}
-    	
-    	super.paint(g);
-    }
     
-
     /**
      * Displays a ChatPanel.
      * @param args
@@ -148,8 +145,7 @@ class ChatPanel extends JPanel {
     public static void main(final String[] args) {
         ChatPanel p = new ChatPanel(new UserName("test"));
         JFrame f = new JFrame();
-        f.setLayout(new BorderLayout());
-        f.add(p, BorderLayout.CENTER);
+        f.setContentPane(p);
         f.setSize(320, 300);
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

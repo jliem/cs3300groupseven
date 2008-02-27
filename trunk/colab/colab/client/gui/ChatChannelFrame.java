@@ -1,8 +1,10 @@
 package colab.client.gui;
 
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.rmi.RemoteException;
 
 import javax.swing.JFrame;
@@ -16,6 +18,9 @@ public class ChatChannelFrame extends JFrame {
     private final ColabClient client;
     private final ClientChatChannel channel;
     private final ChatPanel chatPanel;
+    
+    private static final long serialVersionUID = 1;
+    
     public ChatChannelFrame(final ColabClient client,
             ClientChatChannel clientChannel, final UserName name) {
         this.client = client;
@@ -48,10 +53,10 @@ public class ChatChannelFrame extends JFrame {
            }
         });
 
-        setTitle(channel.getId().toString());
-        setSize(320, 300);
 
-        setLayout(new FlowLayout());
-        add(chatPanel);
+        setTitle(channel.getId().toString());
+        setSize(new Dimension(320, 300));
+
+        setContentPane(chatPanel);
     }
 }

@@ -8,11 +8,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
@@ -29,26 +32,29 @@ public class ChatChannelFrame extends JFrame {
 
 	private final JMenuBar menu;
 
-	private final JMenu fileMenu;
+	private final JMenu fileMenu, optionsMenu;
 
 	private final JMenuItem export, exit;
+	
+	private final JCheckBoxMenuItem timestampCheckBox;
 
 	private static final long serialVersionUID = 1;
 
 	public ChatChannelFrame(final ColabClient client,
-			ClientChatChannel clientChannel, final UserName name) {
+			final ClientChatChannel clientChannel, final UserName name) {
 		this.client = client;
 		channel = clientChannel;
 		chatPanel = new ChatPanel(name);
 
 		chatPanel.addActionListener(new ActionListener() {
 			public void actionPerformed(final ActionEvent e) {
-				String mess;
+				ChatChannelData mess;
 				while ((mess = chatPanel.dequeuePendingMessage()) != null) {
 					try {
-						client.add(channel.getId(), new ChatChannelData(mess,
-								name));
+						clientChannel.add(mess);
+						client.add(channel.getId(), mess);
 					} catch (RemoteException ex) {
+						//TODO: handler remote chat exceptions
 						// REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
 						// ~ <(^.^)> ~
 					}
@@ -68,6 +74,9 @@ public class ChatChannelFrame extends JFrame {
 		menu = new JMenuBar();
 		fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
+		optionsMenu = new JMenu("Options");
+		optionsMenu.setMnemonic(KeyEvent.VK_O);
+		
 
 		export = new JMenuItem("Export Chat");
 		export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
@@ -79,6 +88,10 @@ public class ChatChannelFrame extends JFrame {
 				ActionEvent.ALT_MASK));
 		exit.getAccessibleContext().setAccessibleDescription(
 				"Leaves the channel.");
+		timestampCheckBox = new JCheckBoxMenuItem("Timestamp");
+		timestampCheckBox.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
+				ActionEvent.ALT_MASK));
+		timestampCheckBox.getAccessibleContext().setAccessibleDescription("Enables/disables chat timestamps.");
 
 		export.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -92,11 +105,21 @@ public class ChatChannelFrame extends JFrame {
 				exit();
 			}
 		});
+		
+		timestampCheckBox.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				setTimestampEnabled(timestampCheckBox.getState());
+			}
+		});
+		timestampCheckBox.setSelected(false);
 
 		fileMenu.add(export);
 		fileMenu.add(exit);
 
+		optionsMenu.add(timestampCheckBox);
+		
 		menu.add(fileMenu);
+		menu.add(optionsMenu);
 
 		this.setJMenuBar(menu);
 

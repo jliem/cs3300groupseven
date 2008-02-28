@@ -35,11 +35,12 @@ public final class ChatChannelData extends ChannelData {
         return this.text;
     }
     
+    //TODO:needs some sort of formatting options
     public String getMessageString(boolean timestampEnabled) {
     	String start = getCreator().toString(),
     		end = ": " + getText();
     	if(timestampEnabled){
-    		start += " " + getTimestamp().toString() + " ";
+    		start += " <" + getTimestamp().toString() + "> ";
     	}
     	return start + end; 
     }

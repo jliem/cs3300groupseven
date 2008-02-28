@@ -32,7 +32,7 @@ class ChatPanel extends JPanel {
 
 	private final JTextArea textArea, textbox;
 
-	private LinkedList<String> pendingMessages;
+	private LinkedList<ChatChannelData> pendingMessages;
 
 	private Dimension lastSize;
 
@@ -44,7 +44,7 @@ class ChatPanel extends JPanel {
 		textbox = new JTextArea(2, 20);
 
 		user = new String(name.toString());
-		pendingMessages = new LinkedList<String>();
+		pendingMessages = new LinkedList<ChatChannelData>();
 
 		chatScroll = new JScrollPane(textArea);
 		textArea.setLineWrap(true);
@@ -62,9 +62,7 @@ class ChatPanel extends JPanel {
 						if (!textbox.getText().matches("\\A\\s*\\z")) {
 							// additional "write message" functionality
 							// TODO: should probably be refactored to own method
-							textArea.append(user + ": " + textbox.getText()
-									+ "\n");
-							pendingMessages.addLast(textbox.getText());
+							pendingMessages.addLast(new ChatChannelData(textbox.getText(), new UserName(user)));
 							textbox.setText("");
 							fireActionPerformed(new ActionEvent(this,
 									ActionEvent.ACTION_FIRST, "Message Sent"));
@@ -109,6 +107,7 @@ class ChatPanel extends JPanel {
 	 */
 	public final void writeMessage(final ChatChannelData mess) {
 		textArea.append(mess.getMessageString(timestampEnabled) + "\n");
+		
 		JScrollBar bar = chatScroll.getVerticalScrollBar();
 		boolean autoScroll = ((bar.getValue() + bar.getVisibleAmount()) == bar
 				.getMaximum());
@@ -118,7 +117,7 @@ class ChatPanel extends JPanel {
 		}
 	}
 
-	public String dequeuePendingMessage() {
+	public ChatChannelData dequeuePendingMessage() {
 		if (pendingMessages.size() > 0) {
 			return pendingMessages.removeFirst();
 		}
@@ -146,6 +145,14 @@ class ChatPanel extends JPanel {
 			l.actionPerformed(e);
 		}
 	}
+	
+	public boolean isTimestampEnabled() {
+		return timestampEnabled;
+	}
+
+	public void setTimestampEnabled(boolean timestampEnabled) {
+		this.timestampEnabled = timestampEnabled;
+	}
 
 	/**
 	 * Displays a ChatPanel.
@@ -160,13 +167,5 @@ class ChatPanel extends JPanel {
 		f.setSize(320, 300);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-
-	public boolean isTimestampEnabled() {
-		return timestampEnabled;
-	}
-
-	public void setTimestampEnabled(boolean timestampEnabled) {
-		this.timestampEnabled = timestampEnabled;
-	}
+	}	
 }

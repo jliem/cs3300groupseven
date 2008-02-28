@@ -68,10 +68,11 @@ public class ExportChatFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//TODO:add actual export action
 				try{
-					if(exportFile==null || !exportFile.canWrite()){
+					if(exportFile==null || (!exportFile.exists() && !exportFile.createNewFile()) || !exportFile.canWrite()){
 						showErrorBox("Cannot write to selected file.", "Export Error");
 						return;
 					}
+					
 					if(local.isSelected()){
 						export(exportFile, channel.getLocalMessages());
 					}
@@ -85,8 +86,11 @@ public class ExportChatFrame extends JFrame {
 				catch(IOException ex){
 					showErrorBox("Error writing to file.", "File Error");
 					ex.printStackTrace();
-					
+					return;
 				}
+				
+				setVisible(false);
+				dispose();
 			}
 		});
 		
@@ -174,6 +178,7 @@ public class ExportChatFrame extends JFrame {
 		
 		setSize(275, 200);
 		setResizable(false);
+		//we don't want closing the export window to close the whole app
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 	

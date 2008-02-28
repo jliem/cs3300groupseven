@@ -34,5 +34,14 @@ public final class ChatChannelData extends ChannelData {
     public String getText() {
         return this.text;
     }
+    
+    public String getMessageString(boolean timestampEnabled) {
+    	String start = getCreator().toString(),
+    		end = ": " + getText();
+    	if(timestampEnabled){
+    		start += " " + getTimestamp().toString() + " ";
+    	}
+    	return start + end; 
+    }
 
 }

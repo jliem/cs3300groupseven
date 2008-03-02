@@ -20,8 +20,6 @@ class ChooseCommunityPanel extends JPanel {
 
     private final ArrayList<ActionListener> listeners;
 
-    // private
-
     public ChooseCommunityPanel() {
 
         listeners = new ArrayList<ActionListener>();

@@ -10,14 +10,18 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ConnectionDroppedException;
+import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
+import colab.common.remote.exception.AuthenticationException;
+import colab.common.remote.exception.UserAlreadyLoggedInException;
 
 class ColabClientGUI extends JFrame {
 
@@ -74,7 +78,7 @@ class ColabClientGUI extends JFrame {
                         }
                         gotoCommunityLoginView();
                     }
-                    
+
                    // if(e.getSource() == quitItem){
                     //	System.e
                     //}
@@ -102,9 +106,18 @@ class ColabClientGUI extends JFrame {
         communityPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    client.loginCommmunity(communityPanel
-                            .getCurrentCommunityName());
-                } catch (final RemoteException re) {
+                    CommunityName communityName =
+                        communityPanel.getCurrentCommunityName();
+                    client.loginCommmunity(communityName);
+                } catch (final UserAlreadyLoggedInException ualie) {
+                    showErrorBox(
+                            "You are already logged into this community, "
+                            + "possibly at another location.",
+                            "Unable to log in");
+                    return;
+                } catch (final AuthenticationException ae) {
+                    // The christopher martin experience: enjoy!
+                } catch (final NetworkException re) {
                     // The christopher martin experience: enjoy!
                 }
 
@@ -254,6 +267,10 @@ class ColabClientGUI extends JFrame {
 
         gotoCommunityLoginView();
 
+    }
+
+    private void showErrorBox(String message, String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     public static void main(final String[] args) throws RemoteException {

@@ -81,7 +81,7 @@ public final class Community implements Identifiable<CommunityName>,
      *
      * @return the name of this community
      */
-    public final CommunityName getId() {
+    public CommunityName getId() {
         return name;
     }
 
@@ -90,7 +90,7 @@ public final class Community implements Identifiable<CommunityName>,
      *
      * @return a collection containing every user of this community
      */
-    public final Collection<UserName> getMembers() {
+    public Collection<UserName> getMembers() {
         return members;
     }
 
@@ -128,12 +128,21 @@ public final class Community implements Identifiable<CommunityName>,
      * @param attempt an input string which may be a correct password
      * @return true if the given password is correct, false otherwise
      */
-    public final boolean checkPassword(final char[] attempt) {
+    public boolean checkPassword(final char[] attempt) {
         return password.checkPassword(attempt);
     }
 
-    public final boolean isMember(final UserName username) {
+    public boolean isMember(final UserName username) {
         return members.contains(username);
+    }
+
+    public boolean isActive(final UserName userName) {
+        for (Connection connection : this.clients) {
+            if (connection.getUsername().equals(userName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -151,7 +160,7 @@ public final class Community implements Identifiable<CommunityName>,
      *                    join the community (may be null)
      * @return true if the authentication succeeds, false if it fails
      */
-    public final boolean authenticate(final UserName username,
+    public boolean authenticate(final UserName username,
             final char[] passAttempt) {
 
         // If a correct password was provided, the user can join.
@@ -165,6 +174,7 @@ public final class Community implements Identifiable<CommunityName>,
 
     }
 
+    /** {@inheritDoc} */
     public void handleDisconnect(final DisconnectEvent event) {
         ConnectionIdentifier connectionId = event.getConnectionId();
         this.clients.removeId(connectionId);

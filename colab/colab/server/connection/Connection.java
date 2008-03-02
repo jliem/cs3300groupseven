@@ -18,6 +18,7 @@ import colab.common.remote.client.ChannelInterface;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.exception.AuthenticationException;
 import colab.common.remote.exception.CommunityDoesNotExistException;
+import colab.common.remote.exception.UserAlreadyLoggedInException;
 import colab.common.remote.server.ConnectionInterface;
 import colab.server.ChannelConnection;
 import colab.server.ChannelManager;
@@ -194,6 +195,10 @@ public final class Connection extends UnicastRemoteObject
 
         if (communityAttempt == null) {
             throw new CommunityDoesNotExistException();
+        }
+
+        if (communityAttempt.isActive(this.username)) {
+            throw new UserAlreadyLoggedInException();
         }
 
         if (!communityAttempt.isMember(this.username)) {

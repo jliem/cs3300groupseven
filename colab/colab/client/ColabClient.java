@@ -111,16 +111,12 @@ public final class ColabClient extends UnicastRemoteObject
 
         try {
             this.connection.logIn(new UserName(username), password);
-        } catch (final AuthenticationException ae) {
-            throw ae;
         } catch (final ServerException se) {
-
-            if (se.getCause() instanceof AuthenticationException) {
-                throw new AuthenticationException(se.getCause());
+            Throwable cause = se.getCause();
+            if (cause instanceof AuthenticationException) {
+                throw (AuthenticationException) cause;
             }
-
             throw new ConnectionDroppedException(se);
-
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);
         } finally {
@@ -144,8 +140,12 @@ public final class ColabClient extends UnicastRemoteObject
 
         try {
             this.connection.logIn(communityName, null);
-        } catch (final AuthenticationException ae) {
-            throw ae;
+        } catch (final ServerException se) {
+            Throwable cause = se.getCause();
+            if (cause instanceof AuthenticationException) {
+                throw (AuthenticationException) cause;
+            }
+            throw new ConnectionDroppedException(se);
         } catch (final RemoteException re) {
             throw new ConnectionDroppedException(re);
         } finally {
@@ -181,7 +181,7 @@ public final class ColabClient extends UnicastRemoteObject
         channels.add(channelDescriptor);
     }
 
-    public Vector <ChannelDescriptor> getChannels() {
+    public Vector<ChannelDescriptor> getChannels() {
         return channels;
     }
 

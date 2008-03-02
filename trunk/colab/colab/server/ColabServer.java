@@ -8,15 +8,16 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import colab.common.naming.CommunityName;
-import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
+import colab.server.channel.ServerChannel;
+import colab.server.connection.Connection;
 
 /**
  * Server implementation of ColabServerInterface.
  */
-class ColabServer extends UnicastRemoteObject
+public class ColabServer extends UnicastRemoteObject
         implements ColabServerInterface {
 
     /** Serialization version number. */
@@ -26,13 +27,13 @@ class ColabServer extends UnicastRemoteObject
      * The manager object that keeps track of users
      * and communities for this server instance.
      */
-    protected final UserManager userManager;
+    private final UserManager userManager;
 
     /**
      * The manager object that keeps track of channels
      * for this server instance.
      */
-    protected final ChannelManager channelManager;
+    private final ChannelManager channelManager;
 
     /**
      * Constructs an instance of the server application.
@@ -51,7 +52,6 @@ class ColabServer extends UnicastRemoteObject
     public ConnectionInterface connect(final ColabClientInterface client)
             throws RemoteException {
 
-        System.err.println("New connection made.");
         return new Connection(this, client);
 
     }
@@ -75,16 +75,18 @@ class ColabServer extends UnicastRemoteObject
     }
 
     public void logIn(final CommunityName communityName,
-            final UserName userName, final ColabClientInterface client)
+            final Connection connection)
             throws RemoteException {
 
         Community community = userManager.getCommunity(communityName);
-        community.addClient(userName, client);
+        community.addClient(connection);
+
         Collection<ServerChannel> channels =
             channelManager.getChannels(communityName);
+
+        ColabClientInterface client = connection.getClient();
+
         for (final ServerChannel channel : channels) {
-            System.err.println("Channel added: "
-                       + channel.getChannelDescriptor().getName());
             client.channelAdded(channel.getChannelDescriptor());
         }
 

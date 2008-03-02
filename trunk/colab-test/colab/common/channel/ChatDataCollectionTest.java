@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
-import colab.server.ServerChatChannel;
+import colab.server.channel.ServerChatChannel;
 import junit.framework.TestCase;
 
 public class ChatDataCollectionTest extends TestCase {

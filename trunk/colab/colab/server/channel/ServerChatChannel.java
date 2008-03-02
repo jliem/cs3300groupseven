@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.channel;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;

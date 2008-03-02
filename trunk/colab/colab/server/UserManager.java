@@ -12,7 +12,7 @@ import colab.common.remote.exception.UserDoesNotExistException;
 /**
  * A simple user manager that holds all users and communities in memory.
  */
-final class UserManager {
+public final class UserManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

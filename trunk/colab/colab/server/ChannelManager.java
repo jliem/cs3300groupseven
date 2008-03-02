@@ -10,6 +10,8 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.remote.exception.ChannelDoesNotExistException;
 import colab.common.remote.exception.CommunityDoesNotExistException;
+import colab.server.channel.ServerChannel;
+import colab.server.channel.ServerChatChannel;
 
 /**
  * A channel manager provides channels.  This implementation
@@ -17,42 +19,46 @@ import colab.common.remote.exception.CommunityDoesNotExistException;
  * is joined by one or more users.
  *
  */
-class ChannelManager {
+public final class ChannelManager {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
-    /** Map of all channels, indexed by community name, then channel name */
-    private HashMap<CommunityName, HashMap<ChannelName, ServerChannel>> channelMap;
+    /** Map of all channels, indexed by community name, then channel name. */
+    private HashMap<CommunityName,
+                    HashMap<ChannelName, ServerChannel>> channelMap;
 
     private ColabServer server;
 
     /**
      * Constructs a new channel manager.
-     *
      */
     public ChannelManager(final ColabServer server) {
         this.server = server;
-
-        channelMap = new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
+        this.channelMap =
+            new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
     }
 
     /**
      * Returns a Collection of a Community's channels.
      *
      * @param communityName the Community to look up
-     * @return a non-null Collection of its channels. If there are no channels, the resulting
-     * Collection will have size()==0.
+     * @return a non-null Collection of its channels.
+     *         If there are no channels, the resulting
+     *         Collection will have a size of 0.
      */
-    public final Collection<ServerChannel> getChannels(final CommunityName communityName) {
+    public Collection<ServerChannel> getChannels(
+            final CommunityName communityName) {
 
         Collection<ServerChannel> result = null;
 
         if (channelMap.containsKey(communityName)) {
             // The community is in the map, so find what channels it has
-            HashMap<ChannelName, ServerChannel> subMap = channelMap.get(communityName);
+            HashMap<ChannelName, ServerChannel> subMap =
+                channelMap.get(communityName);
 
-            // Does this return null if there are no values, or just an empty list?
+            // Does this return null if there are no values,
+            // or just an empty list?
             result = subMap.values();
         }
 
@@ -70,7 +76,6 @@ class ChannelManager {
      * @param communityName community name
      * @param channelDescriptor descriptor of the channel to add
      * @return the newly added channel, or the previously existing channel
-     *
      * @throws RemoteException if an rmi error occurred
      */
     public ServerChannel addChannel(final CommunityName communityName,
@@ -130,6 +135,7 @@ class ChannelManager {
         community.channelAdded(channelDescriptor);
 
         return channel;
+
     }
 
     /**
@@ -140,28 +146,30 @@ class ChannelManager {
      * @param channelName the name of the channel requested
      * @return a remote reference to the requested channel
      * @throws ChannelDoesNotExistException if the channel does not exist
-     * @throws RemoteException if an rmi error occurs
      */
-    public final ServerChannel getChannel(final CommunityName communityName,
+    public ServerChannel getChannel(final CommunityName communityName,
             final ChannelName channelName)
-        throws ChannelDoesNotExistException, RemoteException {
+            throws ChannelDoesNotExistException {
 
         ServerChannel result = null;
 
         // Check if it exists
         if (channelExists(communityName, channelName)) {
-            HashMap<ChannelName, ServerChannel> subMap = channelMap.get(communityName);
-
+            HashMap<ChannelName, ServerChannel> subMap =
+                channelMap.get(communityName);
             result = subMap.get(channelName);
         } else {
 
-            throw new ChannelDoesNotExistException("Channel '" +
-                channelName.toString() + "' did not exist");
+            throw new ChannelDoesNotExistException("Channel '"
+                + channelName.toString() + "' did not exist");
         }
 
         // Result should be non-null at this point
-        if (result == null) throw new IllegalStateException("Got an unexpected null when looking for "
+        if (result == null) {
+            throw new IllegalStateException(
+                "Got an unexpected null when looking for "
                 + "a channel named " + channelName.getValue());
+        }
 
         return result;
 
@@ -172,18 +180,19 @@ class ChannelManager {
      *
      * @param communityName community name
      * @param channelName channel name
-     * @return true if the community and channel both exist and both are not null,
-     * false otherwise
+     * @return true if the community and channel both exist
+     *         and both are not null, false otherwise
      */
     public boolean channelExists(final CommunityName communityName,
             final ChannelName channelName) {
 
         if (channelMap.containsKey(communityName)) {
-            HashMap<ChannelName, ServerChannel> subMap = channelMap.get(communityName);
+            HashMap<ChannelName, ServerChannel> subMap =
+                channelMap.get(communityName);
 
-            if (subMap != null &&
-                    subMap.containsKey(channelName) &&
-                    (subMap.get(channelName) != null)) {
+            if (subMap != null
+                    && subMap.containsKey(channelName)
+                    && (subMap.get(channelName) != null)) {
 
                 return true;
 
@@ -191,5 +200,7 @@ class ChannelManager {
         }
 
         return false;
+
     }
+
 }

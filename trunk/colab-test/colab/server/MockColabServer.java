@@ -12,6 +12,9 @@ public class MockColabServer extends ColabServer {
     public MockColabServer() throws RemoteException {
         super();
 
+        UserManager userManager = getUserManager();
+        ChannelManager channelManager = getChannelManager();
+
         // Populate a few test users
 
         User johannes = new User("Johannes", "pass1");

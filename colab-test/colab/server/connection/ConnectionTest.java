@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.connection;
 
 import java.rmi.RemoteException;
 
@@ -7,6 +7,7 @@ import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import junit.framework.TestCase;
 import colab.server.*;
+import colab.server.connection.Connection;
 import colab.common.ConnectionState;
 
 public class ConnectionTest extends TestCase {

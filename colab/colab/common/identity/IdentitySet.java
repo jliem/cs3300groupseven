@@ -102,6 +102,10 @@ public class IdentitySet<K extends Identifier, V extends Identifiable<K>>
         return map.remove(((Identifiable) obj).getId()) != null;
     }
 
+    public final V removeId(final K identifier) {
+        return map.remove(identifier);
+    }
+
     /** {@inheritDoc} */
     public final boolean removeAll(final Collection<?> collection) {
         boolean changed = false;

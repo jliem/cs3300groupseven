@@ -1,9 +1,9 @@
-package colab.server;
+package colab.server.channel;
 
 import java.rmi.RemoteException;
 
 import junit.framework.TestCase;
-import colab.server.ServerChatChannel;
+import colab.server.channel.ServerChatChannel;
 import colab.common.naming.*;
 import colab.common.channel.*;
 

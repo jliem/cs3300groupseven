@@ -1,14 +1,16 @@
-package colab.server;
+package colab.server.connection;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 import colab.common.ConnectionState;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.identity.Identifiable;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
@@ -17,15 +19,35 @@ import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.exception.AuthenticationException;
 import colab.common.remote.exception.CommunityDoesNotExistException;
 import colab.common.remote.server.ConnectionInterface;
+import colab.server.ChannelConnection;
+import colab.server.ChannelManager;
+import colab.server.ColabServer;
+import colab.server.Community;
+import colab.server.UserManager;
+import colab.server.channel.ServerChannel;
+import colab.server.event.DisconnectEvent;
+import colab.server.event.DisconnectListener;
 
 /**
  * Server implementation of {@link ConnectionInterface}.
  */
-final class Connection extends UnicastRemoteObject
-        implements ConnectionInterface {
+public final class Connection extends UnicastRemoteObject
+        implements ConnectionInterface, Identifiable<ConnectionIdentifier> {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
+
+    /**
+     * The integer to use as the id number for the next
+     * instantiated connection, used to ensure that each
+     * connection has a unique id.
+     */
+    private static Integer nextId = 0;
+
+    /**
+     * This connection's arbitrary but unique identifier.
+     */
+    private final ConnectionIdentifier connectionId;
 
     /**
      * The server which created this connection.
@@ -52,6 +74,8 @@ final class Connection extends UnicastRemoteObject
      */
     private Community community;
 
+    private final Vector<DisconnectListener> disconnectListeners;
+
     /**
      * Constructs a new Connection.
      *
@@ -62,6 +86,12 @@ final class Connection extends UnicastRemoteObject
     public Connection(final ColabServer server,
             final ColabClientInterface client) throws RemoteException {
 
+        synchronized(Connection.nextId) {
+            this.connectionId = new ConnectionIdentifier(Connection.nextId++);
+        }
+
+        this.disconnectListeners = new Vector<DisconnectListener>();
+
         // Keep a reference to the server and client
         this.server = server;
         this.client = client;
@@ -69,6 +99,17 @@ final class Connection extends UnicastRemoteObject
         // Put the connection into the initial state
         this.state = ConnectionState.CONNECTED;
 
+        log("Connected");
+
+    }
+
+    /** {@inheritDoc} */
+    public ConnectionIdentifier getId() {
+        return this.connectionId;
+    }
+
+    public ColabClientInterface getClient() {
+        return this.client;
     }
 
     /**
@@ -119,8 +160,7 @@ final class Connection extends UnicastRemoteObject
 
         // Must be in the Connected (not logged in) state
         if (this.state != ConnectionState.CONNECTED) {
-            System.err.println("[Connection] Attempt to perform user "
-                    + "login on connection in '"
+            log("Attempt to perform user login on connection in '"
                     + this.state + "' state");
             throw new IllegalStateException();
         }
@@ -129,7 +169,7 @@ final class Connection extends UnicastRemoteObject
         UserManager userManager = server.getUserManager();
         userManager.checkPassword(username, password);
 
-        System.err.println("User " + username + " logged in");
+        log("User " + username + " logged in");
 
         // Advance to the next state if correct
         this.username = username;
@@ -143,8 +183,7 @@ final class Connection extends UnicastRemoteObject
 
         // Must be in the Logged In (not yet in a community) state
         if (this.state != ConnectionState.LOGGED_IN) {
-            System.err.println("[Connection] Attempt to perform community "
-                    + "login on connection in '"
+            log("Attempt to perform community login on connection in '"
                     + this.state + "' state");
             throw new IllegalStateException();
         }
@@ -163,9 +202,9 @@ final class Connection extends UnicastRemoteObject
             }
         }
 
-        server.logIn(communityName, this.username, client);
+        server.logIn(communityName, this);
 
-        System.err.println("User " + this.username
+        log("User " + this.username
                 + " logged in to community " + communityName);
 
         // Advance to the next state if correct
@@ -184,8 +223,8 @@ final class Connection extends UnicastRemoteObject
 
         // If not logged in as a user, can't log out
         if (!this.state.hasUserLogin()) {
-            System.err.println("[Connection] Attempt to perform user "
-                    + "login on connection without any user login");
+            log("Attempt to perform user login on connection in '"
+                    + this.state + "' state");
             throw new IllegalStateException();
         }
 
@@ -200,10 +239,12 @@ final class Connection extends UnicastRemoteObject
 
         // If not logged in to a community, can't log out
         if (!this.state.hasCommunityLogin()) {
-            System.err.println("[Connection] Attempt to log out of community "
-                    + "when not logged in to any community");
+            log("Attempt to log out of community in '"
+                    + this.state + "' state");
             throw new IllegalStateException();
         }
+
+        this.community.removeClient(this);
 
         // Log out of community
         this.community = null;
@@ -284,7 +325,6 @@ final class Connection extends UnicastRemoteObject
 
     }
 
-
     /** {@inheritDoc} */
     public void joinChannel(final ChannelInterface clientChannel,
             final ChannelDescriptor channelDescriptor) throws RemoteException {
@@ -294,11 +334,12 @@ final class Connection extends UnicastRemoteObject
 
         if (serverChannel == null) {
             throw new IllegalStateException(
-                "Could not create or join channel named "
+                "Could not join channel named "
                 + channelName + " in Connection");
         }
 
-        serverChannel.addClient(this.username, clientChannel);
+        ChannelConnection client = new ChannelConnection(this, clientChannel);
+        serverChannel.addClient(client);
 
     }
 
@@ -307,7 +348,7 @@ final class Connection extends UnicastRemoteObject
             throws RemoteException {
 
         ServerChannel serverChannel = getChannel(channelName);
-        serverChannel.removeClient(this.username);
+        serverChannel.removeClient(this);
 
     }
 
@@ -358,8 +399,7 @@ final class Connection extends UnicastRemoteObject
 
         // Must be in the Connected (not logged in) state
         if (this.state != ConnectionState.CONNECTED) {
-            System.err.println("[Connection] Attempt to get active users "
-                    + "on connection in '"
+            log("Attempt to get active users on connection in '"
                     + this.state + "' state");
             throw new IllegalStateException();
         }
@@ -369,6 +409,32 @@ final class Connection extends UnicastRemoteObject
                 channelName);
 
         return servChan.getUsers();
+    }
+
+    public boolean addDisconnectListener(
+            final DisconnectListener listener) {
+        return this.disconnectListeners.add(listener);
+    }
+
+    public boolean removeDisconnectListener(
+            final DisconnectListener listener) {
+        return this.disconnectListeners.remove(listener);
+    }
+
+    public void disconnect(final Exception e) {
+
+        log("Disconnected");
+
+        DisconnectEvent event = new DisconnectEvent(this.connectionId, e);
+
+        for (DisconnectListener listener : disconnectListeners) {
+            listener.handleDisconnect(event);
+        }
+
+    }
+
+    private void log(final String message) {
+        System.out.println("[Connection " + connectionId + "] " + message);
     }
 
 }

@@ -8,6 +8,7 @@ import colab.common.channel.ChannelType;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.remote.exception.ChannelDoesNotExistException;
+import colab.server.channel.ServerChannel;
 
 public class ChannelManagerTester extends TestCase {
 
@@ -72,7 +73,8 @@ public class ChannelManagerTester extends TestCase {
 
         ColabServer server = new MockColabServer();
 
-        Collection<ServerChannel> channels = server.channelManager.getChannels(
+        Collection<ServerChannel> channels =
+            server.getChannelManager().getChannels(
                 new CommunityName("Team Awesome"));
 
         assertEquals(channels.size(), 1);

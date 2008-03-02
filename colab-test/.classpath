@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JUNIT_HOME/junit.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/colab"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/colab-d1"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

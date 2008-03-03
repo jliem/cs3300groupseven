@@ -13,6 +13,7 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelDoesNotExistException;
 import colab.common.exception.CommunityDoesNotExistException;
+import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserAlreadyLoggedInException;
 import colab.common.identity.Identifiable;
 import colab.common.naming.ChannelName;
@@ -413,7 +414,11 @@ public final class Connection extends UnicastRemoteObject
     public void createUser(final String userName, final char[] password)
             throws RemoteException {
         User user = new User(new UserName(userName), new Password(password));
-        this.server.getUserManager().addUser(user);
+        try {
+            this.server.getUserManager().addUser(user);
+        } catch (final UserAlreadyExistsException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
     }
 
     public boolean addDisconnectListener(

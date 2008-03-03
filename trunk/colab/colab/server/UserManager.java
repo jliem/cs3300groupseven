@@ -5,6 +5,7 @@ import java.util.Collection;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.IncorrectPasswordException;
+import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserDoesNotExistException;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.CommunityName;
@@ -97,7 +98,10 @@ public final class UserManager {
      *
      * @param user the new user to add
      */
-    public void addUser(final User user) {
+    public void addUser(final User user) throws UserAlreadyExistsException {
+        if (users.contains(user)) {
+            throw new UserAlreadyExistsException();
+        }
         users.add(user);
     }
 

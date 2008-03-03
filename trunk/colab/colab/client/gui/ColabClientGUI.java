@@ -1,11 +1,14 @@
 package colab.client.gui;
 
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,6 +42,10 @@ class ColabClientGUI extends JFrame {
     private JMenuItem logoutItem, changeCommItem, quitItem;
 
     public ColabClientGUI(final ColabClient client) {
+
+        Image icon = new ImageIcon(
+                Toolkit.getDefaultToolkit().getImage("logo.png")).getImage();
+        this.setIconImage(icon);
 
         this.client = client;
 
@@ -88,6 +95,7 @@ class ColabClientGUI extends JFrame {
         quitItem.addActionListener(menuListener);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
         setVisible(true);
         gotoUserLoginView(false);
         this.setJMenuBar(menuBar);

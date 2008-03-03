@@ -17,8 +17,11 @@ import javax.swing.JTextField;
 
 import colab.client.ColabClient;
 import colab.common.exception.IncorrectPasswordException;
+import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
+import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserDoesNotExistException;
+import colab.common.naming.UserName;
 
 public class LoginPanel extends JPanel {
 
@@ -66,7 +69,24 @@ public class LoginPanel extends JPanel {
                             "User does not exist");
 
                     if (createUser) {
-                        //client.
+
+                        try {
+                            client.createUser(
+                                new UserName(username.getText()),
+                                password.getPassword());
+                        } catch (final UserAlreadyExistsException uaee) {
+                            showErrorBox("This user name already exists.",
+                                    "Failed to create user");
+                            return;
+                        } catch (final NetworkException networkException) {
+                            // <(^.^)>
+                            return;
+                        }
+
+                        // Run the task again to log in (it had better work
+                        // this time - be careful of infinite looping!)
+                        run();
+
                     }
 
                 } catch (final IncorrectPasswordException e) {

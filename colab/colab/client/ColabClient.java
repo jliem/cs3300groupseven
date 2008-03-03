@@ -17,8 +17,10 @@ import colab.common.exception.AuthenticationException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
+import colab.common.exception.UserAlreadyExistsException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
+import colab.common.naming.InvalidUserNameException;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
@@ -126,6 +128,25 @@ public final class ColabClient extends UnicastRemoteObject
         }
 
         this.connectionState = ConnectionState.LOGGED_IN;
+
+    }
+
+    public void createUser(final UserName userName, final char[] password)
+            throws NetworkException, UserAlreadyExistsException {
+
+        try {
+            connection.createUser(userName.getValue(), password);
+        } catch (final ServerException serverException) {
+            try {
+                throw serverException.getCause().getCause();
+            } catch (final UserAlreadyExistsException userExistsException) {
+                throw userExistsException;
+            } catch (final Throwable t) {
+                throw new ConnectionDroppedException(serverException);
+            }
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
+        }
 
     }
 

@@ -39,15 +39,16 @@ class ColabClientGUI extends JFrame {
     private JMenuItem logoutItem, changeCommItem, quitItem;
 
     public ColabClientGUI(final ColabClient client) {
+
         this.client = client;
 
         this.loginPanel = new LoginPanel(client);
-        this.loginPanelWrapper = new FixedSizePanel(loginPanel, new Dimension(
-                420, 120));
+        this.loginPanelWrapper = new FixedSizePanel(
+                loginPanel, new Dimension(420, 120));
 
         this.communityPanel = new ChooseCommunityPanel();
-        this.communityPanelWrapper = new FixedSizePanel(communityPanel,
-                new Dimension(420, 120));
+        this.communityPanelWrapper = new FixedSizePanel(
+                communityPanel, new Dimension(420, 120));
 
         menuBar = new JMenuBar();
         menu = new JMenu("File");
@@ -56,35 +57,31 @@ class ColabClientGUI extends JFrame {
         changeCommItem = new JMenuItem("Change Communities");
         quitItem = new JMenuItem("Quit");
 
-        ActionListener menuListener = new ActionListener(){
-                public void actionPerformed(ActionEvent e){
-                    if(e.getSource() == logoutItem){
-                        gotoUserLoginView(true);
-                        try {
-                            client.logOutUser();
+        ActionListener menuListener = new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
 
-                        } catch (ConnectionDroppedException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
-
+                if (e.getSource() == logoutItem) {
+                    gotoUserLoginView(true);
+                    try {
+                        client.logOutUser();
+                    } catch (ConnectionDroppedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
                     }
-                    if(e.getSource() == changeCommItem){
-                        try {
-                            client.logOutCommunity();
-                        } catch (ConnectionDroppedException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
-                        gotoCommunityLoginView();
+                }
+
+                if (e.getSource() == changeCommItem) {
+                    try {
+                        client.logOutCommunity();
+                    } catch (ConnectionDroppedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
                     }
+                    gotoCommunityLoginView();
+                }
 
-                   // if(e.getSource() == quitItem){
-                    //	System.e
-                    //}
-
-                }};
-
+            }
+        };
 
         logoutItem.addActionListener(menuListener);
         changeCommItem.addActionListener(menuListener);
@@ -139,9 +136,8 @@ class ColabClientGUI extends JFrame {
                                 e1.printStackTrace();
                             }
 
-                        }
-
-                        else if(e.getActionCommand().equalsIgnoreCase("Change!")){
+                        } else if (e.getActionCommand()
+                                .equalsIgnoreCase("Change!")) {
                             try {
                                 client.logOutCommunity();
                             } catch (ConnectionDroppedException e1) {
@@ -151,14 +147,14 @@ class ColabClientGUI extends JFrame {
                             gotoCommunityLoginView();
                         }
 
-
-
-                        while ((cd = channelPanel.dequeueJoinedChannel()) != null) {
+                        while ((cd = channelPanel.dequeueJoinedChannel())
+                                != null) {
                             try {
-                                // TODO: this is a hack, rewrite with more protocol handling
-                                ChatChannelFrame f = new ChatChannelFrame(client,
-                                        (ClientChatChannel) client
-                                                .joinChannel(cd), currentUser);
+                                // TODO: this is a hack
+                                // rewrite with more protocol handling
+                                ChatChannelFrame f = new ChatChannelFrame(
+                                        client, (ClientChatChannel)
+                                        client.joinChannel(cd), currentUser);
                                 f.setVisible(true);
                             } catch (RemoteException ex) {
                                 ex.printStackTrace();
@@ -169,16 +165,15 @@ class ColabClientGUI extends JFrame {
             }
         });
 
-
-
     }
 
-    private void gotoUserLoginView(boolean logout) {
+    private void gotoUserLoginView(final boolean logout) {
 
         menu.removeAll();
 
-        if(logout)
+        if (logout) {
             loginPanel.clearFields();
+        }
 
         setActivePanel(loginPanelWrapper);
         setTitle("CoLab Login");
@@ -189,6 +184,7 @@ class ColabClientGUI extends JFrame {
     }
 
     private void gotoCommunityLoginView() {
+
         menu.removeAll();
         menu.add(logoutItem);
         ArrayList<String> commNames = new ArrayList<String>();
@@ -211,6 +207,7 @@ class ColabClientGUI extends JFrame {
     }
 
     private void gotoChannelView() {
+
         menu.add(changeCommItem);
         menu.add(logoutItem);
         channelPanel = new ChannelManagerPanel(client.getChannels());
@@ -219,6 +216,7 @@ class ColabClientGUI extends JFrame {
         setResizable(false);
         setSize(120, 300);
         channelPanel.updateUI();
+
     }
 
     private void setActivePanel(final JPanel newActivePanel) {
@@ -269,8 +267,9 @@ class ColabClientGUI extends JFrame {
 
     }
 
-    private void showErrorBox(String message, String title) {
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+    private void showErrorBox(final String message, final String title) {
+        JOptionPane.showMessageDialog(
+                this, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
     public static void main(final String[] args) throws RemoteException {

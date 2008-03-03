@@ -1,24 +1,20 @@
 package colab.server.connection;
 
-import java.rmi.RemoteException;
-
-import colab.client.ColabClient;
-import colab.common.naming.CommunityName;
-import colab.common.naming.UserName;
 import junit.framework.TestCase;
-import colab.server.*;
-import colab.server.connection.Connection;
+import colab.client.ColabClient;
 import colab.common.ConnectionState;
+import colab.server.MockColabServer;
 
 public class ConnectionTest extends TestCase {
-	
-	public void testConnectionCreationandCheckState() throws RemoteException{
-		ColabClient client = new ColabClient();
-		MockColabServer server = new MockColabServer();
-		Connection comm = new Connection(server, client);
-		
-		assertSame(comm.getState(), ConnectionState.CONNECTED);
-			
-	}
-	
+
+    public void testConnectionCreationandCheckState() throws Exception {
+
+        ColabClient client = new ColabClient();
+        MockColabServer server = new MockColabServer();
+        Connection comm = new Connection(server, client);
+
+        assertSame(comm.getState(), ConnectionState.CONNECTED);
+
+    }
+
 }

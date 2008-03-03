@@ -10,20 +10,23 @@ import java.util.Vector;
 import colab.common.ConnectionState;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.exception.AuthenticationException;
+import colab.common.exception.ChannelDoesNotExistException;
+import colab.common.exception.CommunityDoesNotExistException;
+import colab.common.exception.UserAlreadyLoggedInException;
 import colab.common.identity.Identifiable;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelInterface;
 import colab.common.remote.client.ColabClientInterface;
-import colab.common.remote.exception.AuthenticationException;
-import colab.common.remote.exception.CommunityDoesNotExistException;
-import colab.common.remote.exception.UserAlreadyLoggedInException;
 import colab.common.remote.server.ConnectionInterface;
 import colab.server.ChannelConnection;
 import colab.server.ChannelManager;
 import colab.server.ColabServer;
 import colab.server.Community;
+import colab.server.Password;
+import colab.server.User;
 import colab.server.UserManager;
 import colab.server.channel.ServerChannel;
 import colab.server.event.DisconnectEvent;
@@ -129,7 +132,7 @@ public final class Connection extends UnicastRemoteObject
      *
      * @return a user that has authenticated on this connection
      */
-    public UserName getUsername() {
+    public UserName getUserName() {
 
         if (!this.state.hasUserLogin()) {
             throw new IllegalStateException("Not logged in as user");
@@ -161,14 +164,18 @@ public final class Connection extends UnicastRemoteObject
 
         // Must be in the Connected (not logged in) state
         if (this.state != ConnectionState.CONNECTED) {
-            log("Attempt to perform user login on connection in '"
+            throw new IllegalStateException(
+                    "Attempt to perform user login on connection in '"
                     + this.state + "' state");
-            throw new IllegalStateException();
         }
 
         // Check the validity of login credentials
         UserManager userManager = server.getUserManager();
-        userManager.checkPassword(username, password);
+        try {
+            userManager.checkPassword(username, password);
+        } catch (final AuthenticationException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
 
         log("User " + username + " logged in");
 
@@ -184,33 +191,43 @@ public final class Connection extends UnicastRemoteObject
 
         // Must be in the Logged In (not yet in a community) state
         if (this.state != ConnectionState.LOGGED_IN) {
-            log("Attempt to perform community login on connection in '"
+            throw new IllegalStateException(
+                    "Cannot login to community on connection in '"
                     + this.state + "' state");
-            throw new IllegalStateException();
         }
 
-        // Check the validity of login credentials
         UserManager userManager = server.getUserManager();
-        Community communityAttempt = userManager.getCommunity(communityName);
+        ChannelManager channelManager = server.getChannelManager();
 
-        if (communityAttempt == null) {
-            throw new CommunityDoesNotExistException();
+        Community communityAttempt;
+        try {
+            communityAttempt = userManager.getCommunity(communityName);
+        } catch (final CommunityDoesNotExistException e) {
+            throw new RemoteException(e.getMessage(), e);
         }
 
         if (communityAttempt.isActive(this.username)) {
-            throw new UserAlreadyLoggedInException();
+            Throwable e = new UserAlreadyLoggedInException();
+            throw new RemoteException(e.getMessage(), e);
         }
 
         if (!communityAttempt.isMember(this.username)) {
             if (!communityAttempt.authenticate(this.username, password)) {
-                throw new AuthenticationException();
+                Throwable e = new AuthenticationException();
+                throw new RemoteException(e.getMessage(), e);
             }
         }
 
-        server.logIn(communityName, this);
+        communityAttempt.addClient(this);
 
-        log("User " + this.username
-                + " logged in to community " + communityName);
+        // Send the list of channels to the client
+        Collection<ServerChannel> channels =
+            channelManager.getChannels(communityName);
+        for (final ServerChannel channel : channels) {
+            client.channelAdded(channel.getChannelDescriptor());
+        }
+
+        log("User " + username + " logged in to community " + communityName);
 
         // Advance to the next state if correct
         this.community = communityAttempt;
@@ -228,9 +245,9 @@ public final class Connection extends UnicastRemoteObject
 
         // If not logged in as a user, can't log out
         if (!this.state.hasUserLogin()) {
-            log("Attempt to perform user login on connection in '"
+            throw new IllegalStateException(
+                    "Attempt to perform user login on connection in '"
                     + this.state + "' state");
-            throw new IllegalStateException();
         }
 
         // Log out of user
@@ -244,9 +261,9 @@ public final class Connection extends UnicastRemoteObject
 
         // If not logged in to a community, can't log out
         if (!this.state.hasCommunityLogin()) {
-            log("Attempt to log out of community in '"
+            throw new IllegalStateException(
+                    "Attempt to log out of community in '"
                     + this.state + "' state");
-            throw new IllegalStateException();
         }
 
         this.community.removeClient(this);
@@ -256,39 +273,6 @@ public final class Connection extends UnicastRemoteObject
         this.state = ConnectionState.LOGGED_IN;
 
     }
-
-    /**
-     * Return all channels in the currently logged in community.
-     *
-     * @return all the channels of the currently logged in community
-     */
-    /*
-    public Collection<ChannelDescriptor> getChannels() {
-
-        // Must be in the Connected (not logged in) state
-        if (this.state != STATE.CONNECTED) {
-            System.err.println("[Connection] Attempt to get channels "
-                    + "on connection in '"
-                    + this.state + "' state");
-            throw new IllegalStateException();
-        }
-
-        ChannelManager cm = server.getChannelManager();
-        Collection<ServerChannel> serverChannelColl =
-            cm.getChannels(this.community.getId());
-
-        // Convert to ChannelDescriptor by iterating through and building
-        // a new list
-        ArrayList<ChannelDescriptor> chanDescList =
-            new ArrayList<ChannelDescriptor>();
-
-        for (ServerChannel sc : serverChannelColl) {
-            chanDescList.add(sc.getChannelDescriptor());
-        }
-
-        return chanDescList;
-    }
-*/
 
     /** {@inheritDoc} */
     public Collection<CommunityName> getAllCommunityNames()
@@ -361,9 +345,14 @@ public final class Connection extends UnicastRemoteObject
             throws RemoteException {
 
         ChannelManager channelManager = this.server.getChannelManager();
-        ServerChannel serverChannel = channelManager.getChannel(
-                this.community.getId(), channelName);
-        return serverChannel;
+        ServerChannel channel;
+        try {
+            channel = channelManager.getChannel(
+                    this.community.getId(), channelName);
+        } catch (final ChannelDoesNotExistException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
+        return channel;
 
     }
 
@@ -371,9 +360,8 @@ public final class Connection extends UnicastRemoteObject
      * Retrieves all of the communities on the server.
      *
      * @return a collection containing every community
-     * @throws RemoteException if an rmi error occurs
      */
-    private Collection<Community> getAllCommunities() throws RemoteException {
+    private Collection<Community> getAllCommunities() {
 
         UserManager userManager = this.server.getUserManager();
         Collection<Community> communities = userManager.getAllCommunities();
@@ -399,21 +387,33 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+    /** {@inheritDoc} */
     public Collection<UserName> getActiveUsers(
             final ChannelName channelName) throws RemoteException {
 
         // Must be in the Connected (not logged in) state
         if (this.state != ConnectionState.CONNECTED) {
-            log("Attempt to get active users on connection in '"
+            throw new IllegalStateException(
+                    "Attempt to get active users on connection in '"
                     + this.state + "' state");
-            throw new IllegalStateException();
         }
 
         ChannelManager cm = server.getChannelManager();
-        ServerChannel servChan = cm.getChannel(this.community.getId(),
-                channelName);
+        ServerChannel channel;
+        try {
+            channel = cm.getChannel(this.community.getId(), channelName);
+        } catch (final ChannelDoesNotExistException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
 
-        return servChan.getUsers();
+        return channel.getUsers();
+    }
+
+    /** {@inheritDoc} */
+    public void createUser(final String userName, final char[] password)
+            throws RemoteException {
+        User user = new User(new UserName(userName), new Password(password));
+        this.server.getUserManager().addUser(user);
     }
 
     public boolean addDisconnectListener(

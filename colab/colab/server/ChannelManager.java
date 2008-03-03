@@ -6,10 +6,11 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import colab.common.channel.ChannelDescriptor;
+import colab.common.exception.ChannelAlreadyExistsException;
+import colab.common.exception.ChannelDoesNotExistException;
+import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
-import colab.common.remote.exception.ChannelDoesNotExistException;
-import colab.common.remote.exception.CommunityDoesNotExistException;
 import colab.server.channel.ServerChannel;
 import colab.server.channel.ServerChatChannel;
 
@@ -71,37 +72,25 @@ public final class ChannelManager {
     }
 
     /**
-     * Adds a new channel or returns the channel if it already existed.
+     * Creates a new channel.
      *
      * @param communityName community name
      * @param channelDescriptor descriptor of the channel to add
-     * @return the newly added channel, or the previously existing channel
-     * @throws RemoteException if an rmi error occurred
      */
     public ServerChannel addChannel(final CommunityName communityName,
-            final ChannelDescriptor channelDescriptor) throws RemoteException {
+            final ChannelDescriptor channelDescriptor)
+            throws ChannelAlreadyExistsException,
+            CommunityDoesNotExistException {
 
-        // Check whether channel exists
         ChannelName channelName = channelDescriptor.getName();
 
+        // Make sure the channel doesn't already exist
         if (channelExists(communityName, channelName)) {
-            return getChannel(communityName, channelName);
+            throw new ChannelAlreadyExistsException();
         }
 
         // Create the new channel
-        ServerChannel channel = null;
-
-        switch (channelDescriptor.getType()) {
-
-            case CHAT:
-                channel = new ServerChatChannel(channelName);
-                break;
-
-            default:
-                throw new IllegalArgumentException(
-                        "Channel type was unsupported: "
-                        + channelDescriptor.getType());
-        }
+        ServerChannel channel = ServerChannel.create(channelDescriptor);
 
         // Check whether a community entry exists
         HashMap<ChannelName, ServerChannel> subMap = null;
@@ -109,29 +98,16 @@ public final class ChannelManager {
         if (channelMap.containsKey(communityName)) {
             subMap = channelMap.get(communityName);
         } else {
-
             // No community entry, add it
             subMap = new HashMap<ChannelName, ServerChannel>();
-
             channelMap.put(communityName, subMap);
         }
 
-        // Make sure channel entry doesn't exist
-        if (!subMap.containsKey(channelName)) {
-            subMap.put(channelName, channel);
-        } else {
-            // If the channel entry did exist, something is really wrong
-            // since this method already checked whether it exists
-            throw new IllegalStateException("channelExists returned false,"
-                    + " but the channel already exists!");
-        }
+        subMap.put(channelName, channel);
 
-        // Because a new channel was added, notify all clients
+        // Notify the community that a channel has been added to it
         UserManager userManager = server.getUserManager();
         Community community = userManager.getCommunity(communityName);
-        if (community == null) {
-            throw new CommunityDoesNotExistException();
-        }
         community.channelAdded(channelDescriptor);
 
         return channel;

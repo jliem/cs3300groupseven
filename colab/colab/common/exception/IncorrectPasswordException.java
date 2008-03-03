@@ -1,5 +1,4 @@
-package colab.common.remote.exception;
-
+package colab.common.exception;
 
 public class IncorrectPasswordException extends AuthenticationException {
 

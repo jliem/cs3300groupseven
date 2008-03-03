@@ -16,8 +16,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import colab.client.ColabClient;
+import colab.common.exception.IncorrectPasswordException;
 import colab.common.exception.UnableToConnectException;
-import colab.common.remote.exception.AuthenticationException;
+import colab.common.exception.UserDoesNotExistException;
 
 public class LoginPanel extends JPanel {
 
@@ -57,18 +58,29 @@ public class LoginPanel extends JPanel {
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Succeeded!"));
 
-                } catch (AuthenticationException ae) {
+                } catch (final UserDoesNotExistException e) {
+
+                    boolean createUser = showYesNoDialog(
+                            "The specified user account does not exist.\n\n"
+                            + "Do you want to create it now?",
+                            "User does not exist");
+
+                    if (createUser) {
+                        //client.
+                    }
+
+                } catch (final IncorrectPasswordException e) {
 
                     // Bad username and/or password
 
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));
 
-                    showErrorBox("Invalid username and/or password", "Unable to log in");
+                    showErrorBox("Invalid password", "Unable to log in");
 
                     password.setText("");
 
-                } catch (UnableToConnectException ue) {
+                } catch (final UnableToConnectException ue) {
 
                     // Server didn't connect for some reason, probably because
                     // it wasn't running
@@ -154,8 +166,15 @@ public class LoginPanel extends JPanel {
 
     }
 
-    private void showErrorBox(String message, String title) {
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+    private void showErrorBox(final String message, final String title) {
+        JOptionPane.showMessageDialog(
+                this, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    private boolean showYesNoDialog(final String message, final String title) {
+        int selection = JOptionPane.showConfirmDialog(
+                this, message, title, JOptionPane.YES_NO_OPTION);
+        return selection == JOptionPane.YES_OPTION;
     }
 
 }

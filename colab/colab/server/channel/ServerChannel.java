@@ -7,6 +7,7 @@ import java.util.List;
 
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
@@ -25,6 +26,16 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
     private final ChannelName name;
 
     private IdentitySet<ConnectionIdentifier, ChannelConnection> clients;
+
+    public static ServerChannel create(final ChannelDescriptor channel) {
+        switch (channel.getType()) {
+            case CHAT:
+                return new ServerChatChannel(channel.getName());
+            default:
+                throw new IllegalArgumentException(
+                        "Channel type unsupported: " + channel.getType());
+        }
+    }
 
     public ServerChannel(final ChannelName name) {
 
@@ -53,7 +64,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
         connection.addDisconnectListener(this);
 
-        UserName userName = connection.getUsername();
+        UserName userName = connection.getUserName();
         userJoined(userName);
 
     }
@@ -65,7 +76,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
         connection.removeDisconnectListener(this);
 
-        UserName userName = connection.getUsername();
+        UserName userName = connection.getUserName();
         userLeft(userName);
 
     }
@@ -76,7 +87,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
     public Collection<UserName> getUsers() {
         Collection<UserName> users = new ArrayList<UserName>();
         for (ChannelConnection client : this.clients) {
-            users.add(client.getConnection().getUsername());
+            users.add(client.getConnection().getUserName());
         }
         return users;
     }
@@ -91,7 +102,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
         for (final ChannelConnection client : this.clients) {
 
             Connection connection = client.getConnection();
-            UserName userName = connection.getUsername();
+            UserName userName = connection.getUserName();
 
             if (!joinedUserName.equals(userName)) {
 
@@ -120,7 +131,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
         for (final ChannelConnection client : this.clients) {
 
             Connection connection = client.getConnection();
-            UserName userName = connection.getUsername();
+            UserName userName = connection.getUserName();
 
             if (!leftUserName.equals(userName)) {
 
@@ -144,7 +155,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
         for (final ChannelConnection client : this.clients) {
 
             Connection connection = client.getConnection();
-            UserName userName = connection.getUsername();
+            UserName userName = connection.getUserName();
 
             if (!userName.equals(data.getCreator())) {
 

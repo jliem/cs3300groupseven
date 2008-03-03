@@ -138,7 +138,7 @@ public final class Community implements Identifiable<CommunityName>,
 
     public boolean isActive(final UserName userName) {
         for (Connection connection : this.clients) {
-            if (connection.getUsername().equals(userName)) {
+            if (connection.getUserName().equals(userName)) {
                 return true;
             }
         }

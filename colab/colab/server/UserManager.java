@@ -2,12 +2,13 @@ package colab.server;
 
 import java.util.Collection;
 
+import colab.common.exception.AuthenticationException;
+import colab.common.exception.CommunityDoesNotExistException;
+import colab.common.exception.IncorrectPasswordException;
+import colab.common.exception.UserDoesNotExistException;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.exception.AuthenticationException;
-import colab.common.remote.exception.IncorrectPasswordException;
-import colab.common.remote.exception.UserDoesNotExistException;
 
 /**
  * A simple user manager that holds all users and communities in memory.
@@ -50,8 +51,13 @@ public final class UserManager {
      * @param name the name of the community
      * @return the community with the given name
      */
-    public Community getCommunity(final CommunityName name) {
-        return communities.get(name);
+    public Community getCommunity(final CommunityName name)
+            throws CommunityDoesNotExistException {
+        Community community = communities.get(name);
+        if (community == null) {
+            throw new CommunityDoesNotExistException();
+        }
+        return community;
     }
 
     /**
@@ -78,8 +84,12 @@ public final class UserManager {
      * @param name the name of the user to retrieve
      * @return the user with the given name
      */
-    public User getUser(final UserName name) {
-        return users.get(name);
+    public User getUser(final UserName name) throws UserDoesNotExistException {
+        User user = users.get(name);
+        if (user == null) {
+            throw new UserDoesNotExistException();
+        }
+        return user;
     }
 
     /**

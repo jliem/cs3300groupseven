@@ -13,6 +13,7 @@ import java.util.Vector;
 import colab.common.ConnectionState;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.exception.AuthenticationException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
@@ -20,7 +21,6 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
-import colab.common.remote.exception.AuthenticationException;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
 
@@ -111,14 +111,16 @@ public final class ColabClient extends UnicastRemoteObject
 
         try {
             this.connection.logIn(new UserName(username), password);
-        } catch (final ServerException se) {
-            Throwable cause = se.getCause();
-            if (cause instanceof AuthenticationException) {
-                throw (AuthenticationException) cause;
+        } catch (final ServerException serverException) {
+            try {
+                throw serverException.getCause().getCause();
+            } catch (final AuthenticationException authenticationException) {
+                throw authenticationException;
+            } catch (final Throwable t) {
+                throw new ConnectionDroppedException(serverException);
             }
-            throw new ConnectionDroppedException(se);
-        } catch (final RemoteException re) {
-            throw new ConnectionDroppedException(re);
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
         } finally {
             this.connectionState = ConnectionState.CONNECTED;
         }
@@ -140,14 +142,16 @@ public final class ColabClient extends UnicastRemoteObject
 
         try {
             this.connection.logIn(communityName, null);
-        } catch (final ServerException se) {
-            Throwable cause = se.getCause();
-            if (cause instanceof AuthenticationException) {
-                throw (AuthenticationException) cause;
+        } catch (final ServerException serverException) {
+            try {
+                throw serverException.getCause().getCause();
+            } catch (final AuthenticationException authenticationException) {
+                throw authenticationException;
+            } catch (final Throwable t) {
+                throw new ConnectionDroppedException(serverException);
             }
-            throw new ConnectionDroppedException(se);
-        } catch (final RemoteException re) {
-            throw new ConnectionDroppedException(re);
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
         } finally {
             this.connectionState = ConnectionState.LOGGED_IN;
         }
@@ -156,21 +160,26 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
-    public Collection<CommunityName> getAllCommunityNames() throws RemoteException{
+    public Collection<CommunityName> getAllCommunityNames()
+            throws RemoteException {
         return connection.getAllCommunityNames();
      }
 
-    public Collection<CommunityName> getMyCommunityNames() throws RemoteException{
+    public Collection<CommunityName> getMyCommunityNames()
+            throws RemoteException {
         return connection.getMyCommunityNames();
     }
 
-    public ClientChannel joinChannel(ChannelDescriptor desc) throws RemoteException{
-        ClientChannel channel = null;
+    public ClientChannel joinChannel(final ChannelDescriptor desc)
+            throws RemoteException{
+        ClientChannel channel;
         switch (desc.getType()) {
         case CHAT:
             channel = new ClientChatChannel(desc.getName());
             connection.joinChannel(channel, desc);
             break;
+        default:
+            throw new IllegalArgumentException("Channel type not supported");
         }
         return channel;
     }
@@ -199,19 +208,26 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
-    public void logOutUser() throws ConnectionDroppedException{
+    public void logOutUser() throws ConnectionDroppedException {
+
+        this.connectionState = ConnectionState.CONNECTED;
+
         try {
             connection.logOutUser();
-        } catch (RemoteException e) {
-            throw new ConnectionDroppedException(e);
+        } catch (RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
         }
+
     }
 
     public void logOutCommunity() throws ConnectionDroppedException{
+
+        this.connectionState = ConnectionState.LOGGED_IN;
+
         try {
             connection.logOutCommunity();
-        } catch (RemoteException e) {
-            throw new ConnectionDroppedException(e);
+        } catch (RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
         }
 
     }

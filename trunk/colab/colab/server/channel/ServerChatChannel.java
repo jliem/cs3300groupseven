@@ -23,10 +23,8 @@ public final class ServerChatChannel extends ServerChannel {
      * Constructs a new server-side chat channel.
      *
      * @param name the name of the channel
-     * @throws RemoteException if an rmi error occurs
      */
-    public ServerChatChannel(final ChannelName name)
-            throws RemoteException {
+    public ServerChatChannel(final ChannelName name) {
 
         super(name);
         messages = new ChatDataCollection();

@@ -1,7 +1,6 @@
 package colab.server;
 
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
 import colab.common.channel.ChannelDescriptor;
@@ -9,7 +8,7 @@ import colab.common.channel.ChannelType;
 
 public class MockColabServer extends ColabServer {
 
-    public MockColabServer() throws RemoteException {
+    public MockColabServer() throws Exception {
         super();
 
         UserManager userManager = getUserManager();

@@ -110,4 +110,7 @@ public interface ConnectionInterface extends Remote {
     Collection<UserName> getActiveUsers(ChannelName channelName)
             throws RemoteException;
 
+    void createUser(String userName, char[] password)
+            throws RemoteException;
+
 }

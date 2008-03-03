@@ -16,12 +16,12 @@ import javax.swing.JPanel;
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.exception.AuthenticationException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
+import colab.common.exception.UserAlreadyLoggedInException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.exception.AuthenticationException;
-import colab.common.remote.exception.UserAlreadyLoggedInException;
 
 class ColabClientGUI extends JFrame {
 

@@ -7,6 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
+import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
@@ -72,24 +73,6 @@ public class ColabServer extends UnicastRemoteObject
      */
     public ChannelManager getChannelManager() {
         return this.channelManager;
-    }
-
-    public void logIn(final CommunityName communityName,
-            final Connection connection)
-            throws RemoteException {
-
-        Community community = userManager.getCommunity(communityName);
-        community.addClient(connection);
-
-        Collection<ServerChannel> channels =
-            channelManager.getChannels(communityName);
-
-        ColabClientInterface client = connection.getClient();
-
-        for (final ServerChannel channel : channels) {
-            client.channelAdded(channel.getChannelDescriptor());
-        }
-
     }
 
     private void initialize(final String path) throws IOException {

@@ -99,7 +99,8 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
      */
     protected final void userJoined(final UserName joinedUserName) {
 
-        for (final ChannelConnection client : this.clients) {
+        for (final ChannelConnection client
+                : this.clients.toArray(new ChannelConnection[]{})) {
 
             Connection connection = client.getConnection();
             UserName userName = connection.getUserName();
@@ -128,7 +129,8 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
      */
     protected final void userLeft(final UserName leftUserName) {
 
-        for (final ChannelConnection client : this.clients) {
+        for (final ChannelConnection client
+                : this.clients.toArray(new ChannelConnection[]{})) {
 
             Connection connection = client.getConnection();
             UserName userName = connection.getUserName();
@@ -152,7 +154,8 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
     protected final void sendToAll(final ChannelData data) {
 
-        for (final ChannelConnection client : this.clients) {
+        for (final ChannelConnection client
+                : this.clients.toArray(new ChannelConnection[]{})) {
 
             Connection connection = client.getConnection();
             UserName userName = connection.getUserName();

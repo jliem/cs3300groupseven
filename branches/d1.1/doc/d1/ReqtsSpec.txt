@@ -1,0 +1,8 @@
+Our D2 plan had the following original goals:
+·	Document channel protocol is functional
+·	User can create and use a document channel
+·	User can create user accounts and communities
+·	User can create channels, join multiple channels concurrently
+·	Moderators can modify community preferences (adding passwords, changing blacklist, etc.)
+
+Most of our original D2 plans are still valid. Our D1 focused on establishing the back-end framework and getting working network connections. Because most of the framework has been written and is working correctly, we will be able to extend it efficiently in D2. However, our D2 plans must be modified to add data storage to the application. D2 will add mechanisms for storing data to disk and retrieving it later. Because adding data storage will require significant consumption of developer resources, we will remove the moderators feature from our D2 plan.

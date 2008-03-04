@@ -17,13 +17,23 @@ public final class ChatDataCollection extends TreeSet<ChatChannelData> {
         });
     }
 
+    /**
+     * Returns the last n data items.
+     * If the count is negative, all data is returned.
+     */
     public List<ChatChannelData> getLast(int count) {
+
+        if (count < 0) {
+            return new ArrayList<ChatChannelData>(this);
+        }
+
         Iterator<ChatChannelData> it = iterator();
         List<ChatChannelData> result = new ArrayList<ChatChannelData>(count);
         while (it.hasNext() && count-- > 0) {
             result.add(0, it.next());
         }
         return result;
+
     }
 
 }

@@ -29,7 +29,7 @@ public final class ChatDataCollection extends TreeSet<ChatChannelData> {
         }
 
         Iterator<ChatChannelData> it = iterator();
-        List<ChatChannelData> result = new ArrayList<ChatChannelData>(count);
+        List<ChatChannelData> result = new ArrayList<ChatChannelData>();
         while (it.hasNext() && count-- > 0) {
             result.add(0, it.next());
         }

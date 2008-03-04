@@ -1,6 +1,7 @@
 package colab.common.channel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,7 @@ public final class ChatDataCollection extends TreeSet<ChatChannelData> {
     public List<ChatChannelData> getLast(int count) {
 
         if (count < 0) {
-            return new ArrayList<ChatChannelData>(this);
+            count = Integer.MAX_VALUE;
         }
 
         Iterator<ChatChannelData> it = iterator();

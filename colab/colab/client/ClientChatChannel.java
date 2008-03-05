@@ -55,13 +55,7 @@ public class ClientChatChannel extends ClientChannel {
 	}
 
 	public List<ChatChannelData> getLocalMessages() {
-		ArrayList <ChatChannelData> mess = new ArrayList <ChatChannelData>();
-		Iterator <ChatChannelData> i = messages.iterator();
-		
-		while(i.hasNext())
-			mess.add(i.next());
-
-		return mess;
+		return messages.getLast(-1);
 	}
 
 	public int getLocalNumMessages() {

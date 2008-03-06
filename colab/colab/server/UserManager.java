@@ -1,5 +1,7 @@
 package colab.server;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 
 import colab.common.exception.AuthenticationException;
@@ -7,9 +9,15 @@ import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.IncorrectPasswordException;
 import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserDoesNotExistException;
-import colab.common.identity.IdentitySet;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
+import colab.common.util.FileUtils;
+import colab.server.store.CommunityCollection;
+import colab.server.store.CommunityFile;
+import colab.server.store.CommunityStore;
+import colab.server.store.UserCollection;
+import colab.server.store.UserFile;
+import colab.server.store.UserStore;
 
 /**
  * A simple user manager that holds all users and communities in memory.
@@ -19,30 +27,28 @@ public final class UserManager {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
-    /**
-     * All of the communities that exist on a server.
-     */
-    private final IdentitySet<CommunityName, Community> communities;
+    private final ColabServer server;
 
-    /**
-     * All of the users that exist on a server.
-     */
-    private final IdentitySet<UserName, User> users;
+    private final UserStore userStore;
 
-    private ColabServer server;
+    private final CommunityStore communityStore;
 
-    /**
-     * Constructs an "empty" user manager with no communities or users.
-     */
     public UserManager(final ColabServer server) {
 
         this.server = server;
+        this.userStore = new UserCollection();
+        this.communityStore = new CommunityCollection();
 
-        // Create an empty set of communities.
-        communities = new IdentitySet<CommunityName, Community>();
+    }
 
-        // Create an empty set of users.
-        users = new IdentitySet<UserName, User>();
+    public UserManager(final ColabServer server, final File directory)
+            throws IOException {
+
+        this.server = server;
+        this.userStore = new UserFile(
+                FileUtils.getFile(directory, "users"));
+        this.communityStore = new CommunityFile(
+                FileUtils.getFile(directory, "communities"));
 
     }
 
@@ -54,11 +60,15 @@ public final class UserManager {
      */
     public Community getCommunity(final CommunityName name)
             throws CommunityDoesNotExistException {
-        Community community = communities.get(name);
+
+        Community community = communityStore.get(name);
+
         if (community == null) {
             throw new CommunityDoesNotExistException();
         }
+
         return community;
+
     }
 
     /**
@@ -67,7 +77,7 @@ public final class UserManager {
      * @return a collection containing every community
      */
     public Collection<Community> getAllCommunities() {
-        return communities;
+        return communityStore.getAll();
     }
 
     /**
@@ -76,7 +86,7 @@ public final class UserManager {
      * @param community the new community to add
      */
     public void addCommunity(final Community community) {
-        communities.add(community);
+        communityStore.add(community);
     }
 
     /**
@@ -85,12 +95,17 @@ public final class UserManager {
      * @param name the name of the user to retrieve
      * @return the user with the given name
      */
-    public User getUser(final UserName name) throws UserDoesNotExistException {
-        User user = users.get(name);
+    public User getUser(final UserName name)
+            throws UserDoesNotExistException {
+
+        User user = userStore.get(name);
+
         if (user == null) {
             throw new UserDoesNotExistException();
         }
+
         return user;
+
     }
 
     /**
@@ -98,11 +113,15 @@ public final class UserManager {
      *
      * @param user the new user to add
      */
-    public void addUser(final User user) throws UserAlreadyExistsException {
-        if (users.contains(user)) {
+    public void addUser(final User user)
+            throws UserAlreadyExistsException {
+
+        if (userStore.get(user.getId()) != null) {
             throw new UserAlreadyExistsException();
         }
-        users.add(user);
+
+        userStore.add(user);
+
     }
 
     public void checkPassword(final UserName username,

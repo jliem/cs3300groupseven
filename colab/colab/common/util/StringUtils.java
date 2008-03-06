@@ -54,4 +54,16 @@ public final class StringUtils {
 
     }
 
+    public static String toLetters(final byte[] bytes) {
+        char[] charset = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+        char[] letters = new char[bytes.length];
+        for (int i = 0; i < bytes.length; i++) {
+            byte b = bytes[i];
+            int index = Math.abs(new Integer(b)) % charset.length;
+            char c = charset[index];
+            letters[i] = c;
+        }
+        return new String(letters);
+    }
+
 }

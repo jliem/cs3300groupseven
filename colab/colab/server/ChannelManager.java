@@ -1,6 +1,6 @@
 package colab.server;
 
-import java.rmi.RemoteException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.server.channel.ServerChannel;
-import colab.server.channel.ServerChatChannel;
 
 /**
  * A channel manager provides channels.  This implementation
@@ -26,15 +25,24 @@ public final class ChannelManager {
     public static final long serialVersionUID = 1L;
 
     /** Map of all channels, indexed by community name, then channel name. */
-    private HashMap<CommunityName,
+    private final HashMap<CommunityName,
                     HashMap<ChannelName, ServerChannel>> channelMap;
 
-    private ColabServer server;
+    private final ColabServer server;
 
     /**
      * Constructs a new channel manager.
      */
     public ChannelManager(final ColabServer server) {
+        this.server = server;
+        this.channelMap =
+            new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
+    }
+
+    /**
+     * Constructs a new channel manager.
+     */
+    public ChannelManager(final ColabServer server, final File directory) {
         this.server = server;
         this.channelMap =
             new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();

@@ -18,9 +18,14 @@ public final class ColabNameRules {
         + "abcdefghijklmnopqrstuvwxyz"
         + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    /** Characters that can be used in a community name. */
+    /**
+     * Characters that can be used in a community name.
+     *
+     * Explicitly unallowed characters:
+     *  - Colon
+     */
     private static final String COMMUNITY_CHARACTERS =
-        ALPHANUMERIC + " _.-:,";
+        ALPHANUMERIC + " _.-,";
 
     /** The maximum length of a community name. */
     private static final int COMMUNITY_MAX_LENGTH = 50;
@@ -32,7 +37,12 @@ public final class ColabNameRules {
         return COMMUNITY_MAX_LENGTH;
     }
 
-    /** Characters than can be used in a user name. */
+    /**
+     * Characters than can be used in a user name.
+     *
+     * Explicitly unallowed characters:
+     *  - Colon
+     */
     private static final String USER_CHARACTERS =
         ALPHANUMERIC + "._-";
 

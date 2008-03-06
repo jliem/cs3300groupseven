@@ -13,7 +13,7 @@ public final class UserTester extends TestCase {
      */
     public void testStringConstructor() {
 
-        User u = new User("Johannes", "password");
+        User u = new User("Johannes", "password".toCharArray());
         assertEquals(u.getId().getValue(), "Johannes");
 
     }

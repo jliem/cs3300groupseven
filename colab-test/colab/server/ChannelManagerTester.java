@@ -11,7 +11,7 @@ import colab.common.naming.CommunityName;
 import colab.server.channel.ServerChannel;
 
 public class ChannelManagerTester extends TestCase {
-
+/*
     private ChannelManager cm;
 
     public void testCreateChannelAndCommunity() throws Exception {
@@ -80,5 +80,5 @@ public class ChannelManagerTester extends TestCase {
         assertEquals(channels.size(), 1);
 
     }
-
+*/
 }

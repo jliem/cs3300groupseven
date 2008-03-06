@@ -8,7 +8,7 @@ import colab.common.naming.UserName;
 /**
  * Represents a user of the system.
  */
-public class User implements Identifiable<UserName>, Serializable {
+public final class User implements Identifiable<UserName>, Serializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -40,7 +40,7 @@ public class User implements Identifiable<UserName>, Serializable {
      * @param name a unique string identifying this user
      * @param pass the password for this user to log in
      */
-    public User(final String name, final String pass) {
+    public User(final String name, final char[] pass) {
         this(new UserName(name), new Password(pass));
     }
 
@@ -49,8 +49,12 @@ public class User implements Identifiable<UserName>, Serializable {
      *
      * @param pass the new password for this user
      */
-    public final void setPassword(final Password pass) {
+    public void setPassword(final Password pass) {
         this.pass = pass;
+    }
+
+    public Password getPassword() {
+        return this.pass;
     }
 
     /**
@@ -59,7 +63,7 @@ public class User implements Identifiable<UserName>, Serializable {
      * @param attempt an input string which may be a correct password
      * @return true if the given password is correct, false otherwise
      */
-    public final boolean checkPassword(final char[] attempt) {
+    public boolean checkPassword(final char[] attempt) {
         return pass.checkPassword(attempt);
     }
 
@@ -68,11 +72,14 @@ public class User implements Identifiable<UserName>, Serializable {
      *
      * @return the name of this user
      */
-    public final UserName getId() {
+    public UserName getId() {
         return name;
     }
 
+    /** {@inheritDoc} */
+    @Override
     public String toString() {
         return getId().toString();
     }
+
 }

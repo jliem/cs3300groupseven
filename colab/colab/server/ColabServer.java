@@ -1,18 +1,16 @@
 package colab.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Collection;
 
-import colab.common.exception.CommunityDoesNotExistException;
-import colab.common.naming.CommunityName;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
-import colab.server.channel.ServerChannel;
+import colab.common.util.FileUtils;
 import colab.server.connection.Connection;
 
 /**
@@ -36,21 +34,48 @@ public class ColabServer extends UnicastRemoteObject
      */
     private final ChannelManager channelManager;
 
-    /**
-     * Constructs an instance of the server application.
-     *
-     * @throws RemoteException if an rmi error occurs
-     */
     public ColabServer() throws RemoteException {
 
-        // Create the manager objects
         this.userManager = new UserManager(this);
         this.channelManager = new ChannelManager(this);
 
     }
 
+    /**
+     * Constructs an instance of the server application.
+     *
+     * @param path the directory in which data is stored
+     * @throws IOException if an rmi or file-io error occurs
+     */
+    public ColabServer(final String path) throws IOException {
+
+        // Get the directory for data storage
+        File dataDirectory = FileUtils.getDirectory(path);
+
+        // Create the manager objects
+        this.userManager = new UserManager(this,
+                FileUtils.getDirectory(dataDirectory, "user"));
+        this.channelManager = new ChannelManager(this,
+                FileUtils.getDirectory(dataDirectory, "channel"));
+
+    }
+
+    /**
+     * @param port the port on which to listen for connections
+     * @throws IOException if a problem with rmi is encountered
+     */
+    public final void publish(final int port) throws IOException {
+
+        // Create the rmi registry, add the server to it
+        LocateRegistry.createRegistry(port);
+        Naming.rebind("//localhost:" + port + "/COLAB_SERVER", this);
+
+        System.out.println("Server initialized");
+
+    }
+
     /** {@inheritDoc} */
-    public ConnectionInterface connect(final ColabClientInterface client)
+    public final ConnectionInterface connect(final ColabClientInterface client)
             throws RemoteException {
 
         return new Connection(this, client);
@@ -62,7 +87,7 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @return the user manager for this server instance
      */
-    public UserManager getUserManager() {
+    public final UserManager getUserManager() {
         return this.userManager;
     }
 
@@ -71,12 +96,8 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @return the channel for this server instance
      */
-    public ChannelManager getChannelManager() {
+    public final ChannelManager getChannelManager() {
         return this.channelManager;
-    }
-
-    private void initialize(final String path) throws IOException {
-        //File dataDirectory = FileUtils.getOrCreateDirectory(path);
     }
 
     /**
@@ -93,38 +114,12 @@ public class ColabServer extends UnicastRemoteObject
         //    System.setSecurityManager(new RMISecurityManager());
         //}
 
-        // Create a server
-        ColabServer server = new ColabServer();
+        // Get arguments
+        String path = args[0];
+        Integer port = Integer.parseInt(args[1]);
 
-        /*
-        String pathArg;
-        if (args.length >= 1) {
-            pathArg = args[0];
-        } else {
-            pathArg = "data";
-        }
-
-        server.initialize(pathArg);
-        */
-
-        Integer port = null;
-        if (args.length == 0) {
-            System.err.println("No port specified");
-            System.exit(1);
-        } else {
-            try {
-                port = Integer.parseInt(args[0]);
-            } catch (final NumberFormatException nfe) {
-                System.err.println("Port must be an integer");
-                System.exit(1);
-            }
-        }
-
-        // Create the rmi registry, add the server to it
-        LocateRegistry.createRegistry(port);
-        Naming.rebind("//localhost:" + port + "/COLAB_SERVER", server);
-
-        System.out.println("Server initialized");
+        // Create and initialize a server
+        new ColabServer(path).publish(port);
 
     }
 

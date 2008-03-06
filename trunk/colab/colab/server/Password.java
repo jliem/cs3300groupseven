@@ -5,6 +5,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import colab.common.util.StringUtils;
+
 /**
  * Represents a string password.  Stores only a hashed version of the string.
  */
@@ -16,7 +18,7 @@ public final class Password implements Serializable {
     /**
      * The hashed password.
      */
-    private final byte[] hash;
+    private final String hash;
 
     /**
      * A digest used to run the hash function.
@@ -42,22 +44,12 @@ public final class Password implements Serializable {
     }
 
     /**
-     * Constructs a new Password representing
-     * the given password string.
-     *
-     * @param pass a password string
-     */
-    public Password(final String pass) {
-        this(pass.toCharArray());
-    }
-
-    /**
      * Constructs a new Password whose hash is equal to
      * the given byte array.
      *
      * @param hash a hashed password
      */
-    public Password(final byte[] hash) {
+    public Password(final String hash) {
         this.hash = hash;
     }
 
@@ -69,18 +61,11 @@ public final class Password implements Serializable {
      * @return true if the password is correct
      */
     public boolean checkPassword(final char[] pass) {
-        return Arrays.equals(doHash(pass), hash);
+        return doHash(pass).equals(hash);
     }
 
-    /**
-     * Determines whether a password string matches
-     * the password represented by this object.
-     *
-     * @param pass the password string to check
-     * @return true if the password is correct
-     */
-    public boolean checkPassword(final String pass) {
-        return checkPassword(pass.toCharArray());
+    public String getHash() {
+        return this.hash;
     }
 
     /**
@@ -89,7 +74,7 @@ public final class Password implements Serializable {
      * @param characters the characters to hash
      * @return the result of the hash function
      */
-    private static byte[] doHash(final char[] characters) {
+    private static String doHash(final char[] characters) {
 
         // Convert the char array to a byte array
         byte[] bytes = new byte[characters.length];
@@ -98,7 +83,7 @@ public final class Password implements Serializable {
         }
 
         // Hash the byte array
-        byte[] result = doHash(bytes);
+        String result = doHash(bytes);
 
         // Clear the byte array for security
         clear(bytes);
@@ -113,13 +98,13 @@ public final class Password implements Serializable {
      * @param bytes the bytes to hash
      * @return the result of the hash function
      */
-    private static byte[] doHash(final byte[] bytes) {
+    private static String doHash(final byte[] bytes) {
 
         byte[] result;
         digest.update((byte[]) bytes);
         result = digest.digest();
         digest.reset();
-        return result;
+        return StringUtils.toLetters(result);
 
     }
 

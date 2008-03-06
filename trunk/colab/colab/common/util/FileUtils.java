@@ -1,6 +1,7 @@
 package colab.common.util;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -20,7 +21,7 @@ public final class FileUtils {
      * @throws IOException if the directory cannot be created,
      *                     or if a file exists at the specified path
      */
-    public static File getOrCreateDirectory(final String pathStr)
+    public static File getDirectory(final String pathStr)
             throws IOException {
 
         File file = new File(pathStr);
@@ -54,6 +55,108 @@ public final class FileUtils {
         }
 
         return file;
+
+    }
+
+    /**
+     * Ensures the existence of a directory at the given path.
+     *
+     * @param parent the parent of the desired directory
+     *               (must already exist and be a directory)
+     * @param subdirectoryName the name of the desired subdirectory
+     * @return the given subdirectory
+     * @throws IOException if the parent is not a directory,
+     *                     if the subdirectory cannot be created,
+     *                     or if a file exists at the specified path
+     */
+    public static File getDirectory(final File parent,
+            final String subdirectoryName) throws IOException {
+
+        if (!parent.isDirectory()) {
+            throw new IOException("Parent is not a directory");
+        }
+
+        String parentPath = parent.getAbsolutePath();
+        String path = parentPath + File.separator + subdirectoryName;
+        return getDirectory(path);
+
+    }
+
+    /**
+     * Ensures the existence of a file at the given path.
+     *
+     * @param pathStr an absolute or relative file path
+     * @return the given file
+     * @throws IOException if the file cannot be created,
+     *                     or if a directory exists at the specified path
+     */
+    public static File getFile(final String pathStr)
+            throws IOException {
+
+        File file = new File(pathStr);
+
+        if (!file.isAbsolute()) {
+
+            // If a relative path was given, prepend the user path
+            file = new File(System.getProperty("user.dir")
+                    + File.separator + pathStr);
+
+        }
+
+
+        if (file.exists()) {
+
+            // If the path exists but is not a file, throw an exception
+            if (!file.isFile()) {
+                throw new IOException(pathStr + " is not a file");
+            }
+
+        } else {
+
+            // If the path does not exist, create it
+            if (!file.createNewFile()) {
+
+                // If unable to create the file, throw an exception
+                throw new IOException("Unable to create file");
+
+            }
+
+        }
+
+        return file;
+
+    }
+
+    /**
+     * Ensures the existence of a file at the given path.
+     *
+     * @param parent the parent of the desired directory
+     *               (must already exist and be a directory)
+     * @param fileName the name of the desired file
+     * @return the given file
+     * @throws IOException if the parent is not a directory,
+     *                     if the file cannot be created,
+     *                     or if a file exists at the specified path
+     */
+    public static File getFile(final File parent,
+            final String fileName) throws IOException {
+
+        if (!parent.isDirectory()) {
+            throw new IOException("Parent is not a directory");
+        }
+
+        String parentPath = parent.getAbsolutePath();
+        String path = parentPath + File.separator + fileName;
+        return getFile(path);
+
+    }
+
+    public static void appendLine(final File file, final String line)
+            throws IOException {
+
+        FileWriter writer = new FileWriter(file, true);
+        writer.write(line + "\n");
+        writer.flush();
 
     }
 

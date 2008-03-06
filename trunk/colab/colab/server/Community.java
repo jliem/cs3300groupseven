@@ -73,7 +73,7 @@ public final class Community implements Identifiable<CommunityName>,
      * @param password the password to join this community
      */
     public Community(final String name, final String password) {
-        this(new CommunityName(name), new Password(password));
+        this(new CommunityName(name), new Password(password.toCharArray()));
     }
 
     /**
@@ -120,6 +120,10 @@ public final class Community implements Identifiable<CommunityName>,
     public void removeClient(final Connection connection) {
         this.clients.remove(connection.getId());
         connection.removeDisconnectListener(this);
+    }
+
+    public Password getPassword() {
+        return this.password;
     }
 
     /**

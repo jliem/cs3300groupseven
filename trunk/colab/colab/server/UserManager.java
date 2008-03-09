@@ -12,12 +12,8 @@ import colab.common.exception.UserDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
-import colab.server.store.CommunityCollection;
-import colab.server.store.CommunityFile;
-import colab.server.store.CommunityStore;
-import colab.server.store.UserCollection;
-import colab.server.store.UserFile;
-import colab.server.store.UserStore;
+import colab.server.file.CommunityFile;
+import colab.server.file.UserFile;
 
 /**
  * A simple user manager that holds all users and communities in memory.

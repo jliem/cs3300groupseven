@@ -1,7 +1,6 @@
-package colab.server.store;
+package colab.server;
 
 import colab.common.naming.UserName;
-import colab.server.User;
 
 public interface UserStore {
 

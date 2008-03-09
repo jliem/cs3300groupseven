@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import junit.framework.TestCase;
 import colab.common.naming.UserName;
 import colab.server.User;
+import colab.server.file.UserFile;
 
 public class UserFileTester extends TestCase {
 

@@ -1,15 +1,19 @@
 package colab.server.channel;
 
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
-import colab.common.channel.ChatDataCollection;
+import colab.common.channel.ChatDataSet;
 import colab.common.naming.ChannelName;
+import colab.server.file.ChannelFile;
 
 public final class ServerChatChannel extends ServerChannel {
 
@@ -17,7 +21,7 @@ public final class ServerChatChannel extends ServerChannel {
     private static final long serialVersionUID = 1L;
 
     /** The channel data. */
-    private ChatDataCollection messages;
+    private ChannelDataStore<ChatChannelData> messages;
 
     /**
      * Constructs a new server-side chat channel.
@@ -27,7 +31,15 @@ public final class ServerChatChannel extends ServerChannel {
     public ServerChatChannel(final ChannelName name) {
 
         super(name);
-        messages = new ChatDataCollection();
+        this.messages = new ChatDataSet();
+
+    }
+
+    public ServerChatChannel(final ChannelName name, final File file)
+            throws IOException {
+
+        super(name);
+        this.messages = new ChannelFile<ChatChannelData>(file);
 
     }
 

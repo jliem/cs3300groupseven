@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
 
 /**
  * Represents some piece of data in a Channel.
@@ -51,5 +52,7 @@ public abstract class ChannelData implements Serializable {
     public final Date getTimestamp() {
         return this.timestamp;
     }
+
+    public abstract XmlNode toXml();
 
 }

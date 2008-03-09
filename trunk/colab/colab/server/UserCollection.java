@@ -1,8 +1,7 @@
-package colab.server.store;
+package colab.server;
 
 import colab.common.identity.IdentitySet;
 import colab.common.naming.UserName;
-import colab.server.User;
 
 public final class UserCollection implements UserStore {
 

@@ -1,4 +1,4 @@
-package colab.server.store;
+package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,12 +8,14 @@ import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
 import colab.server.Password;
 import colab.server.User;
+import colab.server.UserCollection;
+import colab.server.UserStore;
 
 public final class UserFile implements UserStore {
 
-    private UserCollection users;
+    private final UserCollection users;
 
-    private File file;
+    private final File file;
 
     public UserFile(final File file) throws IOException {
 

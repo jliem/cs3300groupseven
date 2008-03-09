@@ -11,7 +11,9 @@ import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
 import colab.common.util.FileUtils;
+import colab.server.channel.ChannelManager;
 import colab.server.connection.Connection;
+import colab.server.user.UserManager;
 
 /**
  * Server implementation of ColabServerInterface.

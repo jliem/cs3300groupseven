@@ -1,6 +1,11 @@
-package colab.server;
+package colab.server.user;
 
 import colab.common.naming.*;
+import colab.server.MockColabServer;
+import colab.server.user.Community;
+import colab.server.user.Password;
+import colab.server.user.User;
+import colab.server.user.UserManager;
 import junit.framework.TestCase;
 
 public class UserManagerTest extends TestCase {

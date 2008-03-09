@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.user;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import colab.common.exception.UserDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
+import colab.server.ColabServer;
 import colab.server.file.CommunityFile;
 import colab.server.file.UserFile;
 

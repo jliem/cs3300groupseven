@@ -2,6 +2,10 @@ package colab.server;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
+import colab.server.channel.ChannelManager;
+import colab.server.user.Community;
+import colab.server.user.User;
+import colab.server.user.UserManager;
 
 public class MockColabServer extends ColabServer {
 

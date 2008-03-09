@@ -8,10 +8,10 @@ import java.util.Scanner;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
-import colab.server.Community;
-import colab.server.CommunityCollection;
-import colab.server.CommunityStore;
-import colab.server.Password;
+import colab.server.user.Community;
+import colab.server.user.CommunityCollection;
+import colab.server.user.CommunityStore;
+import colab.server.user.Password;
 
 public class CommunityFile implements CommunityStore {
 

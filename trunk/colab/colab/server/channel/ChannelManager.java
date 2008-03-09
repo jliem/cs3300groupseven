@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.channel;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,7 +11,9 @@ import colab.common.exception.ChannelDoesNotExistException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
-import colab.server.channel.ServerChannel;
+import colab.server.ColabServer;
+import colab.server.user.Community;
+import colab.server.user.UserManager;
 
 /**
  * A channel manager provides channels.  This implementation

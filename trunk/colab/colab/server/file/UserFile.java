@@ -6,10 +6,10 @@ import java.util.Scanner;
 
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
-import colab.server.Password;
-import colab.server.User;
-import colab.server.UserCollection;
-import colab.server.UserStore;
+import colab.server.user.Password;
+import colab.server.user.User;
+import colab.server.user.UserCollection;
+import colab.server.user.UserStore;
 
 public final class UserFile implements UserStore {
 

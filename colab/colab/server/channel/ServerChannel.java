@@ -14,7 +14,6 @@ import colab.common.identity.IdentitySet;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelInterface;
-import colab.server.ChannelConnection;
 import colab.server.connection.Connection;
 import colab.server.connection.ConnectionIdentifier;
 import colab.server.event.DisconnectEvent;

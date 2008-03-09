@@ -22,16 +22,16 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelInterface;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ConnectionInterface;
-import colab.server.ChannelConnection;
-import colab.server.ChannelManager;
 import colab.server.ColabServer;
-import colab.server.Community;
-import colab.server.Password;
-import colab.server.User;
-import colab.server.UserManager;
+import colab.server.channel.ChannelConnection;
+import colab.server.channel.ChannelManager;
 import colab.server.channel.ServerChannel;
 import colab.server.event.DisconnectEvent;
 import colab.server.event.DisconnectListener;
+import colab.server.user.Community;
+import colab.server.user.Password;
+import colab.server.user.User;
+import colab.server.user.UserManager;
 
 /**
  * Server implementation of {@link ConnectionInterface}.

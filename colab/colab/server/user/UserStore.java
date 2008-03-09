@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.user;
 
 import colab.common.naming.UserName;
 

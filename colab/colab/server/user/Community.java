@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.user;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;

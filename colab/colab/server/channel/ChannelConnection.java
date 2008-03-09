@@ -1,4 +1,4 @@
-package colab.server;
+package colab.server.channel;
 
 import colab.common.identity.Identifiable;
 import colab.common.remote.client.ChannelInterface;

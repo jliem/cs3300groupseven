@@ -11,7 +11,7 @@ import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
-import colab.common.channel.ChatDataCollection;
+import colab.common.channel.ChatDataSet;
 import colab.common.naming.ChannelName;
 
 public class ClientChatChannel extends ClientChannel {
@@ -20,11 +20,11 @@ public class ClientChatChannel extends ClientChannel {
 
 	private int newMessages = 0;
 
-	protected ChatDataCollection messages;
+	protected ChatDataSet messages;
 
 	public ClientChatChannel(final ChannelName name) throws RemoteException {
 		super(name);
-		messages = new ChatDataCollection();
+		messages = new ChatDataSet();
 		listeners = new ArrayList<ActionListener>();
 	}
 

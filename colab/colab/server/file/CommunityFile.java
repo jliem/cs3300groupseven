@@ -1,4 +1,4 @@
-package colab.server.store;
+package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,13 +9,15 @@ import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
 import colab.server.Community;
+import colab.server.CommunityCollection;
+import colab.server.CommunityStore;
 import colab.server.Password;
 
 public class CommunityFile implements CommunityStore {
 
-    private CommunityCollection communities;
+    private final CommunityCollection communities;
 
-    private File file;
+    private final File file;
 
     public CommunityFile(final File file) throws IOException {
 

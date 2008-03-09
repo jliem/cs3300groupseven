@@ -1,5 +1,7 @@
 package colab.server.channel;
 
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,14 +29,29 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
     private IdentitySet<ConnectionIdentifier, ChannelConnection> clients;
 
-    public static ServerChannel create(final ChannelDescriptor channel) {
+    public static ServerChannel create(final ChannelDescriptor channel,
+            final File file) throws IOException {
+
         switch (channel.getType()) {
-            case CHAT:
-                return new ServerChatChannel(channel.getName());
-            default:
-                throw new IllegalArgumentException(
-                        "Channel type unsupported: " + channel.getType());
+        case CHAT:
+            return new ServerChatChannel(channel.getName(), file);
+        default:
+            throw new IllegalArgumentException(
+                    "Channel type unsupported: " + channel.getType());
         }
+
+    }
+
+    public static ServerChannel create(final ChannelDescriptor channel) {
+
+        switch (channel.getType()) {
+        case CHAT:
+            return new ServerChatChannel(channel.getName());
+        default:
+            throw new IllegalArgumentException(
+                    "Channel type unsupported: " + channel.getType());
+        }
+
     }
 
     public ServerChannel(final ChannelName name) {

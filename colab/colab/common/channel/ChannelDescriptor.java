@@ -10,33 +10,37 @@ public class ChannelDescriptor implements Serializable {
     public static final long serialVersionUID = 1L;
 
     private ChannelName channelName;
+
     private ChannelType channelType;
 
-    public ChannelDescriptor(ChannelName channelName, ChannelType type) {
+    public ChannelDescriptor(
+            final ChannelName channelName, final ChannelType type) {
+
         this.channelName = channelName;
         this.channelType = type;
+
     }
 
-    public ChannelDescriptor(String name, ChannelType type)
-    {
+    public ChannelDescriptor(
+            final String name, final ChannelType type) {
+
         this(new ChannelName(name), type);
+
     }
 
     public ChannelName getName() {
         return channelName;
     }
 
-    public void setName(ChannelName name) {
+    public void setName(final ChannelName name) {
         this.channelName = name;
     }
 
-    public ChannelType getType()
-    {
+    public ChannelType getType() {
         return channelType;
     }
 
-    public void setType(ChannelType type)
-    {
+    public void setType(final ChannelType type) {
         this.channelType = type;
     }
 

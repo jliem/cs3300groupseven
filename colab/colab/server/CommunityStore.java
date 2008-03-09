@@ -1,9 +1,8 @@
-package colab.server.store;
+package colab.server;
 
 import java.util.Collection;
 
 import colab.common.naming.CommunityName;
-import colab.server.Community;
 
 public interface CommunityStore {
 

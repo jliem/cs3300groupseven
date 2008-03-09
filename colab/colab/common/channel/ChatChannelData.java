@@ -3,6 +3,7 @@ package colab.common.channel;
 import java.util.Date;
 
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
 
 /**
  * Represents a message posted to a chat channel.
@@ -34,15 +35,23 @@ public final class ChatChannelData extends ChannelData {
     public String getText() {
         return this.text;
     }
-    
-    //TODO:needs some sort of formatting options
-    public String getMessageString(boolean timestampEnabled) {
-    	String start = getCreator().toString(),
-    		end = ": " + getText();
-    	if(timestampEnabled){
-    		start += " <" + getTimestamp().toString() + "> ";
-    	}
-    	return start + end; 
+
+    // TODO: needs some sort of formatting options
+    public String getMessageString(final boolean timestampEnabled) {
+        String start = getCreator().toString();
+        String end = ": " + getText();
+        if(timestampEnabled){
+            start += " <" + getTimestamp().toString() + "> ";
+        }
+        return start + end;
+    }
+
+    public XmlNode toXml() {
+        XmlNode node = new XmlNode("ChatMessage");
+        node.setAttribute("time", getTimestamp().toString());
+        node.setAttribute("creator", getCreator().toString());
+        node.setContent(text);
+        return node;
     }
 
 }

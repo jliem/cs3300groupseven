@@ -86,6 +86,10 @@ class ColabClientGUI extends JFrame {
                     }
                     gotoCommunityLoginView();
                 }
+                
+                if(e.getSource() == quitItem){
+                	System.exit(1);
+                }
 
             }
         };
@@ -178,7 +182,7 @@ class ColabClientGUI extends JFrame {
     private void gotoUserLoginView(final boolean logout) {
 
         menu.removeAll();
-
+        menu.add(quitItem);
         if (logout) {
             loginPanel.clearFields();
         }
@@ -195,6 +199,7 @@ class ColabClientGUI extends JFrame {
 
         menu.removeAll();
         menu.add(logoutItem);
+        menu.add(quitItem);
         ArrayList<String> commNames = new ArrayList<String>();
         try {
             for (CommunityName name : client.getMyCommunityNames()) {
@@ -218,6 +223,7 @@ class ColabClientGUI extends JFrame {
 
         menu.add(changeCommItem);
         menu.add(logoutItem);
+        menu.add(quitItem);
         channelPanel = new ChannelManagerPanel(client.getChannels());
         setActivePanel(channelPanel);
         setTitle("");

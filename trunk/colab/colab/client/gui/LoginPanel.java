@@ -3,6 +3,9 @@ package colab.client.gui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -141,6 +144,25 @@ public class LoginPanel extends JPanel {
                 loginTask.run();
             }
         });
+
+        // Select the entire text box when clicking the username or password
+        // field
+        FocusListener f = new FocusAdapter() {
+            public void focusGained(FocusEvent fe) {
+                // getText is deprecated for JPasswordField, so we
+                // need two if cases
+                if (fe.getSource() == password) {
+                    password.setSelectionStart(0);
+                    password.setSelectionEnd(password.getPassword().length);
+                } else if (fe.getSource() == username) {
+                    username.setSelectionStart(0);
+                    username.setSelectionEnd(username.getText().length());
+                }
+            }
+        };
+
+        username.addFocusListener(f);
+        password.addFocusListener(f);
 
         setLayout(new GridLayout(4, 2));
 

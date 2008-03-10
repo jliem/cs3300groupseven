@@ -150,6 +150,13 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
+    /**
+     * Logs into a community. User must not already be logged in to any community.
+     * 
+     * @param communityName the community to log into
+     * @throws NetworkException if a network exception occurs
+     * @throws AuthenticationException if the user was not authorized to join the community
+     */
     public void loginCommmunity(final CommunityName communityName)
             throws NetworkException, AuthenticationException {
 
@@ -181,16 +188,32 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
+    /**
+     * Gets community names.
+     * @return the names of the communities in this Connection
+     * @throws RemoteException if a RemoteException occurs
+     */
     public Collection<CommunityName> getAllCommunityNames()
             throws RemoteException {
         return connection.getAllCommunityNames();
      }
 
+    /**
+     * Returns the names of the communities to which this user belongs
+     * @return the names of the communities to which this user belongs
+     * @throws RemoteException if a RemoteException occurs
+     */
     public Collection<CommunityName> getMyCommunityNames()
             throws RemoteException {
         return connection.getMyCommunityNames();
     }
 
+    /**
+     * Creates a new Channel and joins this user.
+     * @param desc the descriptor for the channel
+     * @return a reference to the newly created channel
+     * @throws RemoteException if a RemoteException occurs
+     */
     public ClientChannel joinChannel(final ChannelDescriptor desc)
             throws RemoteException{
         ClientChannel channel;
@@ -211,10 +234,20 @@ public final class ColabClient extends UnicastRemoteObject
         channels.add(channelDescriptor);
     }
 
+    /**
+     * Get channels.
+     * @return a vector of ChannelDescriptors
+     */
     public Vector<ChannelDescriptor> getChannels() {
         return channels;
     }
 
+    /**
+     * Add a channel to this connection.
+     * @param channelName name of the channel to add
+     * @param data the channel data
+     * @throws RemoteException
+     */
     public void add(final ChannelName channelName,
             final ChannelData data) throws RemoteException {
 
@@ -253,4 +286,12 @@ public final class ColabClient extends UnicastRemoteObject
 
     }
 
+    /**
+     * Completely closes all threads, windows, etc. associated
+     * with the client.
+     */
+    public void exitProgram() {
+    	// TODO: Check if data needs to be saved
+    	System.exit(0);
+    }
 }

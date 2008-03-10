@@ -86,9 +86,9 @@ class ColabClientGUI extends JFrame {
                     }
                     gotoCommunityLoginView();
                 }
-                
+
                 if(e.getSource() == quitItem){
-                	System.exit(1);
+                    client.exitProgram();
                 }
 
             }

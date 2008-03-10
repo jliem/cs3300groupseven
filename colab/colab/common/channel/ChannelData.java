@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import colab.common.naming.UserName;
+import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
 
 /**

@@ -39,7 +39,8 @@ public final class ServerChatChannel extends ServerChannel {
             throws IOException {
 
         super(name);
-        this.messages = new ChannelFile<ChatChannelData>(file);
+        this.messages = new ChannelFile<ChatChannelData>(
+                file, ChatChannelData.getXmlConstructor());
 
     }
 

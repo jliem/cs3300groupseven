@@ -77,6 +77,9 @@ public class ChatChannelFrame extends JFrame {
             }
         });
 
+
+        channel.addUserListener(chatPanel.getUserListPanel());
+
         channel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 for (ChatChannelData mess : channel.getNewMessages()) {

@@ -3,7 +3,8 @@ package colab.common.identity;
 /**
  * An Identifier that uses a String as its data field.
  */
-public abstract class StringIdentifier extends Identifier<String> {
+public abstract class StringIdentifier extends Identifier<String>
+    implements Comparable<StringIdentifier> {
 
     /**
      * Constructs an empty string identifier.
@@ -29,4 +30,16 @@ public abstract class StringIdentifier extends Identifier<String> {
         return getValue();
     }
 
+    /**
+     * Compares this object with the specified object for order.
+     *
+     * @param stringIdentifier the object to compare to
+     * @return a negative integer, zero, or a positive integer
+     * as this object is less than, equal to, or greater than
+     * the specified object.
+     */
+    @Override
+    public int compareTo(final StringIdentifier stringIdentifier) {
+        return this.toString().compareTo(stringIdentifier.toString());
+    }
 }

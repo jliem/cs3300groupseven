@@ -2,12 +2,16 @@ package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.util.FileUtils;
+import colab.common.xml.XmlConstructor;
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlReader;
 
 public class ChannelFile<T extends ChannelData>
         implements ChannelDataStore<T> {
@@ -16,10 +20,24 @@ public class ChannelFile<T extends ChannelData>
 
     private final File file;
 
-    public ChannelFile(final File file) throws IOException {
+    public ChannelFile(final File file,
+            final XmlConstructor<T> constructor)
+            throws IOException {
 
         this.file = file;
         this.dataCollection = new ChannelDataSet<T>();
+
+        XmlReader xmlReader = new XmlReader(file);
+        List<XmlNode> xml = xmlReader.getXml();
+        for (final XmlNode node : xml) {
+            T data;
+            try {
+                data = constructor.fromXml(node);
+            } catch (final ParseException e) {
+                throw new IOException(e);
+            }
+            dataCollection.add(data);
+        }
 
     }
 
@@ -27,7 +45,8 @@ public class ChannelFile<T extends ChannelData>
 
         dataCollection.add(data);
 
-        String xmlString = data.toXml().serialize();
+        XmlNode xml = data.toXml();
+        String xmlString = xml.serialize();
         try {
             FileUtils.appendLine(file, xmlString);
         } catch (final IOException ioe) {

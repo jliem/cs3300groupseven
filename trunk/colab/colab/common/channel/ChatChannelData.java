@@ -1,8 +1,11 @@
 package colab.common.channel;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.naming.UserName;
+import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
 
 /**
@@ -16,6 +19,8 @@ public final class ChatChannelData extends ChannelData {
     /** The text of the message. */
     private String text;
 
+    private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance();
+
     /**
      * Constructs a new chat data object.
      *
@@ -24,6 +29,18 @@ public final class ChatChannelData extends ChannelData {
      */
     public ChatChannelData(final String text, final UserName creator) {
         super(creator, new Date());
+        this.text = text;
+    }
+
+    /**
+     * Constructs a new chat data object.
+     *
+     * @param text the text of the message
+     * @param creator the user who posted the message
+     */
+    public ChatChannelData(final String text, final UserName creator,
+            final Date time) {
+        super(creator, time);
         this.text = text;
     }
 
@@ -52,6 +69,22 @@ public final class ChatChannelData extends ChannelData {
         node.setAttribute("creator", getCreator().toString());
         node.setContent(text);
         return node;
+    }
+
+    private static XmlConstructor<ChatChannelData> XML_CONSTRUCTOR =
+            new XmlConstructor<ChatChannelData>() {
+        public ChatChannelData fromXml(final XmlNode node)
+                throws ParseException {
+            Date time = DATE_FORMAT.parse(node.getAttribute("time"));
+            UserName creator = new UserName(node.getAttribute("creator"));
+            String message = node.getBody();
+            ChatChannelData data = new ChatChannelData(message, creator, time);
+            return data;
+        }
+    };
+
+    public static XmlConstructor<ChatChannelData> getXmlConstructor() {
+        return XML_CONSTRUCTOR;
     }
 
 }

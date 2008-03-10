@@ -20,6 +20,21 @@ public class XmlNode {
         this.attributes = new HashMap<String, String>();
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public String getBody() {
+        return stringContent;
+    }
+
+    public List<XmlNode> getChildren() {
+        if (xmlContent == null) {
+            xmlContent = new ArrayList<XmlNode>();
+        }
+        return xmlContent;
+    }
+
     public void setContent(final String content) {
         if (xmlContent != null) {
             throw new IllegalStateException("Content type is xml");
@@ -31,10 +46,11 @@ public class XmlNode {
         if (stringContent != null) {
             throw new IllegalStateException("Content type is string");
         }
-        if (xmlContent == null) {
-            xmlContent = new ArrayList<XmlNode>();
-        }
-        xmlContent.add(node);
+        getChildren().add(node);
+    }
+
+    public String getAttribute(final String key) {
+        return attributes.get(key);
     }
 
     public void setAttribute(final String key, final String value) {

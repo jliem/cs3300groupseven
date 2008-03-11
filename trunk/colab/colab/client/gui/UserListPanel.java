@@ -2,6 +2,7 @@ package colab.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.TreeSet;
 
@@ -11,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import colab.client.ClientChannel;
+import colab.client.ColabClient;
 import colab.client.event.UserJoinedEvent;
 import colab.client.event.UserLeftEvent;
 import colab.client.event.UserListener;
@@ -18,7 +21,21 @@ import colab.common.naming.UserName;
 
 /**
  * A panel to display all the users in this Channel. Comes wrapped in its own
- * scrollable pane.
+ * scrollable pane. To use this panel, a class must add an instance of
+ * UserListPanel to the channel using the addUserListener method, then call
+ * downloadActiveUsers in order to get all users currently connected. The list
+ * will update itself when users join/leave.
+ *
+ * Example usage in ChatChannelFrame:
+ *
+    channel.addUserListener(chatPanel.getUserListPanel());
+    try {
+        // Download list of current users
+        chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
+    } catch (RemoteException ex) {
+        // TODO: Handle remote exception
+        ex.printStackTrace();
+    }
  *
  */
 public final class UserListPanel extends JPanel implements UserListener {
@@ -63,11 +80,25 @@ public final class UserListPanel extends JPanel implements UserListener {
     }
 
     /**
-     * Adds users without triggering a userJoined event.
-     * Call this method right after joining a channel.
+     * Downloads all users connected to a channel and adds them to the user list
+     * without triggering a join event for each user.
+     *
+     * @param client the client
      * @param channel the channel you are joining
+     * @throws RemoteException if a RemoteException occurs.
      */
-    public void addUsers(Collection<UserName> users) {
+    public void downloadActiveUsers(ColabClient client, ClientChannel channel) throws RemoteException {
+        Collection<UserName> users = client.getActiveUsers(channel.getId());
+
+        this.addUsers(users);
+    }
+
+    /**
+     * Adds users without triggering a userJoined event.
+     *
+     * @param users the users to add
+     */
+    private void addUsers(Collection<UserName> users) {
         this.users.addAll(users);
         refreshUsers();
     }

@@ -80,10 +80,13 @@ public class ChatChannelFrame extends JFrame {
         });
 
 
+        // TODO: This behavior is common to all client-side channels
+        // and should be refactored into a parent class
+        // Set up the list of users
         channel.addUserListener(chatPanel.getUserListPanel());
         try {
             // Download list of current users
-            chatPanel.getUserListPanel().addUsers(client.getActiveUsers(channel.getId()));
+            chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
         } catch (RemoteException ex) {
             // TODO: Handle remote exception
             ex.printStackTrace();

@@ -1,6 +1,8 @@
 package colab.common.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -8,6 +10,9 @@ import java.io.IOException;
  * A utility class containing methods for dealing with files.
  */
 public final class FileUtils {
+
+    /** The size of the char buffer used in getContentAsString. */
+    private static final int GETCONTENT_BUFFER_SIZE = 1024;
 
     /** Hidden default constructor. */
     private FileUtils() {
@@ -151,12 +156,44 @@ public final class FileUtils {
 
     }
 
+    /**
+     * Writes a string and a line break to the end of a file.
+     * @param file the file to modify
+     * @param line the string to append
+     * @throws IOException if any problem occurs in writing to the file
+     */
     public static void appendLine(final File file, final String line)
             throws IOException {
 
         FileWriter writer = new FileWriter(file, true);
         writer.write(line + "\n");
         writer.flush();
+
+    }
+
+    /**
+     * Reads all of the content from a file and returns
+     * it as a single string.
+     *
+     * This is not an efficient way to do file I/O, and is
+     * provided only as a convenience for use in test cases.
+     *
+     * @param file the file to read
+     * @return the content of the file, as a string
+     * @throws IOException if any I/O problem occurs
+     */
+    public static String getContentAsString(final File file)
+            throws IOException {
+
+        StringBuilder str = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        char[] buffer = new char[GETCONTENT_BUFFER_SIZE];
+        int charsRead;
+        while ((charsRead = reader.read(buffer)) != -1) {
+            str.append(buffer, 0, charsRead);
+        }
+        reader.read(buffer);
+        return str.toString();
 
     }
 

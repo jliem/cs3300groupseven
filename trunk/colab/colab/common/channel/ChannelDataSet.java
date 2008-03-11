@@ -16,7 +16,17 @@ public class ChannelDataSet<T extends ChannelData>
         dataSet = new TreeSet<T>(
                 new Comparator<T>() {
             public int compare(final T arg0, final T arg1) {
-                return arg1.getTimestamp().compareTo(arg0.getTimestamp());
+
+                int result = arg1.getTimestamp().compareTo(arg0.getTimestamp());
+
+                /* If timestamps are identical, use an
+                 * arbitrary (but consistent) order. */
+                if (result == 0) {
+                    result = arg1.hashCode() - arg0.hashCode();
+                }
+
+                return result;
+
             }
         });
 

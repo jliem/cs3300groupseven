@@ -79,6 +79,10 @@ public final class Connection extends UnicastRemoteObject
      */
     private Community community;
 
+    /**
+     * A collection of objects who need to be notified
+     * when this connection gets disconnected.
+     */
     private final Vector<DisconnectListener> disconnectListeners;
 
     /**
@@ -113,6 +117,9 @@ public final class Connection extends UnicastRemoteObject
         return this.connectionId;
     }
 
+    /**
+     * @return the remote client object
+     */
     public ColabClientInterface getClient() {
         return this.client;
     }
@@ -342,6 +349,14 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+    /**
+     * Retrieves a channel from the server's channel manager.
+     *
+     * @param channelName the name of the channel to retrieve
+     * @return the server-side channel object
+     * @throws RemoteException any exception which should be tossed back
+     *                         to the client is wrapped in a RemoteException
+     */
     private ServerChannel getChannel(final ChannelName channelName)
             throws RemoteException {
 
@@ -371,6 +386,7 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     public void add(final ChannelName channelName, final ChannelData data)
             throws RemoteException {
 
@@ -380,6 +396,7 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     public List<ChannelData> getLastData(final ChannelName channelName,
             final int count) throws RemoteException {
 
@@ -389,14 +406,13 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
     public Collection<UserName> getActiveUsers(
             final ChannelName channelName) throws RemoteException {
 
-        // TODO: This method doesn't work and says the attempt
-        // is made while in an active state. Is that ok?
-        if (this.state != ConnectionState.CONNECTED && this.state != ConnectionState.ACTIVE) {
+        if (!this.state.hasCommunityLogin()) {
             throw new IllegalStateException(
-                    "Attempt to get active users on connection in '"
+                    "Attempt to get channel's active users on connection in '"
                     + this.state + "' state");
         }
 
@@ -422,16 +438,36 @@ public final class Connection extends UnicastRemoteObject
         }
     }
 
-    public boolean addDisconnectListener(
+    /**
+     * Ensures that the listener will be notified when
+     * this connection gets disconnected.
+     *
+     * @param listener the object which needs to be notified
+     */
+    public void addDisconnectListener(
             final DisconnectListener listener) {
-        return this.disconnectListeners.add(listener);
+
+        this.disconnectListeners.add(listener);
+
     }
 
-    public boolean removeDisconnectListener(
+    /**
+     * @param listener the listener to remove
+     */
+    public void removeDisconnectListener(
             final DisconnectListener listener) {
-        return this.disconnectListeners.remove(listener);
+
+        this.disconnectListeners.remove(listener);
+
     }
 
+    /**
+     * This method should be called when a fatal RMI exception is thrown
+     * and the connection needs to be aborted.
+     *
+     * @param e the exception which caused the disconnect, used
+     *          to explain why the disconnection is occurring
+     */
     public void disconnect(final Exception e) {
 
         log("Disconnected");
@@ -444,6 +480,11 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+    /**
+     * Prints an informative message to the console.
+     *
+     * @param message the message to print
+     */
     private void log(final String message) {
         System.out.println("[Connection " + connectionId + "] " + message);
     }

@@ -19,7 +19,6 @@ import colab.server.user.UserManager;
  * A channel manager provides channels.  This implementation
  * does not load any channel data into memory until a channel
  * is joined by one or more users.
- *
  */
 public final class ChannelManager {
 
@@ -30,10 +29,13 @@ public final class ChannelManager {
     private final HashMap<CommunityName,
                     HashMap<ChannelName, ServerChannel>> channelMap;
 
+    /** The server this channel manager is running on. */
     private final ColabServer server;
 
     /**
      * Constructs a new channel manager.
+     *
+     * @param server the server this channel manager will be runnning on.
      */
     public ChannelManager(final ColabServer server) {
         this.server = server;
@@ -43,6 +45,9 @@ public final class ChannelManager {
 
     /**
      * Constructs a new channel manager.
+     *
+     * @param server the server this channel manager will be runnning on.
+     * @param directory the directory used to store channel information.
      */
     public ChannelManager(final ColabServer server, final File directory) {
         this.server = server;
@@ -86,6 +91,11 @@ public final class ChannelManager {
      *
      * @param communityName community name
      * @param channelDescriptor descriptor of the channel to add
+     * @return the created channel object
+     * @throws ChannelAlreadyExistsException if the parameters specify
+     *             a channel that already exists
+     * @throws CommunityDoesNotExistException if the specified community
+     *             does not exist
      */
     public ServerChannel addChannel(final CommunityName communityName,
             final ChannelDescriptor channelDescriptor)

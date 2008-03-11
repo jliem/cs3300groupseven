@@ -19,15 +19,31 @@ import colab.server.connection.ConnectionIdentifier;
 import colab.server.event.DisconnectEvent;
 import colab.server.event.DisconnectListener;
 
-public abstract class ServerChannel implements Channel, DisconnectListener {
+/**
+ * A ServerChannel is a server-side object that represents a channel.
+ *
+ * @param <T> the type of {@link ChannelData} this channel uses
+ */
+public abstract class ServerChannel<T extends ChannelData>
+        implements Channel, DisconnectListener {
 
-    /**
-     * The name of the channel.
-     */
+    /** The name of the channel. */
     private final ChannelName name;
 
+    /**
+     * The clients that are currently active in the channel,
+     * who need to be notified when a change occurs.
+     */
     private IdentitySet<ConnectionIdentifier, ChannelConnection> clients;
 
+    /**
+     * Constructs a new ServerChannel.
+     *
+     * @param channel a description of the channel
+     * @param file a file to use for persistent data storage
+     * @return the created channel
+     * @throws IOException if a file storage error occurs
+     */
     public static ServerChannel create(final ChannelDescriptor channel,
             final File file) throws IOException {
 
@@ -41,6 +57,12 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
     }
 
+    /**
+     * Constructs a new ServerChannel.
+     *
+     * @param channel a description of the channel
+     * @return the created channel
+     */
     public static ServerChannel create(final ChannelDescriptor channel) {
 
         switch (channel.getType()) {
@@ -53,7 +75,13 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
     }
 
-    public ServerChannel(final ChannelName name) {
+
+    /**
+     * Constructs a new ServerChannel.
+     *
+     * @param name the name of the channel
+     */
+    protected ServerChannel(final ChannelName name) {
 
         this.name = name;
 
@@ -67,12 +95,31 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
         return name;
     }
 
-    public abstract void add(final ChannelData data) throws RemoteException;
+    /**
+     * @return a channel descriptor populated with
+     *         information about this channel
+     */
+    public abstract ChannelDescriptor getChannelDescriptor();
 
-    public abstract List<ChannelData> getLastData(final int count);
+    /**
+     * Adds data to the channel.
+     *
+     * @param data data to add
+     */
+    public abstract void add(final T data);
 
-    public final void addClient(final ChannelConnection client)
-            throws RemoteException {
+    /**
+     * @param count the number of elements to retrieve
+     * @return the last n data elements from the channel
+     */
+    public abstract List<T> getLastData(final int count);
+
+    /**
+     * Adds a client to the active-clients list.
+     *
+     * @param client the client to add
+     */
+    public final void addClient(final ChannelConnection client) {
 
         clients.add(client);
 
@@ -85,8 +132,12 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
     }
 
-    public void removeClient(final Connection connection)
-            throws RemoteException {
+    /**
+     * Removes a client from the active-clients list.
+     *
+     * @param connection the connection of the client to remove
+     */
+    public final void removeClient(final Connection connection) {
 
         clients.remove(connection.getId());
 
@@ -100,7 +151,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
     /**
      * @return a list of users in this Channel
      */
-    public Collection<UserName> getUsers() {
+    public final Collection<UserName> getUsers() {
         Collection<UserName> users = new ArrayList<UserName>();
         for (ChannelConnection client : this.clients) {
             users.add(client.getConnection().getUserName());
@@ -115,7 +166,6 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
      */
     protected final void userJoined(final UserName joinedUserName) {
 
-        System.out.println("Server Channel says: " + joinedUserName + " joined!");
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
 
@@ -141,8 +191,6 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
      */
     protected final void userLeft(final UserName leftUserName) {
 
-        System.out.println("Server Channel says: " + leftUserName + " left!");
-
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
 
@@ -161,7 +209,13 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
 
     }
 
-    protected final void sendToAll(final ChannelData data) {
+    /**
+     * Sends a data element to every connected client
+     * except the data's creator.
+     *
+     * @param data the data to send out
+     */
+    protected final void sendToAll(final T data) {
 
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
@@ -187,7 +241,7 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
     }
 
     /** {@inheritDoc} */
-    public void handleDisconnect(final DisconnectEvent event) {
+    public final void handleDisconnect(final DisconnectEvent event) {
         ConnectionIdentifier connectionId = event.getConnectionId();
         clients.removeId(connectionId);
     }

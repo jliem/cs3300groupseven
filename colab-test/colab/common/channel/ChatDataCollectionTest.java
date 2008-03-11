@@ -38,10 +38,10 @@ public class ChatDataCollectionTest extends TestCase {
         scChannel.add(
                 new ChatChannelData("Text3", new UserName("TestChatter")));
 
-        List<ChannelData> last2 = scChannel.getLastData(2);
+        List<ChatChannelData> last2 = scChannel.getLastData(2);
 
-        assertEquals(((ChatChannelData) last2.get(0)).getText(), "Text2");
-        assertEquals(((ChatChannelData) last2.get(1)).getText(), "Text3");
+        assertEquals(last2.get(0).getText(), "Text2");
+        assertEquals(last2.get(1).getText(), "Text3");
 
     }
 
@@ -58,11 +58,11 @@ public class ChatDataCollectionTest extends TestCase {
         scChannel.add(
                 new ChatChannelData("Text3", new UserName("TestChatter")));
 
-        List<ChannelData> all = scChannel.getLastData(-1);
+        List<ChatChannelData> all = scChannel.getLastData(-1);
 
-        assertEquals(((ChatChannelData) all.get(0)).getText(), "Text1");
-        assertEquals(((ChatChannelData) all.get(1)).getText(), "Text2");
-        assertEquals(((ChatChannelData) all.get(2)).getText(), "Text3");
+        assertEquals(all.get(0).getText(), "Text1");
+        assertEquals(all.get(1).getText(), "Text2");
+        assertEquals(all.get(2).getText(), "Text3");
 
     }
 

@@ -115,23 +115,19 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
      */
     protected final void userJoined(final UserName joinedUserName) {
 
+        System.out.println("Server Channel says: " + joinedUserName + " joined!");
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
 
             Connection connection = client.getConnection();
-            UserName userName = connection.getUserName();
 
-            if (!joinedUserName.equals(userName)) {
+            ChannelInterface channelInterface =
+                client.getChannelInterface();
 
-                ChannelInterface channelInterface =
-                    client.getChannelInterface();
-
-                try {
-                    channelInterface.userJoined(userName);
-                } catch (final RemoteException re) {
-                    connection.disconnect(re);
-                }
-
+            try {
+                channelInterface.userJoined(joinedUserName);
+            } catch (final RemoteException re) {
+                connection.disconnect(re);
             }
 
         }
@@ -145,24 +141,21 @@ public abstract class ServerChannel implements Channel, DisconnectListener {
      */
     protected final void userLeft(final UserName leftUserName) {
 
+        System.out.println("Server Channel says: " + leftUserName + " left!");
+
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
 
             Connection connection = client.getConnection();
-            UserName userName = connection.getUserName();
+            ChannelInterface channelInterface =
+                client.getChannelInterface();
 
-            if (!leftUserName.equals(userName)) {
-
-                ChannelInterface channelInterface =
-                    client.getChannelInterface();
-
-                try {
-                    channelInterface.userLeft(userName);
-                } catch (final RemoteException re) {
-                    connection.disconnect(re);
-                }
-
+            try {
+                channelInterface.userLeft(leftUserName);
+            } catch (final RemoteException re) {
+                connection.disconnect(re);
             }
+
 
         }
 

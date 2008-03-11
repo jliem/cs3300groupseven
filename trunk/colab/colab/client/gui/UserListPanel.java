@@ -2,6 +2,7 @@ package colab.client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.Collection;
 import java.util.TreeSet;
 
 import javax.swing.DefaultListModel;
@@ -23,7 +24,7 @@ import colab.common.naming.UserName;
 public final class UserListPanel extends JPanel implements UserListener {
 
     /**
-     *
+     * Serial version ID.
      */
     private static final long serialVersionUID = 1L;
 
@@ -58,7 +59,17 @@ public final class UserListPanel extends JPanel implements UserListener {
         this.setLayout(new BorderLayout());
         this.add(scroll, BorderLayout.CENTER);
 
-        this.setPreferredSize(new Dimension(120, 10));
+        this.setPreferredSize(new Dimension(100, 10));
+    }
+
+    /**
+     * Adds users without triggering a userJoined event.
+     * Call this method right after joining a channel.
+     * @param channel the channel you are joining
+     */
+    public void addUsers(Collection<UserName> users) {
+        this.users.addAll(users);
+        refreshUsers();
     }
 
     /**
@@ -67,9 +78,8 @@ public final class UserListPanel extends JPanel implements UserListener {
      * @param userName the user to add
      */
     public void userJoined(UserJoinedEvent ue) {
-        System.out.println(ue.getUserName() + " has joined!");
         users.add(ue.getUserName());
-        this.updateUsers();
+        this.refreshUsers();
     }
 
     /**
@@ -77,9 +87,8 @@ public final class UserListPanel extends JPanel implements UserListener {
      * @param userName the user to remove
      */
     public void userLeft(UserLeftEvent ue) {
-        System.out.println(ue.getUserName() + " has left!");
         users.remove(ue.getUserName());
-        this.updateUsers();
+        this.refreshUsers();
     }
 
     /**
@@ -89,14 +98,13 @@ public final class UserListPanel extends JPanel implements UserListener {
     public UserName[] getUsers() {
         UserName[] arr = users.toArray(new UserName[0]);
         // toArray should guarantee the data is sorted by TreeSet
-        //Arrays.sort(arr);
         return arr;
     }
 
     /**
      * Refresh the list displayed in the UI.
      */
-    public void updateUsers() {
+    public void refreshUsers() {
         userList.setListData(getUsers());
     }
 

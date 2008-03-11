@@ -152,7 +152,7 @@ public final class ColabClient extends UnicastRemoteObject
 
     /**
      * Logs into a community. User must not already be logged in to any community.
-     * 
+     *
      * @param communityName the community to log into
      * @throws NetworkException if a network exception occurs
      * @throws AuthenticationException if the user was not authorized to join the community
@@ -197,6 +197,17 @@ public final class ColabClient extends UnicastRemoteObject
             throws RemoteException {
         return connection.getAllCommunityNames();
      }
+
+    /**
+     * Gets active users in a channel.
+     * @param channelName the channel to look up
+     * @return a list of all active users
+     * @throws RemoteException if a RemoteException occurs
+     */
+    public Collection<UserName> getActiveUsers(ChannelName channelName)
+        throws RemoteException {
+        return connection.getActiveUsers(channelName);
+    }
 
     /**
      * Returns the names of the communities to which this user belongs
@@ -291,7 +302,7 @@ public final class ColabClient extends UnicastRemoteObject
      * with the client.
      */
     public void exitProgram() {
-    	// TODO: Check if data needs to be saved
-    	System.exit(0);
+        // TODO: Check if data needs to be saved
+        System.exit(0);
     }
 }

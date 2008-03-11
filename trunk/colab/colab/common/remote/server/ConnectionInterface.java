@@ -107,6 +107,12 @@ public interface ConnectionInterface extends Remote {
     void add(ChannelName channelName, ChannelData data)
             throws RemoteException;
 
+    /**
+     * Get a list of all users currently joined to this channel.
+     * @param channelName the channel to look up
+     * @return a list of all the users in this channel
+     * @throws RemoteException if a remote exception occurs
+     */
     Collection<UserName> getActiveUsers(ChannelName channelName)
             throws RemoteException;
 

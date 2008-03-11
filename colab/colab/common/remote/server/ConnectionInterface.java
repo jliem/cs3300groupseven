@@ -101,9 +101,24 @@ public interface ConnectionInterface extends Remote {
      */
     void leaveChannel(ChannelName channelName) throws RemoteException;
 
+    /**
+     * Gets the last *count* pieces of data from the specified Channel.
+     *
+     * @param channelName the channel to retrieve data from
+     * @param count the number of data objects to retrieve
+     * @return a list of data objects
+     * @throws RemoteException if an rmi error occurs
+     */
     List<ChannelData> getLastData(ChannelName channelName, int count)
             throws RemoteException;
 
+    /**
+     * Adds this channel and data to the connection.
+     *
+     * @param channelName the channel to add
+     * @param data the channel's data
+     * @throws RemoteException if an rmi error occurs
+     */
     void add(ChannelName channelName, ChannelData data)
             throws RemoteException;
 
@@ -116,6 +131,12 @@ public interface ConnectionInterface extends Remote {
     Collection<UserName> getActiveUsers(ChannelName channelName)
             throws RemoteException;
 
+    /**
+     * Creates a new user in this connection.
+     * @param userName the user name
+     * @param password the password to use
+     * @throws RemoteException if an rmi error occurs
+     */
     void createUser(String userName, char[] password)
             throws RemoteException;
 

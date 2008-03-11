@@ -17,7 +17,7 @@ import colab.common.remote.client.ChannelInterface;
 /**
  * A client-side remote Channel object.
  */
-abstract class ClientChannel extends UnicastRemoteObject
+public abstract class ClientChannel extends UnicastRemoteObject
         implements Channel, ChannelInterface {
 
     /**

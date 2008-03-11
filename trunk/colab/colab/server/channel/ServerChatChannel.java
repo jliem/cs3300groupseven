@@ -2,11 +2,9 @@ package colab.server.channel;
 
 import java.io.File;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
@@ -15,7 +13,11 @@ import colab.common.channel.ChatDataSet;
 import colab.common.naming.ChannelName;
 import colab.server.file.ChannelFile;
 
-public final class ServerChatChannel extends ServerChannel {
+/**
+ * ServerChatChannel is a type of {@link ServerChannel} which
+ * deals with chat channels.
+ */
+public final class ServerChatChannel extends ServerChannel<ChatChannelData> {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;
@@ -35,6 +37,13 @@ public final class ServerChatChannel extends ServerChannel {
 
     }
 
+    /**
+     * Constructs a new server-side chat channel.
+     *
+     * @param name the name of the channel
+     * @param file the file to use for data storage
+     * @throws IOException if a file storage error occurs
+     */
     public ServerChatChannel(final ChannelName name, final File file)
             throws IOException {
 
@@ -45,10 +54,10 @@ public final class ServerChatChannel extends ServerChannel {
     }
 
     /** {@inheritDoc} */
-    public void add(final ChannelData data) throws RemoteException {
+    public void add(final ChatChannelData data) {
 
         // Store the data
-        messages.add((ChatChannelData) data);
+        messages.add(data);
 
         // Forward it to clients
         sendToAll(data);
@@ -56,15 +65,16 @@ public final class ServerChatChannel extends ServerChannel {
     }
 
     /** {@inheritDoc} */
-    public List<ChannelData> getLastData(final int count) {
+    public List<ChatChannelData> getLastData(final int count) {
 
-        List<ChannelData> list = new ArrayList<ChannelData>();
+        List<ChatChannelData> list = new ArrayList<ChatChannelData>();
         for(ChatChannelData ccd : messages.getLast(count)) {
             list.add(ccd);
         }
         return list;
     }
 
+    /** {@inheritDoc} */
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
     }

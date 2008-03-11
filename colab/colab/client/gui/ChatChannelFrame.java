@@ -58,6 +58,7 @@ public class ChatChannelFrame extends JFrame {
             //TODO: handler remote chat exceptions
             // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
             // ~ <(^.^)> ~
+            ex.printStackTrace();
         }
 
         chatPanel.addActionListener(new ActionListener() {
@@ -71,6 +72,7 @@ public class ChatChannelFrame extends JFrame {
                         //TODO: handler remote chat exceptions
                         // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
                         // ~ <(^.^)> ~
+                        ex.printStackTrace();
                     }
                 }
 
@@ -79,6 +81,13 @@ public class ChatChannelFrame extends JFrame {
 
 
         channel.addUserListener(chatPanel.getUserListPanel());
+        try {
+            // Download list of current users
+            chatPanel.getUserListPanel().addUsers(client.getActiveUsers(channel.getId()));
+        } catch (RemoteException ex) {
+            // TODO: Handle remote exception
+            ex.printStackTrace();
+        }
 
         channel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

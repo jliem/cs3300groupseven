@@ -392,8 +392,9 @@ public final class Connection extends UnicastRemoteObject
     public Collection<UserName> getActiveUsers(
             final ChannelName channelName) throws RemoteException {
 
-        // Must be in the Connected (not logged in) state
-        if (this.state != ConnectionState.CONNECTED) {
+        // TODO: This method doesn't work and says the attempt
+        // is made while in an active state. Is that ok?
+        if (this.state != ConnectionState.CONNECTED && this.state != ConnectionState.ACTIVE) {
             throw new IllegalStateException(
                     "Attempt to get active users on connection in '"
                     + this.state + "' state");

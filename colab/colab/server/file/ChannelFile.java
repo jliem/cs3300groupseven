@@ -27,8 +27,8 @@ public class ChannelFile<T extends ChannelData>
         this.file = file;
         this.dataCollection = new ChannelDataSet<T>();
 
-        XmlReader xmlReader = new XmlReader(file);
-        List<XmlNode> xml = xmlReader.getXml();
+        final XmlReader xmlReader = new XmlReader(file);
+        final List<XmlNode> xml = xmlReader.getXml();
         for (final XmlNode node : xml) {
             T data;
             try {

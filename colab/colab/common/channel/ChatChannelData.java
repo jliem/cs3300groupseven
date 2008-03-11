@@ -2,6 +2,7 @@ package colab.common.channel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import colab.common.naming.UserName;
@@ -19,7 +20,8 @@ public final class ChatChannelData extends ChannelData {
     /** The text of the message. */
     private String text;
 
-    private static final DateFormat DATE_FORMAT = DateFormat.getDateInstance();
+    private static final DateFormat DATE_FORMAT =
+        new SimpleDateFormat("d MMM yyyy HH:mm:ss.S");
 
     /**
      * Constructs a new chat data object.
@@ -65,7 +67,7 @@ public final class ChatChannelData extends ChannelData {
 
     public XmlNode toXml() {
         XmlNode node = new XmlNode("ChatMessage");
-        node.setAttribute("time", getTimestamp().toString());
+        node.setAttribute("time", DATE_FORMAT.format(getTimestamp()));
         node.setAttribute("creator", getCreator().toString());
         node.setContent(text);
         return node;
@@ -85,6 +87,16 @@ public final class ChatChannelData extends ChannelData {
 
     public static XmlConstructor<ChatChannelData> getXmlConstructor() {
         return XML_CONSTRUCTOR;
+    }
+
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof ChatChannelData)) {
+
+        }
+        ChatChannelData otherData = (ChatChannelData) obj;
+        return otherData.getCreator().equals(getCreator())
+            && otherData.getTimestamp().equals(getTimestamp())
+            && otherData.getText().equals(getText());
     }
 
 }

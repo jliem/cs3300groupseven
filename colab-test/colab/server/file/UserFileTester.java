@@ -1,4 +1,4 @@
-package colab.server.store;
+package colab.server.file;
 
 import java.io.BufferedWriter;
 import java.io.File;

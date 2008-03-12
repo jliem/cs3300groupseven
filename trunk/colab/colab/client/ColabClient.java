@@ -25,284 +25,251 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientInterface;
 import colab.common.remote.server.ColabServerInterface;
 import colab.common.remote.server.ConnectionInterface;
+import colab.server.user.Password;
 
 /**
  * The CoLab client application.
  */
-public final class ColabClient extends UnicastRemoteObject
-        implements ColabClientInterface {
+public final class ColabClient extends UnicastRemoteObject implements
+		ColabClientInterface {
 
-    /** Serialization version number. */
-    public static final long serialVersionUID = 1L;
+	/** Serialization version number. */
+	public static final long serialVersionUID = 1L;
 
-    /** The default port. */
-    public static final int DEFAULT_PORT = 9040;
+	/** The default port. */
+	public static final int DEFAULT_PORT = 9040;
 
-    private final ArrayList<ActionListener> listeners;
+	private final ArrayList<ActionListener> listeners;
 
-    private final Vector<ChannelDescriptor> channels;
+	private final Vector<ChannelDescriptor> channels;
 
-    private ConnectionInterface connection;
+	private ConnectionInterface connection;
 
-    private ConnectionState connectionState;
+	private ConnectionState connectionState;
 
-    /**
-     * Constructs the client application.
-     *
-     * @throws RemoteException if an rmi error occurs
-     */
-    public ColabClient() throws RemoteException {
-        listeners = new ArrayList<ActionListener>();
-        channels = new Vector<ChannelDescriptor>();
-        connectionState = ConnectionState.DISCONNECTED;
-    }
+	/**
+	 * Constructs the client application.
+	 * 
+	 * @throws RemoteException
+	 *             if an rmi error occurs
+	 */
+	public ColabClient() throws RemoteException {
+		listeners = new ArrayList<ActionListener>();
+		channels = new Vector<ChannelDescriptor>();
+		connectionState = ConnectionState.DISCONNECTED;
+	}
 
-    /**
-     * Receives the server address and attempts to
-     * connect to the server.
-     *
-     * @param serverAddress the address of the server
-     * @throws UnableToConnectException if connection fails
-     */
-    public void connect(final String serverAddress)
-            throws UnableToConnectException {
+	/**
+	 * Receives the server address and attempts to connect to the server.
+	 * 
+	 * @param serverAddress
+	 *            the address of the server
+	 * @throws UnableToConnectException
+	 *             if connection fails
+	 */
+	public void connect(final String serverAddress)
+			throws UnableToConnectException {
 
-        ConnectionInterface connection;
-        try {
-            ColabServerInterface server = (ColabServerInterface) Naming.lookup(
-                    "//" + serverAddress + "/COLAB_SERVER");
-            connection = server.connect(this);
-        } catch (final Exception e) {
-            throw new UnableToConnectException();
-        } finally {
-            this.connectionState = ConnectionState.DISCONNECTED;
-        }
+		ConnectionInterface connection;
+		try {
+			ColabServerInterface server = (ColabServerInterface) Naming
+					.lookup("//" + serverAddress + "/COLAB_SERVER");
+			connection = server.connect(this);
+		} catch (final Exception e) {
+			throw new UnableToConnectException();
+		} finally {
+			this.connectionState = ConnectionState.DISCONNECTED;
+		}
 
-        this.connectionState = ConnectionState.CONNECTED;
-        this.connection = connection;
+		this.connectionState = ConnectionState.CONNECTED;
+		this.connection = connection;
 
-    }
+	}
 
-    /**
-     * Receives the username and password from the GUI fields and checks to
-     * see if there is an existing corresponding pair.  If the username
-     * exists but the password is incorrect, a ValidationException is thrown.
-     * If the username does not exist, then the GUI asks the user if a new
-     * user should be added.
-     *
-     * @param username received from the GUI text field
-     * @param password received from the GUI password field
-     * @param serverAddress address received from the GUI text field
-     * @throws NetworkException if connection fails
-     * @throws AuthenticationException if user credentials are wrong
-     */
+	/**
+	 * Receives the username and password from the GUI fields and checks to see
+	 * if there is an existing corresponding pair. If the username exists but
+	 * the password is incorrect, a ValidationException is thrown. If the
+	 * username does not exist, then the GUI asks the user if a new user should
+	 * be added.
+	 * 
+	 * @param username
+	 *            received from the GUI text field
+	 * @param password
+	 *            received from the GUI password field
+	 * @param serverAddress
+	 *            address received from the GUI text field
+	 * @throws NetworkException
+	 *             if connection fails
+	 * @throws AuthenticationException
+	 *             if user credentials are wrong
+	 */
 
-    public void loginUser(final String username, final char[] password,
-            final String serverAddress) throws NetworkException,
-            AuthenticationException {
+	public void loginUser(final String username, final char[] password,
+			final String serverAddress) throws NetworkException,
+			AuthenticationException {
 
-        // Must not be already logged in
-        if (this.connectionState.hasUserLogin()) {
-            System.err.println("[ColabClient] Attempt to perform user "
-                    + "login on connection in '"
-                    + this.connectionState + "' state");
-            throw new IllegalStateException();
-        }
+		// Must not be already logged in
+		if (this.connectionState.hasUserLogin()) {
+			System.err.println("[ColabClient] Attempt to perform user "
+					+ "login on connection in '" + this.connectionState
+					+ "' state");
+			throw new IllegalStateException();
+		}
 
-        connect(serverAddress);
+		connect(serverAddress);
 
-        try {
-            this.connection.logIn(new UserName(username), password);
-        } catch (final ServerException serverException) {
-            try {
-                throw serverException.getCause().getCause();
-            } catch (final AuthenticationException authenticationException) {
-                throw authenticationException;
-            } catch (final Throwable t) {
-                throw new ConnectionDroppedException(serverException);
-            }
-        } catch (final RemoteException remoteException) {
-            throw new ConnectionDroppedException(remoteException);
-        } finally {
-            this.connectionState = ConnectionState.CONNECTED;
-        }
+		try {
+			this.connection.logIn(new UserName(username), password);
+		} catch (final ServerException serverException) {
+			try {
+				throw serverException.getCause().getCause();
+			} catch (final AuthenticationException authenticationException) {
+				throw authenticationException;
+			} catch (final Throwable t) {
+				throw new ConnectionDroppedException(serverException);
+			}
+		} catch (final RemoteException remoteException) {
+			throw new ConnectionDroppedException(remoteException);
+		} finally {
+			this.connectionState = ConnectionState.CONNECTED;
+		}
 
-        this.connectionState = ConnectionState.LOGGED_IN;
+		this.connectionState = ConnectionState.LOGGED_IN;
 
-    }
+	}
 
-    public void createUser(final UserName userName, final char[] password)
-            throws NetworkException, UserAlreadyExistsException {
+	public void createUser(final UserName userName, final char[] password)
+			throws NetworkException, UserAlreadyExistsException {
 
-        try {
-            connection.createUser(userName.getValue(), password);
-        } catch (final ServerException serverException) {
-            try {
-                throw serverException.getCause().getCause();
-            } catch (final UserAlreadyExistsException userExistsException) {
-                throw userExistsException;
-            } catch (final Throwable t) {
-                throw new ConnectionDroppedException(serverException);
-            }
-        } catch (final RemoteException remoteException) {
-            throw new ConnectionDroppedException(remoteException);
-        }
+		try {
+			connection.createUser(userName.getValue(), password);
+		} catch (final ServerException serverException) {
+			try {
+				throw serverException.getCause().getCause();
+			} catch (final UserAlreadyExistsException userExistsException) {
+				throw userExistsException;
+			} catch (final Throwable t) {
+				throw new ConnectionDroppedException(serverException);
+			}
+		} catch (final RemoteException remoteException) {
+			throw new ConnectionDroppedException(remoteException);
+		}
 
-    }
+	}
 
-    /**
-     * Logs into a community. User must not already be logged in to any community.
-     *
-     * @param communityName the community to log into
-     * @throws NetworkException if a network exception occurs
-     * @throws AuthenticationException if the user was not authorized to join the community
-     */
-    public void loginCommmunity(final CommunityName communityName)
-            throws NetworkException, AuthenticationException {
+	public void loginCommmunity(final CommunityName communityName)
+			throws NetworkException, AuthenticationException {
 
-        // Must not yet be logged in to a community
-        if (this.connectionState.hasCommunityLogin()) {
-            System.err.println("[Connection] Attempt to perform community "
-                    + "login on connection in '"
-                    + this.connectionState + "' state");
-            throw new IllegalStateException();
-        }
+		// Must not yet be logged in to a community
+		if (this.connectionState.hasCommunityLogin()) {
+			System.err.println("[Connection] Attempt to perform community "
+					+ "login on connection in '" + this.connectionState
+					+ "' state");
+			throw new IllegalStateException();
+		}
 
-        try {
-            this.connection.logIn(communityName, null);
-        } catch (final ServerException serverException) {
-            try {
-                throw serverException.getCause().getCause();
-            } catch (final AuthenticationException authenticationException) {
-                throw authenticationException;
-            } catch (final Throwable t) {
-                throw new ConnectionDroppedException(serverException);
-            }
-        } catch (final RemoteException remoteException) {
-            throw new ConnectionDroppedException(remoteException);
-        } finally {
-            this.connectionState = ConnectionState.LOGGED_IN;
-        }
+		try {
+			this.connection.logIn(communityName, null);
+		} catch (final ServerException serverException) {
+			try {
+				throw serverException.getCause().getCause();
+			} catch (final AuthenticationException authenticationException) {
+				throw authenticationException;
+			} catch (final Throwable t) {
+				throw new ConnectionDroppedException(serverException);
+			}
+		} catch (final RemoteException remoteException) {
+			throw new ConnectionDroppedException(remoteException);
+		} finally {
+			this.connectionState = ConnectionState.LOGGED_IN;
+		}
 
-        this.connectionState = ConnectionState.ACTIVE;
+		this.connectionState = ConnectionState.ACTIVE;
 
-    }
+	}
 
-    /**
-     * Gets community names.
-     * @return the names of the communities in this Connection
-     * @throws RemoteException if a RemoteException occurs
-     */
-    public Collection<CommunityName> getAllCommunityNames()
-            throws RemoteException {
-        return connection.getAllCommunityNames();
-     }
+	public Collection<CommunityName> getAllCommunityNames()
+			throws RemoteException {
+		return connection.getAllCommunityNames();
+	}
 
-    /**
-     * Gets active users in a channel.
-     * @param channelName the channel to look up
-     * @return a list of all active users
-     * @throws RemoteException if a RemoteException occurs
-     */
-    public Collection<UserName> getActiveUsers(ChannelName channelName)
-        throws RemoteException {
-        return connection.getActiveUsers(channelName);
-    }
+	public Collection<CommunityName> getMyCommunityNames()
+			throws RemoteException {
+		return connection.getMyCommunityNames();
+	}
 
-    /**
-     * Returns the names of the communities to which this user belongs
-     * @return the names of the communities to which this user belongs
-     * @throws RemoteException if a RemoteException occurs
-     */
-    public Collection<CommunityName> getMyCommunityNames()
-            throws RemoteException {
-        return connection.getMyCommunityNames();
-    }
+	public ClientChannel joinChannel(final ChannelDescriptor desc)
+			throws RemoteException {
+		ClientChannel channel;
+		switch (desc.getType()) {
+		case CHAT:
+			channel = new ClientChatChannel(desc.getName());
+			connection.joinChannel(channel, desc);
+			break;
+		default:
+			throw new IllegalArgumentException("Channel type not supported");
+		}
+		return channel;
+	}
 
-    /**
-     * Creates a new Channel and joins this user.
-     * @param desc the descriptor for the channel
-     * @return a reference to the newly created channel
-     * @throws RemoteException if a RemoteException occurs
-     */
-    public ClientChannel joinChannel(final ChannelDescriptor desc)
-            throws RemoteException{
-        ClientChannel channel;
-        switch (desc.getType()) {
-        case CHAT:
-            channel = new ClientChatChannel(desc.getName());
-            connection.joinChannel(channel, desc);
-            break;
-        default:
-            throw new IllegalArgumentException("Channel type not supported");
-        }
-        return channel;
-    }
+	/** {@inheritDoc} */
+	public void channelAdded(final ChannelDescriptor channelDescriptor)
+			throws RemoteException {
+		channels.add(channelDescriptor);
+	}
 
-    /** {@inheritDoc} */
-    public void channelAdded(final ChannelDescriptor channelDescriptor)
-            throws RemoteException {
-        channels.add(channelDescriptor);
-    }
+	public Vector<ChannelDescriptor> getChannels() {
+		return channels;
+	}
 
-    /**
-     * Get channels.
-     * @return a vector of ChannelDescriptors
-     */
-    public Vector<ChannelDescriptor> getChannels() {
-        return channels;
-    }
+	public void add(final ChannelName channelName, final ChannelData data)
+			throws RemoteException {
 
-    /**
-     * Add a channel to this connection.
-     * @param channelName name of the channel to add
-     * @param data the channel data
-     * @throws RemoteException
-     */
-    public void add(final ChannelName channelName,
-            final ChannelData data) throws RemoteException {
+		connection.add(channelName, data);
 
-        connection.add(channelName, data);
+	}
 
-    }
+	public List<ChannelData> getLastData(final ChannelName channelName,
+			final int count) throws RemoteException {
 
-    public List<ChannelData> getLastData(final ChannelName channelName,
-            final int count) throws RemoteException {
+		return connection.getLastData(channelName, count);
 
-        return connection.getLastData(channelName, count);
+	}
 
-    }
+	public void logOutUser() throws ConnectionDroppedException {
 
-    public void logOutUser() throws ConnectionDroppedException {
+		this.connectionState = ConnectionState.CONNECTED;
 
-        this.connectionState = ConnectionState.CONNECTED;
+		try {
+			connection.logOutUser();
+		} catch (RemoteException remoteException) {
+			throw new ConnectionDroppedException(remoteException);
+		}
 
-        try {
-            connection.logOutUser();
-        } catch (RemoteException remoteException) {
-            throw new ConnectionDroppedException(remoteException);
-        }
+	}
 
-    }
+	public void logOutCommunity() throws ConnectionDroppedException {
 
-    public void logOutCommunity() throws ConnectionDroppedException{
+		this.connectionState = ConnectionState.LOGGED_IN;
 
-        this.connectionState = ConnectionState.LOGGED_IN;
+		try {
+			connection.logOutCommunity();
+		} catch (RemoteException remoteException) {
+			throw new ConnectionDroppedException(remoteException);
+		}
 
-        try {
-            connection.logOutCommunity();
-        } catch (RemoteException remoteException) {
-            throw new ConnectionDroppedException(remoteException);
-        }
+	}
 
-    }
+	public void createCommunity(final CommunityName commName, Password comPass)
+			throws NetworkException, UserAlreadyExistsException {
 
-    /**
-     * Completely closes all threads, windows, etc. associated
-     * with the client.
-     */
-    public void exitProgram() {
-        // TODO: Check if data needs to be saved
-        System.exit(0);
-    }
+
+	}
+
+	public Collection<UserName> getActiveUsers(ChannelName id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

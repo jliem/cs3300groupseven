@@ -11,6 +11,7 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelInterface;
+import colab.server.user.Password;
 
 /**
  * A remote object on the server which represents a client's session.
@@ -139,5 +140,13 @@ public interface ConnectionInterface extends Remote {
      */
     void createUser(String userName, char[] password)
             throws RemoteException;
+
+	/**
+	 * Creates a new Community in this connection.
+	 * @param commName the Community name
+	 * @param commPass the default Community password used to join Community
+	 */
+    
+    void createCommunity(String commName, Password commPass) throws RemoteException;
 
 }

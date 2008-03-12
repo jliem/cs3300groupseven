@@ -1,5 +1,6 @@
 package colab.client.gui;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,17 +11,18 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import colab.client.ColabClient;
 import colab.common.naming.CommunityName;
 
 class ChooseCommunityPanel extends JPanel {
 
     private JLabel selectLabel;
-    private JButton selectButton;
+    private JButton selectButton, newCommButton;
     private JComboBox selectBox;
 
     private final ArrayList<ActionListener> listeners;
 
-    public ChooseCommunityPanel() {
+    public ChooseCommunityPanel(final ColabClient client) {
 
         listeners = new ArrayList<ActionListener>();
 
@@ -29,19 +31,34 @@ class ChooseCommunityPanel extends JPanel {
 
         selectButton = new JButton("Select");
 
+        newCommButton = new JButton("Create New Community");
+        
+        newCommButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	NewCommunityFrame frame = new NewCommunityFrame(client);
+            	frame.pack();
+				frame.setVisible(true);
+            	frame.setPreferredSize(new Dimension(400,800));
+            	//fireActionPerformed(new ActionEvent(this,
+                  //      ActionEvent.ACTION_FIRST, "New Community"));
+            }
+        });
+        
         selectBox = new JComboBox();
 
         selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                fireActionPerformed(e);
+            	fireActionPerformed(new ActionEvent(this,
+                        ActionEvent.ACTION_FIRST, "Community Chosen"));
             }
         });
 
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(4, 1));
 
         add(selectLabel);
         add(selectBox);
         add(selectButton);
+        add(newCommButton);
 
     }
 

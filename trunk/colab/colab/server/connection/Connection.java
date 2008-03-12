@@ -437,6 +437,11 @@ public final class Connection extends UnicastRemoteObject
             throw new RemoteException(e.getMessage(), e);
         }
     }
+    
+    public void createCommunity(String commName, Password commPass) {
+		// TODO Auto-generated method stub
+		
+	}
 
     /**
      * Ensures that the listener will be notified when
@@ -488,5 +493,7 @@ public final class Connection extends UnicastRemoteObject
     private void log(final String message) {
         System.out.println("[Connection " + connectionId + "] " + message);
     }
+
+	
 
 }

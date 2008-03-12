@@ -26,163 +26,161 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
 public class ChatChannelFrame extends JFrame {
-    private final ColabClient client;
+	private final ColabClient client;
 
-    private final ClientChatChannel channel;
+	private final ClientChatChannel channel;
 
-    private final ChatPanel chatPanel;
+	private final ChatPanel chatPanel;
 
-    private final JMenuBar menu;
+	private final JMenuBar menu;
 
-    private final JMenu fileMenu, optionsMenu;
+	private final JMenu fileMenu, optionsMenu;
 
-    private final JMenuItem export, exit;
+	private final JMenuItem export, exit;
 
-    private final JCheckBoxMenuItem timestampCheckBox;
+	private final JCheckBoxMenuItem timestampCheckBox;
 
-    private static final long serialVersionUID = 1;
+	private static final long serialVersionUID = 1;
 
-    public ChatChannelFrame(final ColabClient client,
-            final ClientChatChannel clientChannel, final UserName name) {
-        this.client = client;
-        channel = clientChannel;
-        chatPanel = new ChatPanel(name);
+	public ChatChannelFrame(final ColabClient client,
+			final ClientChatChannel clientChannel, final UserName name) {
+		this.client = client;
+		channel = clientChannel;
+		chatPanel = new ChatPanel(name);
 
-        try {
-            List<ChannelData> data = client.getLastData(channel.getId(), -1);
-            for (final ChannelData d : data) {
-                chatPanel.writeMessage((ChatChannelData) d);
-            }
-        }
-        catch (RemoteException ex) {
-            //TODO: handler remote chat exceptions
-            // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
-            // ~ <(^.^)> ~
-            ex.printStackTrace();
-        }
+		try {
+			List<ChannelData> data = client.getLastData(channel.getId(), -1);
+			for (final ChannelData d : data) {
+				chatPanel.writeMessage((ChatChannelData) d);
+			}
+		} catch (RemoteException ex) {
+			// TODO: handler remote chat exceptions
+			// REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
+			// ~ <(^.^)> ~
+			ex.printStackTrace();
+		}
 
-        chatPanel.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent e) {
-                ChatChannelData mess;
-                while ((mess = chatPanel.dequeuePendingMessage()) != null) {
-                    try {
-                        clientChannel.add(mess);
-                        client.add(channel.getId(), mess);
-                    } catch (RemoteException ex) {
-                        //TODO: handler remote chat exceptions
-                        // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
-                        // ~ <(^.^)> ~
-                        ex.printStackTrace();
-                    }
-                }
+		chatPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(final ActionEvent e) {
+				ChatChannelData mess;
+				while ((mess = chatPanel.dequeuePendingMessage()) != null) {
+					try {
+						clientChannel.add(mess);
+						client.add(channel.getId(), mess);
+					} catch (RemoteException ex) {
+						// TODO: handler remote chat exceptions
+						// REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
+						// ~ <(^.^)> ~
+						ex.printStackTrace();
+					}
+				}
 
-            }
-        });
+			}
+		});
 
+		// TODO: This behavior is common to all client-side channels
+		// and should be refactored into a parent class
+		// Set up the list of users
+		channel.addUserListener(chatPanel.getUserListPanel());
+		try {
+			// Download list of current users
+			chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
+		} catch (RemoteException ex) {
+			// TODO: Handle remote exception
+			ex.printStackTrace();
+		}
 
-        // TODO: This behavior is common to all client-side channels
-        // and should be refactored into a parent class
-        // Set up the list of users
-        channel.addUserListener(chatPanel.getUserListPanel());
-        try {
-            // Download list of current users
-            chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
-        } catch (RemoteException ex) {
-            // TODO: Handle remote exception
-            ex.printStackTrace();
-        }
+		channel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (ChatChannelData mess : channel.getNewMessages()) {
+					chatPanel.writeMessage(mess);
+				}
+			}
+		});
 
-        channel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                for (ChatChannelData mess : channel.getNewMessages()) {
-                    chatPanel.writeMessage(mess);
-                }
-            }
-        });
+		menu = new JMenuBar();
+		fileMenu = new JMenu("File");
+		fileMenu.setMnemonic(KeyEvent.VK_F);
+		optionsMenu = new JMenu("Options");
+		optionsMenu.setMnemonic(KeyEvent.VK_O);
 
-        menu = new JMenuBar();
-        fileMenu = new JMenu("File");
-        fileMenu.setMnemonic(KeyEvent.VK_F);
-        optionsMenu = new JMenu("Options");
-        optionsMenu.setMnemonic(KeyEvent.VK_O);
+		export = new JMenuItem("Export Chat");
+		export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				ActionEvent.ALT_MASK));
+		export.getAccessibleContext().setAccessibleDescription(
+				"Exports the conversation to a text file.");
+		exit = new JMenuItem("Exit");
+		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
+				ActionEvent.ALT_MASK));
+		exit.getAccessibleContext().setAccessibleDescription(
+				"Leaves the channel.");
+		timestampCheckBox = new JCheckBoxMenuItem("Timestamp");
+		timestampCheckBox.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
+				ActionEvent.ALT_MASK));
+		timestampCheckBox.getAccessibleContext().setAccessibleDescription(
+				"Enables/disables chat timestamps.");
 
+		export.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ExportChatFrame frame = new ExportChatFrame(channel);
+				frame.setVisible(true);
+			}
+		});
 
-        export = new JMenuItem("Export Chat");
-        export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-                ActionEvent.ALT_MASK));
-        export.getAccessibleContext().setAccessibleDescription(
-                "Exports the conversation to a text file.");
-        exit = new JMenuItem("Exit");
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
-                ActionEvent.ALT_MASK));
-        exit.getAccessibleContext().setAccessibleDescription(
-                "Leaves the channel.");
-        timestampCheckBox = new JCheckBoxMenuItem("Timestamp");
-        timestampCheckBox.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
-                ActionEvent.ALT_MASK));
-        timestampCheckBox.getAccessibleContext().setAccessibleDescription("Enables/disables chat timestamps.");
+		exit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				exit();
+			}
+		});
 
-        export.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ExportChatFrame frame = new ExportChatFrame(channel);
-                frame.setVisible(true);
-            }
-        });
+		timestampCheckBox.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				setTimestampEnabled(timestampCheckBox.getState());
+			}
+		});
+		timestampCheckBox.setSelected(false);
 
-        exit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                exit();
-            }
-        });
+		fileMenu.add(export);
+		fileMenu.add(exit);
 
-        timestampCheckBox.addChangeListener(new ChangeListener(){
-            public void stateChanged(ChangeEvent e){
-                setTimestampEnabled(timestampCheckBox.getState());
-            }
-        });
-        timestampCheckBox.setSelected(false);
+		optionsMenu.add(timestampCheckBox);
 
-        fileMenu.add(export);
-        fileMenu.add(exit);
+		menu.add(fileMenu);
+		menu.add(optionsMenu);
 
-        optionsMenu.add(timestampCheckBox);
+		this.setJMenuBar(menu);
 
-        menu.add(fileMenu);
-        menu.add(optionsMenu);
+		setTitle(channel.getId().toString());
+		setSize(new Dimension(320, 300));
 
-        this.setJMenuBar(menu);
+		// and since we'd like the channel to be exited on close...
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				exit();
+			}
+		});
 
-        setTitle(channel.getId().toString());
-        setSize(new Dimension(320, 300));
+		add(chatPanel);
+	}
 
-        // and since we'd like the channel to be exited on close...
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                exit();
-            }
-        });
+	protected void exit() {
+		// TODO:add "leave channel" code
+		setVisible(false);
+		dispose();
+	}
 
-        add(chatPanel);
-    }
+	public static void main(String args[]) throws RemoteException {
+		ChatChannelFrame chat = new ChatChannelFrame(new ColabClient(),
+				new ClientChatChannel(new ChannelName("Test Channel")),
+				new UserName("test"));
+		chat.setVisible(true);
+	}
 
-    protected void exit() {
-        // TODO:add "leave channel" code
-        setVisible(false);
-        dispose();
-    }
+	public boolean isTimestampEnabled() {
+		return chatPanel.isTimestampEnabled();
+	}
 
-    public static void main(String args[]) throws RemoteException {
-        ChatChannelFrame chat = new ChatChannelFrame(new ColabClient(),
-                new ClientChatChannel(new ChannelName("Test Channel")),
-                new UserName("test"));
-        chat.setVisible(true);
-    }
-
-    public boolean isTimestampEnabled() {
-        return chatPanel.isTimestampEnabled();
-    }
-
-    public void setTimestampEnabled(boolean timestampEnabled) {
-        chatPanel.setTimestampEnabled(timestampEnabled);
-    }
+	public void setTimestampEnabled(boolean timestampEnabled) {
+		chatPanel.setTimestampEnabled(timestampEnabled);
+	}
 }

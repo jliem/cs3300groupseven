@@ -34,7 +34,7 @@ public class ChannelFile<T extends ChannelData>
             try {
                 data = constructor.fromXml(node);
             } catch (final ParseException e) {
-                throw new IOException(e);
+                throw new IOException(e.getMessage());
             }
             dataCollection.add(data);
         }

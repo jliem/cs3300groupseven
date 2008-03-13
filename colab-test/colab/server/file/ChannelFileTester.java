@@ -13,6 +13,10 @@ public class ChannelFileTester extends TestCase {
     /**
      * Generates some chat data, writes it to a temporary
      * xml file, then parses the xml to recover the data.
+     *
+     * The message data contains characters which need to
+     * be escaped, as well as escape strings, in attempt
+     * to trip up the writer or parser.
      */
     public void testChatChannel() throws Exception {
 
@@ -26,13 +30,13 @@ public class ChannelFileTester extends TestCase {
                 "Message one", new UserName("Chris")));
         Thread.sleep(50);
         outData.add(new ChatChannelData(
-                "Message two", new UserName("Chris")));
+                "Message two & things...", new UserName("Chris")));
         Thread.sleep(50);
         outData.add(new ChatChannelData(
-                "Message three", new UserName("Pamela")));
+                "&&&amp;<&lt;;&", new UserName("Pamela")));
         Thread.sleep(50);
         outData.add(new ChatChannelData(
-                "Message four", new UserName("Chris")));
+                "Message\r\nfour</message>", new UserName("Chris")));
 
         for (final ChatChannelData message : outData) {
             channelFile.add(message);

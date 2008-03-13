@@ -3,8 +3,7 @@ package colab.common.identity;
 /**
  * An Identifier that uses a String as its data field.
  */
-public abstract class StringIdentifier extends Identifier<String>
-    implements Comparable<StringIdentifier> {
+public abstract class StringIdentifier extends Identifier<String> {
 
     /**
      * Constructs an empty string identifier.

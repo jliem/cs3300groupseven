@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.util.FileUtils;
@@ -65,6 +66,10 @@ public class ChannelFile<T extends ChannelData>
 
         return dataCollection.getLast(count);
 
+    }
+
+    public ChannelDataIdentifier getNextDataId() {
+        return dataCollection.getNextDataId();
     }
 
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
@@ -48,8 +49,10 @@ public final class ServerChatChannel extends ServerChannel<ChatChannelData> {
             throws IOException {
 
         super(name);
-        this.messages = new ChannelFile<ChatChannelData>(
+        ChannelFile<ChatChannelData> channelFile =
+            new ChannelFile<ChatChannelData>(
                 file, ChatChannelData.getXmlConstructor());
+        this.messages = channelFile;
 
     }
 
@@ -77,6 +80,11 @@ public final class ServerChatChannel extends ServerChannel<ChatChannelData> {
     /** {@inheritDoc} */
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
+    }
+
+    /** {@inheritDoc} */
+    public ChannelDataIdentifier getNextDataId() {
+        return messages.getNextDataId();
     }
 
 }

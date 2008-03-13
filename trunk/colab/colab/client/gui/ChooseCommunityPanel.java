@@ -32,23 +32,23 @@ class ChooseCommunityPanel extends JPanel {
         selectButton = new JButton("Select");
 
         newCommButton = new JButton("Create New Community");
-        
+
         newCommButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	NewCommunityFrame frame = new NewCommunityFrame(client);
-            	frame.pack();
-				frame.setVisible(true);
-            	frame.setPreferredSize(new Dimension(400,800));
-            	//fireActionPerformed(new ActionEvent(this,
+                NewCommunityFrame frame = new NewCommunityFrame(client);
+                frame.pack();
+                frame.setVisible(true);
+                frame.setPreferredSize(new Dimension(400,800));
+                //fireActionPerformed(new ActionEvent(this,
                   //      ActionEvent.ACTION_FIRST, "New Community"));
             }
         });
-        
+
         selectBox = new JComboBox();
 
         selectButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	fireActionPerformed(new ActionEvent(this,
+                fireActionPerformed(new ActionEvent(this,
                         ActionEvent.ACTION_FIRST, "Community Chosen"));
             }
         });

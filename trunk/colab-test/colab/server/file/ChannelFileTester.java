@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.UserName;
 
@@ -27,16 +28,24 @@ public class ChannelFileTester extends TestCase {
 
         List<ChatChannelData> outData = new ArrayList<ChatChannelData>();
         outData.add(new ChatChannelData(
-                "Message one", new UserName("Chris")));
+                new ChannelDataIdentifier(4),
+                "Message one",
+                new UserName("Chris")));
         Thread.sleep(50);
         outData.add(new ChatChannelData(
-                "Message two & things...", new UserName("Chris")));
+                new ChannelDataIdentifier(9),
+                "Message two & things...",
+                new UserName("Chris")));
         Thread.sleep(50);
         outData.add(new ChatChannelData(
-                "&&&amp;<&lt;;&", new UserName("Pamela")));
+                new ChannelDataIdentifier(10),
+                "&&&amp;<&lt;;&",
+                new UserName("Pamela")));
         Thread.sleep(50);
         outData.add(new ChatChannelData(
-                "Message\r\nfour</message>", new UserName("Chris")));
+                new ChannelDataIdentifier(16),
+                "Message\r\nfour</message>",
+                new UserName("Chris")));
 
         for (final ChatChannelData message : outData) {
             channelFile.add(message);

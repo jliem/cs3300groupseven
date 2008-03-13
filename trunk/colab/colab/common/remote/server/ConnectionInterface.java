@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
@@ -120,7 +121,7 @@ public interface ConnectionInterface extends Remote {
      * @param data the channel's data
      * @throws RemoteException if an rmi error occurs
      */
-    void add(ChannelName channelName, ChannelData data)
+    ChannelDataIdentifier add(ChannelName channelName, ChannelData data)
             throws RemoteException;
 
     /**
@@ -141,12 +142,14 @@ public interface ConnectionInterface extends Remote {
     void createUser(String userName, char[] password)
             throws RemoteException;
 
-	/**
-	 * Creates a new Community in this connection.
-	 * @param commName the Community name
-	 * @param commPass the default Community password used to join Community
-	 */
-    
-    void createCommunity(String commName, Password commPass) throws RemoteException;
+    /**
+     * Creates a new Community in this connection.
+     *
+     * @param commName the Community name
+     * @param commPass the default Community password used to join Community
+     */
+
+    void createCommunity(String commName, Password commPass)
+        throws RemoteException;
 
 }

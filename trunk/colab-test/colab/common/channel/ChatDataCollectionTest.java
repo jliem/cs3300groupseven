@@ -16,8 +16,10 @@ public class ChatDataCollectionTest extends TestCase {
         ServerChatChannel scChannel =
             new ServerChatChannel(new ChannelName("TestChatChannel"));
 
-        scChannel.add(
-                new ChatChannelData("Test text", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(1),
+                "Test text",
+                new UserName("TestChatter")));
 
         ChatChannelData data =
             (ChatChannelData) scChannel.getLastData(1).get(0);
@@ -29,14 +31,20 @@ public class ChatDataCollectionTest extends TestCase {
         ServerChatChannel scChannel =
             new ServerChatChannel(new ChannelName("TestChatChannel"));
 
-        scChannel.add(
-                new ChatChannelData("Text1", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(1),
+                "Text1",
+                new UserName("TestChatter")));
         Thread.sleep(100);
-        scChannel.add(
-                new ChatChannelData("Text2", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(2),
+                "Text2",
+                new UserName("TestChatter")));
         Thread.sleep(100);
-        scChannel.add(
-                new ChatChannelData("Text3", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(3),
+                "Text3",
+                new UserName("TestChatter")));
 
         List<ChatChannelData> last2 = scChannel.getLastData(2);
 
@@ -49,14 +57,20 @@ public class ChatDataCollectionTest extends TestCase {
         ServerChatChannel scChannel =
             new ServerChatChannel(new ChannelName("TestChatChannel"));
 
-        scChannel.add(
-                new ChatChannelData("Text1", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(7),
+                "Text1",
+                new UserName("TestChatter")));
         Thread.sleep(100);
-        scChannel.add(
-                new ChatChannelData("Text2", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(8),
+                "Text2",
+                new UserName("TestChatter")));
         Thread.sleep(100);
-        scChannel.add(
-                new ChatChannelData("Text3", new UserName("TestChatter")));
+        scChannel.add(new ChatChannelData(
+                new ChannelDataIdentifier(9),
+                "Text3",
+                new UserName("TestChatter")));
 
         List<ChatChannelData> all = scChannel.getLastData(-1);
 

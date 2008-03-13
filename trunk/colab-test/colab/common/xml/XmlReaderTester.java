@@ -48,7 +48,10 @@ public class XmlReaderTester extends TestCase {
 
     public void testSingleNodeWithBody() throws Exception {
 
-        XmlReader reader = new XmlReader("<food>Steak</food>");
+        XmlReader reader = new XmlReader(
+                  "<food>"
+                + XmlNode.escapeXmlContent("Steak <b>Sandwich</b>")
+                + "</food>");
         List<XmlNode> nodes = reader.getXml();
 
         assertEquals(nodes.size(), 1);
@@ -56,7 +59,7 @@ public class XmlReaderTester extends TestCase {
         XmlNode node = nodes.get(0);
 
         assertEquals("food", node.getType());
-        assertEquals("Steak", node.getBody());
+        assertEquals("Steak <b>Sandwich</b>", node.getBody());
 
     }
 

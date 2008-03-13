@@ -120,11 +120,25 @@ public class XmlNode {
                   .replaceAll("\"", "&quot;");
     }
 
+    public static String unescapeXmlAttribute(final String str) {
+        return str.replaceAll("&quot;", "\"")
+                  .replaceAll("&amp;", "&");
+    }
+
     public static String escapeXmlContent(final String str) {
         return str.replaceAll("&", "&amp;")
                   .replaceAll("<", "&lt;")
                   .replaceAll(">", "&gt;")
+                  .replaceAll("\r", "&cr;")
                   .replaceAll("\n", "&br;");
+    }
+
+    public static String unescapeXmlContent(final String str) {
+        return str.replaceAll("&lt;", "<")
+                  .replaceAll("&gt;", ">")
+                  .replaceAll("&cr;", "\r")
+                  .replaceAll("&br;", "\n")
+                  .replaceAll("&amp;", "&");
     }
 
 }

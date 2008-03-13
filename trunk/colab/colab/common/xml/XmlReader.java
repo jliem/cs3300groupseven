@@ -38,7 +38,8 @@ public class XmlReader {
                 parseAttributes(attributes, node);
                 if (lineScanner.hasNext()) {
                     lineScanner.useDelimiter("<");
-                    node.setContent(lineScanner.next().substring(1));
+                    String body = lineScanner.next().substring(1);
+                    node.setContent(XmlNode.unescapeXmlContent(body));
                 } else {
                     stack.push(node);
                 }
@@ -56,7 +57,7 @@ public class XmlReader {
             scanner.next();
             String value = scanner.next();
             scanner.skip("\"");
-            node.setAttribute(key, value);
+            node.setAttribute(key, XmlNode.unescapeXmlAttribute(value));
         }
     }
 

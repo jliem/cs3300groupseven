@@ -15,13 +15,19 @@ public class ChannelDataSetTester extends TestCase {
             new ChannelDataSet<ChatChannelData>();
 
         set.add(new ChatChannelData(
-                "Message one", new UserName("Chris")));
+                new ChannelDataIdentifier(1),
+                "Message one",
+                new UserName("Chris")));
         Thread.sleep(50);
         set.add(new ChatChannelData(
-                "Message two", new UserName("Chris")));
+                new ChannelDataIdentifier(2),
+                "Message two",
+                new UserName("Chris")));
         Thread.sleep(50);
         set.add(new ChatChannelData(
-                "Message three", new UserName("Pamela")));
+                new ChannelDataIdentifier(3),
+                "Message three",
+                new UserName("Pamela")));
 
         assertEquals(3, set.size());
 

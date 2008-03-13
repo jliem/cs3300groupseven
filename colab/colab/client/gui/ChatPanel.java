@@ -61,7 +61,9 @@ class ChatPanel extends ClientChannelPanel {
                         if (!textbox.getText().matches("\\A\\s*\\z")) {
                             // additional "write message" functionality
                             // TODO: should probably be refactored to own method
-                            pendingMessages.addLast(new ChatChannelData(textbox.getText(), new UserName(user)));
+                            pendingMessages.addLast(
+                                    new ChatChannelData(textbox.getText(),
+                                            new UserName(user)));
                             textbox.setText("");
                             fireActionPerformed(new ActionEvent(this,
                                     ActionEvent.ACTION_FIRST, "Message Sent"));

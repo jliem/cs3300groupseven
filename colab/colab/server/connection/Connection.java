@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import colab.common.ConnectionState;
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelDoesNotExistException;
@@ -387,11 +388,20 @@ public final class Connection extends UnicastRemoteObject
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
-    public void add(final ChannelName channelName, final ChannelData data)
-            throws RemoteException {
+    public ChannelDataIdentifier add(final ChannelName channelName,
+            final ChannelData data) throws RemoteException {
 
         ServerChannel channel = getChannel(channelName);
+
+        ChannelDataIdentifier id = channel.getNextDataId();
+
+        data.setId(id);
+        data.setCreator(this.username);
+        data.setTimestamp();
+
         channel.add(data);
+
+        return id;
 
     }
 
@@ -437,11 +447,11 @@ public final class Connection extends UnicastRemoteObject
             throw new RemoteException(e.getMessage(), e);
         }
     }
-    
+
     public void createCommunity(String commName, Password commPass) {
-		// TODO Auto-generated method stub
-		
-	}
+        // TODO Auto-generated method stub
+
+    }
 
     /**
      * Ensures that the listener will be notified when
@@ -494,6 +504,6 @@ public final class Connection extends UnicastRemoteObject
         System.out.println("[Connection " + connectionId + "] " + message);
     }
 
-	
+
 
 }

@@ -20,6 +20,7 @@ public final class ChatChannelData extends ChannelData {
     /** The text of the message. */
     private String text;
 
+    /** The date format used to serialize the timestamp. */
     private static final DateFormat DATE_FORMAT =
         new SimpleDateFormat("d MMM yyyy HH:mm:ss.S");
 
@@ -37,12 +38,26 @@ public final class ChatChannelData extends ChannelData {
     /**
      * Constructs a new chat data object.
      *
+     * @param id the id of the data object
      * @param text the text of the message
      * @param creator the user who posted the message
      */
-    public ChatChannelData(final String text, final UserName creator,
-            final Date time) {
-        super(creator, time);
+    public ChatChannelData(final ChannelDataIdentifier id,
+            final String text, final UserName creator) {
+        super(id, creator, new Date());
+        this.text = text;
+    }
+
+    /**
+     * Constructs a new chat data object.
+     *
+     * @param id the id of the data object
+     * @param text the text of the message
+     * @param creator the user who posted the message
+     */
+    public ChatChannelData(final ChannelDataIdentifier id,
+            final String text, final UserName creator, final Date time) {
+        super(id, creator, time);
         this.text = text;
     }
 
@@ -65,8 +80,10 @@ public final class ChatChannelData extends ChannelData {
         return start + end;
     }
 
+    /** {@inheritDoc} */
     public XmlNode toXml() {
         XmlNode node = new XmlNode("ChatMessage");
+        node.setAttribute("id", getId().toString());
         node.setAttribute("time", DATE_FORMAT.format(getTimestamp()));
         node.setAttribute("creator", getCreator().toString());
         node.setContent(text);
@@ -77,11 +94,12 @@ public final class ChatChannelData extends ChannelData {
             new XmlConstructor<ChatChannelData>() {
         public ChatChannelData fromXml(final XmlNode node)
                 throws ParseException {
+            ChannelDataIdentifier id = new ChannelDataIdentifier(
+                    Integer.parseInt(node.getAttribute("id")));
             Date time = DATE_FORMAT.parse(node.getAttribute("time"));
             UserName creator = new UserName(node.getAttribute("creator"));
             String message = node.getBody();
-            ChatChannelData data = new ChatChannelData(message, creator, time);
-            return data;
+            return new ChatChannelData(id, message, creator, time);
         }
     };
 

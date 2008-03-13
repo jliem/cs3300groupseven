@@ -9,6 +9,7 @@ import java.util.List;
 
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.ChannelName;
@@ -35,6 +36,8 @@ public abstract class ServerChannel<T extends ChannelData>
      * who need to be notified when a change occurs.
      */
     private IdentitySet<ConnectionIdentifier, ChannelConnection> clients;
+
+    public abstract ChannelDataIdentifier getNextDataId();
 
     /**
      * Constructs a new ServerChannel.

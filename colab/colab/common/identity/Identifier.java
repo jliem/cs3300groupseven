@@ -9,7 +9,8 @@ import java.io.Serializable;
  * @param <T> the underlying type that this identifier represents
  *            (such  as a string for a name, or an int for an ID number)
  */
-public abstract class Identifier<T> implements Serializable {
+public abstract class Identifier<T extends Comparable<T>>
+        implements Serializable, Comparable<Identifier<T>> {
 
     /**
      * The identifying data.
@@ -62,6 +63,10 @@ public abstract class Identifier<T> implements Serializable {
         Identifier other = (Identifier) obj;
         return other.value.equals(this.value);
 
+    }
+
+    public int compareTo(final Identifier<T> otherId) {
+        return value.compareTo(otherId.value);
     }
 
 }

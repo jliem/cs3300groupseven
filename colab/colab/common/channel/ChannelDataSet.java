@@ -9,6 +9,8 @@ import java.util.TreeSet;
 public class ChannelDataSet<T extends ChannelData>
         implements ChannelDataStore<T> {
 
+    private Integer nextDataId = 1;
+
     final protected TreeSet<T> dataSet;
 
     public ChannelDataSet() {
@@ -16,23 +18,19 @@ public class ChannelDataSet<T extends ChannelData>
         dataSet = new TreeSet<T>(
                 new Comparator<T>() {
             public int compare(final T arg0, final T arg1) {
-
-                int result = arg1.getTimestamp().compareTo(arg0.getTimestamp());
-
-                /* If timestamps are identical, use an
-                 * arbitrary (but consistent) order. */
-                if (result == 0) {
-                    result = arg1.hashCode() - arg0.hashCode();
-                }
-
-                return result;
-
+                return arg1.getId().compareTo(arg0.getId());
             }
         });
 
     }
 
     public void add(final T data) {
+
+        ChannelDataIdentifier identifier = data.getId();
+        Integer id = identifier.getValue();
+        if (id >= nextDataId) {
+            nextDataId = id + 1;
+        }
 
         dataSet.add(data);
 
@@ -44,10 +42,7 @@ public class ChannelDataSet<T extends ChannelData>
 
     }
 
-    /**
-     * Returns the last n data items.  If the count is negative or
-     * greater than the number of available items, all data is returned.
-     */
+    /** {@inheritDoc} */
     public List<T> getLast(int count) {
 
         if (count < 0) {
@@ -67,6 +62,13 @@ public class ChannelDataSet<T extends ChannelData>
 
         return getLast(-1);
 
+    }
+
+    /** {@inheritDoc} */
+    public ChannelDataIdentifier getNextDataId() {
+        ChannelDataIdentifier id = new ChannelDataIdentifier(nextDataId);
+        nextDataId++;
+        return id;
     }
 
 }

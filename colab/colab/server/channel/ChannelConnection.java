@@ -1,12 +1,12 @@
 package colab.server.channel;
 
 import colab.common.identity.Identifiable;
-import colab.common.remote.client.ChannelInterface;
+import colab.common.remote.client.ChannelRemote;
 import colab.server.connection.Connection;
 import colab.server.connection.ConnectionIdentifier;
 
 /**
- * ChannelConnection is a wrapper for a remote {@link ChannelInterface}
+ * ChannelConnection is a wrapper for a remote {@link ChannelRemote}
  * which associates the channel interface with the {@link Connection}
  * on which it was created.
  */
@@ -17,14 +17,14 @@ public final class ChannelConnection
     private final Connection connection;
 
     /** The channel interface. */
-    private final ChannelInterface channelInterface;
+    private final ChannelRemote channelInterface;
 
     /**
      * @param connection the connection which created the channel interface
      * @param channelInterface the channel interface
      */
     public ChannelConnection(final Connection connection,
-            final ChannelInterface channelInterface) {
+            final ChannelRemote channelInterface) {
         this.connection = connection;
         this.channelInterface = channelInterface;
     }
@@ -39,7 +39,7 @@ public final class ChannelConnection
     /**
      * @return the channel interface
      */
-    public ChannelInterface getChannelInterface() {
+    public ChannelRemote getChannelInterface() {
         return channelInterface;
     }
 

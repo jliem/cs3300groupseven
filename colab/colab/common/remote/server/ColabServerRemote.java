@@ -3,7 +3,7 @@ package colab.common.remote.server;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import colab.common.remote.client.ColabClientInterface;
+import colab.common.remote.client.ColabClientRemote;
 
 
 /**
@@ -12,9 +12,9 @@ import colab.common.remote.client.ColabClientInterface;
  * rmi registry so that clients can make invocations upon it.
  *
  * The purpose of this remote interface is for the client to gain a remote
- * reference to a {@link ConnectionInterface} for any further activity.
+ * reference to a {@link ConnectionRemote} for any further activity.
  */
-public interface ColabServerInterface extends Remote {
+public interface ColabServerRemote extends Remote {
 
     /**
      * Creates a connection object for the client.
@@ -25,7 +25,7 @@ public interface ColabServerInterface extends Remote {
      *         invocations from the client who requested it
      * @throws RemoteException if an rmi error occurs
      */
-    ConnectionInterface connect(ColabClientInterface client)
+    ConnectionRemote connect(ColabClientRemote client)
             throws RemoteException;
 
 }

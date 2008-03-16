@@ -11,7 +11,7 @@ import colab.common.identity.Identifiable;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ColabClientInterface;
+import colab.common.remote.client.ColabClientRemote;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlSerializable;
 import colab.server.connection.Connection;
@@ -119,7 +119,7 @@ public final class Community implements Identifiable<CommunityName>,
     public void channelAdded(final ChannelDescriptor channelDescriptor) {
 
         for (final Connection connection : this.clients) {
-            ColabClientInterface client = connection.getClient();
+            ColabClientRemote client = connection.getClient();
             try {
                 client.channelAdded(channelDescriptor);
             } catch (final RemoteException re) {

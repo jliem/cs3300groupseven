@@ -6,7 +6,13 @@ import java.rmi.RemoteException;
 import colab.common.channel.ChannelData;
 import colab.common.naming.UserName;
 
-public interface ChannelInterface extends Remote {
+/**
+ * A remote interface for a client-side object which the
+ * server application uses when it needs to update the client
+ * with some information about a channel in which the client
+ * is participating.
+ */
+public interface ChannelRemote extends Remote {
 
     /**
      * Informs the client that data has been added to the channel.

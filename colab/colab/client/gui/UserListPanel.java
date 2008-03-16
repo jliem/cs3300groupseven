@@ -28,14 +28,14 @@ import colab.common.naming.UserName;
  *
  * Example usage in ChatChannelFrame:
  *
-    channel.addUserListener(chatPanel.getUserListPanel());
-    try {
-        // Download list of current users
-        chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
-    } catch (RemoteException ex) {
-        // TODO: Handle remote exception
-        ex.printStackTrace();
-    }
+ *   channel.addUserListener(chatPanel.getUserListPanel());
+ *   try {
+ *       // Download list of current users
+ *       chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
+ *   } catch (final RemoteException ex) {
+ *       // Handle remote exception
+ *       ex.printStackTrace();
+ *   }
  *
  */
 public final class UserListPanel extends JPanel implements UserListener {
@@ -87,10 +87,13 @@ public final class UserListPanel extends JPanel implements UserListener {
      * @param channel the channel you are joining
      * @throws RemoteException if a RemoteException occurs.
      */
-    public void downloadActiveUsers(ColabClient client, ClientChannel channel) throws RemoteException {
+    public void downloadActiveUsers(final ColabClient client,
+            final ClientChannel channel) throws RemoteException {
+
         Collection<UserName> users = client.getActiveUsers(channel.getId());
 
         this.addUsers(users);
+
     }
 
     /**
@@ -98,27 +101,32 @@ public final class UserListPanel extends JPanel implements UserListener {
      *
      * @param users the users to add
      */
-    private void addUsers(Collection<UserName> users) {
+    private void addUsers(final Collection<UserName> users) {
+
         this.users.addAll(users);
         refreshUsers();
+
     }
 
     /**
      * Adds a new user to the userlist.
      *
-     * @param userName the user to add
+     * @param joinEvent the user to add
      */
-    public void userJoined(UserJoinedEvent ue) {
-        users.add(ue.getUserName());
+    public void userJoined(final UserJoinedEvent joinEvent) {
+
+        users.add(joinEvent.getUserName());
         this.refreshUsers();
+
     }
 
     /**
      * Removes a user from the list.
-     * @param userName the user to remove
+     *
+     * @param leaveEvent the user to remove
      */
-    public void userLeft(UserLeftEvent ue) {
-        users.remove(ue.getUserName());
+    public void userLeft(final UserLeftEvent leaveEvent) {
+        users.remove(leaveEvent.getUserName());
         this.refreshUsers();
     }
 

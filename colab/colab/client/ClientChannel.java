@@ -12,13 +12,13 @@ import colab.client.event.UserListener;
 import colab.common.channel.Channel;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ChannelInterface;
+import colab.common.remote.client.ChannelRemote;
 
 /**
  * A client-side remote Channel object.
  */
 public abstract class ClientChannel extends UnicastRemoteObject
-        implements Channel, ChannelInterface {
+        implements Channel, ChannelRemote {
 
     /**
      * The name of the channel.

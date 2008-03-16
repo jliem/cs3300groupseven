@@ -27,8 +27,9 @@ public class CommunityTest extends TestCase {
     */
 
 /*
-    public void testCommunityCreationandClientRemoval() throws RemoteException{
-        Community comm = new Community(new CommunityName("TestComm"), new Password("TestPass"));
+    public void testCommunityCreationandClientRemoval() throws RemoteException {
+        Community comm = new Community(
+            new CommunityName("TestComm"), new Password("TestPass"));
         ColabClient client = new ColabClient();
 
         comm.addClient(new UserName("TestUser"), client);
@@ -41,8 +42,10 @@ public class CommunityTest extends TestCase {
 */
 
 /*
-    public void testCommunityCreationandChannelAddition() throws RemoteException{
-        Community comm = new Community(new CommunityName("TestComm"), new Password("TestPass"));
+    public void testCommunityCreationandChannelAddition()
+            throws RemoteException {
+        Community comm = new Community(
+            new CommunityName("TestComm"), new Password("TestPass"));
         ColabClient client = new ColabClient();
 
         comm.addClient(new UserName("TestUser"), client);
@@ -56,13 +59,15 @@ public class CommunityTest extends TestCase {
 
 /*
     public void testCommunityAuthentication() throws RemoteException{
-        Community comm = new Community(new CommunityName("TestComm"), new Password("TestPass"));
+        Community comm = new Community(
+            new CommunityName("TestComm"), new Password("TestPass"));
         ColabClient client = new ColabClient();
 
         comm.addClient(new UserName("TestUser"), client);
         comm.getMembers().add(new UserName("Bob"));
 
-        assertTrue(comm.authenticate(new UserName("Bob"), new String("TestPass").toCharArray()));
+        assertTrue(comm.authenticate(
+            new UserName("Bob"), new String("TestPass").toCharArray()));
 
     }
 */

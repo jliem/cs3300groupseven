@@ -2,6 +2,7 @@ package colab.server;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
+import colab.common.naming.ChannelName;
 import colab.server.channel.ChannelManager;
 import colab.server.user.Community;
 import colab.server.user.User;
@@ -47,7 +48,7 @@ public class MockColabServer extends ColabServer {
         // Add a lobby to each community
 
         ChannelDescriptor lobbyDesc = new ChannelDescriptor(
-                "Lobby", ChannelType.CHAT);
+                 new ChannelName("Lobby"), ChannelType.CHAT);
 
         channelManager.addChannel(groupSeven.getId(), lobbyDesc);
         channelManager.addChannel(teamAwesome.getId(), lobbyDesc);

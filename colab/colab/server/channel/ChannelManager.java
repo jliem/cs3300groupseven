@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ChannelAlreadyExistsException;
@@ -151,13 +152,11 @@ public final class ChannelManager {
 
         // Check if it exists
         if (channelExists(communityName, channelName)) {
-            HashMap<ChannelName, ServerChannel> subMap =
+            Map<ChannelName, ServerChannel> subMap =
                 channelMap.get(communityName);
             result = subMap.get(channelName);
         } else {
-
-            throw new ChannelDoesNotExistException("Channel '"
-                + channelName.toString() + "' did not exist");
+            throw new ChannelDoesNotExistException(channelName);
         }
 
         // Result should be non-null at this point

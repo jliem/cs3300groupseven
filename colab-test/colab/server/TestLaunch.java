@@ -6,8 +6,8 @@ import colab.client.ColabClient;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.server.ColabServerInterface;
-import colab.common.remote.server.ConnectionInterface;
+import colab.common.remote.server.ColabServerRemote;
+import colab.common.remote.server.ConnectionRemote;
 
 public class TestLaunch {
 
@@ -21,8 +21,8 @@ public class TestLaunch {
 
         String url = "//localhost:" + 9040 + "/COLAB_SERVER";
 
-        ColabServerInterface server = (ColabServerInterface) Naming.lookup(url);
-        ConnectionInterface connection = server.connect(client);
+        ColabServerRemote server = (ColabServerRemote) Naming.lookup(url);
+        ConnectionRemote connection = server.connect(client);
         connection.logIn(new UserName("Chris"), "pass4".toCharArray());
 
         System.out.println("User logged in.");

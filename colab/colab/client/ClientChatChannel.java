@@ -16,55 +16,55 @@ import colab.common.naming.ChannelName;
 
 public class ClientChatChannel extends ClientChannel {
 
-	private ArrayList<ActionListener> listeners;
+    private ArrayList<ActionListener> listeners;
 
-	private int newMessages = 0;
+    private int newMessages = 0;
 
-	protected ChatDataSet messages;
+    protected ChatDataSet messages;
 
-	public ClientChatChannel(final ChannelName name) throws RemoteException {
-		super(name);
-		messages = new ChatDataSet();
-		listeners = new ArrayList<ActionListener>();
-	}
+    public ClientChatChannel(final ChannelName name) throws RemoteException {
+        super(name);
+        messages = new ChatDataSet();
+        listeners = new ArrayList<ActionListener>();
+    }
 
-	public void add(final ChannelData data) throws RemoteException {
-		ChatChannelData chatData = (ChatChannelData) data;
-		messages.add(chatData);
-		newMessages++;
-		fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST,
-				"Message Added"));
-	}
+    public void add(final ChannelData data) throws RemoteException {
+        ChatChannelData chatData = (ChatChannelData) data;
+        messages.add(chatData);
+        newMessages++;
+        fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST,
+                "Message Added"));
+    }
 
-	protected void fireActionPerformed(final ActionEvent e) {
-		for (ActionListener l : listeners) {
-			l.actionPerformed(e);
-		}
-	}
+    protected void fireActionPerformed(final ActionEvent e) {
+        for (ActionListener l : listeners) {
+            l.actionPerformed(e);
+        }
+    }
 
-	public void addActionListener(final ActionListener l) {
-		listeners.add(l);
-	}
+    public void addActionListener(final ActionListener l) {
+        listeners.add(l);
+    }
 
-	public void removeActionListener(final ActionListener l) {
-		listeners.remove(l);
-	}
+    public void removeActionListener(final ActionListener l) {
+        listeners.remove(l);
+    }
 
-	public ChannelDescriptor getChannelDescriptor() {
-		return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
-	}
+    public ChannelDescriptor getChannelDescriptor() {
+        return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
+    }
 
-	public List<ChatChannelData> getLocalMessages() {
-		return messages.getLast(-1);
-	}
+    public List<ChatChannelData> getLocalMessages() {
+        return messages.getLast(-1);
+    }
 
-	public int getLocalNumMessages() {
-		return messages.size();
-	}
+    public int getLocalNumMessages() {
+        return messages.size();
+    }
 
-	public List<ChatChannelData> getNewMessages() {
-		List <ChatChannelData> list = messages.getLast(newMessages);
-		newMessages = 0;
-		return list;
-	}
+    public List<ChatChannelData> getNewMessages() {
+        List <ChatChannelData> list = messages.getLast(newMessages);
+        newMessages = 0;
+        return list;
+    }
 }

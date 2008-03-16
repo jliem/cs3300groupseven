@@ -4,15 +4,26 @@ import java.io.Serializable;
 
 import colab.common.naming.ChannelName;
 
-public class ChannelDescriptor implements Serializable {
+/**
+ * Descriptive data used to identify a channel.
+ */
+public final class ChannelDescriptor implements Serializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    /** The name of the channel. */
     private ChannelName channelName;
 
+    /** The type of channel. */
     private ChannelType channelType;
 
+    /**
+     * Constructs a new ChannelDescriptor.
+     *
+     * @param channelName the name of the channel
+     * @param type the type of channel
+     */
     public ChannelDescriptor(
             final ChannelName channelName, final ChannelType type) {
 
@@ -21,30 +32,47 @@ public class ChannelDescriptor implements Serializable {
 
     }
 
-    public ChannelDescriptor(
-            final String name, final ChannelType type) {
-
-        this(new ChannelName(name), type);
-
-    }
-
+    /**
+     * Retrieves the name of the channel.
+     *
+     * @return the name of the channel
+     */
     public ChannelName getName() {
         return channelName;
     }
 
+    /**
+     * Sets the name of the channel.
+     *
+     * @param name the name of the channel
+     */
     public void setName(final ChannelName name) {
         this.channelName = name;
     }
 
+    /**
+     * Retrieves the type of channel.
+     *
+     * @return the type of channel
+     */
     public ChannelType getType() {
         return channelType;
     }
 
+    /**
+     * Sets the type of channel.
+     *
+     * @param type the type of channel
+     */
     public void setType(final ChannelType type) {
         this.channelType = type;
     }
 
+    /** {@inheritDoc} */
+    @Override
     public String toString() {
-        return this.channelName.toString() + ": " + this.channelType.toString();
+        return "Channel name: " + this.channelName.toString()
+             + ", type: " + this.channelType.toString();
     }
+
 }

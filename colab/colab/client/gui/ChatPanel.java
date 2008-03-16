@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -20,7 +19,8 @@ import colab.common.naming.UserName;
 
 class ChatPanel extends ClientChannelPanel {
 
-    public static final long serialVersionUID = 1;
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private ArrayList<ActionListener> listeners;
 
@@ -36,7 +36,8 @@ class ChatPanel extends ClientChannelPanel {
 
     private boolean timestampEnabled = false;
 
-    public ChatPanel(UserName name) {
+    public ChatPanel(final UserName name) {
+
         listeners = new ArrayList<ActionListener>();
         textArea = new JTextArea(10, 30);
         textbox = new JTextArea(2, 20);
@@ -82,75 +83,84 @@ class ChatPanel extends ClientChannelPanel {
         add(userListPanel, BorderLayout.EAST);
 
         lastSize = getSize();
+
     }
 
     /**
      * Adds new chat input to original chat dialog.
      *
-     * @param mess
-     *            from the user
+     * @param message the message posted by the user
      */
-    public final void writeMessage(final ChatChannelData mess) {
-        textArea.append(mess.getMessageString(timestampEnabled) + "\n");
+    public final void writeMessage(final ChatChannelData message) {
+
+        textArea.append(message.getMessageString(timestampEnabled) + "\n");
 
         JScrollBar bar = chatScroll.getVerticalScrollBar();
-        boolean autoScroll = ((bar.getValue() + bar.getVisibleAmount()) == bar
-                .getMaximum());
+        boolean autoScroll =
+            ((bar.getValue() + bar.getVisibleAmount()) == bar.getMaximum());
 
         if (autoScroll) {
             textArea.setCaretPosition(textArea.getDocument().getLength());
         }
+
     }
 
     public ChatChannelData dequeuePendingMessage() {
+
         if (pendingMessages.size() > 0) {
             return pendingMessages.removeFirst();
         }
+
         return null;
+
     }
 
     /**
      * Adds an ActionListener of a certain type to an element.
      *
-     * @param l
-     *            the particular ActionListener
+     * @param listener the particular ActionListener
      */
-    public final void addActionListener(final ActionListener l) {
-        listeners.add(l);
+    public final void addActionListener(final ActionListener listener) {
+        listeners.add(listener);
     }
 
     /**
-     * Fires when ActionEvent e occurs.
+     * Fires when an ActionEvent occurs.
      *
-     * @param e
-     *            the ActionEvent that occurs
+     * @param event the ActionEvent that occurs
      */
-    protected final void fireActionPerformed(final ActionEvent e) {
-        for (ActionListener l : listeners) {
-            l.actionPerformed(e);
+    protected final void fireActionPerformed(final ActionEvent event) {
+
+        for (final ActionListener listener : listeners) {
+            listener.actionPerformed(event);
         }
+
     }
 
     public boolean isTimestampEnabled() {
+
         return timestampEnabled;
+
     }
 
-    public void setTimestampEnabled(boolean timestampEnabled) {
+    public void setTimestampEnabled(final boolean timestampEnabled) {
+
         this.timestampEnabled = timestampEnabled;
+
     }
 
-    /**
-     * Displays a ChatPanel.
-     *
-     * @param args
-     *            standard
-     */
     public static void main(final String[] args) {
-        ChatPanel p = new ChatPanel(new UserName("test"));
+
         JFrame f = new JFrame();
-        f.setContentPane(p);
         f.setSize(320, 300);
-        f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        ChatPanel p = new ChatPanel(new UserName("test"));
+        f.setContentPane(p);
+
+        f.pack();
+        f.setVisible(true);
+
     }
+
 }

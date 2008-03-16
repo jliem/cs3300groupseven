@@ -102,6 +102,12 @@ public class IdentitySet<K extends Identifier, V extends Identifiable<K>>
         return map.remove(((Identifiable) obj).getId()) != null;
     }
 
+    /**
+     * Removes the element with the given identifier from the set.
+     *
+     * @param identifier the identifier of the element to remove
+     * @return the element which was removed
+     */
     public final V removeId(final K identifier) {
         return map.remove(identifier);
     }

@@ -43,7 +43,7 @@ public class ColabServer extends UnicastRemoteObject
      */
     public ColabServer() throws RemoteException {
 
-        this.userManager = new UserManager(this);
+        this.userManager = new UserManager();
         this.channelManager = new ChannelManager(this);
 
     }
@@ -59,11 +59,15 @@ public class ColabServer extends UnicastRemoteObject
         // Get the directory for data storage
         File dataDirectory = FileUtils.getDirectory(path);
 
-        // Create the manager objects
-        this.userManager = new UserManager(this,
-                FileUtils.getDirectory(dataDirectory, "user"));
-        this.channelManager = new ChannelManager(this,
-                FileUtils.getDirectory(dataDirectory, "channel"));
+        // Create the user manager
+        File userDirectory =
+            FileUtils.getDirectory(dataDirectory, "user");
+        this.userManager = new UserManager(userDirectory);
+
+        // Create the channel manager
+        File channelDirectory =
+            FileUtils.getDirectory(dataDirectory, "channel");
+        this.channelManager = new ChannelManager(this, channelDirectory);
 
     }
 

@@ -3,9 +3,6 @@ package colab.client.gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -13,16 +10,16 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import colab.common.channel.ChannelDescriptor;
 
-class ChannelManagerPanel extends JPanel {
+final class ChannelManagerPanel extends JPanel {
+
+    /** Serialization verson number. */
+    public static final long serialVersionUID = 1L;
 
     private final ArrayList<ActionListener> listeners;
 
@@ -52,7 +49,7 @@ class ChannelManagerPanel extends JPanel {
 
         channelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         channelList.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(final MouseEvent e) {
                 if (e.getClickCount() > 1 && !channelList.isSelectionEmpty()) {
                     // adds the currently selected channel descriptor to our
                     // pending join channel list
@@ -75,7 +72,6 @@ class ChannelManagerPanel extends JPanel {
 
         };
 
-
         add(scrollChan);
     }
 
@@ -87,20 +83,18 @@ class ChannelManagerPanel extends JPanel {
     }
 
 
-    public void addActionListener(ActionListener l) {
-        listeners.add(l);
+    public void addActionListener(final ActionListener listener) {
+        listeners.add(listener);
     }
 
-    public void removeActionListener(ActionListener l) {
-        listeners.remove(l);
+    public void removeActionListener(final ActionListener listener) {
+        listeners.remove(listener);
     }
 
-    public void fireActionPerformed(ActionEvent e) {
-        for (ActionListener l : listeners) {
-            l.actionPerformed(e);
+    public void fireActionPerformed(ActionEvent event) {
+        for (final ActionListener listener : listeners) {
+            listener.actionPerformed(event);
         }
     }
-
-
 
 }

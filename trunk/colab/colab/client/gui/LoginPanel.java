@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -31,15 +32,25 @@ public class LoginPanel extends JPanel {
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;
 
-    private JLabel usernameLabel, passwordLabel, serverLabel;
-    private JPasswordField password;
-    private JTextField username, serverIP;
-    private JButton loginButton;
+    private final JLabel usernameLabel;
+
+    private final JLabel passwordLabel;
+
+    private final JLabel serverLabel;
+
+    private final JPasswordField password;
+
+    private final JTextField username;
+
+    private final JTextField serverIP;
+
+    private final JButton loginButton;
+
     private String currentUser;
-    private ArrayList<ActionListener> listeners;
+
+    private final List<ActionListener> listeners;
 
     public LoginPanel(final ColabClient client) {
-
 
         usernameLabel = new JLabel("Username / Desired Username: ");
         passwordLabel = new JLabel("Password / Desired Password: ");
@@ -149,7 +160,7 @@ public class LoginPanel extends JPanel {
         // Select the entire text box when clicking the username or password
         // field
         FocusListener f = new FocusAdapter() {
-            public void focusGained(FocusEvent fe) {
+            public void focusGained(final FocusEvent fe) {
                 // getText is deprecated for JPasswordField, so we
                 // need two if cases
                 if (fe.getSource() == password) {
@@ -203,10 +214,8 @@ public class LoginPanel extends JPanel {
     }
 
     public void clearFields() {
-        // TODO Auto-generated method stub
         password.setText("");
         username.setText("");
-
     }
 
     private void showErrorBox(final String message, final String title) {

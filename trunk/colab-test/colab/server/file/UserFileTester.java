@@ -7,8 +7,17 @@ import java.util.List;
 import junit.framework.TestCase;
 import colab.server.user.User;
 
+/**
+ * Test cases for {@link UserFile}.
+ */
 public final class UserFileTester extends TestCase {
 
+    /**
+     * Generates some useres, writes them to a temporary
+     * xml file, then parses the xml to recover the data.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testWriteAndRead() throws Exception {
 
         File file = File.createTempFile("colabTestReadFile", null);

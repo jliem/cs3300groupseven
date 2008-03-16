@@ -2,9 +2,17 @@ package colab.client.event;
 
 import colab.common.naming.UserName;
 
+/**
+ * Indicates that a user has left.
+ */
 public class UserLeftEvent extends UserEvent {
 
-    public UserLeftEvent(UserName userName) {
+    /**
+     * Constructs a new UserLeftEvent.
+     *
+     * @param userName the name of the user
+     */
+    public UserLeftEvent(final UserName userName) {
         super(userName);
     }
 

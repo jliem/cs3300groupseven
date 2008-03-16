@@ -4,6 +4,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,20 +15,30 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import colab.client.ColabClient;
+import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.NetworkException;
-import colab.common.exception.UserAlreadyExistsException;
 import colab.common.naming.CommunityName;
 import colab.server.user.Password;
 
 public class NewCommunityFrame extends JFrame {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     private final JButton createButton;
+
     private final JTextField commName;
+
     private final JPasswordField commPass;
+
     private final JPasswordField confirmCommPass;
+
     private final JLabel nameLabel;
+
     private final JLabel passLabel;
+
     private final JLabel confirmPassLabel;
+
     private final ColabClient client;
 
     public NewCommunityFrame(final ColabClient client) {
@@ -42,61 +54,9 @@ public class NewCommunityFrame extends JFrame {
 
         createButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                if (commName.getText() != null
-                        && commPass.getPassword() != null
-                        && confirmCommPass.getPassword() != null) {
-
-                    if (commPass.getPassword().toString().compareTo(
-                            confirmCommPass.getPassword().toString()) != 0) {
-                        showErrorBox(
-                            "The password fields do not agree. "
-                          + "Please enter the desired password again. "
-                          + "(The password is case sensitive!)",
-                            "Password Error");
-                        commPass.setText("");
-                        confirmCommPass.setText("");
-                    }
-
-                    if (commPass.getPassword().toString().compareTo(
-                            confirmCommPass.getPassword().toString()) == 0) {
-                        boolean flagged = false;
-                        try {
-                            for (CommunityName name : client
-                                    .getAllCommunityNames()) {
-                                if (name.toString().equalsIgnoreCase(
-                                        commName.getText())) {
-                                    showErrorBox(
-                                        "A community with that name already "
-                                      + "exists; please enter a new community "
-                                      + "name.", "Community Name Error");
-                                    commName.setText("");
-                                    flagged = true;
-                                }
-                            }
-                        } catch (RemoteException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
-                        }
-
-                        if (!flagged) {
-                            try {
-                                client.createCommunity(new CommunityName(
-                                        commName.getText()), new Password(
-                                        commPass.getPassword().toString()));
-                            } catch (NetworkException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            } catch (UserAlreadyExistsException e1) {
-                                // TODO Auto-generated catch block
-                                e1.printStackTrace();
-                            }
-                        }
-                    }
-
-                }
+                handleCreate(e);
             }
         });
-
 
         //this.setPreferredSize(new Dimension(800,400));
         setLayout(new GridLayout(4, 2));
@@ -111,8 +71,72 @@ public class NewCommunityFrame extends JFrame {
     }
 
     private void showErrorBox(final String message, final String title) {
-        JOptionPane.showMessageDialog(this, message, title,
-                JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this, message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void handleCreate(final ActionEvent e) {
+
+        if (commName.getText() == null
+                || commPass.getPassword() == null
+                || confirmCommPass.getPassword() == null) {
+
+            return;
+
+        }
+
+        if (!Arrays.equals(
+                commPass.getPassword(),
+                confirmCommPass.getPassword())) {
+
+            showErrorBox(
+                  "The password fields do not agree. Please enter the "
+                + "desired password again. (The password is case sensitive!)",
+                "Password Error");
+
+            commPass.setText("");
+            confirmCommPass.setText("");
+
+            return;
+
+        }
+
+        boolean flagged = false;
+
+        Collection<CommunityName> allCommunities;
+        try {
+            allCommunities = client.getAllCommunityNames();
+        } catch (final RemoteException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return;
+        }
+        for (CommunityName name : allCommunities) {
+            if (name.toString().equalsIgnoreCase(commName.getText())) {
+                showErrorBox("A community with that name already "
+                        + "exists; please enter a new community name.",
+                    "Community Name Error");
+                commName.setText("");
+                flagged = true;
+            }
+        }
+
+        if (!flagged) {
+            Password password = new Password(
+                    commPass.getPassword().toString());
+            CommunityName name = new CommunityName(
+                    commName.getText());
+            try {
+                client.createCommunity(name, password);
+            } catch (NetworkException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (CommunityAlreadyExistsException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+
     }
 
 }

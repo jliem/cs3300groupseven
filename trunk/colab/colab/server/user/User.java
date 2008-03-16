@@ -1,14 +1,18 @@
 package colab.server.user;
 
 import java.io.Serializable;
+import java.text.ParseException;
 
 import colab.common.identity.Identifiable;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlSerializable;
 
 /**
  * Represents a user of the system.
  */
-public final class User implements Identifiable<UserName>, Serializable {
+public final class User implements Identifiable<UserName>,
+        Serializable, XmlSerializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -53,6 +57,9 @@ public final class User implements Identifiable<UserName>, Serializable {
         this.pass = pass;
     }
 
+    /**
+     * @return the user's password
+     */
     public Password getPassword() {
         return this.pass;
     }
@@ -77,9 +84,52 @@ public final class User implements Identifiable<UserName>, Serializable {
     }
 
     /** {@inheritDoc} */
+    public XmlNode toXml() {
+        XmlNode node = new XmlNode("User");
+        node.setAttribute("name", name.getValue());
+        node.setAttribute("password", pass.getHash());
+        return node;
+    }
+
+    /**
+     * Constructs a new User from the data in an XmlNode.
+     *
+     * @param node the xml node containing data
+     * @return a User built from the data in the xml node
+     * @throws ParseException if the data is improperly formatted
+     */
+    public static User fromXml(final XmlNode node) throws ParseException {
+        UserName name = new UserName(node.getAttribute("name"));
+        Password pass = new Password(node.getAttribute("password"));
+        return new User(name, pass);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String toString() {
-        return getId().toString();
+        return "User: " + getId().toString() + ", pass: " + pass.getHash();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object object) {
+
+        if (!(object instanceof User)) {
+            return false;
+        }
+
+        User otherUser = (User) object;
+
+        return getId().equals(otherUser.getId())
+            && getPassword().equals(otherUser.getPassword());
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return getId().hashCode()
+             + getPassword().hashCode();
     }
 
 }

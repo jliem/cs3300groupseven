@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import colab.common.util.StringUtils;
+
 public class XmlNode {
 
     private final String type;
@@ -81,7 +83,8 @@ public class XmlNode {
         str.append(indentation);
         str.append(openingTag());
         if (stringContent != null) {
-            str.append(escapeXmlContent(stringContent));
+            String content = StringUtils.emptyIfNull(stringContent);
+            str.append(escapeXmlContent(content));
         } else {
            str.append("");
         }
@@ -104,7 +107,7 @@ public class XmlNode {
     }
 
     public String serialize(final String indentation) {
-        if (stringContent != null) {
+        if (xmlContent == null) {
             return serializeSingleLine(indentation);
         } else {
             return serializeMultiLine(indentation);

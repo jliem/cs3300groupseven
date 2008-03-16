@@ -36,6 +36,11 @@ public class ColabServer extends UnicastRemoteObject
      */
     private final ChannelManager channelManager;
 
+    /**
+     * Constructs an instance of the server application.
+     *
+     * @throws RemoteException if an rmi error occurs
+     */
     public ColabServer() throws RemoteException {
 
         this.userManager = new UserManager(this);

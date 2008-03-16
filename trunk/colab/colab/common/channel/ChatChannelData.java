@@ -54,6 +54,7 @@ public final class ChatChannelData extends ChannelData {
      * @param id the id of the data object
      * @param text the text of the message
      * @param creator the user who posted the message
+     * @param time the time at which this data was posted
      */
     public ChatChannelData(final ChannelDataIdentifier id,
             final String text, final UserName creator, final Date time) {
@@ -70,7 +71,12 @@ public final class ChatChannelData extends ChannelData {
         return this.text;
     }
 
-    // TODO: needs some sort of formatting options
+    /**
+     * Returns the message with additional formatting applied.
+     *
+     * @param timestampEnabled whether to include the timestamp
+     * @return a human-readable message string
+     */
     public String getMessageString(final boolean timestampEnabled) {
         String start = getCreator().toString();
         String end = ": " + getText();
@@ -90,7 +96,10 @@ public final class ChatChannelData extends ChannelData {
         return node;
     }
 
-    private static XmlConstructor<ChatChannelData> XML_CONSTRUCTOR =
+    /**
+     * A closure which constructs a ChatChannelData from an xml node.
+     */
+    private static final XmlConstructor<ChatChannelData> XML_CONSTRUCTOR =
             new XmlConstructor<ChatChannelData>() {
         public ChatChannelData fromXml(final XmlNode node)
                 throws ParseException {
@@ -103,18 +112,31 @@ public final class ChatChannelData extends ChannelData {
         }
     };
 
+    /**
+     * @return an XmlConstructor for ChatChannelData.
+     */
     public static XmlConstructor<ChatChannelData> getXmlConstructor() {
         return XML_CONSTRUCTOR;
     }
 
+    /** {@inheritDoc} */
+    @Override
     public boolean equals(final Object obj) {
         if (!(obj instanceof ChatChannelData)) {
-
+            return false;
         }
         ChatChannelData otherData = (ChatChannelData) obj;
         return otherData.getCreator().equals(getCreator())
             && otherData.getTimestamp().equals(getTimestamp())
             && otherData.getText().equals(getText());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return getCreator().hashCode()
+             + getTimestamp().hashCode()
+             + getText().hashCode();
     }
 
 }

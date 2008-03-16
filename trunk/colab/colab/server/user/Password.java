@@ -3,7 +3,6 @@ package colab.server.user;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import colab.common.util.StringUtils;
 
@@ -117,6 +116,26 @@ public final class Password implements Serializable {
         for (int i = 0; i < bytes.length; i++) {
             bytes[i] = 0;
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object object) {
+
+        if (!(object instanceof Password)) {
+            return false;
+        }
+
+        Password otherPassword = (Password) object;
+
+        return getHash().equals(otherPassword.getHash());
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return getHash().hashCode();
     }
 
 }

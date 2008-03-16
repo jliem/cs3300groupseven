@@ -65,7 +65,8 @@ public abstract class Identifier<T extends Comparable<T>>
 
     }
 
-    public int compareTo(final Identifier<T> otherId) {
+    /** {@inheritDoc} */
+    public final int compareTo(final Identifier<T> otherId) {
         return value.compareTo(otherId.value);
     }
 

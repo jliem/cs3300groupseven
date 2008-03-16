@@ -111,10 +111,11 @@ public class LoginPanel extends JPanel {
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));
 
-                    showErrorBox("Unable to connect to the server. Double-check that the server is running.", "Unable to Connect");
+                    showErrorBox("Unable to connect to the server. "
+                          + "Double-check that the server is running.",
+                          "Unable to Connect");
 
-                }	catch (final Exception e) {
-
+                } catch (final Exception e) {
 
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));
@@ -179,7 +180,7 @@ public class LoginPanel extends JPanel {
     }
 
     /**
-     * Populate login information for testing purposes
+     * Populate login information for testing purposes.
      */
     private void populateLogin() {
         serverIP.setText("localhost:9040");

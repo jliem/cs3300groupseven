@@ -22,16 +22,16 @@ import colab.common.exception.UserAlreadyExistsException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ColabClientInterface;
-import colab.common.remote.server.ColabServerInterface;
-import colab.common.remote.server.ConnectionInterface;
+import colab.common.remote.client.ColabClientRemote;
+import colab.common.remote.server.ColabServerRemote;
+import colab.common.remote.server.ConnectionRemote;
 import colab.server.user.Password;
 
 /**
  * The CoLab client application.
  */
 public final class ColabClient extends UnicastRemoteObject implements
-        ColabClientInterface {
+        ColabClientRemote {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -43,7 +43,7 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     private final Vector<ChannelDescriptor> channels;
 
-    private ConnectionInterface connection;
+    private ConnectionRemote connection;
 
     private ConnectionState connectionState;
 
@@ -70,9 +70,9 @@ public final class ColabClient extends UnicastRemoteObject implements
     public void connect(final String serverAddress)
             throws UnableToConnectException {
 
-        ConnectionInterface connection;
+        ConnectionRemote connection;
         try {
-            ColabServerInterface server = (ColabServerInterface) Naming
+            ColabServerRemote server = (ColabServerRemote) Naming
                     .lookup("//" + serverAddress + "/COLAB_SERVER");
             connection = server.connect(this);
         } catch (final Exception e) {

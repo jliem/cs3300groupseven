@@ -6,13 +6,29 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * A set of ChannelData, sorted by their identifiers.
+ *
+ * @param <T> the type of channel data in the set
+ */
 public class ChannelDataSet<T extends ChannelData>
         implements ChannelDataStore<T> {
 
+    /**
+     * An integer which is always higher than the highest
+     * identifier value in the set, used to assign an
+     * identifier to the next piece of data that is added.
+     */
     private Integer nextDataId = 1;
 
-    final protected TreeSet<T> dataSet;
+    /**
+     * The data elements represented by this set.
+     */
+    private final TreeSet<T> dataSet;
 
+    /**
+     * Constructs an empty ChannelDataSet.
+     */
     public ChannelDataSet() {
 
         dataSet = new TreeSet<T>(
@@ -24,10 +40,17 @@ public class ChannelDataSet<T extends ChannelData>
 
     }
 
-    public void add(final T data) {
+    /** {@inheritDoc} */
+    public final void add(final T data) {
 
-        ChannelDataIdentifier identifier = data.getId();
-        Integer id = identifier.getValue();
+        if (data.getId() == null) {
+            // data's identifier is null, so assign it one
+            data.setId(new ChannelDataIdentifier(nextDataId));
+        }
+
+        Integer id = data.getId().getValue();
+
+        // Ensure that nextDataId is still greater than every id
         if (id >= nextDataId) {
             nextDataId = id + 1;
         }
@@ -36,14 +59,17 @@ public class ChannelDataSet<T extends ChannelData>
 
     }
 
-    public int size() {
+    /** {@inheritDoc} */
+    public final int size() {
 
         return dataSet.size();
 
     }
 
     /** {@inheritDoc} */
-    public List<T> getLast(int count) {
+    public final List<T> getLast(final int requestedItems) {
+
+        int count = requestedItems;
 
         if (count < 0) {
             count = Integer.MAX_VALUE;
@@ -58,17 +84,11 @@ public class ChannelDataSet<T extends ChannelData>
 
     }
 
-    public List<T> getAll() {
+    /** {@inheritDoc} */
+    public final List<T> getAll() {
 
         return getLast(-1);
 
-    }
-
-    /** {@inheritDoc} */
-    public ChannelDataIdentifier getNextDataId() {
-        ChannelDataIdentifier id = new ChannelDataIdentifier(nextDataId);
-        nextDataId++;
-        return id;
     }
 
 }

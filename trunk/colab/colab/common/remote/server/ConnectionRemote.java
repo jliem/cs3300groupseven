@@ -11,13 +11,13 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ChannelInterface;
+import colab.common.remote.client.ChannelRemote;
 import colab.server.user.Password;
 
 /**
  * A remote object on the server which represents a client's session.
  */
-public interface ConnectionInterface extends Remote {
+public interface ConnectionRemote extends Remote {
 
     /**
      * Attempts to authenticate a user, using the name and password.
@@ -91,7 +91,7 @@ public interface ConnectionInterface extends Remote {
      * @param channelDescriptor the dsecriptor of the channel being joined
      * @throws RemoteException if an rmi error occurs
      */
-    void joinChannel(ChannelInterface clientChannel,
+    void joinChannel(ChannelRemote clientChannel,
             ChannelDescriptor channelDescriptor) throws RemoteException;
 
     /**
@@ -119,6 +119,7 @@ public interface ConnectionInterface extends Remote {
      *
      * @param channelName the channel to add
      * @param data the channel's data
+     * @return the id assigned to the data that was added
      * @throws RemoteException if an rmi error occurs
      */
     ChannelDataIdentifier add(ChannelName channelName, ChannelData data)
@@ -143,13 +144,14 @@ public interface ConnectionInterface extends Remote {
             throws RemoteException;
 
     /**
-     * Creates a new Community in this connection.
+     * Creates a new community in this connection.
      *
-     * @param commName the Community name
-     * @param commPass the default Community password used to join Community
+     * @param name the community name
+     * @param password the password used to join the community
+     * @throws RemoteException if an rmi error occurs
      */
 
-    void createCommunity(String commName, Password commPass)
+    void createCommunity(String name, char[] password)
         throws RemoteException;
 
 }

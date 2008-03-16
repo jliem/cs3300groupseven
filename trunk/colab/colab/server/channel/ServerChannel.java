@@ -9,12 +9,11 @@ import java.util.List;
 
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
-import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ChannelInterface;
+import colab.common.remote.client.ChannelRemote;
 import colab.server.connection.Connection;
 import colab.server.connection.ConnectionIdentifier;
 import colab.server.event.DisconnectEvent;
@@ -36,8 +35,6 @@ public abstract class ServerChannel<T extends ChannelData>
      * who need to be notified when a change occurs.
      */
     private IdentitySet<ConnectionIdentifier, ChannelConnection> clients;
-
-    public abstract ChannelDataIdentifier getNextDataId();
 
     /**
      * Constructs a new ServerChannel.
@@ -107,6 +104,9 @@ public abstract class ServerChannel<T extends ChannelData>
     /**
      * Adds data to the channel.
      *
+     * The data object's identifier is ignored,
+     * and will get set by this method.
+     *
      * @param data data to add
      */
     public abstract void add(final T data);
@@ -174,7 +174,7 @@ public abstract class ServerChannel<T extends ChannelData>
 
             Connection connection = client.getConnection();
 
-            ChannelInterface channelInterface =
+            ChannelRemote channelInterface =
                 client.getChannelInterface();
 
             try {
@@ -198,7 +198,7 @@ public abstract class ServerChannel<T extends ChannelData>
                 : this.clients.toArray(new ChannelConnection[]{})) {
 
             Connection connection = client.getConnection();
-            ChannelInterface channelInterface =
+            ChannelRemote channelInterface =
                 client.getChannelInterface();
 
             try {
@@ -228,7 +228,7 @@ public abstract class ServerChannel<T extends ChannelData>
 
             if (!userName.equals(data.getCreator())) {
 
-                ChannelInterface channelInterface =
+                ChannelRemote channelInterface =
                     client.getChannelInterface();
 
                 try {

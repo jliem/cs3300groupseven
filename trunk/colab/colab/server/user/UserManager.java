@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import colab.common.exception.AuthenticationException;
+import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.IncorrectPasswordException;
 import colab.common.exception.UserAlreadyExistsException;
@@ -54,6 +55,7 @@ public final class UserManager {
      *
      * @param name the name of the community
      * @return the community with the given name
+     * @throws CommunityDoesNotExistException if the community does not exist
      */
     public Community getCommunity(final CommunityName name)
             throws CommunityDoesNotExistException {
@@ -81,9 +83,17 @@ public final class UserManager {
      * Adds a new community.
      *
      * @param community the new community to add
+     * @throws CommunityAlreadyExistsException if the community already exists
      */
-    public void addCommunity(final Community community) {
+    public void addCommunity(final Community community)
+            throws CommunityAlreadyExistsException {
+
+        if (communityStore.get(community.getId()) != null) {
+            throw new CommunityAlreadyExistsException();
+        }
+
         communityStore.add(community);
+
     }
 
     /**

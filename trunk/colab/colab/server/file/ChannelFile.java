@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
-import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.util.FileUtils;
@@ -14,13 +13,29 @@ import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlReader;
 
-public class ChannelFile<T extends ChannelData>
+/**
+ * A collection of data in a channel, backed by a
+ * {@link ChannelDataSet} and maintained persistently
+ * by a text file.
+ *
+ * @param <T> the type of channel data in the collection
+ */
+public final class ChannelFile<T extends ChannelData>
         implements ChannelDataStore<T> {
 
+    /** The backing data set. */
     private final ChannelDataSet<T> dataCollection;
 
+    /** The file used for persistent storage. */
     private final File file;
 
+    /**
+     * Construct a new ChannelFile.
+     *
+     * @param file the file to use for persistent storage
+     * @param constructor a closure used to construct data elements from xml
+     * @throws IOException if an I/O error occurs
+     */
     public ChannelFile(final File file,
             final XmlConstructor<T> constructor)
             throws IOException {
@@ -42,6 +57,7 @@ public class ChannelFile<T extends ChannelData>
 
     }
 
+    /** {@inheritDoc} */
     public void add(final T data) {
 
         dataCollection.add(data);
@@ -56,20 +72,25 @@ public class ChannelFile<T extends ChannelData>
 
     }
 
+    /** {@inheritDoc} */
     public List<T> getAll() {
 
         return dataCollection.getAll();
 
     }
 
+    /** {@inheritDoc} */
     public List<T> getLast(final int count) {
 
         return dataCollection.getLast(count);
 
     }
 
-    public ChannelDataIdentifier getNextDataId() {
-        return dataCollection.getNextDataId();
+    /** {@inheritDoc} */
+    public int size() {
+
+        return dataCollection.size();
+
     }
 
 }

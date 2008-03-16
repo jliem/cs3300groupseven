@@ -7,7 +7,7 @@ import java.util.Map;
 
 import colab.common.util.StringUtils;
 
-public class XmlNode {
+public final class XmlNode {
 
     private final String type;
 

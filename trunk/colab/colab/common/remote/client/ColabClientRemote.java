@@ -11,7 +11,7 @@ import colab.common.channel.ChannelDescriptor;
  * with some information that is not specific to any
  * particular channel.
  */
-public interface ColabClientInterface extends Remote {
+public interface ColabClientRemote extends Remote {
 
     /**
      * Notifies the client that a channel exists in the community

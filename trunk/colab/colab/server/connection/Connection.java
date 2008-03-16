@@ -13,6 +13,7 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelDoesNotExistException;
+import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserAlreadyLoggedInException;
@@ -20,9 +21,9 @@ import colab.common.identity.Identifiable;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.common.remote.client.ChannelInterface;
-import colab.common.remote.client.ColabClientInterface;
-import colab.common.remote.server.ConnectionInterface;
+import colab.common.remote.client.ChannelRemote;
+import colab.common.remote.client.ColabClientRemote;
+import colab.common.remote.server.ConnectionRemote;
 import colab.server.ColabServer;
 import colab.server.channel.ChannelConnection;
 import colab.server.channel.ChannelManager;
@@ -35,10 +36,10 @@ import colab.server.user.User;
 import colab.server.user.UserManager;
 
 /**
- * Server implementation of {@link ConnectionInterface}.
+ * Server implementation of {@link ConnectionRemote}.
  */
 public final class Connection extends UnicastRemoteObject
-        implements ConnectionInterface, Identifiable<ConnectionIdentifier> {
+        implements ConnectionRemote, Identifiable<ConnectionIdentifier> {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -63,7 +64,7 @@ public final class Connection extends UnicastRemoteObject
     /**
      * A remote reference to the connected client.
      */
-    private final ColabClientInterface client;
+    private final ColabClientRemote client;
 
     /**
      * The current state of the connection.
@@ -94,7 +95,7 @@ public final class Connection extends UnicastRemoteObject
      * @throws RemoteException if an rmi error occurs
      */
     public Connection(final ColabServer server,
-            final ColabClientInterface client) throws RemoteException {
+            final ColabClientRemote client) throws RemoteException {
 
         synchronized(Connection.nextId) {
             this.connectionId = new ConnectionIdentifier(Connection.nextId++);
@@ -121,7 +122,7 @@ public final class Connection extends UnicastRemoteObject
     /**
      * @return the remote client object
      */
-    public ColabClientInterface getClient() {
+    public ColabClientRemote getClient() {
         return this.client;
     }
 
@@ -324,7 +325,7 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public void joinChannel(final ChannelInterface clientChannel,
+    public void joinChannel(final ChannelRemote clientChannel,
             final ChannelDescriptor channelDescriptor) throws RemoteException {
 
         ChannelName channelName = channelDescriptor.getName();
@@ -393,14 +394,13 @@ public final class Connection extends UnicastRemoteObject
 
         ServerChannel channel = getChannel(channelName);
 
-        ChannelDataIdentifier id = channel.getNextDataId();
-
-        data.setId(id);
+        data.setId(null);
         data.setCreator(this.username);
         data.setTimestamp();
 
         channel.add(data);
 
+        ChannelDataIdentifier id = data.getId();
         return id;
 
     }
@@ -440,7 +440,9 @@ public final class Connection extends UnicastRemoteObject
     /** {@inheritDoc} */
     public void createUser(final String userName, final char[] password)
             throws RemoteException {
-        User user = new User(new UserName(userName), new Password(password));
+        User user = new User(
+                new UserName(userName),
+                new Password(password));
         try {
             this.server.getUserManager().addUser(user);
         } catch (final UserAlreadyExistsException e) {
@@ -448,8 +450,19 @@ public final class Connection extends UnicastRemoteObject
         }
     }
 
-    public void createCommunity(String commName, Password commPass) {
-        // TODO Auto-generated method stub
+    /** {@inheritDoc} */
+    public void createCommunity(final String communityName,
+            final char[] password) throws RemoteException {
+
+        Community community = new Community(
+                new CommunityName(communityName),
+                new Password(password));
+
+        try {
+            this.server.getUserManager().addCommunity(community);
+        } catch (final CommunityAlreadyExistsException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
 
     }
 
@@ -503,7 +516,5 @@ public final class Connection extends UnicastRemoteObject
     private void log(final String message) {
         System.out.println("[Connection " + connectionId + "] " + message);
     }
-
-
 
 }

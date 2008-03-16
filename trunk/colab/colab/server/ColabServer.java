@@ -7,9 +7,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import colab.common.remote.client.ColabClientInterface;
-import colab.common.remote.server.ColabServerInterface;
-import colab.common.remote.server.ConnectionInterface;
+import colab.common.remote.client.ColabClientRemote;
+import colab.common.remote.server.ColabServerRemote;
+import colab.common.remote.server.ConnectionRemote;
 import colab.common.util.FileUtils;
 import colab.server.channel.ChannelManager;
 import colab.server.connection.Connection;
@@ -19,7 +19,7 @@ import colab.server.user.UserManager;
  * Server implementation of ColabServerInterface.
  */
 public class ColabServer extends UnicastRemoteObject
-        implements ColabServerInterface {
+        implements ColabServerRemote {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -82,7 +82,7 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public final ConnectionInterface connect(final ColabClientInterface client)
+    public final ConnectionRemote connect(final ColabClientRemote client)
             throws RemoteException {
 
         return new Connection(this, client);

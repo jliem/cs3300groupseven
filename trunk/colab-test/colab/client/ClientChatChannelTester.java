@@ -9,7 +9,9 @@ import colab.common.naming.UserName;
 public class ClientChatChannelTester extends TestCase {
 
     public void testUserJoined() throws Exception {
-         ClientChatChannel chan = new ClientChatChannel(new ChannelName("Test Channel"));
+
+         ClientChatChannel chan = new ClientChatChannel(
+                 new ChannelName("Test Channel"));
 
          Set<UserName> members = chan.getMembers();
          UserName user1 = new UserName("test1");
@@ -28,7 +30,8 @@ public class ClientChatChannelTester extends TestCase {
     }
 
     public void testUserLeft() throws Exception {
-         ClientChatChannel chan = new ClientChatChannel(new ChannelName("Test Channel"));
+         ClientChatChannel chan = new ClientChatChannel(
+                 new ChannelName("Test Channel"));
 
          Set<UserName> members = chan.getMembers();
          UserName user1 = new UserName("test1");
@@ -46,5 +49,7 @@ public class ClientChatChannelTester extends TestCase {
          chan.userLeft(user2);
 
          assertTrue(members.isEmpty());
+
     }
+
 }

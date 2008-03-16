@@ -3,14 +3,15 @@ package colab.server.user;
 import junit.framework.TestCase;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.server.MockColabServer;
 
+/**
+ * Test cases for {@link UserManager}.
+ */
 public final class UserManagerTest extends TestCase {
 
     public void testUserManagerCreationandAddCommunity() throws Exception{
 
-        MockColabServer server = new MockColabServer();
-        UserManager um = new UserManager(server);
+        UserManager um = new UserManager();
         um.addCommunity(new Community(
                 new CommunityName("TestComm"),
                 new Password("TestCommPass".toCharArray())));
@@ -23,8 +24,7 @@ public final class UserManagerTest extends TestCase {
 
     public void testUserManagerCreationandAddUser() throws Exception{
 
-        MockColabServer server = new MockColabServer();
-        UserManager um = new UserManager(server);
+        UserManager um = new UserManager();
         um.addUser(new User(
                 new UserName("TestUser"),
                 new Password("TestUserPass".toCharArray())));

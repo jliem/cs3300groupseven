@@ -14,4 +14,5 @@ public abstract class ClientChannelPanel extends JPanel {
     public UserListPanel getUserListPanel() {
         return userListPanel;
     }
+
 }

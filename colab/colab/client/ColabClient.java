@@ -15,6 +15,7 @@ import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
+import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
@@ -262,9 +263,11 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
-    public void createCommunity(final CommunityName commName, Password comPass)
-            throws NetworkException, UserAlreadyExistsException {
+    public void createCommunity(final CommunityName commName,
+            final Password comPass) throws NetworkException,
+            CommunityAlreadyExistsException {
 
+        // TODO:
 
     }
 

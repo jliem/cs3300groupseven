@@ -9,6 +9,9 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.UserName;
 
+/**
+ * Test cases for {@link ChannelFile}.
+ */
 public final class ChannelFileTester extends TestCase {
 
     /**
@@ -18,6 +21,8 @@ public final class ChannelFileTester extends TestCase {
      * The message data contains characters which need to
      * be escaped, as well as escape strings, in attempt
      * to trip up the writer or parser.
+     *
+     * @throws Exception if any exception is thrown
      */
     public void testChatChannel() throws Exception {
 

@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  * Wraps a fixed-size panel so it can be placed in the middle
  * of a container without being resized.
  */
-class FixedSizePanel extends JPanel {
+final class FixedSizePanel extends JPanel {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;
@@ -21,11 +21,23 @@ class FixedSizePanel extends JPanel {
     /** The panel being wrapped. */
     private JPanel innerPanel;
 
+    /**
+     * Constructs a new FixedSizePanel with a
+     * specific size for the inner panel.
+     *
+     * @param jpanel the fixed-size panel to wrap
+     * @param size the fixed size of the wrapped panel
+     */
     public FixedSizePanel(final JPanel jpanel, final Dimension size) {
         this(jpanel);
         setFixedSize(size);
     }
 
+    /**
+     * Constructs a new FixedSizePanel.
+     *
+     * @param jpanel the fixed-size panel to wrap
+     */
     public FixedSizePanel(final JPanel jpanel) {
         innerPanel = new JPanel();
         innerPanel = jpanel;
@@ -44,6 +56,11 @@ class FixedSizePanel extends JPanel {
         setSize(size);
     }
 
+    /**
+     * Sets the size of the inner panel.
+     *
+     * @param dimension the desired size of the inner panel
+     */
     public void setFixedSize(final Dimension dimension) {
         innerPanel.setMinimumSize(dimension);
         innerPanel.setPreferredSize(dimension);

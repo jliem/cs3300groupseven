@@ -29,18 +29,34 @@ import colab.common.naming.UserName;
 
 class ColabClientGUI extends JFrame {
 
+    /** Serialization verson number. */
+    public static final long serialVersionUID = 1L;
+
     private final ColabClient client;
 
     private final LoginPanel loginPanel;
+
     private final FixedSizePanel loginPanelWrapper;
+
     private ChooseCommunityPanel communityPanel;
+
     private final FixedSizePanel communityPanelWrapper;
+
     private ChannelManagerPanel channelPanel;
+
     private JPanel activePanel;
+
     private UserName currentUser;
+
     private JMenuBar menuBar;
+
     private JMenu menu;
-    private JMenuItem logoutItem, changeCommItem, quitItem;
+
+    private JMenuItem logoutItem;
+
+    private JMenuItem changeCommItem;
+
+    private JMenuItem quitItem;
 
     public ColabClientGUI(final ColabClient client) {
 
@@ -182,8 +198,7 @@ class ColabClientGUI extends JFrame {
                     });
                 }
 
-                if(e.getActionCommand().equalsIgnoreCase("New Community")){
-
+                if (e.getActionCommand().equalsIgnoreCase("New Community")) {
 
                 }
             }

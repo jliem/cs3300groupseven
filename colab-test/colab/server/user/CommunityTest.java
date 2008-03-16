@@ -8,6 +8,9 @@ import colab.common.naming.*;
 import colab.client.ColabClient;
 import colab.common.channel.*;
 
+/**
+ * Test cases for {@link Community}.
+ */
 public final class CommunityTest extends TestCase {
 
     /*

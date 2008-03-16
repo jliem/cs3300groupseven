@@ -34,12 +34,33 @@ import colab.common.naming.ChannelName;
 
 public class ExportChatFrame extends JFrame {
 
+    /** Serialization verson number. */
+    public static final long serialVersionUID = 1L;
+
     private final JFileChooser fileChooser;
-    private final JButton exportButton, browseButton;
-    private final JTextField fromBox, toBox, fileBox;
-    private final JLabel fromLabel, toLabel;
-    private final JRadioButton local, lines, entire;
+
+    private final JButton exportButton;
+
+    private final JButton browseButton;
+
+    private final JTextField fromBox;
+
+    private final JTextField toBox;
+
+    private final JTextField fileBox;
+
+    private final JLabel fromLabel;
+
+    private final JLabel toLabel;
+
+    private final JRadioButton local;
+
+    private final JRadioButton lines;
+
+    private final JRadioButton entire;
+
     private File exportFile;
+
     public ExportChatFrame(final ClientChatChannel channel) {
 
         fileChooser = new JFileChooser();

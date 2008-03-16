@@ -9,7 +9,7 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.UserName;
 
-public class ChannelFileTester extends TestCase {
+public final class ChannelFileTester extends TestCase {
 
     /**
      * Generates some chat data, writes it to a temporary

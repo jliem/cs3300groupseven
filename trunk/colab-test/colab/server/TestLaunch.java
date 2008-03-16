@@ -3,15 +3,14 @@ package colab.server;
 import java.rmi.Naming;
 
 import colab.client.ColabClient;
-import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
 
-public class TestLaunch {
+public final class TestLaunch {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
 
         ColabServer.main(new String[]{});
 
@@ -31,15 +30,6 @@ public class TestLaunch {
         connection.logIn(communityName, "awesomePass".toCharArray());
 
         System.out.println("Logged into community.");
-
-        ChannelName channelName = new ChannelName("Lobby");
-        //ClientChatChannel clientChannel =
-        //    new ClientChatChannel(channelName);
-
-        //ChannelInterface serverChannel =
-            //connection.joinChannel(clientChannel, channelName);
-        //System.out.println("Channle!~~!~~!~!@~bbqzomg");
-        //serverChannel.add(new ChatChannelData("hi all", ));
 
     }
 

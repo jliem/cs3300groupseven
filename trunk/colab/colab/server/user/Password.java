@@ -63,6 +63,9 @@ public final class Password implements Serializable {
         return doHash(pass).equals(hash);
     }
 
+    /**
+     * @return the password, hashed into a string
+     */
     public String getHash() {
         return this.hash;
     }

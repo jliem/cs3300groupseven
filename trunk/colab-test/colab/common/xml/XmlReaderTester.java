@@ -4,7 +4,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-public class XmlReaderTester extends TestCase {
+public final class XmlReaderTester extends TestCase {
 
     public void testEmptyString() throws Exception {
 

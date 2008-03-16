@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 import junit.framework.TestCase;
 
-public class FileUtilsTester extends TestCase {
+public final class FileUtilsTester extends TestCase {
 
     public void testAppendLine() throws Exception {
 

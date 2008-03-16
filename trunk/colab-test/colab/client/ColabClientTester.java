@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import colab.common.exception.UnableToConnectException;
 import colab.server.MockColabServer;
 
-public class ColabClientTester extends TestCase {
+public final class ColabClientTester extends TestCase {
 
     public void testConnect() throws Exception {
 

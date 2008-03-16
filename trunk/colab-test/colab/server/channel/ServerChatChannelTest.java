@@ -7,7 +7,7 @@ import colab.server.channel.ServerChatChannel;
 import colab.common.naming.*;
 import colab.common.channel.*;
 
-public class ServerChatChannelTest extends TestCase {
+public final class ServerChatChannelTest extends TestCase {
 
     public void testServerChatChannelCreationandAddition()
             throws RemoteException {

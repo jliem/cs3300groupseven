@@ -12,7 +12,6 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
-import colab.server.user.Password;
 
 /**
  * A remote object on the server which represents a client's session.

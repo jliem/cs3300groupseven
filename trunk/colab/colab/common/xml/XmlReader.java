@@ -6,19 +6,41 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
-public class XmlReader {
+/**
+ * Parses an xml file.
+ */
+public final class XmlReader {
 
+    /**
+     * The scanner used to read in the file.
+     */
     private final Scanner in;
 
+    /**
+     * Constructs a new XmlReader.
+     *
+     * @param file the file to read
+     * @throws IOException if an I/O exception occurs
+     */
     public XmlReader(final File file) throws IOException {
         this.in = new Scanner(file);
     }
 
+    /**
+     * Constructs a new XmlReader.
+     *
+     * @param str the string to parse
+     */
     public XmlReader(final String str) {
         this.in = new Scanner(str);
     }
 
-    public List<XmlNode> getXml() throws IOException {
+    /**
+     * Parses the content.
+     *
+     * @return a list of xml nodes represented by the string content
+     */
+    public List<XmlNode> getXml() {
         Stack<XmlNode> stack = new Stack<XmlNode>();
         stack.push(new XmlNode(""));
         while (in.hasNextLine()) {
@@ -48,6 +70,12 @@ public class XmlReader {
         return stack.pop().getChildren();
     }
 
+    /**
+     * Parses a serialized attribute string.
+     *
+     * @param attributes a string representing an attribute mapping
+     * @param node the mapping represented by the string
+     */
     static void parseAttributes(final String attributes, final XmlNode node) {
         Scanner scanner = new Scanner(attributes.trim());
         while (scanner.hasNext()) {

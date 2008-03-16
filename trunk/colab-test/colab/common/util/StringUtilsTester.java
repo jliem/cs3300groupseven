@@ -2,7 +2,7 @@ package colab.common.util;
 
 import junit.framework.TestCase;
 
-public class StringUtilsTester extends TestCase {
+public final class StringUtilsTester extends TestCase {
 
     public void testContainsOnlyCharacters1() {
         assertTrue(StringUtils.containsOnlyCharacters(

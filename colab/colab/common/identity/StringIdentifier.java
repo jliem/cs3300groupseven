@@ -37,7 +37,7 @@ public abstract class StringIdentifier extends Identifier<String> {
      * as this object is less than, equal to, or greater than
      * the specified object.
      */
-    public int compareTo(final StringIdentifier stringIdentifier) {
+    public final int compareTo(final StringIdentifier stringIdentifier) {
         return this.toString().compareTo(stringIdentifier.toString());
     }
 }

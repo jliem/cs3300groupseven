@@ -5,17 +5,18 @@ import java.util.Date;
 
 import colab.common.identity.Identifiable;
 import colab.common.naming.UserName;
-import colab.common.xml.XmlNode;
+import colab.common.xml.XmlSerializable;
 
 /**
  * Represents some piece of data in a Channel.
  */
 public abstract class ChannelData implements Serializable,
-        Identifiable<ChannelDataIdentifier> {
+        Identifiable<ChannelDataIdentifier>, XmlSerializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    /** The id of this piece of date (unique to its respective channel). */
     private ChannelDataIdentifier id;
 
     /**
@@ -63,10 +64,20 @@ public abstract class ChannelData implements Serializable,
         this.timestamp = timestamp;
     }
 
+    /**
+     * Retrieves the identifier for this object.
+     *
+     * @return the identifier for this channel data.
+     */
     public final ChannelDataIdentifier getId() {
         return this.id;
     }
 
+    /**
+     * Sets the identifier for this object.
+     *
+     * @param id the identifier for this channel data.
+     */
     public final void setId(final ChannelDataIdentifier id) {
         this.id = id;
     }
@@ -80,6 +91,11 @@ public abstract class ChannelData implements Serializable,
         return this.creator;
     }
 
+    /**
+     * Sets the user who created this data.
+     *
+     * @param creator the user from whom this data originated
+     */
     public final void setCreator(final UserName creator) {
         this.creator = creator;
     }
@@ -93,18 +109,22 @@ public abstract class ChannelData implements Serializable,
         return this.timestamp;
     }
 
+    /**
+     * Sets the creation datetime of this data.
+     *
+     * @param timestamp the time at which this data was originally created
+     */
     public final void setTimestamp(final Date timestamp) {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Sets the creation datetime of this data as the current time.
+     *
+     * Equivalent to setTimestamp(new Date()).
+     */
     public final void setTimestamp() {
         this.timestamp = new Date();
     }
-
-    /**
-     * @return an xml node containing all of the data required
-     *         to serialize this object.
-     */
-    public abstract XmlNode toXml();
 
 }

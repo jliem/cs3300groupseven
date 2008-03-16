@@ -33,8 +33,8 @@ public final class UserManager {
     public UserManager(final ColabServer server) {
 
         this.server = server;
-        this.userStore = new UserCollection();
-        this.communityStore = new CommunityCollection();
+        this.userStore = new UserSet();
+        this.communityStore = new CommunitySet();
 
     }
 

@@ -3,14 +3,20 @@ package colab.server.user;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.UserName;
 
-public final class UserCollection implements UserStore {
+/**
+ * A simple UserStore which stores all users in a set.
+ */
+public final class UserSet implements UserStore {
 
     /**
      * All of the users that exist.
      */
     private final IdentitySet<UserName, User> users;
 
-    public UserCollection() {
+    /**
+     * Constructs an empty UserSet.
+     */
+    public UserSet() {
         this.users = new IdentitySet<UserName, User>();
     }
 

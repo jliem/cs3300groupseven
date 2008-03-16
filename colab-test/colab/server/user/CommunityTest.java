@@ -10,17 +10,21 @@ import colab.common.channel.*;
 
 public class CommunityTest extends TestCase {
 
-/*
-    public void testCommunityCreationandClientAddition() throws RemoteException{
-        Community comm = new Community(new CommunityName("TestComm"), new Password("TestPass"));
+    /*
+    public void testCommunityCreationandClientAddition() throws Exception {
+
+        Community community = new Community(
+                new CommunityName("TestComm"),
+                new Password("TestPass"));
+
         ColabClient client = new ColabClient();
 
-        comm.addClient(new UserName("TestUser"), client);
+        community.addClient(new UserName("TestUser"), client);
 
         assertSame(comm.getClients().get(new UserName("TestUser")), client);
 
     }
-*/
+    */
 
 /*
     public void testCommunityCreationandClientRemoval() throws RemoteException{

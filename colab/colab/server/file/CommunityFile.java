@@ -2,71 +2,75 @@ package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
-import java.util.Scanner;
+import java.util.List;
 
 import colab.common.naming.CommunityName;
-import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlReader;
 import colab.server.user.Community;
-import colab.server.user.CommunityCollection;
+import colab.server.user.CommunitySet;
 import colab.server.user.CommunityStore;
-import colab.server.user.Password;
 
-public class CommunityFile implements CommunityStore {
+/**
+ * A collection of files, backed by a {@link CommunitySet}
+ * and maintained persistently by a text file.
+ */
+public final class CommunityFile implements CommunityStore {
 
-    private final CommunityCollection communities;
+    /** The backing community set. */
+    private final CommunitySet communities;
 
+    /** The file for persistent storage. */
     private final File file;
 
+    /**
+     * Contructs a new CommunityFile.
+     *
+     * @param file the file to use for persistent storage
+     * @throws IOException if an I/O exception occurs
+     */
     public CommunityFile(final File file) throws IOException {
 
         this.file = file;
-        this.communities = new CommunityCollection();
+        this.communities = new CommunitySet();
 
-        Scanner fileScanner = new Scanner(file);
-        while (fileScanner.hasNextLine()) {
-            String line = fileScanner.nextLine();
-            if (line.indexOf(":") < 0) {
-                continue;
+        final XmlReader xmlReader = new XmlReader(file);
+        final List<XmlNode> xml = xmlReader.getXml();
+        for (final XmlNode node : xml) {
+            Community data;
+            try {
+                data = Community.fromXml(node);
+            } catch (final ParseException e) {
+                throw new IOException(e.getMessage());
             }
-            Scanner lineScanner = new Scanner(line);
-            lineScanner.useDelimiter(":");
-            CommunityName name = new CommunityName(lineScanner.next());
-            Password pass = new Password(lineScanner.next());
-            Community community = new Community(name, pass);
-            while (lineScanner.hasNext()) {
-                UserName userName = new UserName(lineScanner.next());
-                community.getMembers().add(userName);
-            }
-            communities.add(community);
-            lineScanner.close();
+            communities.add(data);
         }
-        fileScanner.close();
 
     }
 
+    /** {@inheritDoc} */
     public Collection<Community> getAll() {
         return communities.getAll();
     }
 
+    /** {@inheritDoc} */
     public void add(final Community community) {
 
         communities.add(community);
 
+        String str = community.toXml().serialize();
         try {
-            String passHash = community.getPassword().getHash();
-            String line = community.getId() + ":" + passHash + ":";
-            for (UserName memberName : community.getMembers()) {
-                line += memberName + ":";
-            }
-            FileUtils.appendLine(file, line);
+            FileUtils.appendLine(file, str);
         } catch (final IOException ioe) {
             ioe.printStackTrace();
         }
 
     }
 
+    /** {@inheritDoc} */
     public Community get(final CommunityName name) {
         return communities.get(name);
     }

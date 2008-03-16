@@ -2,7 +2,6 @@ package colab.common.identity;
 
 import junit.framework.TestCase;
 
-
 /**
  * Test cases for {@link IdentitySet}.
  */

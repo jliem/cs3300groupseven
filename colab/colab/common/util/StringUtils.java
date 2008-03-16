@@ -54,6 +54,12 @@ public final class StringUtils {
 
     }
 
+    /**
+     * Converts a byte array, arbitrarily but consistently, to a string.
+     *
+     * @param bytes a byte array
+     * @return a string which is dependent on the byte array
+     */
     public static String toLetters(final byte[] bytes) {
         char[] charset = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         char[] letters = new char[bytes.length];

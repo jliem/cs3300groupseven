@@ -5,7 +5,7 @@ import colab.server.ColabServer;
 import colab.client.ColabClient;
 import colab.common.remote.server.ConnectionRemote;
 
-public class ColabServerTester extends TestCase {
+public final class ColabServerTester extends TestCase {
 
     public void testCreateServerandConnect() throws Exception {
 

@@ -6,7 +6,10 @@ import junit.framework.TestCase;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
-public class ClientChatChannelTester extends TestCase {
+/**
+ * Tester for {@link ClientChatChannel}.
+ */
+public final class ClientChatChannelTester extends TestCase {
 
     public void testUserJoined() throws Exception {
 

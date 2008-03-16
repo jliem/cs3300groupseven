@@ -8,7 +8,7 @@ import colab.common.naming.*;
 import colab.client.ColabClient;
 import colab.common.channel.*;
 
-public class CommunityTest extends TestCase {
+public final class CommunityTest extends TestCase {
 
     /*
     public void testCommunityCreationandClientAddition() throws Exception {

@@ -10,7 +10,7 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.server.channel.ServerChannel;
 
-public class ChannelManagerTester extends TestCase {
+public final class ChannelManagerTester extends TestCase {
 /*
     private ChannelManager cm;
 

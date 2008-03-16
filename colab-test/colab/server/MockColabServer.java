@@ -8,7 +8,7 @@ import colab.server.user.Community;
 import colab.server.user.User;
 import colab.server.user.UserManager;
 
-public class MockColabServer extends ColabServer {
+public final class MockColabServer extends ColabServer {
 
     public MockColabServer() throws Exception {
 

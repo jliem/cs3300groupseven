@@ -7,7 +7,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import colab.server.user.User;
 
-public class UserFileTester extends TestCase {
+public final class UserFileTester extends TestCase {
 
     public void testWriteAndRead() throws Exception {
 

@@ -2,9 +2,10 @@ package colab.common.naming;
 
 import junit.framework.TestCase;
 
-public class ColabNameRulesTester extends TestCase {
+public final class ColabNameRulesTester extends TestCase {
 
     public void testIsValidCommunityNameLength() {
+
         int maxLength = ColabNameRules.getCommunityMaxLength();
 
         StringBuilder s = new StringBuilder();

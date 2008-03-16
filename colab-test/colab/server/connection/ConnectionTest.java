@@ -5,7 +5,7 @@ import colab.client.ColabClient;
 import colab.common.ConnectionState;
 import colab.server.MockColabServer;
 
-public class ConnectionTest extends TestCase {
+public final class ConnectionTest extends TestCase {
 
     public void testConnectionCreationandCheckState() throws Exception {
 

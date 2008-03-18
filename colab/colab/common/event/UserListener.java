@@ -1,4 +1,4 @@
-package colab.client.event;
+package colab.common.event;
 
 /**
  * A UserListener is notified when a user joins or leaves
@@ -9,11 +9,11 @@ public interface UserListener {
     /**
      * @param joinedEvent the join event
      */
-    void userJoined(UserJoinedEvent joinedEvent);
+    void handleUserEvent(UserJoinedEvent joinedEvent);
 
     /**
      * @param leftEvent the leave event
      */
-    void userLeft(UserLeftEvent leftEvent);
+    void handleUserEvent(UserLeftEvent leftEvent);
 
 }

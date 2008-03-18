@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
@@ -14,7 +13,7 @@ import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataSet;
 import colab.common.naming.ChannelName;
 
-public class ClientChatChannel extends ClientChannel {
+public final class ClientChatChannel extends ClientChannel {
 
     private ArrayList<ActionListener> listeners;
 
@@ -67,4 +66,5 @@ public class ClientChatChannel extends ClientChannel {
         newMessages = 0;
         return list;
     }
+
 }

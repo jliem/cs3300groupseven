@@ -27,7 +27,7 @@ import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserDoesNotExistException;
 import colab.common.naming.UserName;
 
-public class LoginPanel extends JPanel {
+public final class LoginPanel extends JPanel {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;

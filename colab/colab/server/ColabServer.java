@@ -3,8 +3,10 @@ package colab.server;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
 import colab.common.remote.client.ColabClientRemote;
@@ -35,6 +37,12 @@ public class ColabServer extends UnicastRemoteObject
      * for this server instance.
      */
     private final ChannelManager channelManager;
+
+    /**
+     * The address in the rmi registry to which this
+     * server has bound itself; null if not bound.
+     */
+    private String rmiAddress = null;
 
     /**
      * Constructs an instance of the server application.
@@ -77,11 +85,35 @@ public class ColabServer extends UnicastRemoteObject
      */
     public final void publish(final int port) throws IOException {
 
+        String address = "//localhost:" + port + "/COLAB_SERVER";
+
         // Create the rmi registry, add the server to it
-        LocateRegistry.createRegistry(port);
-        Naming.rebind("//localhost:" + port + "/COLAB_SERVER", this);
+        try {
+            LocateRegistry.createRegistry(port);
+        } catch (final ExportException e) {
+            // registry already created
+        }
+        Naming.rebind(address, this);
+
+        this.rmiAddress = address;
 
         System.out.println("Server initialized");
+
+    }
+
+    /**
+     * Removes the server from the rmi registry.
+     *
+     * @throws NotBoundException if the server is not bound to the registry
+     * @throws IOException if an I/O error occurs
+     */
+    public final void unpublish() throws NotBoundException, IOException {
+
+        try {
+            Naming.unbind(this.rmiAddress);
+        } finally {
+            this.rmiAddress = null;
+        }
 
     }
 

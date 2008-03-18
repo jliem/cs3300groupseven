@@ -3,6 +3,9 @@ package colab.common.channel;
 import colab.common.naming.UserName;
 import junit.framework.TestCase;
 
+/**
+ * Test cases for {@link ChannelDataSet}.
+ */
 public final class ChannelDataSetTester extends TestCase {
 
     /**

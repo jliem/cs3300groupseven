@@ -1,49 +1,71 @@
 package colab.common.naming;
 
 import junit.framework.TestCase;
+import colab.common.util.StringUtils;
 
+/**
+ * Test cases for {@link ColabNameRules}.
+ */
 public final class ColabNameRulesTester extends TestCase {
 
-    public void testIsValidCommunityNameLength() {
+    /**
+     * Tests validating an empty-string community name.
+     */
+    public void testEmptyCommunityName() {
+
+        String name = "";
+
+        assertTrue(ColabNameRules.isValidCommunityName(name));
+
+    }
+
+    /**
+     * Tests validating a single-character community name.
+     */
+    public void testSingleCharacterCommunityName() {
+
+        String name = "a";
+
+        assertTrue(ColabNameRules.isValidCommunityName(name));
+
+    }
+
+    /**
+     * Tests validating a community name whose length is exactly
+     * the maximum length.
+     */
+    public void testMaxLengthCommunityName() {
 
         int maxLength = ColabNameRules.getCommunityMaxLength();
+        String name = StringUtils.repeat("a", maxLength);
 
-        StringBuilder s = new StringBuilder();
+        assertTrue(ColabNameRules.isValidCommunityName(name));
 
-        // Empty string
-        assertTrue(ColabNameRules.isValidCommunityName(s.toString()));
-
-        s.append('a');
-
-        // Single character
-        assertTrue(ColabNameRules.isValidCommunityName(s.toString()));
-
-        // Max valid length
-        for (int i=0; i<maxLength-1; i++) {
-            s.append('a');
-        }
-
-        assertTrue(ColabNameRules.isValidCommunityName(s.toString()));
-
-        // Valid length + 1
-        s.append('a');
-
-        assertFalse(ColabNameRules.isValidCommunityName(s.toString()));
     }
 
-    public void testIsValidCommunityNameChars() {
-        StringBuilder s = new StringBuilder();
+    /**
+     * Tests validating a community name whose length is one
+     * greater than the maximum length.
+     */
+    public void testTooLongCommunityName() {
 
-        // Empty string
-        assertTrue(ColabNameRules.isValidCommunityName(s.toString()));
+        int maxLength = ColabNameRules.getCommunityMaxLength();
+        String name = StringUtils.repeat("a", maxLength + 1);
 
-        s.append('a');
+        assertFalse(ColabNameRules.isValidCommunityName(name));
 
-        // Single character
-        assertTrue(ColabNameRules.isValidCommunityName(s.toString()));
-
-        s.append("$");
-
-        assertFalse(ColabNameRules.isValidCommunityName(s.toString()));
     }
+
+    /**
+     * Tests validating a community name with an invalid
+     * character in it.
+     */
+    public void testInvalidCharacterInCommunityName() {
+
+        String name = "abcd$efgh";
+
+        assertFalse(ColabNameRules.isValidCommunityName(name));
+
+    }
+
 }

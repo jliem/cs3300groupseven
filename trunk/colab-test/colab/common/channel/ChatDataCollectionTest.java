@@ -1,6 +1,5 @@
 package colab.common.channel;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -8,10 +7,17 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 import colab.server.channel.ServerChatChannel;
 
+/**
+ * Test cases for {@link ServerChatChannel}.
+ */
 public final class ChatDataCollectionTest extends TestCase {
 
-    public void testServerChatChannelCreationandAddition()
-            throws RemoteException {
+    /**
+     * Adds some data to a chat channel.
+     *
+     * @throws Exception if any exception is thrown
+     */
+    public void testAddData() throws Exception {
 
         ServerChatChannel scChannel =
             new ServerChatChannel(new ChannelName("TestChatChannel"));
@@ -27,6 +33,12 @@ public final class ChatDataCollectionTest extends TestCase {
 
     }
 
+    /**
+     * Adds three messages to a chat channel, and
+     * fetches the last two.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testGetLastData() throws Exception {
         ServerChatChannel scChannel =
             new ServerChatChannel(new ChannelName("TestChatChannel"));
@@ -53,7 +65,13 @@ public final class ChatDataCollectionTest extends TestCase {
 
     }
 
+    /**
+     * Adds several messages to a chat channel, and fetches them all.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testGetAllData() throws Exception {
+
         ServerChatChannel scChannel =
             new ServerChatChannel(new ChannelName("TestChatChannel"));
 

@@ -1,4 +1,4 @@
-package colab.client.event;
+package colab.common.event;
 
 import colab.common.naming.UserName;
 

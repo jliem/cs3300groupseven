@@ -17,7 +17,10 @@ import javax.swing.JTextArea;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.UserName;
 
-class ChatPanel extends ClientChannelPanel {
+/**
+ * Panel which displays the UI for a chat channel.
+ */
+final class ChatPanel extends ClientChannelPanel {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -36,6 +39,11 @@ class ChatPanel extends ClientChannelPanel {
 
     private boolean timestampEnabled = false;
 
+    /**
+     * Constructs a new ChatPanel.
+     *
+     * @param name the name of the currently logged-in user
+     */
     public ChatPanel(final UserName name) {
 
         listeners = new ArrayList<ActionListener>();
@@ -80,7 +88,7 @@ class ChatPanel extends ClientChannelPanel {
 
         add(chatScroll, BorderLayout.CENTER);
         add(sendScroll, BorderLayout.SOUTH);
-        add(userListPanel, BorderLayout.EAST);
+        add(getUserListPanel(), BorderLayout.EAST);
 
         lastSize = getSize();
 

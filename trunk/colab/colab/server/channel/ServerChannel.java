@@ -10,6 +10,8 @@ import java.util.List;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.event.UserJoinedEvent;
+import colab.common.event.UserLeftEvent;
 import colab.common.identity.IdentitySet;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
@@ -131,7 +133,7 @@ public abstract class ServerChannel<T extends ChannelData>
         connection.addDisconnectListener(this);
 
         UserName userName = connection.getUserName();
-        userJoined(userName);
+        handleUserEvent(new UserJoinedEvent(userName));
 
     }
 
@@ -147,7 +149,7 @@ public abstract class ServerChannel<T extends ChannelData>
         connection.removeDisconnectListener(this);
 
         UserName userName = connection.getUserName();
-        userLeft(userName);
+        handleUserEvent(new UserLeftEvent(userName));
 
     }
 
@@ -165,9 +167,9 @@ public abstract class ServerChannel<T extends ChannelData>
     /**
      * Informs all clients that a user has joined this channel.
      *
-     * @param joinedUserName the username of the user who joined.
+     * @param event the event
      */
-    protected final void userJoined(final UserName joinedUserName) {
+    private void handleUserEvent(final UserJoinedEvent event) {
 
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
@@ -178,7 +180,7 @@ public abstract class ServerChannel<T extends ChannelData>
                 client.getChannelInterface();
 
             try {
-                channelInterface.userJoined(joinedUserName);
+                channelInterface.handleUserEvent(event);
             } catch (final RemoteException re) {
                 connection.disconnect(re);
             }
@@ -190,9 +192,9 @@ public abstract class ServerChannel<T extends ChannelData>
     /**
      * Informs all clients that a user has left this channel.
      *
-     * @param leftUserName the username of the user who left
+     * @param event the event
      */
-    protected final void userLeft(final UserName leftUserName) {
+    private void handleUserEvent(final UserLeftEvent event) {
 
         for (final ChannelConnection client
                 : this.clients.toArray(new ChannelConnection[]{})) {
@@ -202,7 +204,7 @@ public abstract class ServerChannel<T extends ChannelData>
                 client.getChannelInterface();
 
             try {
-                channelInterface.userLeft(leftUserName);
+                channelInterface.handleUserEvent(event);
             } catch (final RemoteException re) {
                 connection.disconnect(re);
             }

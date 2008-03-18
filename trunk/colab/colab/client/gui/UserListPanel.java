@@ -14,9 +14,9 @@ import javax.swing.ListSelectionModel;
 
 import colab.client.ClientChannel;
 import colab.client.ColabClient;
-import colab.client.event.UserJoinedEvent;
-import colab.client.event.UserLeftEvent;
-import colab.client.event.UserListener;
+import colab.common.event.UserJoinedEvent;
+import colab.common.event.UserLeftEvent;
+import colab.common.event.UserListener;
 import colab.common.naming.UserName;
 
 /**
@@ -113,7 +113,7 @@ public final class UserListPanel extends JPanel implements UserListener {
      *
      * @param joinEvent the user to add
      */
-    public void userJoined(final UserJoinedEvent joinEvent) {
+    public void handleUserEvent(final UserJoinedEvent joinEvent) {
 
         users.add(joinEvent.getUserName());
         this.refreshUsers();
@@ -125,7 +125,7 @@ public final class UserListPanel extends JPanel implements UserListener {
      *
      * @param leaveEvent the user to remove
      */
-    public void userLeft(final UserLeftEvent leaveEvent) {
+    public void handleUserEvent(final UserLeftEvent leaveEvent) {
         users.remove(leaveEvent.getUserName());
         this.refreshUsers();
     }

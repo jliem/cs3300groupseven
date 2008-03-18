@@ -72,4 +72,22 @@ public final class StringUtils {
         return new String(letters);
     }
 
+    /**
+     * Concatenates a string with itself repeatly and returns the result.
+     *
+     * @param str a string to repeat
+     * @param times the number of times to repeat it
+     * @return the given string, repeated the given number of times
+     */
+    public static String repeat(final String str, final int times) {
+        if (times < 0) {
+            throw new IllegalArgumentException();
+        }
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < times; i++) {
+            out.append(str);
+        }
+        return out.toString();
+    }
+
 }

@@ -4,12 +4,13 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import colab.client.event.UserJoinedEvent;
-import colab.client.event.UserLeftEvent;
-import colab.client.event.UserListener;
 import colab.common.channel.Channel;
+import colab.common.event.UserJoinedEvent;
+import colab.common.event.UserLeftEvent;
+import colab.common.event.UserListener;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
@@ -27,7 +28,7 @@ public abstract class ClientChannel extends UnicastRemoteObject
 
     protected final Set<UserName> members;
 
-    private ArrayList<UserListener> userListeners;
+    private List<UserListener> userListeners;
 
     public ClientChannel(final ChannelName name) throws RemoteException {
 
@@ -40,12 +41,12 @@ public abstract class ClientChannel extends UnicastRemoteObject
 
     }
 
-    public void addUserListener(UserListener ul) {
-        userListeners.add(ul);
+    public final void addUserListener(final UserListener listener) {
+        userListeners.add(listener);
     }
 
-    public boolean removeUserListener(UserListener ul) {
-        return userListeners.remove(ul);
+    public final boolean removeUserListener(final UserListener listener) {
+        return userListeners.remove(listener);
     }
 
     /** {@inheritDoc} */
@@ -53,31 +54,35 @@ public abstract class ClientChannel extends UnicastRemoteObject
         return name;
     }
 
-    public void userJoined(UserName userName) throws RemoteException {
-        members.add(userName);
+    /** {@inheritDoc} */
+    public final void handleUserEvent(final UserJoinedEvent event)
+            throws RemoteException {
 
-        for (UserListener ul : userListeners) {
-            ul.userJoined(new UserJoinedEvent(userName));
-        }
-    }
+        members.add(event.getUserName());
 
-    public void userLeft(UserName userName) throws RemoteException {
-
-        boolean result = members.remove(userName);
-
-        for (UserListener ul : userListeners) {
-            ul.userLeft(new UserLeftEvent(userName));
-        }
-
-        // Check that remove was successful
-        if (!result) {
-            throw new IllegalStateException("Could not remove user "
-                + userName.toString() + " from members list in ClientChannel");
+        for (UserListener listener : userListeners) {
+            listener.handleUserEvent(event);
         }
 
     }
 
+    /** {@inheritDoc} */
+    public final void handleUserEvent(final UserLeftEvent event)
+            throws RemoteException {
+
+        members.remove(event.getUserName());
+
+        for (UserListener listener : userListeners) {
+            listener.handleUserEvent(event);
+        }
+
+    }
+
+    /**
+     * @return the names of the users who are currently in this channel
+     */
     public final Set<UserName> getMembers() {
         return this.members;
     }
+
 }

@@ -25,7 +25,7 @@ import colab.common.channel.ChatChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
-public class ChatChannelFrame extends JFrame {
+public final class ChatChannelFrame extends JFrame {
 
     private final ColabClient client;
 

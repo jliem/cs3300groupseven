@@ -3,6 +3,8 @@ package colab.client;
 import java.util.Set;
 
 import junit.framework.TestCase;
+import colab.common.event.UserJoinedEvent;
+import colab.common.event.UserLeftEvent;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
@@ -11,45 +13,56 @@ import colab.common.naming.UserName;
  */
 public final class ClientChatChannelTester extends TestCase {
 
+    /**
+     * Informs a channel that users have joined, and tests that
+     * they get added to the channel's list of members.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testUserJoined() throws Exception {
 
-         ClientChatChannel chan = new ClientChatChannel(
+         ClientChatChannel channel = new ClientChatChannel(
                  new ChannelName("Test Channel"));
 
-         Set<UserName> members = chan.getMembers();
+         Set<UserName> members = channel.getMembers();
          UserName user1 = new UserName("test1");
          UserName user2 = new UserName("test2");
 
          assertTrue(members.isEmpty());
 
-         chan.userJoined(user1);
+         channel.handleUserEvent(new UserJoinedEvent(user1));
 
          assertTrue(members.contains(user1));
 
-         chan.userJoined(user2);
+         channel.handleUserEvent(new UserJoinedEvent(user2));
 
          assertTrue(members.contains(user2));
 
     }
 
+    /**
+     * Tests removing users from a channel's members list.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testUserLeft() throws Exception {
-         ClientChatChannel chan = new ClientChatChannel(
+         ClientChatChannel channel = new ClientChatChannel(
                  new ChannelName("Test Channel"));
 
-         Set<UserName> members = chan.getMembers();
+         Set<UserName> members = channel.getMembers();
          UserName user1 = new UserName("test1");
          UserName user2 = new UserName("test2");
 
-         chan.userJoined(user1);
+         channel.handleUserEvent(new UserJoinedEvent(user1));
 
-         chan.userJoined(user2);
+         channel.handleUserEvent(new UserJoinedEvent(user2));
 
-         chan.userLeft(user1);
+         channel.handleUserEvent(new UserLeftEvent(user1));
 
          assertFalse(members.contains(user1));
          assertTrue(members.contains(user2));
 
-         chan.userLeft(user2);
+         channel.handleUserEvent(new UserLeftEvent(user2));
 
          assertTrue(members.isEmpty());
 

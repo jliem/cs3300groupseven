@@ -4,7 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import colab.common.channel.ChannelData;
-import colab.common.naming.UserName;
+import colab.common.event.UserJoinedEvent;
+import colab.common.event.UserLeftEvent;
 
 /**
  * A remote interface for a client-side object which the
@@ -25,17 +26,17 @@ public interface ChannelRemote extends Remote {
     /**
      * Informs the client that a user has joined (been added to) the channel.
      *
-     * @param userName the name of the user
+     * @param event the joined event
      * @throws RemoteException if an rmi error occurs
      */
-    void userJoined(UserName userName) throws RemoteException;
+    void handleUserEvent(UserJoinedEvent event) throws RemoteException;
 
     /**
      * Informs the client that a user has left (been removed from) the channel.
      *
-     * @param userName the name of a user
+     * @param event the left event
      * @throws RemoteException if an rmi error occurs
      */
-    void userLeft(UserName userName) throws RemoteException;
+    void handleUserEvent(UserLeftEvent event) throws RemoteException;
 
 }

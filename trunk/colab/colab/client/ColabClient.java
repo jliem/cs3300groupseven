@@ -1,11 +1,9 @@
 package colab.client;
 
-import java.awt.event.ActionListener;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.ServerException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
@@ -40,7 +38,7 @@ public final class ColabClient extends UnicastRemoteObject implements
     /** The default port. */
     public static final int DEFAULT_PORT = 9040;
 
-    private final ArrayList<ActionListener> listeners;
+    //private final List<ActionListener> listeners;
 
     private final Vector<ChannelDescriptor> channels;
 
@@ -55,7 +53,7 @@ public final class ColabClient extends UnicastRemoteObject implements
      *             if an rmi error occurs
      */
     public ColabClient() throws RemoteException {
-        listeners = new ArrayList<ActionListener>();
+        //listeners = new ArrayList<ActionListener>();
         channels = new Vector<ChannelDescriptor>();
         connectionState = ConnectionState.DISCONNECTED;
     }
@@ -140,6 +138,15 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
+    /**
+     * Sends a request to the server to create a new user account.
+     *
+     * @param userName the name of the user to create
+     * @param password the desired password for the new user
+     * @throws NetworkException if a network I/O error occurs
+     * @throws UserAlreadyExistsException if a user with the specified
+     *                                    name already exists on the server
+     */
     public void createUser(final UserName userName, final char[] password)
             throws NetworkException, UserAlreadyExistsException {
 
@@ -159,6 +166,15 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
+    /**
+     * Logs into a community.
+     *
+     * @param communityName the name of community to log in to
+     * @throws NetworkException if a network I/O error occurs
+     * @throws AuthenticationException if the server rejected the login
+     *                                 because the user is not a member
+     *                                 of the community
+     */
     public void loginCommmunity(final CommunityName communityName)
             throws NetworkException, AuthenticationException {
 
@@ -190,28 +206,55 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
+    /**
+     * Retrieves the names of all of the communities on the server.
+     *
+     * @return a collection containing the name of every community
+     * @throws NetworkException if a network I/O error occurs
+     */
     public Collection<CommunityName> getAllCommunityNames()
-            throws RemoteException {
-        return connection.getAllCommunityNames();
+            throws NetworkException {
+
+        try {
+            return connection.getAllCommunityNames();
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
+        }
+
     }
 
+    /**
+     * Retrieves the names of the communities on the server
+     * of which the currently logged-in user is a member.
+     *
+     * @return a collection containing the name of communities
+     * @throws NetworkException if a network I/O error occurs
+     */
     public Collection<CommunityName> getMyCommunityNames()
-            throws RemoteException {
-        return connection.getMyCommunityNames();
+            throws NetworkException {
+
+        try {
+            return connection.getMyCommunityNames();
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
+        }
+
     }
 
     public ClientChannel joinChannel(final ChannelDescriptor desc)
             throws RemoteException {
+
         ClientChannel channel;
         switch (desc.getType()) {
         case CHAT:
             channel = new ClientChatChannel(desc.getName());
-            connection.joinChannel(channel, desc);
             break;
         default:
             throw new IllegalArgumentException("Channel type not supported");
         }
+        connection.joinChannel(channel, desc);
         return channel;
+
     }
 
     /** {@inheritDoc} */

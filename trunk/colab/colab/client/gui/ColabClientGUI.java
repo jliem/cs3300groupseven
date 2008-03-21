@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -227,17 +230,26 @@ class ColabClientGUI extends JFrame {
         menu.removeAll();
         menu.add(logoutItem);
         menu.add(quitItem);
-        ArrayList<String> commNames = new ArrayList<String>();
+
+        // Get the collection of my communities
+        Collection<CommunityName> myCommunities;
         try {
-            for (CommunityName name : client.getMyCommunityNames()) {
-                commNames.add(name.getValue());
-            }
-        } catch (RemoteException re) {
-            re.printStackTrace();
+            myCommunities = client.getMyCommunityNames();
+        } catch (final NetworkException e) {
+            return; // <(^.^)>
         }
 
+        // Convert to a list of strings
+        List<String> myCommunityNames = new ArrayList<String>();
+        for (final CommunityName name : myCommunities) {
+            myCommunityNames.add(name.getValue());
+        }
+
+        // Alphabetize the list
+        Collections.sort(myCommunityNames);
+
         this.currentUser = new UserName(loginPanel.getCurrentUser());
-        communityPanel.setCommunityNames(commNames.toArray());
+        communityPanel.setCommunityNames(myCommunityNames.toArray());
         setActivePanel(communityPanelWrapper);
         setTitle("Select Community");
         setResizable(false);

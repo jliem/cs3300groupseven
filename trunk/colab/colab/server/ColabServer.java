@@ -89,9 +89,11 @@ public class ColabServer extends UnicastRemoteObject
 
         // Create the rmi registry, add the server to it
         try {
+            System.out.print("Creating RMI registry on port " + port + ": ");
             LocateRegistry.createRegistry(port);
+            System.out.println("Done");
         } catch (final ExportException e) {
-            // registry already created
+            System.out.println("Already exists");
         }
         Naming.rebind(address, this);
 

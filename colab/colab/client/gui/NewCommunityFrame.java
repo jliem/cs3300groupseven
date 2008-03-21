@@ -106,12 +106,13 @@ public class NewCommunityFrame extends JFrame {
         Collection<CommunityName> allCommunities;
         try {
             allCommunities = client.getAllCommunityNames();
-        } catch (final RemoteException e1) {
+        } catch (final NetworkException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
             return;
         }
-        for (CommunityName name : allCommunities) {
+
+        for (final CommunityName name : allCommunities) {
             if (name.toString().equalsIgnoreCase(commName.getText())) {
                 showErrorBox("A community with that name already "
                         + "exists; please enter a new community name.",

@@ -1,11 +1,9 @@
 package colab.common.exception;
 
-import java.rmi.RemoteException;
-
 /**
  * A general superclass for exceptions which indicate network failure.
  */
-public class NetworkException extends RemoteException {
+public class NetworkException extends Exception {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

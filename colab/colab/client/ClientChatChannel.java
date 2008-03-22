@@ -15,6 +15,8 @@ import colab.common.naming.ChannelName;
 
 public final class ClientChatChannel extends ClientChannel {
 
+    private final static long serialVersionUID = 1;
+    
     private ArrayList<ActionListener> listeners;
 
     private int newMessages = 0;

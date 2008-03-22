@@ -2,6 +2,14 @@ package colab.common;
 
 import java.util.ArrayList;
 
+import colab.common.naming.UserName;
+
+/**
+ * @author matt
+ * A log for paragaph inserts, deletes, and header changes.
+ * 
+ * @see DocumentParagraph
+ */
 public class DocumentParagraphDiff {
     private interface Applicable {
         public void apply(DocumentParagraph para) throws Exception;
@@ -81,6 +89,23 @@ public class DocumentParagraphDiff {
         }
     }
     
+    private class ChangeLock implements Applicable {
+        private UserName newOwner;
+
+        public ChangeLock(UserName newOwner) {
+            super();
+            this.newOwner = newOwner;
+        }
+        
+        public void apply(DocumentParagraph para) throws Exception {
+            para.lock(newOwner);
+        }
+
+        public UserName getNewOwner() {
+            return newOwner;
+        }
+    }
+    
     private ArrayList<Applicable> changes;
     
     public DocumentParagraphDiff() {
@@ -117,6 +142,14 @@ public class DocumentParagraphDiff {
     
     public void changeHeaderLevel(int headerLevel) {
         changes.add(new ChangeLevel(headerLevel));
+    }
+    
+    /** 
+     * @param newOwner - the new owner of the lock, specifed as {@code null}
+     * to unlock
+     */
+    public void lock(UserName newOwner) {
+        changes.add(new ChangeLock(newOwner));
     }
     
     public void reset() {

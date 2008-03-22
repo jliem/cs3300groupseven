@@ -20,10 +20,6 @@ public final class ChatChannelData extends ChannelData {
     /** The text of the message. */
     private String text;
 
-    /** The date format used to serialize the timestamp. */
-    private static final DateFormat DATE_FORMAT =
-        new SimpleDateFormat("d MMM yyyy HH:mm:ss.S");
-
     /**
      * Constructs a new chat data object.
      *

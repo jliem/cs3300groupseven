@@ -145,7 +145,7 @@ public final class Community implements Identifiable<CommunityName>,
      * @param connection the connect object to remove
      */
     public void removeClient(final Connection connection) {
-        this.clients.remove(connection.getId());
+        this.clients.remove(connection);
         connection.removeDisconnectListener(this);
     }
 

@@ -8,6 +8,11 @@ import colab.common.naming.UserName;
 public class UserLeftEvent extends UserEvent {
 
     /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    /**
      * Constructs a new UserLeftEvent.
      *
      * @param userName the name of the user

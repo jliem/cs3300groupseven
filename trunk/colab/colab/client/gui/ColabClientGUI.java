@@ -148,8 +148,12 @@ class ColabClientGUI extends JFrame {
                         return;
                     } catch (final AuthenticationException ae) {
                         // The christopher martin experience: enjoy!
-                    } catch (final NetworkException re) {
+                        // TODO: Implement this
+                        ae.printStackTrace();
+                    } catch (final NetworkException ne) {
                         // The christopher martin experience: enjoy!
+                        // TODO: Fix this
+                        ne.printStackTrace();
                     }
 
                     Vector<ChannelDescriptor> channels = client.getChannels();
@@ -266,7 +270,8 @@ class ColabClientGUI extends JFrame {
         channelPanel = new ChannelManagerPanel(client.getChannels());
         setActivePanel(channelPanel);
         setTitle("");
-        setResizable(false);
+        //setResizable(false);
+        setResizable(true);
         setSize(120, 300);
         channelPanel.updateUI();
 

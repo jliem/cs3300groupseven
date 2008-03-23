@@ -3,9 +3,9 @@ package colab.client.gui;
 import javax.swing.JPanel;
 
 /**
- * A panel which displays the content of some sort of channel.
+ * Parent class for all client-side channel panels.
  */
-public abstract class ClientChannelPanel extends JPanel {
+abstract class ClientChannelPanel extends JPanel {
 
     /**
      * A panel which contains a list of active users in the channel.

@@ -142,7 +142,7 @@ public interface ConnectionRemote extends Remote {
      *
      * @return a user that has authenticated on this connection
      */
-    public UserName getUserName();
+    public UserName getUserName() throws RemoteException;
 
     /**
      * Creates a new user in this connection.

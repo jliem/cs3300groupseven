@@ -41,9 +41,14 @@ public class NewCommunityFrame extends JFrame {
 
     private final ColabClient client;
 
-    public NewCommunityFrame(final ColabClient client) {
+    private final ChooseCommunityPanel parentPanel;
+
+    public NewCommunityFrame(final ChooseCommunityPanel parentPanel,
+            final ColabClient client) {
 
         this.client = client;
+        this.parentPanel = parentPanel;
+
         createButton = new JButton("Create Community");
         commName = new JTextField("");
         commPass = new JPasswordField("");
@@ -141,6 +146,12 @@ public class NewCommunityFrame extends JFrame {
             }
 
             System.out.println("Created new community " + name.getValue());
+
+            // Show updated list
+            parentPanel.refreshCommunityNames();
+
+            // Destroy this window
+            this.dispose();
         }
 
     }

@@ -306,29 +306,10 @@ class ColabClientGUI extends JFrame {
         menu.add(logoutItem);
         menu.add(quitItem);
 
-        // Get the collection of my communities
-        Collection<CommunityName> myCommunities;
-        try {
-            myCommunities = client.getMyCommunityNames();
-        } catch (final NetworkException e) {
-            if (DebugManager.NETWORK) {
-                e.printStackTrace();
-            }
-
-            return; // <(^.^)>
-        }
-
-        // Convert to a list of strings
-        List<String> myCommunityNames = new ArrayList<String>();
-        for (final CommunityName name : myCommunities) {
-            myCommunityNames.add(name.getValue());
-        }
-
-        // Alphabetize the list
-        Collections.sort(myCommunityNames);
+        communityPanel.refreshCommunityNames();
 
         this.currentUser = new UserName(loginPanel.getCurrentUser());
-        communityPanel.setCommunityNames(myCommunityNames.toArray());
+
         setActivePanel(communityPanelWrapper);
         setTitle("Select Community");
         setResizable(false);

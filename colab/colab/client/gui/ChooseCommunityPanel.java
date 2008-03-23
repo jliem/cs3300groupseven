@@ -5,6 +5,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -13,7 +15,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import colab.client.ColabClient;
+import colab.common.DebugManager;
+import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 
 class ChooseCommunityPanel extends JPanel {
 
@@ -26,7 +31,11 @@ class ChooseCommunityPanel extends JPanel {
 
     private final List<ActionListener> listeners;
 
+    private final ColabClient client;
+
     public ChooseCommunityPanel(final ColabClient client) {
+
+        this.client = client;
 
         listeners = new ArrayList<ActionListener>();
 
@@ -39,7 +48,7 @@ class ChooseCommunityPanel extends JPanel {
 
         newCommButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                NewCommunityFrame frame = new NewCommunityFrame(client);
+                NewCommunityFrame frame = new NewCommunityFrame(getThis(), client);
                 frame.pack();
                 frame.setVisible(true);
                 frame.setPreferredSize(new Dimension(400, 800));
@@ -66,6 +75,34 @@ class ChooseCommunityPanel extends JPanel {
 
     }
 
+    public void refreshCommunityNames() {
+
+        // Get the collection of my communities
+        Collection<CommunityName> myCommunities;
+        try {
+            myCommunities = client.getMyCommunityNames();
+        } catch (final NetworkException e) {
+            if (DebugManager.NETWORK) {
+                e.printStackTrace();
+            }
+
+            return; // <(^.^)>
+        }
+
+        // Convert to a list of strings
+        List<String> myCommunityNames = new ArrayList<String>();
+        for (final CommunityName name : myCommunities) {
+            myCommunityNames.add(name.getValue());
+        }
+
+        // Alphabetize the list
+        Collections.sort(myCommunityNames);
+
+        setCommunityNames(myCommunityNames.toArray());
+
+        repaint();
+    }
+
     public void setCommunityNames(final Object[] names) {
         selectBox.removeAllItems();
 
@@ -90,4 +127,13 @@ class ChooseCommunityPanel extends JPanel {
         return new CommunityName(name);
     }
 
+
+    /**
+     * Lame hack to get access to the instance of ChooseCommunityPanel
+     * from the anonymous inner class.
+     * @return a reference to this
+     */
+    private ChooseCommunityPanel getThis() {
+        return this;
+    }
 }

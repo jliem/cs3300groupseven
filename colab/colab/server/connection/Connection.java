@@ -310,6 +310,8 @@ public final class Connection extends UnicastRemoteObject
             new ArrayList<CommunityName>(communities.size());
 
         for (Community c : communities) {
+            System.out.println("Checking " + c.getId());
+
             if (c.getMembers().contains(this.username)) {
                 communityNames.add(c.getId());
             }
@@ -466,11 +468,15 @@ public final class Connection extends UnicastRemoteObject
         Community community = new Community(communityName,
                 password);
 
+        System.out.println("Connection created community " + community);
+
         try {
             this.server.getUserManager().addCommunity(community);
         } catch (final CommunityAlreadyExistsException e) {
             throw new RemoteException(e.getMessage(), e);
         }
+
+        System.out.println("Connection is returning community " + community);
 
         return community;
     }
@@ -524,6 +530,19 @@ public final class Connection extends UnicastRemoteObject
      */
     private void log(final String message) {
         System.out.println("[Connection " + connectionId + "] " + message);
+    }
+
+    @Override
+    public void joinCommunity(ChannelRemote clientChannel,
+            ChannelDescriptor channelDescriptor) throws RemoteException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void leaveCommunity(ChannelName channelName) throws RemoteException {
+        // TODO Auto-generated method stub
+
     }
 
 }

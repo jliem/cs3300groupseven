@@ -77,6 +77,10 @@ public final class ColabClient extends UnicastRemoteObject implements
                     .lookup("//" + serverAddress + "/COLAB_SERVER");
             connection = server.connect(this);
         } catch (final Exception e) {
+            if (DebugManager.EXCEPTIONS) {
+                e.printStackTrace();
+            }
+
             throw new UnableToConnectException();
         } finally {
             this.connectionState = ConnectionState.DISCONNECTED;

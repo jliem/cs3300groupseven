@@ -82,6 +82,13 @@ public final class UserManager {
      * @return a collection containing every community
      */
     public Collection<Community> getAllCommunities() {
+
+        System.out.println("Communities:");
+
+        for (Community c : communityStore.getAll()) {
+            System.out.println(c.getId());
+        }
+
         return communityStore.getAll();
     }
 
@@ -99,6 +106,8 @@ public final class UserManager {
         }
 
         communityStore.add(community);
+
+        System.out.println("Added community " + community.getId());
 
     }
 

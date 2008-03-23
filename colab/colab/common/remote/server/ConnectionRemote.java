@@ -12,6 +12,8 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
+import colab.server.user.Community;
+import colab.server.user.Password;
 
 /**
  * A remote object on the server which represents a client's session.
@@ -134,6 +136,15 @@ public interface ConnectionRemote extends Remote {
             throws RemoteException;
 
     /**
+     * Returns the user that is logged in.
+     *
+     * Throws IllegalStateException if no user is logged in.
+     *
+     * @return a user that has authenticated on this connection
+     */
+    public UserName getUserName();
+
+    /**
      * Creates a new user in this connection.
      * @param userName the user name
      * @param password the password to use
@@ -147,10 +158,23 @@ public interface ConnectionRemote extends Remote {
      *
      * @param name the community name
      * @param password the password used to join the community
+     * @return the Community that is created
      * @throws RemoteException if an rmi error occurs
      */
 
-    void createCommunity(String name, char[] password)
+    Community createCommunity(String name, char[] password)
+        throws RemoteException;
+
+    /**
+     * Creates a new community in this connection.
+     *
+     * @param name the community name
+     * @param password the password used to join the community
+     * @return the Community that is created
+     * @throws RemoteException if an rmi error occurs
+     */
+
+    Community createCommunity(CommunityName name, Password password)
         throws RemoteException;
 
 }

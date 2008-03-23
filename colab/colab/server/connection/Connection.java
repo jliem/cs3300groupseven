@@ -135,13 +135,7 @@ public final class Connection extends UnicastRemoteObject
         return this.state;
     }
 
-    /**
-     * Returns the user that is logged in.
-     *
-     * Throws IllegalStateException if no user is logged in.
-     *
-     * @return a user that has authenticated on this connection
-     */
+    /** {@inheritDoc} */
     public UserName getUserName() {
 
         if (!this.state.hasUserLogin()) {
@@ -458,12 +452,19 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public void createCommunity(final String communityName,
+    public Community createCommunity(final String communityName,
             final char[] password) throws RemoteException {
 
-        Community community = new Community(
-                new CommunityName(communityName),
+        return createCommunity(new CommunityName(communityName),
                 new Password(password));
+    }
+
+    /** {@inheritDoc} */
+    public Community createCommunity(final CommunityName communityName,
+            final Password password) throws RemoteException {
+
+        Community community = new Community(communityName,
+                password);
 
         try {
             this.server.getUserManager().addCommunity(community);
@@ -471,6 +472,7 @@ public final class Connection extends UnicastRemoteObject
             throw new RemoteException(e.getMessage(), e);
         }
 
+        return community;
     }
 
     /**

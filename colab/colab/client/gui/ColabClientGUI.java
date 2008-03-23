@@ -246,7 +246,7 @@ class ColabClientGUI extends JFrame {
                 // TODO: Handle this?
                 // Probably don't need to worry about it
                 // as the window is closing anyway
-                if (DebugManager.EXIT_EXCEPTIONS);
+                if (DebugManager.EXIT);
                     e.printStackTrace();
             }
         }
@@ -273,13 +273,13 @@ class ColabClientGUI extends JFrame {
 
             // TODO: Think of a better way of handling such situations
         } catch (IllegalStateException ie) {
-            if (DebugManager.EXIT_EXCEPTIONS)
+            if (DebugManager.EXIT)
                 ie.printStackTrace();
         } catch (NullPointerException ne) {
-            if (DebugManager.EXIT_EXCEPTIONS)
+            if (DebugManager.EXIT)
                 ne.printStackTrace();
         } catch (Exception e) {
-            if (DebugManager.EXIT_EXCEPTIONS)
+            if (DebugManager.EXIT)
                 e.printStackTrace();
         }
     }
@@ -311,6 +311,10 @@ class ColabClientGUI extends JFrame {
         try {
             myCommunities = client.getMyCommunityNames();
         } catch (final NetworkException e) {
+            if (DebugManager.NETWORK) {
+                e.printStackTrace();
+            }
+
             return; // <(^.^)>
         }
 

@@ -107,7 +107,7 @@ public final class UserManager {
 
         communityStore.add(community);
 
-        System.out.println("Added community " + community.getId());
+        System.out.println("UserManager added community " + community.getId() + community);
 
     }
 

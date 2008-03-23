@@ -105,6 +105,28 @@ public interface ConnectionRemote extends Remote {
     void leaveChannel(ChannelName channelName) throws RemoteException;
 
     /**
+     * Retrieves a channel.
+     * The channel will be created if it does not exist.
+     *
+     * @param clientChannel a remote object representing the
+     *                      channel on the client side
+     * @param channelDescriptor the dsecriptor of the channel being joined
+     * @throws RemoteException if an rmi error occurs
+     */
+    void joinCommunity(ChannelRemote clientChannel,
+            ChannelDescriptor channelDescriptor) throws RemoteException;
+
+    /**
+     * Indicates that the client has exited from a channel
+     * and should not continue to receive updates from it.
+     *
+     * @param channelName the name of the channel being left
+     * @throws RemoteException if an rmi error occurs
+     */
+    void leaveCommunity(ChannelName channelName) throws RemoteException;
+
+
+    /**
      * Gets the last *count* pieces of data from the specified Channel.
      *
      * @param channelName the channel to retrieve data from

@@ -324,6 +324,8 @@ public final class ColabClient extends UnicastRemoteObject implements
 
         Community comm = connection.createCommunity(name, password);
 
+        System.out.println("Client received " + comm);
+
         if (comm != null) {
             // Attempt to add this user
             UserName username = null;

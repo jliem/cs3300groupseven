@@ -229,6 +229,9 @@ class ColabClientGUI extends JFrame {
         });
     }
 
+    /**
+     * Attempts to close any windows opened by this frame.
+     */
     private void leaveOpenedChannels() {
         // Because the windows that were opened from this frame might
         // have been closed since then, channelList may have invalid entries
@@ -248,25 +251,31 @@ class ColabClientGUI extends JFrame {
             }
         }
 
+        // Reset the list
         channelList.clear();
     }
 
+    /**
+     * Clean up and exit the program.
+     */
     private void exit() {
         // First attempt to exit any channels this frame has opened
         leaveOpenedChannels();
 
         try {
-            // Now try to log out of the current community, if possible
-            client.logOutCommunity();
-
-            // Finally, log the user out
+            // Log the user out. This will also
+            // log out of any communities.
             client.logOutUser();
-        } catch (NullPointerException ne) {
-            // These are expected if we weren't in the proper state
+
+            // Exceptions are expected if we weren't in the proper state
             // to log out (ex. a window was closed, and then we try to close
             // the parent which triggers another logoff)
 
             // TODO: Think of a better way of handling such situations
+        } catch (IllegalStateException ie) {
+            if (DebugManager.EXIT_EXCEPTIONS)
+                ie.printStackTrace();
+        } catch (NullPointerException ne) {
             if (DebugManager.EXIT_EXCEPTIONS)
                 ne.printStackTrace();
         } catch (Exception e) {

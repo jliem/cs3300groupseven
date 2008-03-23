@@ -1,5 +1,6 @@
 package colab.client.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,6 +32,8 @@ final class ChannelManagerPanel extends JPanel {
 
 
     public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel) {
+
+        this.setLayout(new BorderLayout());
 
         listeners = new ArrayList<ActionListener>();
 

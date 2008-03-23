@@ -320,10 +320,10 @@ public final class ColabClient extends UnicastRemoteObject implements
      * @return a list of all active users
      * @throws RemoteException if a RemoteException occurs
      */
-    public Collection<UserName> getActiveUsers(ChannelName id)
+    public Collection<UserName> getActiveUsers(ChannelName channelName)
         throws RemoteException {
 
-        return connection.getActiveUsers(id);
+        return connection.getActiveUsers(channelName);
     }
 
 }

@@ -71,8 +71,11 @@ public final class ChannelDescriptor implements Serializable {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "Channel name: " + this.channelName.toString()
-             + ", type: " + this.channelType.toString();
+
+        // Because ChannelManagerPanel uses the toString() in the display,
+        // it needs to be as short and concise as possible
+        return this.channelName.toString() + " - " + this.channelType.toString();
+
     }
 
 }

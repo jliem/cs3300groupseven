@@ -95,7 +95,7 @@ abstract class ClientChannelFrame extends JFrame {
                 client.leaveChannel(clientChannel.getChannelDescriptor());
             } catch (Exception e) {
                 // TODO: Handle this? Might not be necessary
-                if (DebugManager.EXIT_EXCEPTIONS)
+                if (DebugManager.EXIT)
                     e.printStackTrace();
             }
         }

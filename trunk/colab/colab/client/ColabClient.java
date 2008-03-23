@@ -25,6 +25,7 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
+import colab.server.user.Community;
 import colab.server.user.Password;
 
 /**
@@ -313,11 +314,29 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
-    public void createCommunity(final CommunityName commName,
-            final Password comPass) throws NetworkException,
-            CommunityAlreadyExistsException {
+    public void createCommunity(final CommunityName name,
+            final Password password) throws NetworkException,
+            CommunityAlreadyExistsException, RemoteException {
 
-        // TODO:
+        Community comm = connection.createCommunity(name, password);
+
+        if (comm != null) {
+            // Attempt to add this user
+            UserName username = null;
+            try {
+                username = connection.getUserName();
+            } catch (IllegalStateException ie) {
+                // Not sure why we'd ever be here
+                if (DebugManager.ILLEGAL_STATE) {
+                    ie.printStackTrace();
+                }
+            }
+
+            if (username != null) {
+                comm.addMember(username);
+            }
+
+        }
 
     }
 
@@ -342,11 +361,11 @@ public final class ColabClient extends UnicastRemoteObject implements
         try {
             logOutUser();
         } catch (ConnectionDroppedException e1) {
-            if (DebugManager.EXIT_EXCEPTIONS) {
+            if (DebugManager.EXIT) {
                 e1.printStackTrace();
             }
         } catch (Exception e) {
-            if (DebugManager.EXIT_EXCEPTIONS) {
+            if (DebugManager.EXIT) {
                 e.printStackTrace();
             }
         }

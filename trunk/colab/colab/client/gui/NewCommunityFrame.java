@@ -77,9 +77,9 @@ public class NewCommunityFrame extends JFrame {
 
     private void handleCreate(final ActionEvent e) {
 
-        if (commName.getText() == null
-                || commPass.getPassword() == null
-                || confirmCommPass.getPassword() == null) {
+        if (commName.getText().isEmpty()
+                || commPass.getPassword().length == 0
+                || confirmCommPass.getPassword().length == 0) {
 
             return;
 
@@ -129,6 +129,9 @@ public class NewCommunityFrame extends JFrame {
                     commName.getText());
             try {
                 client.createCommunity(name, password);
+            } catch (RemoteException re) {
+                // TODO: Handle remote exception
+                re.printStackTrace();
             } catch (NetworkException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -136,6 +139,8 @@ public class NewCommunityFrame extends JFrame {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
+
+            System.out.println("Created new community " + name.getValue());
         }
 
     }

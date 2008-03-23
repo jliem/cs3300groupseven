@@ -117,6 +117,15 @@ class ColabClientGUI extends JFrame {
                 }
 
                 if (e.getSource() == quitItem) {
+                	
+                	if(activePanel != loginPanelWrapper){
+                	try {
+						client.logOutUser();
+					} catch (ConnectionDroppedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                	}
                     System.exit(1);
                 }
 

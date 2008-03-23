@@ -5,6 +5,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ConnectionDroppedException;
@@ -44,6 +47,8 @@ class ColabClientGUI extends JFrame {
     private ChooseCommunityPanel communityPanel;
 
     private final FixedSizePanel communityPanelWrapper;
+
+    private ArrayList<ClientChannelFrame> channelList;
 
     private ChannelManagerPanel channelPanel;
 
@@ -77,6 +82,8 @@ class ColabClientGUI extends JFrame {
         this.communityPanelWrapper = new FixedSizePanel(communityPanel,
                 new Dimension(420, 120));
 
+        channelList = new ArrayList<ClientChannelFrame>();
+
         menuBar = new JMenuBar();
         menu = new JMenu("File");
         menuBar.add(menu);
@@ -90,6 +97,7 @@ class ColabClientGUI extends JFrame {
                 if (e.getSource() == logoutItem) {
                     gotoUserLoginView(true);
                     try {
+                        leaveOpenedChannels();
                         client.logOutUser();
                     } catch (ConnectionDroppedException e1) {
                         // TODO Auto-generated catch block
@@ -99,6 +107,7 @@ class ColabClientGUI extends JFrame {
 
                 if (e.getSource() == changeCommItem) {
                     try {
+                        leaveOpenedChannels();
                         client.logOutCommunity();
                     } catch (ConnectionDroppedException e1) {
                         // TODO Auto-generated catch block
@@ -197,6 +206,7 @@ class ColabClientGUI extends JFrame {
                                                     .joinChannel(cd),
                                             currentUser);
                                     f.setVisible(true);
+                                    channelList.add(f);
                                 } catch (RemoteException ex) {
                                     ex.printStackTrace();
                                 }
@@ -206,11 +216,63 @@ class ColabClientGUI extends JFrame {
                 }
 
                 if (e.getActionCommand().equalsIgnoreCase("New Community")) {
-
+                    // TODO: Fill this in
                 }
             }
         });
 
+        // If this frame is closed, exit the channel and clean up
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(final WindowEvent e) {
+                exit();
+            }
+        });
+    }
+
+    private void leaveOpenedChannels() {
+        // Because the windows that were opened from this frame might
+        // have been closed since then, channelList may have invalid entries
+        // for windows which no longer exist
+        for (ClientChannelFrame channelFrame : channelList) {
+            try {
+                // TODO: Think of some better way of detecting this
+                if (channelFrame.isVisible()) {
+                    channelFrame.exit();
+                }
+            } catch (Exception e) {
+                // TODO: Handle this?
+                // Probably don't need to worry about it
+                // as the window is closing anyway
+                if (DebugManager.EXIT_EXCEPTIONS);
+                    e.printStackTrace();
+            }
+        }
+
+        channelList.clear();
+    }
+
+    private void exit() {
+        // First attempt to exit any channels this frame has opened
+        leaveOpenedChannels();
+
+        try {
+            // Now try to log out of the current community, if possible
+            client.logOutCommunity();
+
+            // Finally, log the user out
+            client.logOutUser();
+        } catch (NullPointerException ne) {
+            // These are expected if we weren't in the proper state
+            // to log out (ex. a window was closed, and then we try to close
+            // the parent which triggers another logoff)
+
+            // TODO: Think of a better way of handling such situations
+            if (DebugManager.EXIT_EXCEPTIONS)
+                ne.printStackTrace();
+        } catch (Exception e) {
+            if (DebugManager.EXIT_EXCEPTIONS)
+                e.printStackTrace();
+        }
     }
 
     private void gotoUserLoginView(final boolean logout) {

@@ -257,6 +257,12 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
+    public void leaveChannel(final ChannelDescriptor desc)
+        throws RemoteException {
+
+        connection.leaveChannel(desc.getName());
+    }
+
     /** {@inheritDoc} */
     public void channelAdded(final ChannelDescriptor channelDescriptor)
             throws RemoteException {

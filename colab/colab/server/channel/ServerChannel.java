@@ -150,7 +150,6 @@ public abstract class ServerChannel<T extends ChannelData>
 
         UserName userName = connection.getUserName();
         handleUserEvent(new UserLeftEvent(userName));
-
     }
 
     /**

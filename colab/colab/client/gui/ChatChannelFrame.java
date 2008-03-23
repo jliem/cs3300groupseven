@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -18,6 +17,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import colab.client.ClientChannel;
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelData;
@@ -25,9 +25,8 @@ import colab.common.channel.ChatChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
-public final class ChatChannelFrame extends JFrame {
+public final class ChatChannelFrame extends ClientChannelFrame {
 
-    private final ColabClient client;
 
     private final ClientChatChannel channel;
 
@@ -45,9 +44,13 @@ public final class ChatChannelFrame extends JFrame {
 
     public ChatChannelFrame(final ColabClient client,
             final ClientChatChannel clientChannel, final UserName name) {
-        this.client = client;
+
+        super(client, clientChannel, new ChatPanel(name));
+
         channel = clientChannel;
-        chatPanel = new ChatPanel(name);
+
+        // Cast the parent's generic version to a ChatPanel for convenience
+        chatPanel = (ChatPanel)(super.clientChannelPanel);
 
         try {
             List<ChannelData> data = client.getLastData(channel.getId(), -1);
@@ -78,18 +81,6 @@ public final class ChatChannelFrame extends JFrame {
 
             }
         });
-
-        // TODO: This behavior is common to all client-side channels
-        // and should be refactored into a parent class
-        // Set up the list of users
-        channel.addUserListener(chatPanel.getUserListPanel());
-        try {
-            // Download list of current users
-            chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
-        } catch (RemoteException ex) {
-            // TODO: Handle remote exception
-            ex.printStackTrace();
-        }
 
         channel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -151,23 +142,7 @@ public final class ChatChannelFrame extends JFrame {
 
         this.setJMenuBar(menu);
 
-        setTitle(channel.getId().toString());
-        setSize(new Dimension(320, 300));
-
-        // and since we'd like the channel to be exited on close...
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                exit();
-            }
-        });
-
         add(chatPanel);
-    }
-
-    protected void exit() {
-        // TODO:add "leave channel" code
-        setVisible(false);
-        dispose();
     }
 
     public static void main(final String[] args) throws RemoteException {
@@ -182,11 +157,20 @@ public final class ChatChannelFrame extends JFrame {
 
     }
 
+    /**
+     * Getter for timestamp state.
+     * @return flag for enabled timestamp
+     */
     public boolean isTimestampEnabled() {
         return chatPanel.isTimestampEnabled();
     }
 
-    public void setTimestampEnabled(boolean timestampEnabled) {
+    /**
+     * Toggles timestamp state.
+     * @param timestampEnabled true if timestamp is enabled
+     */
+    public void setTimestampEnabled(final boolean timestampEnabled) {
         chatPanel.setTimestampEnabled(timestampEnabled);
     }
+
 }

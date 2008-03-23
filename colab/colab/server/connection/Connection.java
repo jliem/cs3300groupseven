@@ -278,10 +278,11 @@ public final class Connection extends UnicastRemoteObject
 
         this.community.removeClient(this);
 
+        log("User " + username + " logged out of community " + community.getId().toString());
+
         // Log out of community
         this.community = null;
         this.state = ConnectionState.LOGGED_IN;
-
     }
 
     /** {@inheritDoc} */
@@ -347,6 +348,12 @@ public final class Connection extends UnicastRemoteObject
             throws RemoteException {
 
         ServerChannel serverChannel = getChannel(channelName);
+
+        if (serverChannel == null) {
+            throw new IllegalStateException("Could not leave channel "
+                    + channelName.getValue() + " because it no longer exists");
+        }
+
         serverChannel.removeClient(this);
 
     }

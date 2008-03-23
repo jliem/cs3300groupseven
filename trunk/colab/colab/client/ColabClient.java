@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Vector;
 
 import colab.common.ConnectionState;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
@@ -330,6 +331,27 @@ public final class ColabClient extends UnicastRemoteObject implements
         throws RemoteException {
 
         return connection.getActiveUsers(channelName);
+    }
+
+    /**
+     * Completely closes all threads, windows, etc. associated
+     * with the client.
+     */
+    public void exitProgram() {
+
+        try {
+            logOutUser();
+        } catch (ConnectionDroppedException e1) {
+            if (DebugManager.EXIT_EXCEPTIONS) {
+                e1.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DebugManager.EXIT_EXCEPTIONS) {
+                e.printStackTrace();
+            }
+        }
+
+        System.exit(0);
     }
 
 }

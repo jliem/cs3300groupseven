@@ -1,9 +1,7 @@
 package colab.client;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
@@ -16,8 +14,6 @@ import colab.common.naming.ChannelName;
 public final class ClientChatChannel extends ClientChannel {
 
     private final static long serialVersionUID = 1;
-    
-    private ArrayList<ActionListener> listeners;
 
     private int newMessages = 0;
 
@@ -26,7 +22,6 @@ public final class ClientChatChannel extends ClientChannel {
     public ClientChatChannel(final ChannelName name) throws RemoteException {
         super(name);
         messages = new ChatDataSet();
-        listeners = new ArrayList<ActionListener>();
     }
 
     public void add(final ChannelData data) throws RemoteException {
@@ -35,20 +30,6 @@ public final class ClientChatChannel extends ClientChannel {
         newMessages++;
         fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST,
                 "Message Added"));
-    }
-
-    protected void fireActionPerformed(final ActionEvent e) {
-        for (ActionListener l : listeners) {
-            l.actionPerformed(e);
-        }
-    }
-
-    public void addActionListener(final ActionListener l) {
-        listeners.add(l);
-    }
-
-    public void removeActionListener(final ActionListener l) {
-        listeners.remove(l);
     }
 
     public ChannelDescriptor getChannelDescriptor() {

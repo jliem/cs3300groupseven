@@ -103,7 +103,9 @@ public final class UserListPanel extends JPanel implements UserListener {
      */
     private void addUsers(final Collection<UserName> users) {
 
-        this.users.addAll(users);
+        if (users != null)
+            this.users.addAll(users);
+
         refreshUsers();
 
     }

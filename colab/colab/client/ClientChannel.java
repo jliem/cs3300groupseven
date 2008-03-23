@@ -29,7 +29,7 @@ public abstract class ClientChannel extends UnicastRemoteObject
     private final ChannelName name;
 
     private ArrayList<ActionListener> listeners;
-    
+
     protected final Set<UserName> members;
 
     private List<UserListener> userListeners;
@@ -41,6 +41,7 @@ public abstract class ClientChannel extends UnicastRemoteObject
         // Create an empty collection of users
         members = new HashSet<UserName>();
 
+        listeners = new ArrayList<ActionListener>();
         userListeners = new ArrayList<UserListener>();
 
     }

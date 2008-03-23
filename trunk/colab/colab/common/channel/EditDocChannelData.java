@@ -2,6 +2,8 @@ package colab.common.channel;
 
 import java.util.Date;
 
+import colab.common.Document;
+import colab.common.DocumentParagraph;
 import colab.common.DocumentParagraphDiff;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
@@ -22,6 +24,15 @@ public class EditDocChannelData extends DocumentChannelData {
         this.paragraphID = paragraphID;
     }
 
+    @Override
+    public void apply(Document doc) throws Exception {
+        doc.applyEdit(paragraphID, differences);
+    }
+    
+    public void apply(DocumentParagraph para) {
+        differences.apply(para);
+    }
+    
     public DocumentParagraphDiff getDifferences() {
         return differences;
     }

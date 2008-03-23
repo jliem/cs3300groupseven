@@ -2,6 +2,7 @@ package colab.common.channel;
 
 import java.util.Date;
 
+import colab.common.Document;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
@@ -17,6 +18,11 @@ public class DeleteDocChannelData extends DocumentChannelData {
         this.paragraphID = paragraphID;
     }
 
+    @Override
+    public void apply(Document doc) throws Exception {
+        doc.delete(paragraphID);
+    }
+    
     public ParagraphIdentifier getParagraphID() {
         return paragraphID;
     }

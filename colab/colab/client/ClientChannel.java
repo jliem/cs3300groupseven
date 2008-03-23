@@ -1,5 +1,7 @@
 package colab.client;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public abstract class ClientChannel extends UnicastRemoteObject
      */
     private final ChannelName name;
 
+    private ArrayList<ActionListener> listeners;
+    
     protected final Set<UserName> members;
 
     private List<UserListener> userListeners;
@@ -83,6 +87,20 @@ public abstract class ClientChannel extends UnicastRemoteObject
      */
     public final Set<UserName> getMembers() {
         return this.members;
+    }
+
+    protected void fireActionPerformed(final ActionEvent e) {
+        for (ActionListener l : listeners) {
+            l.actionPerformed(e);
+        }
+    }
+
+    public void addActionListener(final ActionListener l) {
+        listeners.add(l);
+    }
+
+    public void removeActionListener(final ActionListener l) {
+        listeners.remove(l);
     }
 
 }

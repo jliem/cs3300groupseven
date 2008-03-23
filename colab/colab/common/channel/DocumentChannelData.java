@@ -2,6 +2,7 @@ package colab.common.channel;
 
 import java.util.Date;
 
+import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
@@ -44,6 +45,8 @@ public abstract class DocumentChannelData extends ChannelData {
     public DocumentChannelDataType getType() {
         return type;
     }
+    
+    public abstract void apply(Document doc) throws Exception;
     
     public XmlNode toXml() {
         // TODO Auto-generated method stub

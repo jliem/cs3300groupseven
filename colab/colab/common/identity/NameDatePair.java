@@ -29,7 +29,17 @@ public class NameDatePair implements Comparable<NameDatePair>{
         return name;
     }
 
-    public int compareTo(NameDatePair arg0) {
-        return date.compareTo(arg0.getDate());
+    public boolean equals(NameDatePair pair) {
+        return name.equals(pair.getName()) && date.equals(pair.getDate());
+    }
+    
+    public int compareTo(NameDatePair pair) {
+        int ret = date.compareTo(pair.getDate());
+        
+        if(ret == 0) {
+            ret = name.compareTo(pair.getName());
+        }
+        
+        return ret;
     }
 }

@@ -2,6 +2,7 @@ package colab.common.channel;
 
 import java.util.Date;
 
+import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.naming.UserName;
 
@@ -20,6 +21,14 @@ public class InsertDocChannelData extends DocumentChannelData {
         this.paragraph = paragraph;
     }
 
+    @Override
+    public void apply(Document doc) throws Exception {
+        if(offset > doc.getNumberParagraphs()) {
+            throw new Exception("Offset outside of document limits.");
+        }
+        doc.insert(offset, paragraph);
+    }
+    
     public int getOffset() {
         return offset;
     }

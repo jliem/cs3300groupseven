@@ -125,3 +125,17 @@ public class DocumentParagraph implements Serializable, Identifiable {
         return id;
     }
 }
+
+interface LockListener {
+    public void onLock(UserName newOwner);
+    public void unlock();
+}
+
+interface HeaderChangeListener {
+    public void onHeaderChange(int headerLevel);
+}
+
+interface EditListener {
+    public void onInsert(int offset, String hunk);
+    public void onDelete(int offset, int length);
+}

@@ -314,9 +314,16 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
-    public Collection<UserName> getActiveUsers(ChannelName id) {
-        // TODO Auto-generated method stub
-        return null;
+    /**
+     * Gets active users in a channel.
+     * @param channelName the channel to look up
+     * @return a list of all active users
+     * @throws RemoteException if a RemoteException occurs
+     */
+    public Collection<UserName> getActiveUsers(ChannelName id)
+        throws RemoteException {
+
+        return connection.getActiveUsers(id);
     }
 
 }

@@ -196,4 +196,12 @@ public interface ConnectionRemote extends Remote {
     void createCommunity(CommunityName name, Password password)
         throws RemoteException;
 
+    /**
+     * Creates a new channel in the currently logged-in community.
+     *
+     * @param channelDesc descriptor of the channel
+     */
+    void createChannel(ChannelDescriptor channelDesc)
+        throws RemoteException ;
+
 }

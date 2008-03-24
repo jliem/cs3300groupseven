@@ -498,7 +498,24 @@ public final class Connection extends UnicastRemoteObject
     public void createCommunity(final CommunityName communityName,
             final Password password) throws RemoteException {
 
-        server.createCommunity(communityName, password);
+        if (!this.state.hasUserLogin()) {
+            throw new IllegalStateException("Could not create community" +
+                    " because the user was not logged in");
+        } else {
+            server.createCommunity(communityName, password, username);
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void createChannel(ChannelDescriptor channelDesc)
+        throws RemoteException {
+
+        if (!this.state.hasCommunityLogin()) {
+            throw new IllegalStateException("Could not create channel" +
+            " because the user was not logged in");
+        }
+
+        server.createChannel(channelDesc, community.getId());
     }
 
     /**

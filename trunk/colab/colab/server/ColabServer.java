@@ -10,6 +10,7 @@ import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
+import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
 import colab.common.exception.AuthenticationException;
@@ -162,14 +163,31 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /**
-     * Creates a new community in this connection.
+     * Creates a new community in this connection without specifying
+     * any user as creator.
      *
      * @param name the community name
      * @param password the password used to join the community
+
      * @throws RemoteException if an rmi error occurs
      */
     public void createCommunity(final CommunityName communityName,
             final Password password) throws RemoteException {
+
+        createCommunity(communityName, password, null);
+    }
+
+    /**
+     * Creates a new community in this connection.
+     *
+     * @param name the community name
+     * @param password the password used to join the community
+     * @param creator the user who created this community
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void createCommunity(final CommunityName communityName,
+            final Password password, final UserName creator)
+            throws RemoteException {
 
         Community community = new Community(communityName,
                 password);
@@ -180,20 +198,55 @@ public class ColabServer extends UnicastRemoteObject
             throw new RemoteException(e.getMessage(), e);
         }
 
-        // If the community was added successfully, add
-        // the default lobby
-        // Add a lobby to each community
-
-        ChannelDescriptor lobbyDesc = new ChannelDescriptor(
-                 new ChannelName("Lobby"), ChannelType.CHAT);
 
         try {
-            channelManager.addChannel(communityName, lobbyDesc);
+
+            // If the community was added successfully, add
+            // the default lobby
+            ChannelDescriptor lobbyDesc = new ChannelDescriptor(
+                     new ChannelName("Lobby"), ChannelType.CHAT);
+
+            createChannel(lobbyDesc, communityName);
+
+            // TODO: The creator should also be a moderator
+            // Add the creator as a member
+            if (creator != null) {
+                addAsMember(creator, communityName);
+            }
+        } catch (CommunityDoesNotExistException ce) {
+
+            // This would only happen if the community weren't
+            // created successfully
+            if (DebugManager.EXCEPTIONS) {
+                ce.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * Creates a new channel.
+     *
+     * @param channelDesc the channel descriptor
+     * @param communityName the community in which to create the channel
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void createChannel(ChannelDescriptor channelDesc,
+            CommunityName communityName)
+            throws RemoteException {
+
+        try {
+
+            // Look up community to see if it exists
+            Community comm = getCommunity(communityName);
+
+            channelManager.addChannel(communityName, channelDesc);
         } catch (final ChannelAlreadyExistsException e) {
             throw new RemoteException(e.getMessage(), e);
         } catch (CommunityDoesNotExistException e) {
             throw new RemoteException(e.getMessage(), e);
         }
+
     }
 
     /**
@@ -225,7 +278,6 @@ public class ColabServer extends UnicastRemoteObject
         if (comm != null) {
             comm.addMember(userName);
         }
-
     }
 
     /**

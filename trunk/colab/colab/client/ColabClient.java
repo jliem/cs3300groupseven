@@ -329,37 +329,33 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
+    /**
+     * Create a new community on the server.
+     *
+     * @param name the community name
+     * @param password the community password
+     * @throws NetworkException
+     * @throws CommunityAlreadyExistsException
+     * @throws RemoteException
+     */
     public void createCommunity(final CommunityName name,
             final Password password) throws NetworkException,
             CommunityAlreadyExistsException, RemoteException {
 
-       connection.createCommunity(name, password);
+        connection.createCommunity(name, password);
+    }
 
-        // Attempt to add this user
-        UserName username = null;
-        try {
-            username = connection.getUserName();
-        } catch (IllegalStateException ie) {
-            // Not sure why we'd ever be here
-            if (DebugManager.ILLEGAL_STATE) {
-                ie.printStackTrace();
-            }
-        }
+    /**
+     * Creates a new channel on the server in the
+     * currently logged-in community.
+     *
+     * @param channelDesc channel descriptor
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void createChannel(final ChannelDescriptor channelDesc)
+        throws RemoteException {
 
-        if (username != null) {
-            try {
-                connection.addAsMember(name);
-            } catch (CommunityDoesNotExistException ce) {
-
-                // This would only happen if the community weren't
-                // created successfully
-                if (DebugManager.EXCEPTIONS) {
-                    ce.printStackTrace();
-                }
-            }
-        }
-
-
+        connection.createChannel(channelDesc);
     }
 
     /**

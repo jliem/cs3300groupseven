@@ -108,7 +108,9 @@ public final class Community implements Identifiable<CommunityName>,
      * @param username the name of the user to add
      */
     public void addMember(final UserName username) {
-        members.add(username);
+        if (!members.contains(username)) {
+            members.add(username);
+        }
     }
 
     /**

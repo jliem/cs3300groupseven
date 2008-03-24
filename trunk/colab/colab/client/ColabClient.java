@@ -274,8 +274,6 @@ public final class ColabClient extends UnicastRemoteObject implements
     public void channelAdded(final ChannelDescriptor channelDescriptor)
             throws RemoteException {
 
-        System.out.println("Channel added: " + channelDescriptor);
-
         channels.add(channelDescriptor);
     }
 
@@ -287,10 +285,6 @@ public final class ColabClient extends UnicastRemoteObject implements
     }
 
     public Vector<ChannelDescriptor> getChannels() {
-        System.out.println("ColabClient returning channels:");
-        for (ChannelDescriptor cd : channels) {
-            System.out.println(cd.getName());
-        }
         return channels;
     }
 
@@ -314,7 +308,9 @@ public final class ColabClient extends UnicastRemoteObject implements
         this.connectionState = ConnectionState.CONNECTED;
 
         try {
-            connection.logOutUser();
+            if (connection != null) {
+                connection.logOutUser();
+            }
         } catch (RemoteException remoteException) {
             throw new ConnectionDroppedException(remoteException);
         }

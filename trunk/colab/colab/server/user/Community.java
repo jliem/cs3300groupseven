@@ -99,9 +99,17 @@ public final class Community implements Identifiable<CommunityName>,
      * @param username the name of the user to add
      */
     public void addMember(final UserName username) {
-        System.out.println("Added " + username + " to " + super.toString());
-
         members.add(username);
+    }
+
+    /**
+     * Removes a member from this community's member list.
+     *
+     * @param username the name of the user to remove
+     * @return true if removed successfully, false otherwise
+     */
+    public boolean removeMember(final UserName username) {
+        return members.remove(username);
     }
 
     /**
@@ -110,12 +118,6 @@ public final class Community implements Identifiable<CommunityName>,
      * @return a collection containing every user of this community
      */
     public Collection<UserName> getMembers() {
-
-        System.out.println("Members:");
-
-        for (UserName u : members) {
-            System.out.println(u.getValue());
-        }
         return members;
     }
 

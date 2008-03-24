@@ -7,7 +7,8 @@ import colab.common.naming.ChannelName;
 /**
  * Descriptive data used to identify a channel.
  */
-public final class ChannelDescriptor implements Serializable {
+public final class ChannelDescriptor implements Serializable,
+    Comparable<ChannelDescriptor> {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -77,5 +78,31 @@ public final class ChannelDescriptor implements Serializable {
         return this.channelName.toString() + " - " + this.channelType.toString();
 
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public int compareTo(ChannelDescriptor cd) {
+        // Sort by name, then type
+        int nameCompare = this.getName().compareTo(cd.getName());
+
+        if (nameCompare == 0) {
+            return this.getType().compareTo(cd.getType());
+        }
+
+        return nameCompare;
+    }
+
+//    /** {@inheritDoc} */
+//    @Override
+//    public boolean equals(Object o) {
+//
+//        if (o instanceof ChannelDescriptor) {
+//            ChannelDescriptor cd = (ChannelDescriptor)o;
+//            return (channelName.equals(cd.getName()) &&
+//                    channelType.equals(cd.getType()));
+//        }
+//
+//        return false;
+//    }
 
 }

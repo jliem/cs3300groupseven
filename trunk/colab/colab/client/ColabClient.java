@@ -273,10 +273,24 @@ public final class ColabClient extends UnicastRemoteObject implements
     /** {@inheritDoc} */
     public void channelAdded(final ChannelDescriptor channelDescriptor)
             throws RemoteException {
+
+        System.out.println("Channel added: " + channelDescriptor);
+
         channels.add(channelDescriptor);
     }
 
+    /** {@inheritDoc} */
+    public void removeAllChannels()
+        throws RemoteException {
+
+        channels.clear();
+    }
+
     public Vector<ChannelDescriptor> getChannels() {
+        System.out.println("ColabClient returning channels:");
+        for (ChannelDescriptor cd : channels) {
+            System.out.println(cd.getName());
+        }
         return channels;
     }
 

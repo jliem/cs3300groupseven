@@ -224,6 +224,9 @@ public final class Connection extends UnicastRemoteObject
 
         communityAttempt.addClient(this);
 
+        // Clear existing list of channels
+        client.removeAllChannels();
+
         // Send the list of channels to the client
         Collection<ServerChannel> channels =
             channelManager.getChannels(communityName);

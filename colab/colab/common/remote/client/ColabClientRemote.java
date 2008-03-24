@@ -23,4 +23,12 @@ public interface ColabClientRemote extends Remote {
     void channelAdded(ChannelDescriptor channelDescriptor)
             throws RemoteException;
 
+    /**
+     * Removes all channels from this client.
+     *
+     * @throws RemoteException
+     */
+    void removeAllChannels()
+            throws RemoteException;
+
 }

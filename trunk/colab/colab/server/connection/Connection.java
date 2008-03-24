@@ -13,7 +13,6 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelDoesNotExistException;
-import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserAlreadyLoggedInException;
@@ -26,14 +25,12 @@ import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ConnectionRemote;
 import colab.server.ColabServer;
 import colab.server.channel.ChannelConnection;
-import colab.server.channel.ChannelManager;
 import colab.server.channel.ServerChannel;
 import colab.server.event.DisconnectEvent;
 import colab.server.event.DisconnectListener;
 import colab.server.user.Community;
 import colab.server.user.Password;
 import colab.server.user.User;
-import colab.server.user.UserManager;
 
 /**
  * Server implementation of {@link ConnectionRemote}.
@@ -174,10 +171,9 @@ public final class Connection extends UnicastRemoteObject
         }
 
         // Check the validity of login credentials
-        UserManager userManager = server.getUserManager();
         try {
-            userManager.checkPassword(username, password);
-        } catch (final AuthenticationException e) {
+            server.checkPassword(username, password);
+        } catch (AuthenticationException e) {
             throw new RemoteException(e.getMessage(), e);
         }
 
@@ -200,12 +196,9 @@ public final class Connection extends UnicastRemoteObject
                     + this.state + "' state");
         }
 
-        UserManager userManager = server.getUserManager();
-        ChannelManager channelManager = server.getChannelManager();
-
         Community communityAttempt;
         try {
-            communityAttempt = userManager.getCommunity(communityName);
+            communityAttempt = server.getCommunity(communityName);
         } catch (final CommunityDoesNotExistException e) {
             throw new RemoteException(e.getMessage(), e);
         }
@@ -229,7 +222,7 @@ public final class Connection extends UnicastRemoteObject
 
         // Send the list of channels to the client
         Collection<ServerChannel> channels =
-            channelManager.getChannels(communityName);
+            server.getChannels(communityName);
         for (final ServerChannel channel : channels) {
             client.channelAdded(channel.getChannelDescriptor());
         }
@@ -373,10 +366,9 @@ public final class Connection extends UnicastRemoteObject
         throws RemoteException, CommunityDoesNotExistException {
 
         // Look up the community
-        UserManager userManager = this.server.getUserManager();
         Community comm = null;
 
-        comm = userManager.getCommunity(communityName);
+        comm = server.getCommunity(communityName);
 
         if (comm != null) {
             comm.removeMember(this.username);
@@ -395,10 +387,9 @@ public final class Connection extends UnicastRemoteObject
     private ServerChannel getChannel(final ChannelName channelName)
             throws RemoteException {
 
-        ChannelManager channelManager = this.server.getChannelManager();
         ServerChannel channel;
         try {
-            channel = channelManager.getChannel(
+            channel = server.getChannel(
                     this.community.getId(), channelName);
         } catch (final ChannelDoesNotExistException e) {
             throw new RemoteException(e.getMessage(), e);
@@ -417,9 +408,7 @@ public final class Connection extends UnicastRemoteObject
     private Community getCommunity(CommunityName communityName)
         throws CommunityDoesNotExistException {
 
-        UserManager userManager = this.server.getUserManager();
-
-        return userManager.getCommunity(communityName);
+        return server.getCommunity(communityName);
     }
 
     /**
@@ -428,11 +417,7 @@ public final class Connection extends UnicastRemoteObject
      * @return a collection containing every community
      */
     private Collection<Community> getAllCommunities() {
-
-        UserManager userManager = this.server.getUserManager();
-        Collection<Community> communities = userManager.getAllCommunities();
-        return communities;
-
+        return server.getAllCommunities();
     }
 
     /** {@inheritDoc} */
@@ -474,15 +459,18 @@ public final class Connection extends UnicastRemoteObject
                     + this.state + "' state");
         }
 
-        ChannelManager cm = server.getChannelManager();
         ServerChannel channel;
         try {
-            channel = cm.getChannel(this.community.getId(), channelName);
+            channel = server.getChannel(this.community.getId(), channelName);
         } catch (final ChannelDoesNotExistException e) {
             throw new RemoteException(e.getMessage(), e);
         }
 
-        return channel.getUsers();
+        if (channel != null) {
+            return channel.getUsers();
+        } else {
+            return null;
+        }
     }
 
     /** {@inheritDoc} */
@@ -492,7 +480,7 @@ public final class Connection extends UnicastRemoteObject
                 new UserName(userName),
                 new Password(password));
         try {
-            this.server.getUserManager().addUser(user);
+            this.server.addUser(user);
         } catch (final UserAlreadyExistsException e) {
             throw new RemoteException(e.getMessage(), e);
         }

@@ -145,10 +145,11 @@ public final class UserManager {
      *
      * @param username a username
      * @param password a password
+     * @return true if the user's password is correct
      * @throws AuthenticationException if the password is incorrect
      *                                 for the user
      */
-    public void checkPassword(final UserName username,
+    public boolean checkPassword(final UserName username,
             final char[] password) throws AuthenticationException {
 
         User userAttempt = getUser(username);
@@ -161,6 +162,7 @@ public final class UserManager {
             throw new IncorrectPasswordException();
         }
 
+        return true;
     }
 
 }

@@ -82,7 +82,7 @@ public class NewCommunityFrame extends JFrame {
 
     private void handleCreate(final ActionEvent e) {
 
-        if (commName.getText().isEmpty()
+        if (commName.getText().compareTo("") == 0
                 || commPass.getPassword().length == 0
                 || confirmCommPass.getPassword().length == 0) {
 
@@ -145,11 +145,7 @@ public class NewCommunityFrame extends JFrame {
                 e1.printStackTrace();
             }
 
-            JOptionPane.showMessageDialog(this,
-                    "Created new community " + name.getValue(),
-                    "New Community Created",
-                    JOptionPane.INFORMATION_MESSAGE);
-
+            System.out.println("Created new community " + name.getValue());
 
             // Show updated list
             parentPanel.refreshCommunityNames();

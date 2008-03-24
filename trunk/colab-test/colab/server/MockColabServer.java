@@ -10,23 +10,23 @@ import colab.server.user.UserManager;
 public final class MockColabServer extends ColabServer {
 
     public MockColabServer() throws Exception {
-
-        UserManager userManager = getUserManager();
-        ChannelManager channelManager = getChannelManager();
+//
+//        UserManager userManager = getUserManager();
+//        ChannelManager channelManager = getChannelManager();
 
         // Populate a few test users
 
         User johannes = new User("Johannes", "pass1".toCharArray());
-        userManager.addUser(johannes);
+        addUser(johannes);
 
         User pamela = new User("Pamela", "pass2".toCharArray());
-        userManager.addUser(pamela);
+        addUser(pamela);
 
         User matthew = new User("Matthew", "pass3".toCharArray());
-        userManager.addUser(matthew);
+        addUser(matthew);
 
         User chris = new User("Chris", "pass4".toCharArray());
-        userManager.addUser(chris);
+        addUser(chris);
 
         // Populate a few test communities
 

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -98,22 +99,30 @@ public class NewChannelFrame extends JFrame {
 
             ChannelDescriptor desc = new ChannelDescriptor(name, type);
 
-            try {
-                client.createChannel(desc);
-            } catch (RemoteException re) {
-                if (DebugManager.EXCEPTIONS) {
-                    re.printStackTrace();
+            // Check whether this channel already exists
+            Vector<ChannelDescriptor> channels = client.getChannels();
+            if (channels.contains(desc)) {
+                showErrorBox("A channel with that name and type already exists.",
+                        "Duplicate Channel");
+            } else {
+
+                try {
+                    client.createChannel(desc);
+                } catch (RemoteException re) {
+                    if (DebugManager.EXCEPTIONS) {
+                        re.printStackTrace();
+                    }
                 }
+
+                // Show updated list
+                parentPanel.refreshChannels();
+
+                // Select this channel automatically
+                parentPanel.setSelectedChannel(desc);
+
+                // Destroy this window
+                this.closeWindow();
             }
-
-            // Show updated list
-            parentPanel.refreshChannels();
-
-            // Select this channel automatically
-            parentPanel.setSelectedChannel(desc);
-
-            // Destroy this window
-            this.closeWindow();
 
         }
     }

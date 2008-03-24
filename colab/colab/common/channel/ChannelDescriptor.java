@@ -92,17 +92,23 @@ public final class ChannelDescriptor implements Serializable,
         return nameCompare;
     }
 
-//    /** {@inheritDoc} */
-//    @Override
-//    public boolean equals(Object o) {
-//
-//        if (o instanceof ChannelDescriptor) {
-//            ChannelDescriptor cd = (ChannelDescriptor)o;
+    /**
+     * Checks whether an object is equal to this ChannelDescriptor.
+     * Equality is defined as having the same name, so the community
+     * of the channel is not taken into account.
+     */
+    @Override
+    public boolean equals(Object o) {
+
+        if (o instanceof ChannelDescriptor) {
+            ChannelDescriptor cd = (ChannelDescriptor)o;
 //            return (channelName.equals(cd.getName()) &&
 //                    channelType.equals(cd.getType()));
-//        }
-//
-//        return false;
-//    }
+
+            return (channelName.equals(cd.getName()));
+        }
+
+        return false;
+    }
 
 }

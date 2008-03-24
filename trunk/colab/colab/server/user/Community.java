@@ -94,6 +94,15 @@ public final class Community implements Identifiable<CommunityName>,
     }
 
     /**
+     * Returns the password object.
+     *
+     * @return the password
+     */
+    public Password getPassword() {
+        return password;
+    }
+
+    /**
      * Adds a user to this community's member list.
      *
      * @param username the name of the user to add

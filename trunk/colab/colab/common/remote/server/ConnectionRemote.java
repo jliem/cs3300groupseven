@@ -180,10 +180,8 @@ public interface ConnectionRemote extends Remote {
      *
      * @param name the community name
      * @param password the password used to join the community
-     * @return the Community that is created
      * @throws RemoteException if an rmi error occurs
      */
-
     void createCommunity(String name, char[] password)
         throws RemoteException;
 
@@ -192,7 +190,6 @@ public interface ConnectionRemote extends Remote {
      *
      * @param name the community name
      * @param password the password used to join the community
-     * @return the Community that is created
      * @throws RemoteException if an rmi error occurs
      */
 

@@ -312,16 +312,14 @@ class ColabClientGUI extends JFrame {
         try {
             // Log the user out. This will also
             // log out of any communities.
-            client.logOutUser();
+            if (client.hasUserLogin())
+                client.logOutUser();
 
             // Exceptions are expected if we weren't in the proper state
             // to log out (ex. a window was closed, and then we try to close
             // the parent which triggers another logoff)
 
             // TODO: Think of a better way of handling such situations
-        } catch (IllegalStateException ie) {
-            if (DebugManager.EXIT)
-                ie.printStackTrace();
         } catch (NullPointerException ne) {
             if (DebugManager.EXIT)
                 ne.printStackTrace();

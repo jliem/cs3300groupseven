@@ -7,75 +7,151 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
 
 final class ChannelManagerPanel extends JPanel {
 
-    /** Serialization verson number. */
+    /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
     private final ArrayList<ActionListener> listeners;
 
     private final LinkedList<ChannelDescriptor> pendingJoins;
 
-    private final Vector<ChannelDescriptor> channels;
+    private ChannelDescriptor[] channels;
 
     private final JList channelList;
 
+    private final ColabClient client;
 
-    public ChannelManagerPanel(Vector <ChannelDescriptor> channelListModel) {
+    public ChannelManagerPanel(ColabClient client) {
+
+        this.client = client;
 
         this.setLayout(new BorderLayout());
 
         listeners = new ArrayList<ActionListener>();
 
         pendingJoins = new LinkedList<ChannelDescriptor>();
-        channels = channelListModel;
+
+        channels = getSortedChannels();
 
         channelList = new JList(channels);
-
-
-       //menu.add(changeCommunityItem);
 
         channelList.setPreferredSize(new Dimension(100, 230));
         JScrollPane scrollChan = new JScrollPane(channelList);
         scrollChan.setPreferredSize(new Dimension(110, 240));
-        setPreferredSize(new Dimension(115, 275));
 
         channelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         channelList.addMouseListener(new MouseAdapter() {
             public void mouseClicked(final MouseEvent e) {
-                if (e.getClickCount() > 1 && !channelList.isSelectionEmpty()) {
-                    // adds the currently selected channel descriptor to our
-                    // pending join channel list
-                    pendingJoins.add(channels.elementAt(channelList
-                            .getLeadSelectionIndex()));
-                    fireActionPerformed(new ActionEvent(this,
-                            ActionEvent.ACTION_FIRST, "Joined"));
+                if (e.getClickCount() > 1) {
+                    joinSelectedChannel();
                 }
             }
         });
 
-        ActionListener al = new ActionListener() {
+        add(scrollChan, BorderLayout.CENTER);
 
-            public void actionPerformed(final ActionEvent e) {
+        JPanel buttonPanel = new JPanel();
+        JButton joinButton = new JButton("Join Channel");
+        JButton createChannelButton = new JButton("Create New Channel");
 
-                    fireActionPerformed(new ActionEvent(this,
-                            ActionEvent.ACTION_FIRST, "Change!"));
-                }
+        joinButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                joinSelectedChannel();
+            }
+        });
+
+        createChannelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                handleCreateNewChannel();
+            }
+        });
+
+        buttonPanel.add(joinButton);
+        buttonPanel.add(createChannelButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
 
 
-        };
+        setPreferredSize(new Dimension(400, 400));
 
-        add(scrollChan);
+    }
+
+    /**
+     * Creates GUI to prompt user when creating
+     * a new channel.
+     */
+    public void handleCreateNewChannel() {
+        NewChannelFrame ncf = new NewChannelFrame(this, client);
+
+        ncf.pack();
+        ncf.setVisible(true);
+    }
+
+    /**
+     * Joins the selected channel in the list box.
+     */
+    public void joinSelectedChannel() {
+        if (!channelList.isSelectionEmpty()) {
+            // adds the currently selected channel descriptor to our
+            // pending join channel list
+
+            pendingJoins.add(channels[channelList
+                    .getLeadSelectionIndex()]);
+            fireActionPerformed(new ActionEvent(this,
+                    ActionEvent.ACTION_FIRST, "Joined"));
+        } else {
+            showErrorDialog("Please select a channel from the list.",
+            "No Channel Selected");
+        }
+    }
+
+    /**
+     * Pre-selects a specific channel.
+     *
+     * @param desc the channel descriptor
+     */
+    public void setSelectedChannel(ChannelDescriptor desc) {
+        // Find the right channel
+        int index = -1;
+        int i = 0;
+        do {
+            ChannelDescriptor cd = channels[i];
+
+            if (cd.getName().equals(desc.getName()) &&
+                    cd.getType().equals(desc.getType())) {
+                index = i;
+            }
+
+            i++;
+        } while (index == -1 && i < channels.length);
+
+        if (index > -1) {
+            channelList.setSelectedIndex(index);
+        }
+    }
+
+    /**
+     * Retrieves the latest list of channels from the client
+     * and refreshes the UI.
+     */
+    public void refreshChannels() {
+        channels = getSortedChannels();
+        channelList.setListData(channels);
     }
 
     public ChannelDescriptor dequeueJoinedChannel() {
@@ -100,4 +176,20 @@ final class ChannelManagerPanel extends JPanel {
         }
     }
 
+    public void showInfoDialog(String message, String title) {
+        JOptionPane.showMessageDialog(this,
+                message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void showErrorDialog(String message, String title) {
+        JOptionPane.showMessageDialog(this,
+                message, title, JOptionPane.ERROR_MESSAGE);
+    }
+
+    private ChannelDescriptor[] getSortedChannels() {
+        Vector<ChannelDescriptor> vector = client.getChannels();
+        ChannelDescriptor[] arr = vector.toArray(new ChannelDescriptor[0]);
+        Arrays.sort(arr);
+        return arr;
+    }
 }

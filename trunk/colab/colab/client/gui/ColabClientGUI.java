@@ -165,8 +165,7 @@ class ColabClientGUI extends JFrame {
                         ne.printStackTrace();
                     }
 
-                    Vector<ChannelDescriptor> channels = client.getChannels();
-                    channelPanel = new ChannelManagerPanel(channels);
+                    channelPanel = new ChannelManagerPanel(client);
 
                     gotoChannelView();
 
@@ -323,12 +322,12 @@ class ColabClientGUI extends JFrame {
         menu.add(changeCommItem);
         menu.add(logoutItem);
         menu.add(quitItem);
-        channelPanel = new ChannelManagerPanel(client.getChannels());
+        channelPanel = new ChannelManagerPanel(client);
         setActivePanel(channelPanel);
         setTitle("");
         //setResizable(false);
         setResizable(true);
-        setSize(120, 300);
+        setSize(300, 330);
         channelPanel.updateUI();
 
     }

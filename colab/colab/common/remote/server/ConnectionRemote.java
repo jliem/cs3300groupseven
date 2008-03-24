@@ -31,7 +31,7 @@ public interface ConnectionRemote extends Remote {
      *                 may be null, but authentication will fail
      * @throws RemoteException if an rmi error occurs
      */
-    void logIn(UserName username, char[] password)
+    public void logIn(UserName username, char[] password)
         throws RemoteException;
 
     /**
@@ -39,7 +39,7 @@ public interface ConnectionRemote extends Remote {
      *
      * @throws RemoteException if an rmi error occurs
      */
-    void logOutUser() throws RemoteException;
+    public void logOutUser() throws RemoteException;
 
     /**
      * Attempts to log into a community, using the name and optional password.
@@ -52,7 +52,7 @@ public interface ConnectionRemote extends Remote {
      *                 community, may be null
      * @throws RemoteException if an rmi error occurs
      */
-    void logIn(CommunityName communityName, char[] password)
+    public void logIn(CommunityName communityName, char[] password)
         throws RemoteException;
 
     /**
@@ -60,7 +60,7 @@ public interface ConnectionRemote extends Remote {
      *
      * @throws RemoteException if an rmi error occurs
      */
-    void logOutCommunity() throws RemoteException;
+    public void logOutCommunity() throws RemoteException;
 
     /**
      * Retrieves the names of every community on the server.
@@ -68,7 +68,7 @@ public interface ConnectionRemote extends Remote {
      * @return a collection containing every community name
      * @throws RemoteException if an rmi error occurs
      */
-    Collection<CommunityName> getAllCommunityNames()
+    public Collection<CommunityName> getAllCommunityNames()
         throws RemoteException;
 
     /**
@@ -81,7 +81,7 @@ public interface ConnectionRemote extends Remote {
      *         in which the user has membership
      * @throws RemoteException if an rmi error occurs
      */
-    Collection<CommunityName> getMyCommunityNames()
+    public Collection<CommunityName> getMyCommunityNames()
         throws RemoteException;
 
     /**
@@ -93,7 +93,7 @@ public interface ConnectionRemote extends Remote {
      * @param channelDescriptor the dsecriptor of the channel being joined
      * @throws RemoteException if an rmi error occurs
      */
-    void joinChannel(ChannelRemote clientChannel,
+    public void joinChannel(ChannelRemote clientChannel,
             ChannelDescriptor channelDescriptor) throws RemoteException;
 
     /**
@@ -103,7 +103,7 @@ public interface ConnectionRemote extends Remote {
      * @param channelName the name of the channel being left
      * @throws RemoteException if an rmi error occurs
      */
-    void leaveChannel(ChannelName channelName) throws RemoteException;
+    public void leaveChannel(ChannelName channelName) throws RemoteException;
 
     /**
      * Checks whether the logged in user is a member of a given community.
@@ -124,7 +124,7 @@ public interface ConnectionRemote extends Remote {
      * @throws RemoteException if an rmi error occurs
      * @throws CommunityDoesNotExistException if the community does not exist
      */
-    void addAsMember(CommunityName communityName)
+    public void addAsMember(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException;
 
     /**
@@ -134,7 +134,7 @@ public interface ConnectionRemote extends Remote {
      * @param communityName the name of the community being left
      * @throws RemoteException if an rmi error occurs
      */
-    void removeAsMember(CommunityName communityName)
+    public void removeAsMember(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException;
 
 
@@ -146,7 +146,7 @@ public interface ConnectionRemote extends Remote {
      * @return a list of data objects
      * @throws RemoteException if an rmi error occurs
      */
-    List<ChannelData> getLastData(ChannelName channelName, int count)
+    public List<ChannelData> getLastData(ChannelName channelName, int count)
             throws RemoteException;
 
     /**
@@ -157,7 +157,7 @@ public interface ConnectionRemote extends Remote {
      * @return the id assigned to the data that was added
      * @throws RemoteException if an rmi error occurs
      */
-    ChannelDataIdentifier add(ChannelName channelName, ChannelData data)
+    public ChannelDataIdentifier add(ChannelName channelName, ChannelData data)
             throws RemoteException;
 
     /**
@@ -166,7 +166,7 @@ public interface ConnectionRemote extends Remote {
      * @return a list of all the users in this channel
      * @throws RemoteException if a remote exception occurs
      */
-    Collection<UserName> getActiveUsers(ChannelName channelName)
+    public Collection<UserName> getActiveUsers(ChannelName channelName)
             throws RemoteException;
 
     /**
@@ -184,7 +184,7 @@ public interface ConnectionRemote extends Remote {
      * @param password the password to use
      * @throws RemoteException if an rmi error occurs
      */
-    void createUser(String userName, char[] password)
+    public void createUser(String userName, char[] password)
             throws RemoteException;
 
     /**
@@ -194,7 +194,7 @@ public interface ConnectionRemote extends Remote {
      * @param password the password used to join the community
      * @throws RemoteException if an rmi error occurs
      */
-    void createCommunity(String name, char[] password)
+    public void createCommunity(String name, char[] password)
         throws RemoteException;
 
     /**
@@ -205,7 +205,7 @@ public interface ConnectionRemote extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
 
-    void createCommunity(CommunityName name, Password password)
+    public void createCommunity(CommunityName name, Password password)
         throws RemoteException;
 
     /**
@@ -213,7 +213,15 @@ public interface ConnectionRemote extends Remote {
      *
      * @param channelDesc descriptor of the channel
      */
-    void createChannel(ChannelDescriptor channelDesc)
+    public void createChannel(ChannelDescriptor channelDesc)
         throws RemoteException ;
+
+    /**
+     * Checks whether a user has logged into the program.
+     *
+     * @return true if the user has logged in
+     */
+    public boolean hasUserLogin()
+        throws RemoteException;
 
 }

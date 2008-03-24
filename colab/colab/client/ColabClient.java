@@ -435,13 +435,24 @@ public final class ColabClient extends UnicastRemoteObject implements
     }
 
     /**
+     * Checks whether a user has logged into the program.
+     *
+     * @return true if the user has logged in
+     */
+    public boolean hasUserLogin() throws RemoteException {
+        return connection.hasUserLogin();
+    }
+
+    /**
      * Completely closes all threads, windows, etc. associated
      * with the client.
      */
     public void exitProgram() {
 
         try {
-            logOutUser();
+            if (this.hasUserLogin()) {
+                logOutUser();
+            }
         } catch (ConnectionDroppedException e1) {
             if (DebugManager.EXIT) {
                 e1.printStackTrace();

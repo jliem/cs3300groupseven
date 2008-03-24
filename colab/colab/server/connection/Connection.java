@@ -247,7 +247,7 @@ public final class Connection extends UnicastRemoteObject
         // If not logged in as a user, can't log out
         if (!this.state.hasUserLogin()) {
             throw new IllegalStateException(
-                    "Attempt to perform user login on connection in '"
+                    "Attempt to perform user logout on connection in '"
                     + this.state + "' state");
         }
 
@@ -391,6 +391,11 @@ public final class Connection extends UnicastRemoteObject
             comm.removeMember(this.username);
         }
 
+    }
+
+    /** {@inheritDoc} */
+    public boolean hasUserLogin() throws RemoteException {
+        return this.state.hasUserLogin();
     }
 
     /**
@@ -585,6 +590,7 @@ public final class Connection extends UnicastRemoteObject
     private void log(final String message) {
         System.out.println("[Connection " + connectionId + "] " + message);
     }
+
 
 
 }

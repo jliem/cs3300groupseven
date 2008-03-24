@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import colab.common.channel.Channel;
+import colab.common.channel.ChannelDescriptor;
 import colab.common.event.UserJoinedEvent;
 import colab.common.event.UserLeftEvent;
 import colab.common.event.UserListener;
@@ -58,6 +59,11 @@ public abstract class ClientChannel extends UnicastRemoteObject
     public final ChannelName getId() {
         return name;
     }
+
+    /**
+     * Return the channel descriptor.
+     */
+    public abstract ChannelDescriptor getChannelDescriptor();
 
     /** {@inheritDoc} */
     public final void handleUserEvent(final UserJoinedEvent event)

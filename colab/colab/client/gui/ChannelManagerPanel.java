@@ -126,23 +126,7 @@ final class ChannelManagerPanel extends JPanel {
      * @param desc the channel descriptor
      */
     public void setSelectedChannel(ChannelDescriptor desc) {
-        // Find the right channel
-        int index = -1;
-        int i = 0;
-        do {
-            ChannelDescriptor cd = channels[i];
-
-            if (cd.getName().equals(desc.getName()) &&
-                    cd.getType().equals(desc.getType())) {
-                index = i;
-            }
-
-            i++;
-        } while (index == -1 && i < channels.length);
-
-        if (index > -1) {
-            channelList.setSelectedIndex(index);
-        }
+        channelList.setSelectedValue(desc, true);
     }
 
     /**

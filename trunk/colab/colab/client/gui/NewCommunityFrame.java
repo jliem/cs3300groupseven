@@ -145,10 +145,12 @@ public class NewCommunityFrame extends JFrame {
                 e1.printStackTrace();
             }
 
-            System.out.println("Created new community " + name.getValue());
 
             // Show updated list
             parentPanel.refreshCommunityNames();
+
+            // Select newly created community
+            parentPanel.setSelectedCommunity(name);
 
             // Destroy this window
             this.dispose();

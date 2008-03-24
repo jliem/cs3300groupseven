@@ -263,6 +263,21 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /**
+     * Checks whether a user is a member of a given community.
+     *
+     * @param userName the user name
+     * @param communityName the community name
+     * @return true if the user is a member of the community, false otherwise
+     * @throws CommunityDoesNotExistException if the community did not exist
+     */
+    public boolean isMember(final UserName userName,
+            final CommunityName communityName)
+            throws CommunityDoesNotExistException {
+
+        return userManager.getCommunity(communityName).isMember(userName);
+    }
+
+    /**
      * Adds a user as a member of a community.
      * @param userName the user
      * @param communityName the community

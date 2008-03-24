@@ -361,15 +361,7 @@ public final class Connection extends UnicastRemoteObject
 
         // TODO: Check state
 
-        // Look up the community
-        UserManager userManager = this.server.getUserManager();
-        Community comm = null;
-
-        comm = userManager.getCommunity(communityName);
-
-        if (comm != null) {
-            comm.addMember(this.username);
-        }
+        server.addAsMember(this.username, communityName);
     }
 
     /** {@inheritDoc} */
@@ -515,15 +507,7 @@ public final class Connection extends UnicastRemoteObject
     public void createCommunity(final CommunityName communityName,
             final Password password) throws RemoteException {
 
-        Community community = new Community(communityName,
-                password);
-
-        try {
-            this.server.getUserManager().addCommunity(community);
-        } catch (final CommunityAlreadyExistsException e) {
-            throw new RemoteException(e.getMessage(), e);
-        }
-
+        server.createCommunity(communityName, password);
     }
 
     /**

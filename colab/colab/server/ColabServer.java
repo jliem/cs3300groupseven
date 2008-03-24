@@ -9,12 +9,22 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
+import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.ChannelType;
+import colab.common.exception.ChannelAlreadyExistsException;
+import colab.common.exception.CommunityAlreadyExistsException;
+import colab.common.exception.CommunityDoesNotExistException;
+import colab.common.naming.ChannelName;
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
 import colab.common.util.FileUtils;
 import colab.server.channel.ChannelManager;
 import colab.server.connection.Connection;
+import colab.server.user.Community;
+import colab.server.user.Password;
 import colab.server.user.UserManager;
 
 /**
@@ -143,6 +153,60 @@ public class ColabServer extends UnicastRemoteObject
      */
     public final ChannelManager getChannelManager() {
         return this.channelManager;
+    }
+
+    /**
+     * Creates a new community in this connection.
+     *
+     * @param name the community name
+     * @param password the password used to join the community
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void createCommunity(final CommunityName communityName,
+            final Password password) throws RemoteException {
+
+        Community community = new Community(communityName,
+                password);
+
+        try {
+            userManager.addCommunity(community);
+        } catch (final CommunityAlreadyExistsException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
+
+        // If the community was added successfully, add
+        // the default lobby
+        // Add a lobby to each community
+
+        ChannelDescriptor lobbyDesc = new ChannelDescriptor(
+                 new ChannelName("Lobby"), ChannelType.CHAT);
+
+        try {
+            channelManager.addChannel(communityName, lobbyDesc);
+        } catch (final ChannelAlreadyExistsException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (CommunityDoesNotExistException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Adds a user as a member of a community.
+     * @param userName the user
+     * @param communityName the community
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void addAsMember(final UserName userName,
+            final CommunityName communityName)
+            throws RemoteException, CommunityDoesNotExistException {
+
+        // Look up the community
+        Community comm = userManager.getCommunity(communityName);
+
+        if (comm != null) {
+            comm.addMember(userName);
+        }
+
     }
 
     /**

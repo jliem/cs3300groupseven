@@ -9,10 +9,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;

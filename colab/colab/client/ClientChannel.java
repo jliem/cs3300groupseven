@@ -60,11 +60,6 @@ public abstract class ClientChannel extends UnicastRemoteObject
         return name;
     }
 
-    /**
-     * Return the channel descriptor.
-     */
-    public abstract ChannelDescriptor getChannelDescriptor();
-
     /** {@inheritDoc} */
     public final void handleUserEvent(final UserJoinedEvent event)
             throws RemoteException {

@@ -14,6 +14,8 @@ import colab.common.naming.ChannelName;
 public interface Channel extends Identifiable<ChannelName> {
 
     /**
+     * Returns the channel descriptor.
+     *
      * @return a descriptor object with basic information about this channel
      */
     ChannelDescriptor getChannelDescriptor();

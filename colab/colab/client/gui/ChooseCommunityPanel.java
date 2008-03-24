@@ -75,6 +75,9 @@ class ChooseCommunityPanel extends JPanel {
 
     }
 
+    /**
+     * Refreshes the list of communities.
+     */
     public void refreshCommunityNames() {
 
         // Get the collection of my communities
@@ -101,6 +104,11 @@ class ChooseCommunityPanel extends JPanel {
         setCommunityNames(myCommunityNames.toArray());
 
         repaint();
+    }
+
+    public void setSelectedCommunity(final CommunityName communityName) {
+        // Sets focus to this particular community
+        selectBox.setSelectedItem(communityName.getValue());
     }
 
     public void setCommunityNames(final Object[] names) {

@@ -3,7 +3,8 @@ package colab.client.gui;
 import javax.swing.JPanel;
 
 /**
- * Parent class for all client-side channel panels.
+ * Parent class for all client-side channel panels. The child
+ * class is responsible for adding the userListPanel to itself.
  */
 abstract class ClientChannelPanel extends JPanel {
 

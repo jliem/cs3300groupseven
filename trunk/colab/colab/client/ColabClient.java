@@ -353,6 +353,21 @@ public final class ColabClient extends UnicastRemoteObject implements
     }
 
     /**
+     * Checks whether the logged in user is a member of a given community.
+     *
+     * @param communityName the community name
+     * @return true if the user is a member of the community, false otherwise
+     * @throws CommunityDoesNotExistException
+     * @throws RemoteException
+     * @throws CommunityDoesNotExistException if the community did not exist
+     */
+    public boolean isMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException {
+
+        return connection.isMember(communityName);
+    }
+
+    /**
      * Create a new community on the server.
      *
      * @param name the community name

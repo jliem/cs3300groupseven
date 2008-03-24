@@ -33,6 +33,12 @@ class ChooseCommunityPanel extends JPanel {
 
     private final ColabClient client;
 
+
+    /** Flag to toggle whether all communities are shown
+     * or just ones to which this user belongs.
+     */
+    private boolean showAllCommunities = true;
+
     public ChooseCommunityPanel(final ColabClient client) {
 
         this.client = client;
@@ -48,12 +54,8 @@ class ChooseCommunityPanel extends JPanel {
 
         newCommButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                NewCommunityFrame frame = new NewCommunityFrame(getThis(), client);
-                frame.pack();
-                frame.setVisible(true);
-                frame.setPreferredSize(new Dimension(400, 800));
-                //fireActionPerformed(new ActionEvent(this,
-                  //      ActionEvent.ACTION_FIRST, "New Community"));
+                fireActionPerformed(new ActionEvent(this,
+                        ActionEvent.ACTION_FIRST, "New Community"));
             }
         });
 
@@ -80,10 +82,14 @@ class ChooseCommunityPanel extends JPanel {
      */
     public void refreshCommunityNames() {
 
-        // Get the collection of my communities
-        Collection<CommunityName> myCommunities;
+        // Get the collection of communities
+        Collection<CommunityName> communities;
         try {
-            myCommunities = client.getMyCommunityNames();
+            if (showAllCommunities) {
+                communities = client.getAllCommunityNames();
+            } else {
+                communities = client.getMyCommunityNames();
+            }
         } catch (final NetworkException e) {
             if (DebugManager.NETWORK) {
                 e.printStackTrace();
@@ -93,15 +99,15 @@ class ChooseCommunityPanel extends JPanel {
         }
 
         // Convert to a list of strings
-        List<String> myCommunityNames = new ArrayList<String>();
-        for (final CommunityName name : myCommunities) {
-            myCommunityNames.add(name.getValue());
+        List<String> communityNames = new ArrayList<String>();
+        for (final CommunityName name : communities) {
+            communityNames.add(name.getValue());
         }
 
         // Alphabetize the list
-        Collections.sort(myCommunityNames);
+        Collections.sort(communityNames);
 
-        setCommunityNames(myCommunityNames.toArray());
+        setCommunityNames(communityNames.toArray());
 
         repaint();
     }
@@ -135,13 +141,4 @@ class ChooseCommunityPanel extends JPanel {
         return new CommunityName(name);
     }
 
-
-    /**
-     * Lame hack to get access to the instance of ChooseCommunityPanel
-     * from the anonymous inner class.
-     * @return a reference to this
-     */
-    private ChooseCommunityPanel getThis() {
-        return this;
-    }
 }

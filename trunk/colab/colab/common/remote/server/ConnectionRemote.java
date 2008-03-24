@@ -106,11 +106,23 @@ public interface ConnectionRemote extends Remote {
     void leaveChannel(ChannelName channelName) throws RemoteException;
 
     /**
+     * Checks whether the logged in user is a member of a given community.
+     *
+     * @param communityName the community name
+     * @return true if the user is a member of the community, false otherwise
+     * @throws CommunityDoesNotExistException if the community did not exist
+     * @throws RemoteException if an rmi error occurs
+     */
+    public boolean isMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException;
+
+    /**
      * Indicates that a client is becoming a new member
      * of a community.
      *
      * @param communityName the name of the community being joined
      * @throws RemoteException if an rmi error occurs
+     * @throws CommunityDoesNotExistException if the community does not exist
      */
     void addAsMember(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException;

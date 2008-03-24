@@ -23,4 +23,13 @@ public class AuthenticationException extends Exception {
     public AuthenticationException(final Throwable cause) {
         super(cause);
     }
+
+    /**
+     * Constructs a new exception with the specified detail message.
+     *
+     * @param message the detail message
+     */
+    public AuthenticationException(final String message) {
+        super(message);
+    }
 }

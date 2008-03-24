@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 import colab.common.ConnectionState;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
@@ -307,8 +308,14 @@ public final class Connection extends UnicastRemoteObject
 
         for (Community c : communities) {
 
-            if (c.getMembers().contains(this.username)) {
-                communityNames.add(c.getId());
+            try {
+                if (this.isMember(c.getId())) {
+                    communityNames.add(c.getId());
+                }
+            } catch (CommunityDoesNotExistException ce) {
+                // This should never happen since we just downloaded
+                // the list of communities
+                ce.printStackTrace();
             }
         }
 
@@ -349,19 +356,29 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
-    /** {@inheritDoc}
-     * @throws CommunityDoesNotExistException */
-    @Override
+    /** {@inheritDoc} */
+    public boolean isMember(CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException {
+
+        if (!this.state.hasUserLogin()) {
+            throw new IllegalStateException("Attempt to check" +
+                    " community membership, but user " + this.username +
+                    " was not logged in");
+        }
+
+        return server.isMember(this.username, communityName);
+    }
+
+    /** {@inheritDoc} */
     public void addAsMember(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException {
 
-        // TODO: Check state
+        // TODO: Check state?
 
         server.addAsMember(this.username, communityName);
     }
 
     /** {@inheritDoc} */
-    @Override
     public void removeAsMember(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException {
 

@@ -142,80 +142,12 @@ class ColabClientGUI extends JFrame {
         });
 
         communityPanel.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent e) {
+            public void actionPerformed(final ActionEvent event) {
 
-                if (e.getActionCommand().equalsIgnoreCase("Community Chosen")) {
-                    try {
-                        CommunityName communityName = communityPanel
-                                .getCurrentCommunityName();
-                        client.loginCommmunity(communityName);
-                    } catch (final UserAlreadyLoggedInException ualie) {
-                        showErrorBox(
-                                "You are already logged into this community, "
-                                        + "possibly at another location.",
-                                "Unable to log in");
-                        return;
-                    } catch (final AuthenticationException ae) {
-                        // The christopher martin experience: enjoy!
-                        // TODO: Implement this
-                        ae.printStackTrace();
-                    } catch (final NetworkException ne) {
-                        // The christopher martin experience: enjoy!
-                        // TODO: Fix this
-                        ne.printStackTrace();
-                    }
-
-                    channelPanel = new ChannelManagerPanel(client);
-
-                    gotoChannelView();
-
-                    channelPanel.addActionListener(new ActionListener() {
-                        public void actionPerformed(final ActionEvent e) {
-                            ChannelDescriptor cd;
-
-                            if (e.getActionCommand()
-                                    .equalsIgnoreCase("Logout!")) {
-                                try {
-                                    client.logOutUser();
-                                    gotoUserLoginView(true);
-
-                                } catch (ConnectionDroppedException e1) {
-                                    // TODO Auto-generated catch block
-                                    e1.printStackTrace();
-                                }
-
-                            } else if (e.getActionCommand().equalsIgnoreCase(
-                                    "Change!")) {
-                                try {
-                                    client.logOutCommunity();
-                                } catch (ConnectionDroppedException e1) {
-                                    // TODO Auto-generated catch block
-                                    e1.printStackTrace();
-                                }
-                                gotoCommunityLoginView();
-                            }
-
-                            while ((cd = channelPanel.dequeueJoinedChannel())
-                                    != null) {
-                                try {
-                                    // TODO: this is a hack
-                                    // rewrite with more protocol handling
-                                    ChatChannelFrame f = new ChatChannelFrame(
-                                            client, (ClientChatChannel) client
-                                                    .joinChannel(cd),
-                                            currentUser);
-                                    f.setVisible(true);
-                                    channelList.add(f);
-                                } catch (RemoteException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                        }
-                    });
-                }
-
-                if (e.getActionCommand().equalsIgnoreCase("New Community")) {
-                    // TODO: Fill this in
+                if (event.getActionCommand().equalsIgnoreCase("Community Chosen")) {
+                    handleCommunityChosen();
+                } else if (event.getActionCommand().equalsIgnoreCase("New Community")) {
+                    handleNewCommunity();
                 }
             }
         });
@@ -226,6 +158,126 @@ class ColabClientGUI extends JFrame {
                 exit();
             }
         });
+    }
+
+    /**
+     * Display window for creating a new community.
+     */
+    private void handleNewCommunity() {
+        NewCommunityFrame frame = new NewCommunityFrame(communityPanel, client);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setPreferredSize(new Dimension(400, 800));
+    }
+
+    /**
+     * Code that runs when a user attempts to log into
+     * a community.
+     */
+    private void handleCommunityChosen() {
+
+        boolean loginOK = false;
+
+        try {
+            CommunityName communityName = communityPanel
+                    .getCurrentCommunityName();
+            if (client.isMember(communityName)) {
+                client.loginCommmunity(communityName);
+            } else {
+                String password = promptForCommunityPassword();
+
+                // TODO: Log in when not a member
+                // For now, throw an exception
+                throw new AuthenticationException("Not a member" +
+                        " of selected community");
+            }
+
+            loginOK = true;
+
+        } catch (final UserAlreadyLoggedInException ualie) {
+            showErrorBox(
+                    "You are already logged into this community, "
+                            + "possibly at another location.",
+                    "Unable to log in");
+        } catch (final AuthenticationException ae) {
+            showErrorBox(
+                    "You are unauthorized to join this community.",
+                    "Unable to join community");
+        } catch (final NetworkException ne) {
+
+            if (DebugManager.NETWORK)
+                ne.printStackTrace();
+        } catch (RemoteException re) {
+
+            if (DebugManager.EXCEPTIONS)
+                re.printStackTrace();
+        }
+
+        // Exit method if an exception occurred while
+        // logging in
+        if (!loginOK)
+            return;
+
+        channelPanel = new ChannelManagerPanel(client);
+
+        gotoChannelView();
+
+        channelPanel.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                ChannelDescriptor cd;
+
+                if (e.getActionCommand()
+                        .equalsIgnoreCase("Logout!")) {
+                    try {
+                        client.logOutUser();
+                        gotoUserLoginView(true);
+
+                    } catch (ConnectionDroppedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+
+                } else if (e.getActionCommand().equalsIgnoreCase(
+                        "Change!")) {
+                    try {
+                        client.logOutCommunity();
+                    } catch (ConnectionDroppedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    gotoCommunityLoginView();
+                }
+
+                while ((cd = channelPanel.dequeueJoinedChannel())
+                        != null) {
+                    try {
+                        // TODO: this is a hack
+                        // rewrite with more protocol handling
+                        ChatChannelFrame f = new ChatChannelFrame(
+                                client, (ClientChatChannel) client
+                                        .joinChannel(cd),
+                                currentUser);
+                        f.setVisible(true);
+                        channelList.add(f);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Displays GUI to ask user for password to join community.
+     *
+     * @return the String the user entered as a password, or null if
+     * the user canceled.
+     */
+    private String promptForCommunityPassword() {
+        return JOptionPane.showInputDialog(this,
+                "You are not a member of the community you selected.\n\nPlease" +
+                " enter the community password to log in:",
+                "Enter community password");
     }
 
     /**

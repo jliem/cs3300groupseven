@@ -8,12 +8,16 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Collection;
 
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
+import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelAlreadyExistsException;
+import colab.common.exception.ChannelDoesNotExistException;
 import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
+import colab.common.exception.UserAlreadyExistsException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
@@ -22,9 +26,11 @@ import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
 import colab.common.util.FileUtils;
 import colab.server.channel.ChannelManager;
+import colab.server.channel.ServerChannel;
 import colab.server.connection.Connection;
 import colab.server.user.Community;
 import colab.server.user.Password;
+import colab.server.user.User;
 import colab.server.user.UserManager;
 
 /**
@@ -191,6 +197,19 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /**
+     * Adds a new user.
+     *
+     * @param user the new user to add
+     * @throws UserAlreadyExistsException if a user with the given
+     *                                    name already exists
+     */
+    public void addUser(final User user)
+            throws UserAlreadyExistsException {
+
+        userManager.addUser(user);
+    }
+
+    /**
      * Adds a user as a member of a community.
      * @param userName the user
      * @param communityName the community
@@ -209,6 +228,75 @@ public class ColabServer extends UnicastRemoteObject
 
     }
 
+    /**
+     * Checks that a user's password is correct.
+     *
+     * @param username a username
+     * @param password a password
+     * @return true if the user's password is correct
+     * @throws AuthenticationException if the password is incorrect
+     *                                 for the user
+     */
+    public boolean checkPassword(UserName username, char[] password)
+        throws AuthenticationException {
+
+        return userManager.checkPassword(username, password);
+
+    }
+
+    /**
+     * Retrieves a community.
+     *
+     * @param name the name of the community
+     * @return the community with the given name
+     * @throws CommunityDoesNotExistException
+     * @throws CommunityDoesNotExistException if the community does not exist
+     */
+    public Community getCommunity(final CommunityName name)
+        throws CommunityDoesNotExistException {
+
+        return userManager.getCommunity(name);
+    }
+
+    /**
+     * Retrieves all of the communities on the server.
+     *
+     * @return a collection containing every community
+     */
+    public Collection<Community> getAllCommunities() {
+        return userManager.getAllCommunities();
+    }
+
+    /// ChannelManager
+    /**
+     * Returns a Collection of a Community's channels.
+     *
+     * @param communityName the Community to look up
+     * @return a non-null Collection of its channels.
+     *         If there are no channels, the resulting
+     *         Collection will have a size of 0.
+     */
+    public Collection<ServerChannel> getChannels(
+            final CommunityName communityName) {
+
+        return channelManager.getChannels(communityName);
+    }
+
+    /**
+     * Retrieves a channel.
+     *
+     * @param communityName the name of the community to which
+     *                      the channel belongs
+     * @param channelName the name of the channel requested
+     * @return a remote reference to the requested channel
+     * @throws ChannelDoesNotExistException if the channel does not exist
+     */
+    public ServerChannel getChannel(final CommunityName communityName,
+            final ChannelName channelName)
+            throws ChannelDoesNotExistException {
+
+        return channelManager.getChannel(communityName, channelName);
+    }
     /**
      * The entry point for launching the server application.
      *

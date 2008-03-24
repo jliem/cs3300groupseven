@@ -26,6 +26,9 @@ import colab.common.naming.UserName;
  * downloadActiveUsers in order to get all users currently connected. The list
  * will update itself when users join/leave.
  *
+ * ClientChannelFrame will set it up properly, so all client-side frames should
+ * extend that class.
+ *
  * Example usage in ChatChannelFrame:
  *
  *   channel.addUserListener(chatPanel.getUserListPanel());

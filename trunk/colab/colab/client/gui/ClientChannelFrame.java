@@ -12,7 +12,10 @@ import colab.client.ColabClient;
 import colab.common.DebugManager;
 
 /**
- * Parent class for all client-side channel frames.
+ * Parent class for all client-side channel frames. This class
+ * will set up the list of users but the panel (which should extend
+ * ClientChannelPanel) is responsible for adding the actual user list to
+ * the GUI.
  */
 abstract class ClientChannelFrame extends JFrame {
 

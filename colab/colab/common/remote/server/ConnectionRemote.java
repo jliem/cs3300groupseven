@@ -8,6 +8,7 @@ import java.util.List;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
@@ -105,25 +106,24 @@ public interface ConnectionRemote extends Remote {
     void leaveChannel(ChannelName channelName) throws RemoteException;
 
     /**
-     * Retrieves a channel.
-     * The channel will be created if it does not exist.
+     * Indicates that a client is becoming a new member
+     * of a community.
      *
-     * @param clientChannel a remote object representing the
-     *                      channel on the client side
-     * @param channelDescriptor the dsecriptor of the channel being joined
+     * @param communityName the name of the community being joined
      * @throws RemoteException if an rmi error occurs
      */
-    void joinCommunity(ChannelRemote clientChannel,
-            ChannelDescriptor channelDescriptor) throws RemoteException;
+    void addAsMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException;
 
     /**
-     * Indicates that the client has exited from a channel
-     * and should not continue to receive updates from it.
+     * Indicates that the client is longer a member of
+     * this community.
      *
-     * @param channelName the name of the channel being left
+     * @param communityName the name of the community being left
      * @throws RemoteException if an rmi error occurs
      */
-    void leaveCommunity(ChannelName channelName) throws RemoteException;
+    void removeAsMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException;
 
 
     /**
@@ -184,7 +184,7 @@ public interface ConnectionRemote extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
 
-    Community createCommunity(String name, char[] password)
+    void createCommunity(String name, char[] password)
         throws RemoteException;
 
     /**
@@ -196,7 +196,7 @@ public interface ConnectionRemote extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
 
-    Community createCommunity(CommunityName name, Password password)
+    void createCommunity(CommunityName name, Password password)
         throws RemoteException;
 
 }

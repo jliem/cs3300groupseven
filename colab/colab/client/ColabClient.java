@@ -15,6 +15,7 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.CommunityAlreadyExistsException;
+import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
@@ -322,27 +323,32 @@ public final class ColabClient extends UnicastRemoteObject implements
             final Password password) throws NetworkException,
             CommunityAlreadyExistsException, RemoteException {
 
-        Community comm = connection.createCommunity(name, password);
+       connection.createCommunity(name, password);
 
-        System.out.println("Client received " + comm);
+        // Attempt to add this user
+        UserName username = null;
+        try {
+            username = connection.getUserName();
+        } catch (IllegalStateException ie) {
+            // Not sure why we'd ever be here
+            if (DebugManager.ILLEGAL_STATE) {
+                ie.printStackTrace();
+            }
+        }
 
-        if (comm != null) {
-            // Attempt to add this user
-            UserName username = null;
+        if (username != null) {
             try {
-                username = connection.getUserName();
-            } catch (IllegalStateException ie) {
-                // Not sure why we'd ever be here
-                if (DebugManager.ILLEGAL_STATE) {
-                    ie.printStackTrace();
+                connection.addAsMember(name);
+            } catch (CommunityDoesNotExistException ce) {
+
+                // This would only happen if the community weren't
+                // created successfully
+                if (DebugManager.EXCEPTIONS) {
+                    ce.printStackTrace();
                 }
             }
-
-            if (username != null) {
-                comm.addMember(username);
-            }
-
         }
+
 
     }
 

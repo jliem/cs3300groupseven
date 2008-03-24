@@ -310,7 +310,6 @@ public final class Connection extends UnicastRemoteObject
             new ArrayList<CommunityName>(communities.size());
 
         for (Community c : communities) {
-            System.out.println("Checking " + c.getId());
 
             if (c.getMembers().contains(this.username)) {
                 communityNames.add(c.getId());
@@ -354,6 +353,42 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+    /** {@inheritDoc}
+     * @throws CommunityDoesNotExistException */
+    @Override
+    public void addAsMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException {
+
+        // TODO: Check state
+
+        // Look up the community
+        UserManager userManager = this.server.getUserManager();
+        Community comm = null;
+
+        comm = userManager.getCommunity(communityName);
+
+        if (comm != null) {
+            comm.addMember(this.username);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removeAsMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException {
+
+        // Look up the community
+        UserManager userManager = this.server.getUserManager();
+        Community comm = null;
+
+        comm = userManager.getCommunity(communityName);
+
+        if (comm != null) {
+            comm.removeMember(this.username);
+        }
+
+    }
+
     /**
      * Retrieves a channel from the server's channel manager.
      *
@@ -375,6 +410,21 @@ public final class Connection extends UnicastRemoteObject
         }
         return channel;
 
+    }
+
+    /**
+     * Retrieves a community from the server's UserManager.
+     * @param communityName the name of the community to retrieve
+     * @return the community
+     * @throws CommunityDoesNotExistException if no community
+     * with that name exists
+     */
+    private Community getCommunity(CommunityName communityName)
+        throws CommunityDoesNotExistException {
+
+        UserManager userManager = this.server.getUserManager();
+
+        return userManager.getCommunity(communityName);
     }
 
     /**
@@ -454,21 +504,19 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public Community createCommunity(final String communityName,
+    public void createCommunity(final String communityName,
             final char[] password) throws RemoteException {
 
-        return createCommunity(new CommunityName(communityName),
+        createCommunity(new CommunityName(communityName),
                 new Password(password));
     }
 
     /** {@inheritDoc} */
-    public Community createCommunity(final CommunityName communityName,
+    public void createCommunity(final CommunityName communityName,
             final Password password) throws RemoteException {
 
         Community community = new Community(communityName,
                 password);
-
-        System.out.println("Connection created community " + community);
 
         try {
             this.server.getUserManager().addCommunity(community);
@@ -476,9 +524,6 @@ public final class Connection extends UnicastRemoteObject
             throw new RemoteException(e.getMessage(), e);
         }
 
-        System.out.println("Connection is returning community " + community);
-
-        return community;
     }
 
     /**
@@ -532,17 +577,5 @@ public final class Connection extends UnicastRemoteObject
         System.out.println("[Connection " + connectionId + "] " + message);
     }
 
-    @Override
-    public void joinCommunity(ChannelRemote clientChannel,
-            ChannelDescriptor channelDescriptor) throws RemoteException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void leaveCommunity(ChannelName channelName) throws RemoteException {
-        // TODO Auto-generated method stub
-
-    }
 
 }

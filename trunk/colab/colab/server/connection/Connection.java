@@ -86,6 +86,12 @@ public final class Connection extends UnicastRemoteObject
     private final Vector<DisconnectListener> disconnectListeners;
 
     /**
+     * A list of all channels the client using this connection
+     * is currently joined to.
+     */
+    private Vector<ChannelName> joinedChannels;
+
+    /**
      * Constructs a new Connection.
      *
      * @param server the server to which the client is connected
@@ -100,6 +106,7 @@ public final class Connection extends UnicastRemoteObject
         }
 
         this.disconnectListeners = new Vector<DisconnectListener>();
+        this.joinedChannels = new Vector<ChannelName>();
 
         // Keep a reference to the server and client
         this.server = server;
@@ -267,7 +274,8 @@ public final class Connection extends UnicastRemoteObject
                     + this.state + "' state");
         }
 
-        // TODO: Log out of any server and client channels
+        // Log out of any joined channels
+        this.leaveAllJoinedChannels();
 
         this.community.removeClient(this);
 
@@ -341,6 +349,9 @@ public final class Connection extends UnicastRemoteObject
         ChannelConnection client = new ChannelConnection(this, clientChannel);
         serverChannel.addClient(client);
 
+        joinedChannels.add(channelName);
+
+        log(this.username + " joined channel " + channelName);
     }
 
     /** {@inheritDoc} */
@@ -355,6 +366,10 @@ public final class Connection extends UnicastRemoteObject
         }
 
         serverChannel.removeClient(this);
+
+        joinedChannels.remove(channelName);
+
+        log(this.username + " left channel " + channelName);
 
     }
 
@@ -557,6 +572,28 @@ public final class Connection extends UnicastRemoteObject
         for (DisconnectListener listener : disconnectListeners) {
             listener.handleDisconnect(event);
         }
+
+    }
+
+    /**
+     * Leaves all channels this client is connected to.
+     *
+     * @throws RemoteException if an rmi error occurs
+     */
+    private void leaveAllJoinedChannels() throws RemoteException {
+        // Can't use a loop over joinedChannels directly or we'll
+        // get a ConcurrentModificationException, so create
+        // a new list
+        ChannelName[] channels = joinedChannels.toArray(new ChannelName[0]);
+
+        for (ChannelName channel : channels) {
+            leaveChannel(channel);
+        }
+
+        // Sanity check
+        if (joinedChannels.size() > 0)
+            throw new IllegalStateException("Tried to leave all channels, " +
+                    "but size of joinedChannels is > 0");
 
     }
 

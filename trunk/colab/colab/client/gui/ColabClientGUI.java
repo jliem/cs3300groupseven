@@ -95,7 +95,7 @@ class ColabClientGUI extends JFrame {
                 if (e.getSource() == logoutItem) {
                     gotoUserLoginView(true);
                     try {
-                        leaveOpenedChannels();
+                        closeOpenedChannelWindows();
                         client.logOutUser();
                     } catch (ConnectionDroppedException e1) {
                         // TODO Auto-generated catch block
@@ -105,7 +105,7 @@ class ColabClientGUI extends JFrame {
 
                 if (e.getSource() == changeCommItem) {
                     try {
-                        leaveOpenedChannels();
+                        closeOpenedChannelWindows();
                         client.logOutCommunity();
                     } catch (ConnectionDroppedException e1) {
                         // TODO Auto-generated catch block
@@ -284,7 +284,7 @@ class ColabClientGUI extends JFrame {
     /**
      * Attempts to close any windows opened by this frame.
      */
-    private void leaveOpenedChannels() {
+    private void closeOpenedChannelWindows() {
         // Because the windows that were opened from this frame might
         // have been closed since then, channelList may have invalid entries
         // for windows which no longer exist
@@ -303,6 +303,8 @@ class ColabClientGUI extends JFrame {
             }
         }
 
+
+
         // Reset the list
         channelList.clear();
     }
@@ -311,12 +313,12 @@ class ColabClientGUI extends JFrame {
      * Clean up and exit the program.
      */
     private void exit() {
-        // First attempt to exit any channels this frame has opened
-        leaveOpenedChannels();
+        // First close all opened windows
+        closeOpenedChannelWindows();
 
         try {
             // Log the user out. This will also
-            // log out of any communities.
+            // log out of any communities and channels.
             if (client.hasUserLogin())
                 client.logOutUser();
 

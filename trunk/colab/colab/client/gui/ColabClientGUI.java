@@ -28,6 +28,7 @@ import colab.common.exception.NetworkException;
 import colab.common.exception.UserAlreadyLoggedInException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
+import colab.server.user.Password;
 
 class ColabClientGUI extends JFrame {
 
@@ -180,12 +181,17 @@ class ColabClientGUI extends JFrame {
             if (client.isMember(communityName)) {
                 client.loginCommmunity(communityName);
             } else {
-                String password = promptForCommunityPassword();
-
-                // TODO: Log in when not a member
-                // For now, throw an exception
+                char[] password = promptForCommunityPassword();
+                
+                if(client.checkCommunityPassword(communityName, password)){
+                	client.addUserToCommunity(currentUser, communityName);
+                	client.loginCommmunity(communityName);
+                }
+                
+                else{
                 throw new AuthenticationException("Not a member" +
                         " of selected community");
+                }
             }
 
             loginOK = true;
@@ -269,11 +275,11 @@ class ColabClientGUI extends JFrame {
      * @return the String the user entered as a password, or null if
      * the user canceled.
      */
-    private String promptForCommunityPassword() {
-        return JOptionPane.showInputDialog(this,
+    private char[] promptForCommunityPassword() {
+        return (JOptionPane.showInputDialog(this,
                 "You are not a member of the community you selected.\n\nPlease" +
                 " enter the community password to log in:",
-                "Enter community password");
+                "Enter community password")).toCharArray();
     }
 
     /**

@@ -223,5 +223,18 @@ public interface ConnectionRemote extends Remote {
      */
     public boolean hasUserLogin()
         throws RemoteException;
+    
+    /**
+     * Checks whether a given password is correct for a given community
+     * @param commName 
+     * @param password
+     * @return
+     * @throws RemoteException
+     */
+    public boolean checkCommunityPassword(CommunityName commName, char[] password)
+    	throws RemoteException;
 
+    
+    public void addUserToCommunity(UserName user, CommunityName comm)
+    	throws RemoteException;
 }

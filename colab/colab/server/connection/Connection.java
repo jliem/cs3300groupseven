@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 import colab.common.ConnectionState;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
@@ -334,6 +335,11 @@ public final class Connection extends UnicastRemoteObject
     public void joinChannel(final ChannelRemote clientChannel,
             final ChannelDescriptor channelDescriptor) throws RemoteException {
 
+        if (!this.state.hasUserLogin()) {
+            throw new IllegalStateException("Could not join channel " +
+                    "because user was not logged in");
+        }
+
         ChannelName channelName = channelDescriptor.getName();
         ServerChannel serverChannel = getChannel(channelName);
 
@@ -343,17 +349,28 @@ public final class Connection extends UnicastRemoteObject
                 + channelName + " in Connection");
         }
 
-        ChannelConnection client = new ChannelConnection(this, clientChannel);
-        serverChannel.addClient(client);
+        // Check whether the user is already part of the channel
+        if (!serverChannel.contains(username)) {
+            ChannelConnection client = new ChannelConnection(this, clientChannel);
+            serverChannel.addClient(client);
 
-        joinedChannels.add(channelName);
+            joinedChannels.add(channelName);
 
-        log(this.username + " joined channel " + channelName);
+            log(this.username + " joined channel " + channelName);
+        } else {
+            DebugManager.debug(this.username + " tried to join channel "
+                    + channelName + "but was already a member.");
+        }
     }
 
     /** {@inheritDoc} */
     public void leaveChannel(final ChannelName channelName)
             throws RemoteException {
+
+        if (!this.state.hasUserLogin()) {
+            throw new IllegalStateException("Could not leave channel " +
+                    "because user was not logged in");
+        }
 
         ServerChannel serverChannel = getChannel(channelName);
 
@@ -362,12 +379,26 @@ public final class Connection extends UnicastRemoteObject
                     + channelName.getValue() + " because it no longer exists");
         }
 
-        serverChannel.removeClient(this);
+        // Check whether user is part of channel
+        if (serverChannel.contains(this)) {
+            serverChannel.removeClient(this);
 
-        joinedChannels.remove(channelName);
+            joinedChannels.remove(channelName);
 
-        log(this.username + " left channel " + channelName);
+            log(this.username + " left channel " + channelName);
+        } else {
+            // Sanity check: if server channel does not contain
+            // this client, it shouldn't be in joined channels either
+            if (joinedChannels.contains(channelName)) {
+                throw new IllegalStateException("Server channel says that " +
+                        this + " is not part of the channel, but the channel " +
+                        "is in the joined channels list in Connection");
+            }
 
+
+            DebugManager.debug(this.username + " tried to leave a channel " +
+                    "but was not a member.");
+        }
     }
 
     /** {@inheritDoc} */

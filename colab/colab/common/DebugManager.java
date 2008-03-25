@@ -28,4 +28,11 @@ public class DebugManager {
      */
     public static final boolean ILLEGAL_STATE = EXCEPTIONS && true;
 
+    public static final boolean PRINT_DEBUG_MESSAGES = true;
+
+    public static void debug(String message) {
+        if (PRINT_DEBUG_MESSAGES) {
+            System.out.println("*** DEBUG *** " + message);
+        }
+    }
 }

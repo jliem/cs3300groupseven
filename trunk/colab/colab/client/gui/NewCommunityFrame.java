@@ -129,7 +129,7 @@ public class NewCommunityFrame extends JFrame {
 
         if (!flagged) {
             Password password = new Password(
-                    commPass.getPassword().toString().toCharArray());
+                    commPass.getPassword());
             CommunityName name = new CommunityName(
                     commName.getText());
             try {

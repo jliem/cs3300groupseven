@@ -70,7 +70,6 @@ public final class ChannelDescriptor implements Serializable,
     }
 
     /** {@inheritDoc} */
-   // @Override
     public String toString() {
 
         // Because ChannelManagerPanel uses the toString() in the display,
@@ -80,7 +79,6 @@ public final class ChannelDescriptor implements Serializable,
     }
 
     /** {@inheritDoc} */
-   // @Override
     public int compareTo(ChannelDescriptor cd) {
         // Sort by name, then type
         int nameCompare = this.getName().compareTo(cd.getName());
@@ -96,8 +94,10 @@ public final class ChannelDescriptor implements Serializable,
      * Checks whether an object is equal to this ChannelDescriptor.
      * Equality is defined as having the same name, so the community
      * of the channel is not taken into account.
+     *
+     * @param o the Object to check
+     * @return true if the objects are equal
      */
-  //  @Override
     public boolean equals(Object o) {
 
         if (o instanceof ChannelDescriptor) {

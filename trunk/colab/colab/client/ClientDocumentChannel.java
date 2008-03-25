@@ -11,36 +11,50 @@ import colab.common.channel.DocumentChannelData;
 import colab.common.channel.DocumentDataSet;
 import colab.common.naming.ChannelName;
 
-public class ClientDocumentChannel extends ClientChannel {
+public final class ClientDocumentChannel extends ClientChannel {
 
+    /** Serialization version number. */
     private static final long serialVersionUID = 1;
-    
+
     private int newRevisions = 0;
 
     protected DocumentDataSet revisions;
-    
-    public ClientDocumentChannel(final ChannelName name) throws RemoteException{
+
+    public ClientDocumentChannel(final ChannelName name)
+            throws RemoteException {
+
         super(name);
         revisions = new DocumentDataSet();
+
     }
 
-    public void add(ChannelData data) throws RemoteException {
+    public void add(final ChannelData data) throws RemoteException {
+
         revisions.add((DocumentChannelData)data);
         newRevisions++;
-        fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST,
-                "Message Added"));
+
+        ActionEvent event = new ActionEvent(
+                this, ActionEvent.ACTION_FIRST, "Message Added");
+        fireActionPerformed(event);
+
     }
 
     public ChannelDescriptor getChannelDescriptor() {
+
         return new ChannelDescriptor(this.getId(), ChannelType.DOCUMENT);
+
     }
 
     public List<DocumentChannelData> getLocalMessages() {
+
         return revisions.getLast(-1);
+
     }
 
     public int getLocalNumMessages() {
+
         return revisions.size();
+
     }
 
     public List<DocumentChannelData> getNewMessages() {

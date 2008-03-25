@@ -4,8 +4,8 @@ import java.util.Date;
 
 import colab.common.naming.UserName;
 
-public class NameDatePair implements Comparable<NameDatePair>{
-    
+public final class NameDatePair implements Comparable<NameDatePair> {
+
     private final UserName name;
 
     private final Date date;
@@ -15,7 +15,7 @@ public class NameDatePair implements Comparable<NameDatePair>{
         this.name = name;
         this.date = date;
     }
-    
+
     @Override
     public String toString() {
         return name.toString() + " " + date.toString();
@@ -29,17 +29,18 @@ public class NameDatePair implements Comparable<NameDatePair>{
         return name;
     }
 
-    public boolean equals(NameDatePair pair) {
+    public boolean equals(final NameDatePair pair) {
         return name.equals(pair.getName()) && date.equals(pair.getDate());
     }
-    
-    public int compareTo(NameDatePair pair) {
+
+    public int compareTo(final NameDatePair pair) {
         int ret = date.compareTo(pair.getDate());
-        
+
         if(ret == 0) {
             ret = name.compareTo(pair.getName());
         }
-        
+
         return ret;
     }
+
 }

@@ -13,7 +13,8 @@ import colab.common.naming.ChannelName;
 
 public final class ClientChatChannel extends ClientChannel {
 
-    private final static long serialVersionUID = 1;
+    /** Serialization version number. */
+    private static final long serialVersionUID = 1L;
 
     private int newMessages = 0;
 

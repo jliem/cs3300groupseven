@@ -102,7 +102,8 @@ public class NewChannelFrame extends JFrame {
             // Check whether this channel already exists
             Vector<ChannelDescriptor> channels = client.getChannels();
             if (channels.contains(desc)) {
-                showErrorBox("A channel with that name and type already exists.",
+                showErrorBox(
+                        "A channel with that name and type already exists.",
                         "Duplicate Channel");
             } else {
 

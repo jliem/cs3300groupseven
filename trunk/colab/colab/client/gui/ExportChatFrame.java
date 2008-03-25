@@ -37,6 +37,8 @@ public class ExportChatFrame extends JFrame {
     /** Serialization verson number. */
     public static final long serialVersionUID = 1L;
 
+    private final ClientChatChannel channel;
+
     private final JFileChooser fileChooser;
 
     private final JButton exportButton;
@@ -62,6 +64,8 @@ public class ExportChatFrame extends JFrame {
     private File exportFile;
 
     public ExportChatFrame(final ClientChatChannel channel) {
+
+        this.channel = channel;
 
         fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -90,39 +94,7 @@ public class ExportChatFrame extends JFrame {
 
         exportButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                // TODO: add actual export action
-                try {
-
-                    // Try to create/open a file from the path in the text box
-                    exportFile = new File(fileBox.getText());
-
-                    if (exportFile == null || (!exportFile.exists()
-                            && !exportFile.createNewFile())
-                            || !exportFile.canWrite()) {
-
-                        showErrorBox("Cannot write to selected file.",
-                                     "Export Error");
-                        return;
-
-                    }
-
-                    if (local.isSelected()) {
-                        export(exportFile, channel.getLocalMessages());
-                    } else if (lines.isSelected()) {
-                        // TODO: export per line, requires some server-side
-                        // fixes (retrieving old history)
-                    } else {
-                        // TODO: total export, requires some server-side
-                        // fixes (retrieving old history)
-                    }
-                } catch(final IOException ex) {
-                    showErrorBox("Error writing to file.", "File Error");
-                    ex.printStackTrace();
-                    return;
-                }
-
-                setVisible(false);
-                dispose();
+                exportAction();
             }
         });
 
@@ -161,8 +133,8 @@ public class ExportChatFrame extends JFrame {
 
         /* Construct three constraints, one to be shared by the radio
          * buttons, and another for the lines stuff */
-        GridBagConstraints buttonsC = new GridBagConstraints(),
-            linesC = new GridBagConstraints();
+        GridBagConstraints buttonsC = new GridBagConstraints();
+        GridBagConstraints linesC = new GridBagConstraints();
 
         buttonsC.gridx = 0;
         buttonsC.gridy = GridBagConstraints.RELATIVE;
@@ -191,9 +163,9 @@ public class ExportChatFrame extends JFrame {
         filePanel.add(browseButton);
 
         setLayout(new GridBagLayout());
-        GridBagConstraints optionsC = new GridBagConstraints(),
-            filesC = new GridBagConstraints(),
-            exportC = new GridBagConstraints();
+        GridBagConstraints optionsC = new GridBagConstraints();
+        GridBagConstraints filesC = new GridBagConstraints();
+        GridBagConstraints exportC = new GridBagConstraints();
 
         optionsC.gridx = 0;
         optionsC.gridy = 0;
@@ -214,6 +186,44 @@ public class ExportChatFrame extends JFrame {
 
         // We don't want closing the export window to close the whole app
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    }
+
+    private void exportAction() {
+
+        // TODO: add actual export action
+        try {
+
+            // Try to create/open a file from the path in the text box
+            exportFile = new File(fileBox.getText());
+
+            if (exportFile == null || (!exportFile.exists()
+                    && !exportFile.createNewFile())
+                    || !exportFile.canWrite()) {
+
+                showErrorBox("Cannot write to selected file.",
+                             "Export Error");
+                return;
+
+            }
+
+            if (local.isSelected()) {
+                export(exportFile, channel.getLocalMessages());
+            } else if (lines.isSelected()) {
+                // TODO: export per line, requires some server-side
+                // fixes (retrieving old history)
+            } else {
+                // TODO: total export, requires some server-side
+                // fixes (retrieving old history)
+            }
+        } catch(final IOException ex) {
+            showErrorBox("Error writing to file.", "File Error");
+            ex.printStackTrace();
+            return;
+        }
+
+        setVisible(false);
+        dispose();
 
     }
 

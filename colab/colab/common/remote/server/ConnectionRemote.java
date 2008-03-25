@@ -117,28 +117,6 @@ public interface ConnectionRemote extends Remote {
         throws RemoteException, CommunityDoesNotExistException;
 
     /**
-     * Indicates that a client is becoming a new member
-     * of a community.
-     *
-     * @param communityName the name of the community being joined
-     * @throws RemoteException if an rmi error occurs
-     * @throws CommunityDoesNotExistException if the community does not exist
-     */
-    public void addAsMember(CommunityName communityName)
-        throws RemoteException, CommunityDoesNotExistException;
-
-    /**
-     * Indicates that the client is longer a member of
-     * this community.
-     *
-     * @param communityName the name of the community being left
-     * @throws RemoteException if an rmi error occurs
-     */
-    public void removeAsMember(CommunityName communityName)
-        throws RemoteException, CommunityDoesNotExistException;
-
-
-    /**
      * Gets the last *count* pieces of data from the specified Channel.
      *
      * @param channelName the channel to retrieve data from

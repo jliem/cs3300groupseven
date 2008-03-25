@@ -127,8 +127,7 @@ public final class ChannelManager {
         subMap.put(channelName, channel);
 
         // Notify the community that a channel has been added to it
-        UserManager userManager = server.getUserManager();
-        Community community = userManager.getCommunity(communityName);
+        Community community = server.getCommunity(communityName);
         community.channelAdded(channelDescriptor);
 
         return channel;

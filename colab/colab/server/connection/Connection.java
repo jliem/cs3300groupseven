@@ -372,30 +372,6 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public void addAsMember(CommunityName communityName)
-        throws RemoteException, CommunityDoesNotExistException {
-
-        // TODO: Check state?
-
-        server.addAsMember(this.username, communityName);
-    }
-
-    /** {@inheritDoc} */
-    public void removeAsMember(CommunityName communityName)
-        throws RemoteException, CommunityDoesNotExistException {
-
-        // Look up the community
-        Community comm = null;
-
-        comm = server.getCommunity(communityName);
-
-        if (comm != null) {
-            comm.removeMember(this.username);
-        }
-
-    }
-
-    /** {@inheritDoc} */
     public boolean hasUserLogin() throws RemoteException {
         return this.state.hasUserLogin();
     }

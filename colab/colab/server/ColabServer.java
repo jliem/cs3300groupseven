@@ -46,6 +46,8 @@ public class ColabServer extends UnicastRemoteObject
     /**
      * The manager object that keeps track of users
      * and communities for this server instance.
+     *
+     * Field is protected so that MockColabServer can access it.
      */
     private final UserManager userManager;
 
@@ -145,24 +147,6 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /**
-     * Returns the user/community manager.
-     *
-     * @return the user manager for this server instance
-     */
-    public final UserManager getUserManager() {
-        return this.userManager;
-    }
-
-    /**
-     * Returns the channel manager.
-     *
-     * @return the channel for this server instance
-     */
-    public final ChannelManager getChannelManager() {
-        return this.channelManager;
-    }
-
-    /**
      * Creates a new community in this connection without specifying
      * any user as creator.
      *
@@ -192,35 +176,26 @@ public class ColabServer extends UnicastRemoteObject
         Community community = new Community(communityName,
                 password);
 
+        // TODO: The creator should also be a moderator
+        // Add the creator as a member
+        if (creator != null) {
+            community.addMember(creator);
+        }
+
+        // Try to add the community
         try {
             userManager.addCommunity(community);
         } catch (final CommunityAlreadyExistsException e) {
             throw new RemoteException(e.getMessage(), e);
         }
 
+        // If the community was added successfully, add
+        // the default lobby
+        ChannelDescriptor lobbyDesc = new ChannelDescriptor(
+                 new ChannelName("*** Lobby ***"), ChannelType.CHAT);
 
-        try {
+        createChannel(lobbyDesc, communityName);
 
-            // If the community was added successfully, add
-            // the default lobby
-            ChannelDescriptor lobbyDesc = new ChannelDescriptor(
-                     new ChannelName("*** Lobby ***"), ChannelType.CHAT);
-
-            createChannel(lobbyDesc, communityName);
-
-            // TODO: The creator should also be a moderator
-            // Add the creator as a member
-            if (creator != null) {
-                addAsMember(creator, communityName);
-            }
-        } catch (CommunityDoesNotExistException ce) {
-
-            // This would only happen if the community weren't
-            // created successfully
-            if (DebugManager.EXCEPTIONS) {
-                ce.printStackTrace();
-            }
-        }
 
     }
 
@@ -275,24 +250,6 @@ public class ColabServer extends UnicastRemoteObject
             throws CommunityDoesNotExistException {
 
         return userManager.getCommunity(communityName).isMember(userName);
-    }
-
-    /**
-     * Adds a user as a member of a community.
-     * @param userName the user
-     * @param communityName the community
-     * @throws RemoteException if an rmi error occurs
-     */
-    public void addAsMember(final UserName userName,
-            final CommunityName communityName)
-            throws RemoteException, CommunityDoesNotExistException {
-
-        // Look up the community
-        Community comm = userManager.getCommunity(communityName);
-
-        if (comm != null) {
-            comm.addMember(userName);
-        }
     }
 
     /**
@@ -385,6 +342,17 @@ public class ColabServer extends UnicastRemoteObject
         // Create and initialize a server
         new ColabServer(path).publish(port);
 
+    }
+
+
+    /**
+     * Returns the user/community manager.
+     * Used for testing purposes in MockColabServer.
+     *
+     * @return the user manager for this server instance
+     */
+    protected final UserManager getUserManager() {
+        return this.userManager;
     }
 
 }

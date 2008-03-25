@@ -304,6 +304,7 @@ class ColabClientGUI extends JFrame {
         for (ClientChannelFrame channelFrame : channelList) {
             try {
                 // TODO: Think of some better way of detecting this
+                // This actually works, but is kind of hacky
                 if (channelFrame.isVisible()) {
                     channelFrame.exit();
                 }

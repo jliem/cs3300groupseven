@@ -158,6 +158,26 @@ public abstract class ServerChannel<T extends ChannelData>
     }
 
     /**
+     * Checks whether a client is part of this channel.
+     *
+     * @param client the client to look up
+     * @return true if this client is part of the channel, false otherwise
+     */
+    public final boolean contains(final Connection client) {
+        return clients.contains(client);
+    }
+
+    /**
+     * Checks whether a user is part of this channel.
+     *
+     * @param username the user name
+     * @return true if the user is part of the channel, false otherwise
+     */
+    public final boolean contains(final UserName username) {
+        return (getUsers().contains(username));
+    }
+
+    /**
      * @return a list of users in this Channel
      */
     public final Collection<UserName> getUsers() {

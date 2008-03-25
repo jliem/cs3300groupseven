@@ -20,28 +20,14 @@ import colab.common.event.UserListener;
 import colab.common.naming.UserName;
 
 /**
- * A panel to display all the users in this Channel. Comes wrapped in its own
- * scrollable pane. To use this panel, a class must add an instance of
- * UserListPanel to the channel using the addUserListener method, then call
- * downloadActiveUsers in order to get all users currently connected. The list
+ * A panel to display all the users in a Channel. The list
  * will update itself when users join/leave.
  *
  * ClientChannelFrame will set it up properly, so all client-side frames should
  * extend that class.
  *
- * Example usage in ChatChannelFrame:
- *
- *   channel.addUserListener(chatPanel.getUserListPanel());
- *   try {
- *       // Download list of current users
- *       chatPanel.getUserListPanel().downloadActiveUsers(client, channel);
- *   } catch (final RemoteException ex) {
- *       // Handle remote exception
- *       ex.printStackTrace();
- *   }
- *
  */
-public final class UserListPanel extends JPanel implements UserListener {
+final class UserListPanel extends JPanel implements UserListener {
 
     /**
      * Serial version ID.
@@ -132,6 +118,8 @@ public final class UserListPanel extends JPanel implements UserListener {
      * @param leaveEvent the user to remove
      */
     public void handleUserEvent(final UserLeftEvent leaveEvent) {
+
+        System.out.println("userpanel says " + leaveEvent.getUserName() + " has left");
         users.remove(leaveEvent.getUserName());
         this.refreshUsers();
     }

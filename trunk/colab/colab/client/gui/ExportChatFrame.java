@@ -81,8 +81,9 @@ public class ExportChatFrame extends JFrame {
             public void actionPerformed(final ActionEvent e) {
                 if (fileChooser.showOpenDialog(ExportChatFrame.this)
                         == JFileChooser.APPROVE_OPTION) {
-                    exportFile = fileChooser.getSelectedFile();
-                    fileBox.setText(exportFile.getPath());
+
+                    // Sets the file path in the text box
+                    fileBox.setText(fileChooser.getSelectedFile().getPath());
                 }
             }
         });
@@ -91,6 +92,10 @@ public class ExportChatFrame extends JFrame {
             public void actionPerformed(final ActionEvent e) {
                 // TODO: add actual export action
                 try {
+
+                    // Try to create/open a file from the path in the text box
+                    exportFile = new File(fileBox.getText());
+
                     if (exportFile == null || (!exportFile.exists()
                             && !exportFile.createNewFile())
                             || !exportFile.canWrite()) {

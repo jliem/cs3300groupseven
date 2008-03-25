@@ -79,10 +79,17 @@ abstract class ClientChannelFrame extends JFrame {
 
     /**
      * Perform cleanup before exiting this window.
+     * @throws RemoteException
      */
     public void exit() {
         // Before closing window, try to exit the channel
-        leaveChannel();
+        try {
+            leaveChannel();
+        } catch (RemoteException re) {
+            if (DebugManager.EXIT) {
+                re.printStackTrace();
+            }
+        }
 
         setVisible(false);
         dispose();
@@ -90,17 +97,10 @@ abstract class ClientChannelFrame extends JFrame {
 
     /**
      * Indicates that this client is leaving this channel.
+     * @throws RemoteException
      */
-    private void leaveChannel()  {
+    private void leaveChannel() throws RemoteException  {
 
-        if (clientChannel != null) {
-            try {
-                client.leaveChannel(clientChannel.getChannelDescriptor());
-            } catch (Exception e) {
-                // TODO: Handle this? Might not be necessary
-                if (DebugManager.EXIT)
-                    e.printStackTrace();
-            }
-        }
+        client.leaveChannel(clientChannel.getChannelDescriptor());
     }
 }

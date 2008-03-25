@@ -62,6 +62,8 @@ class ColabClientGUI extends JFrame {
 
     private JMenuItem quitItem;
 
+    private CommunityName communityName;
+
     public ColabClientGUI(final ColabClient client) {
 
         Image icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
@@ -175,7 +177,7 @@ class ColabClientGUI extends JFrame {
         boolean loginOK = false;
 
         try {
-            CommunityName communityName = communityPanel
+            communityName = communityPanel
                     .getCurrentCommunityName();
 
             char[] password = null;
@@ -373,7 +375,12 @@ class ColabClientGUI extends JFrame {
         menu.add(quitItem);
         channelPanel = new ChannelManagerPanel(client);
         setActivePanel(channelPanel);
-        setTitle("");
+        if (communityName == null) {
+            setTitle("");
+        } else {
+            setTitle(communityName.getValue());
+        }
+
         //setResizable(false);
         setResizable(true);
         setSize(300, 330);

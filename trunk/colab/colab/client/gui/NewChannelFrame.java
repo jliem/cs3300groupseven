@@ -133,12 +133,4 @@ public class NewChannelFrame extends JFrame {
     private void closeWindow() {
         this.dispose();
     }
-
-    public static void main(String[] args) {
-        NewChannelFrame f = new NewChannelFrame(null,
-                null);
-        f.pack();
-        f.setVisible(true);
-
-    }
 }

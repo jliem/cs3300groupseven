@@ -26,8 +26,6 @@ class ChooseCommunityPanel extends JPanel {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
-    private JLabel selectLabel;
-    private JButton selectButton, newCommButton;
     private JComboBox selectBox;
 
     private JCheckBox showAllCommCheckBox;
@@ -48,12 +46,11 @@ class ChooseCommunityPanel extends JPanel {
 
         listeners = new ArrayList<ActionListener>();
 
-        selectLabel = new JLabel(
-                "Select the community you wish to visit for this session: ");
+        JLabel selectLabel = new JLabel("Select the community you wish to visit for this session: ");
 
-        selectButton = new JButton("Select");
+        JButton joinButton = new JButton("Join Community");
 
-        newCommButton = new JButton("Create New Community");
+        JButton newCommButton = new JButton("Create New Community");
 
         newCommButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -64,7 +61,7 @@ class ChooseCommunityPanel extends JPanel {
 
         selectBox = new JComboBox();
 
-        selectButton.addActionListener(new ActionListener() {
+        joinButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 fireActionPerformed(new ActionEvent(this,
                         ActionEvent.ACTION_FIRST, "Community Chosen"));
@@ -81,12 +78,12 @@ class ChooseCommunityPanel extends JPanel {
             }
 
         });
-        setLayout(new GridLayout(5, 1));
+        setLayout(new GridLayout(4, 1));
 
         add(selectLabel);
         add(selectBox);
         add(showAllCommCheckBox);
-        add(selectButton);
+        add(joinButton);
         add(newCommButton);
 
 

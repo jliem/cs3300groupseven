@@ -224,6 +224,12 @@ public final class Community implements Identifiable<CommunityName>,
             final char[] passAttempt) {
 
         // If a correct password was provided, the user can join.
+        System.out.println("Authentication running");
+        for (char c : passAttempt)
+            System.out.print(c);
+
+        System.out.println();
+
         if (passAttempt != null && checkPassword(passAttempt)) {
             members.add(username);
             return true;

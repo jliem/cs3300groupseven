@@ -27,7 +27,6 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
-import colab.server.user.Community;
 import colab.server.user.Password;
 
 /**
@@ -178,13 +177,15 @@ public final class ColabClient extends UnicastRemoteObject implements
      * Logs into a community.
      *
      * @param communityName the name of community to log in to
+     * @param password the community's password
      * @throws NetworkException if a network I/O error occurs
      * @throws AuthenticationException if the server rejected the login
      *                                 because the user is not a member
      *                                 of the community
      */
-    public void loginCommmunity(final CommunityName communityName)
-            throws NetworkException, AuthenticationException {
+    public void loginCommunity(final CommunityName communityName,
+            final char[] password) throws NetworkException,
+            AuthenticationException {
 
         // Must not yet be logged in to a community
         if (this.connectionState.hasCommunityLogin()) {
@@ -195,7 +196,7 @@ public final class ColabClient extends UnicastRemoteObject implements
         }
 
         try {
-            this.connection.logIn(communityName, null);
+            this.connection.logIn(communityName, password);
         } catch (final ServerException serverException) {
             try {
                 throw serverException.getCause().getCause();
@@ -211,7 +212,20 @@ public final class ColabClient extends UnicastRemoteObject implements
         }
 
         this.connectionState = ConnectionState.ACTIVE;
+    }
+    /**
+     * Logs into a community.
+     *
+     * @param communityName the name of community to log in to
+     * @throws NetworkException if a network I/O error occurs
+     * @throws AuthenticationException if the server rejected the login
+     *                                 because the user is not a member
+     *                                 of the community
+     */
+    public void loginCommmunity(final CommunityName communityName)
+            throws NetworkException, AuthenticationException {
 
+        this.loginCommunity(communityName, null);
     }
 
     /**
@@ -465,25 +479,5 @@ public final class ColabClient extends UnicastRemoteObject implements
 
         System.exit(0);
     }
-    
-    /**
-     * Checks with connection to see if the password is the community's joining password
-     * @param commName
-     * @param password
-     * @return whether the password was valid
-     * @throws RemoteException
-     */
-    
-    public boolean checkCommunityPassword(CommunityName commName, char[] password) throws RemoteException{
-    	
-    	return connection.checkCommunityPassword(commName, password);
-    	
-    }
-
-	public void addUserToCommunity(UserName currentUser, CommunityName comm) throws RemoteException {
-		// TODO Auto-generated method stub
-		connection.addUserToCommunity(currentUser, comm);		
-		
-	}
 
 }

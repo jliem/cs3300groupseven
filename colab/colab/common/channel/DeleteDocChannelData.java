@@ -6,30 +6,34 @@ import colab.common.Document;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
-public class DeleteDocChannelData extends DocumentChannelData {
-    
-    private final static long serialVersionUID = 1;
-    
+public final class DeleteDocChannelData extends DocumentChannelData {
+
+    /** Serialization version number. */
+    private static final long serialVersionUID = 1L;
+
     private ParagraphIdentifier paragraphID;
-    
-    public DeleteDocChannelData(ParagraphIdentifier paragraphID, UserName creator, Date timestamp) {
+
+    public DeleteDocChannelData(final ParagraphIdentifier paragraphID,
+            final UserName creator, final Date timestamp) {
+
         super(creator, timestamp, DocumentChannelDataType.DELETE);
-       
+
         this.paragraphID = paragraphID;
+
     }
 
     @Override
-    public void apply(Document doc) throws Exception {
+    public void apply(final Document doc) throws Exception {
         doc.delete(paragraphID);
     }
-    
+
     public ParagraphIdentifier getParagraphID() {
         return paragraphID;
     }
 
-    public void setParagraphID(ParagraphIdentifier paragraphID) {
+    public void setParagraphID(final ParagraphIdentifier paragraphID) {
         this.paragraphID = paragraphID;
     }
-    
-    
+
+
 }

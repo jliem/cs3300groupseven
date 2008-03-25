@@ -11,17 +11,16 @@ import colab.server.channel.ServerDocumentChannel;
 
 
 /**
- * @author matt
- * The ChannelData flavor for document editing functionality. 
- * 
- * This class, through its subclasses, represents a few more architectural problems 
- * we've got on our plate- namely, that of wide-spread synchronization.  The most 
- * obvious issue is this- if I want to insert a paragraph, and I do that using an
- * index, how do I know that my index is correct? We can't get locks on the whole
- * paragraph structure... I've temporarily solved the most obvious aspects of the
- * problem with {@link ParagraphIdentifier}, but that really doesn't cut it, since it
- * has its own drawbacks. 
- * 
+ * @author matt The ChannelData flavor for document editing functionality.
+ *
+ * This class, through its subclasses, represents a few more architectural
+ * problems we've got on our plate- namely, that of wide-spread synchronization.
+ * The most obvious issue is this- if I want to insert a paragraph, and I do
+ * that using an index, how do I know that my index is correct? We can't get
+ * locks on the whole paragraph structure... I've temporarily solved the most
+ * obvious aspects of the problem with {@link ParagraphIdentifier}, but that
+ * really doesn't cut it, since it has its own drawbacks.
+ *
  * @see ServerDocumentChannel
  * @see DocumentParagraph
  */
@@ -32,27 +31,28 @@ public abstract class DocumentChannelData extends ChannelData {
         DELETE,
         EDIT
     }
-    
+
     public static final long serialVersionUID = 1;
-    
+
     private DocumentChannelDataType type;
-    
-    protected DocumentChannelData(UserName creator, Date timestamp, DocumentChannelDataType type) {
+
+    protected DocumentChannelData(final UserName creator, final Date timestamp,
+            final DocumentChannelDataType type) {
         super(creator, timestamp);
         this.type = type;
     }
-    
-    public DocumentChannelDataType getType() {
+
+    public final DocumentChannelDataType getType() {
         return type;
     }
-    
-    public abstract void apply(Document doc) throws Exception;
-    
+
+    public abstract void apply(final Document doc) throws Exception;
+
     public XmlNode toXml() {
-        // TODO Auto-generated method stub
+        // TODO: Auto-generated method stub
         return null;
     }
-    
+
     /**
      * A closure which constructs a ChatChannelData from an xml node.
      */
@@ -75,7 +75,7 @@ public abstract class DocumentChannelData extends ChannelData {
     /*public static XmlConstructor<ChatChannelData> getXmlConstructor() {
         return XML_CONSTRUCTOR;
     }*/
-    
+
    /*private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
            new XmlConstructor<DocumentChannelData>() {
        public DocumentChannelData fromXml(final XmlNode node)
@@ -88,4 +88,5 @@ public abstract class DocumentChannelData extends ChannelData {
            return new DocumentChannelData(id, message, creator, time);
        }
    };*/
+
 }

@@ -142,10 +142,17 @@ class ColabClientGUI extends JFrame {
         communityPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
 
-                if (event.getActionCommand().equalsIgnoreCase("Community Chosen")) {
+                if (event.getActionCommand()
+                        .equalsIgnoreCase("Community Chosen")) {
+
                     handleCommunityChosen();
-                } else if (event.getActionCommand().equalsIgnoreCase("New Community")) {
+
+                } else if (event.getActionCommand()
+                        .equalsIgnoreCase("New Community")) {
+
+
                     handleNewCommunity();
+
                 }
             }
         });
@@ -201,18 +208,23 @@ class ColabClientGUI extends JFrame {
                     "Unable to join community");
         } catch (final NetworkException ne) {
 
-            if (DebugManager.NETWORK)
+            if (DebugManager.NETWORK) {
                 ne.printStackTrace();
+            }
+
         } catch (RemoteException re) {
 
-            if (DebugManager.EXCEPTIONS)
+            if (DebugManager.EXCEPTIONS) {
                 re.printStackTrace();
+            }
+
         }
 
         // Exit method if an exception occurred while
         // logging in
-        if (!loginOK)
+        if (!loginOK) {
             return;
+        }
 
         channelPanel = new ChannelManagerPanel(client);
 
@@ -271,12 +283,13 @@ class ColabClientGUI extends JFrame {
      */
     private char[] promptForCommunityPassword() {
         String result = JOptionPane.showInputDialog(this,
-                "You are not a member of the community you selected.\n\nPlease" +
-                " enter the community password to log in:",
+                "You are not a member of the community you selected.\n\nPlease"
+                + " enter the community password to log in:",
                 "Enter community password");
 
-        if (result != null)
+        if (result != null) {
             return result.toCharArray();
+        }
 
         return null;
     }
@@ -294,12 +307,13 @@ class ColabClientGUI extends JFrame {
                 if (channelFrame.isVisible()) {
                     channelFrame.exit();
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 // TODO: Handle this?
                 // Probably don't need to worry about it
                 // as the window is closing anyway
-                if (DebugManager.EXIT);
+                if (DebugManager.EXIT) {
                     e.printStackTrace();
+                }
             }
         }
 
@@ -319,20 +333,23 @@ class ColabClientGUI extends JFrame {
         try {
             // Log the user out. This will also
             // log out of any communities and channels.
-            if (client.hasUserLogin())
+            if (client.hasUserLogin()) {
                 client.logOutUser();
+            }
 
             // Exceptions are expected if we weren't in the proper state
             // to log out (ex. a window was closed, and then we try to close
             // the parent which triggers another logoff)
 
             // TODO: Think of a better way of handling such situations
-        } catch (NullPointerException ne) {
-            if (DebugManager.EXIT)
+        } catch (final NullPointerException ne) {
+            if (DebugManager.EXIT) {
                 ne.printStackTrace();
-        } catch (Exception e) {
-            if (DebugManager.EXIT)
+            }
+        } catch (final Exception e) {
+            if (DebugManager.EXIT) {
                 e.printStackTrace();
+            }
         }
     }
 

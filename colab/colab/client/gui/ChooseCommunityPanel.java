@@ -46,7 +46,9 @@ class ChooseCommunityPanel extends JPanel {
 
         listeners = new ArrayList<ActionListener>();
 
-        JLabel selectLabel = new JLabel("Select the community you wish to visit for this session: ");
+        JLabel selectLabel = new JLabel(
+                "Select the community you wish to "
+                + "visit for this session: ");
 
         JButton joinButton = new JButton("Join Community");
 

@@ -6,34 +6,39 @@ import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.naming.UserName;
 
-public class InsertDocChannelData extends DocumentChannelData {
+public final class InsertDocChannelData extends DocumentChannelData {
 
+    /** Serialization version number. */
     private static final long serialVersionUID = 1;
 
     private int offset;
 
     private DocumentParagraph paragraph;
 
-    public InsertDocChannelData(int offset, DocumentParagraph paragraph, UserName creator, Date timestamp) {
+    public InsertDocChannelData(final int offset,
+            final DocumentParagraph paragraph,
+            final UserName creator, final Date timestamp) {
+
         super(creator, timestamp, DocumentChannelDataType.INSERT);
 
         this.offset = offset;
         this.paragraph = paragraph;
+
     }
 
     @Override
-    public void apply(Document doc) throws Exception {
+    public void apply(final Document doc) throws Exception {
         if(offset > doc.getNumberParagraphs()) {
             throw new Exception("Offset outside of document limits.");
         }
         doc.insert(offset, paragraph);
     }
-    
+
     public int getOffset() {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset(final int offset) {
         this.offset = offset;
     }
 
@@ -41,7 +46,7 @@ public class InsertDocChannelData extends DocumentChannelData {
         return paragraph;
     }
 
-    public void setParagraph(DocumentParagraph paragraph) {
+    public void setParagraph(final DocumentParagraph paragraph) {
         this.paragraph = paragraph;
     }
 

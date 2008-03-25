@@ -90,17 +90,17 @@ public abstract class ClientChannel extends UnicastRemoteObject
         return this.members;
     }
 
-    protected void fireActionPerformed(final ActionEvent e) {
-        for (ActionListener l : listeners) {
+    protected final void fireActionPerformed(final ActionEvent e) {
+        for (final ActionListener l : listeners) {
             l.actionPerformed(e);
         }
     }
 
-    public void addActionListener(final ActionListener l) {
+    public final void addActionListener(final ActionListener l) {
         listeners.add(l);
     }
 
-    public void removeActionListener(final ActionListener l) {
+    public final void removeActionListener(final ActionListener l) {
         listeners.remove(l);
     }
 

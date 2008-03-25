@@ -512,20 +512,20 @@ public final class Connection extends UnicastRemoteObject
             final Password password) throws RemoteException {
 
         if (!this.state.hasUserLogin()) {
-            throw new IllegalStateException("Could not create community" +
-                    " because the user was not logged in");
+            throw new IllegalStateException("Could not create community"
+                    + " because the user was not logged in");
         } else {
             server.createCommunity(communityName, password, username);
         }
     }
 
     /** {@inheritDoc} */
-    public void createChannel(ChannelDescriptor channelDesc)
+    public void createChannel(final ChannelDescriptor channelDesc)
         throws RemoteException {
 
         if (!this.state.hasCommunityLogin()) {
-            throw new IllegalStateException("Could not create channel" +
-            " because the user was not logged in");
+            throw new IllegalStateException("Could not create channel"
+                + " because the user was not logged in");
         }
 
         server.createChannel(channelDesc, community.getId());
@@ -589,9 +589,10 @@ public final class Connection extends UnicastRemoteObject
         }
 
         // Sanity check
-        if (joinedChannels.size() > 0)
-            throw new IllegalStateException("Tried to leave all channels, " +
-                    "but size of joinedChannels is > 0");
+        if (joinedChannels.size() > 0) {
+            throw new IllegalStateException("Tried to leave all channels, "
+                    + "but size of joinedChannels is > 0");
+        }
 
     }
 
@@ -603,7 +604,5 @@ public final class Connection extends UnicastRemoteObject
     private void log(final String message) {
         System.out.println("[Connection " + connectionId + "] " + message);
     }
-
-
 
 }

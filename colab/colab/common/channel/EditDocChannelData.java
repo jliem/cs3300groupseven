@@ -8,7 +8,7 @@ import colab.common.DocumentParagraphDiff;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
-public class EditDocChannelData extends DocumentChannelData {
+public final class EditDocChannelData extends DocumentChannelData {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;

@@ -23,7 +23,8 @@ public class DebugManager {
      */
     public static final boolean NETWORK = EXCEPTIONS && true;
 
-    /** Flag for printing illegal state exceptions.
+    /**
+     * Flag for printing illegal state exceptions.
      */
     public static final boolean ILLEGAL_STATE = EXCEPTIONS && true;
 

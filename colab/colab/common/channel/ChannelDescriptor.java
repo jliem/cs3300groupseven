@@ -75,12 +75,13 @@ public final class ChannelDescriptor implements Serializable,
 
         // Because ChannelManagerPanel uses the toString() in the display,
         // it needs to be as short and concise as possible
-        return this.channelName.toString() + " - " + this.channelType.toString();
+        return this.channelName.toString() + " - "
+                + this.channelType.toString();
 
     }
 
     /** {@inheritDoc} */
-    public int compareTo(ChannelDescriptor cd) {
+    public int compareTo(final ChannelDescriptor cd) {
         // Sort by name, then type
         int nameCompare = this.getName().compareTo(cd.getName());
 
@@ -100,7 +101,7 @@ public final class ChannelDescriptor implements Serializable,
      * @return true if the objects are equal
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
 
         if (o instanceof ChannelDescriptor) {
             ChannelDescriptor cd = (ChannelDescriptor)o;
@@ -111,6 +112,7 @@ public final class ChannelDescriptor implements Serializable,
         }
 
         return false;
+
     }
 
 }

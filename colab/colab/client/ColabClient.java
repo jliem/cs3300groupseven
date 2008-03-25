@@ -294,9 +294,9 @@ public final class ColabClient extends UnicastRemoteObject implements
                 channel = new ClientChatChannel(desc.getName());
                 break;
             default:
-                throw new IllegalStateException("ColabClient#joinChannel does" +
-                        " not support type " + desc.getType() + ", but it" +
-                        " is listed as a supported type in ColabClient.");
+                throw new IllegalStateException("ColabClient#joinChannel does"
+                        + " not support type " + desc.getType() + ", but it"
+                        + " is listed as a supported type in ColabClient.");
         }
 
         connection.joinChannel(channel, desc);

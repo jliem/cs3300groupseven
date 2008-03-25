@@ -5,9 +5,7 @@ import java.rmi.RemoteException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.server.channel.ChannelManager;
 import colab.server.user.Community;
-import colab.server.user.Password;
 import colab.server.user.User;
 import colab.server.user.UserManager;
 
@@ -88,8 +86,9 @@ public final class MockColabServer extends ColabServer {
         // Look up the community
         UserManager userManager = super.getUserManager();
         Community comm = userManager.getCommunity(communityName);
-        if (comm != null)
+        if (comm != null) {
             comm.addMember(userName);
+        }
 
     }
 
@@ -100,9 +99,9 @@ public final class MockColabServer extends ColabServer {
         Integer port = 9040;
 
         // Get arguments
-        if (args.length > 0)
+        if (args.length > 0) {
             port = Integer.parseInt(args[0]);
-
+        }
 
         // Create and initialize a server
         new MockColabServer().publish(port);

@@ -10,10 +10,10 @@ import colab.common.identity.Identifier;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
-public class DocumentParagraph implements Serializable, Identifiable {
+public final class DocumentParagraph implements Serializable, Identifiable {
 
-	/** Serialization version number. */
-	public static final long serialVersionUID = 1L;
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private List<ParagraphListener> listeners;
 
@@ -32,7 +32,7 @@ public class DocumentParagraph implements Serializable, Identifiable {
     }
 
     public DocumentParagraph(final String cont, final int head,
-    		final UserName creator, final Date date) {
+            final UserName creator, final Date date) {
         headerLevel = head;
         contents = new StringBuffer(cont);
         lockHolder = creator;
@@ -42,7 +42,7 @@ public class DocumentParagraph implements Serializable, Identifiable {
     }
 
     protected DocumentParagraph(final String cont, final int head,
-    		final UserName creator, final DocumentParagraphDiff diff) {
+            final UserName creator, final DocumentParagraphDiff diff) {
         this(cont, head, creator, new Date());
         differences = diff;
     }
@@ -106,16 +106,21 @@ public class DocumentParagraph implements Serializable, Identifiable {
     public DocumentParagraph copy() {
         // TODO: username copy method, otherwise copy could change lock in this
         // instantiation
-        return new DocumentParagraph(this.contents.toString(), this.headerLevel, this.lockHolder,
+        return new DocumentParagraph(
+                this.contents.toString(),
+                this.headerLevel,
+                this.lockHolder,
                 this.differences.copy());
     }
 
     public DocumentParagraphDiff getDifferences() {
+
         DocumentParagraphDiff ret = differences.copy();
 
         resetDifferences();
 
         return ret;
+
     }
 
     public DocumentParagraphDiff peekDifferences() {
@@ -137,31 +142,31 @@ public class DocumentParagraph implements Serializable, Identifiable {
     public void addParagraphListener(final ParagraphListener listener) {
         listeners.add(listener);
     }
-    
+
     protected void fireOnLock(final UserName newOwner) {
         for (ParagraphListener listener : listeners) {
             listener.onLock(newOwner);
         }
     }
-    
+
     protected void fireOnUnlock() {
         for (ParagraphListener listener : listeners) {
             listener.onUnlock();
         }
     }
-    
+
     protected void fireHeaderChange(int headerLevel) {
         for (ParagraphListener listener : listeners) {
             listener.onHeaderChange(headerLevel);
         }
     }
-    
+
     protected void fireOnInsert(int offset, String hunk) {
         for (ParagraphListener listener : listeners) {
             listener.onInsert(offset, hunk);
         }
     }
-    
+
     protected void fireOnDelete(int offset, int length) {
         for (ParagraphListener listener : listeners) {
             listener.onDelete(offset, length);
@@ -171,7 +176,7 @@ public class DocumentParagraph implements Serializable, Identifiable {
 
 interface ParagraphListener {
 
-	public void onLock(UserName newOwner);
+    public void onLock(UserName newOwner);
 
     public void onUnlock();
 

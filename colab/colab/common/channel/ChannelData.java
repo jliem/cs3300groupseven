@@ -2,14 +2,11 @@ package colab.common.channel;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import colab.common.identity.Identifiable;
 import colab.common.naming.UserName;
-import colab.common.xml.XmlConstructor;
-import colab.common.xml.XmlNode;
 import colab.common.xml.XmlSerializable;
 
 /**
@@ -21,7 +18,7 @@ public abstract class ChannelData implements Serializable,
     /** The date format used to serialize the timestamp. */
     protected static final DateFormat DATE_FORMAT =
         new SimpleDateFormat("d MMM yyyy HH:mm:ss.S");
-    
+
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
@@ -135,4 +132,5 @@ public abstract class ChannelData implements Serializable,
     public final void setTimestamp() {
         this.timestamp = new Date();
     }
+
 }

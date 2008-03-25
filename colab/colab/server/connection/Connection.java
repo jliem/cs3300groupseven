@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Vector;
 
 import colab.common.ConnectionState;
-import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
@@ -279,7 +278,8 @@ public final class Connection extends UnicastRemoteObject
 
         this.community.removeClient(this);
 
-        log("User " + username + " logged out of community " + community.getId().toString());
+        log("User " + username + " logged out of community "
+                + community.getId().toString());
 
         // Log out of community
         this.community = null;
@@ -374,13 +374,13 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
-    public boolean isMember(CommunityName communityName)
+    public boolean isMember(final CommunityName communityName)
         throws CommunityDoesNotExistException, RemoteException {
 
         if (!this.state.hasUserLogin()) {
-            throw new IllegalStateException("Attempt to check" +
-                    " community membership, but user " + this.username +
-                    " was not logged in");
+            throw new IllegalStateException("Attempt to check"
+                    + " community membership, but user " + this.username
+                    + " was not logged in");
         }
 
         return server.isMember(this.username, communityName);
@@ -420,10 +420,11 @@ public final class Connection extends UnicastRemoteObject
      * @throws CommunityDoesNotExistException if no community
      * with that name exists
      */
-    private Community getCommunity(CommunityName communityName)
+    private Community getCommunity(final CommunityName communityName)
         throws CommunityDoesNotExistException {
 
         return server.getCommunity(communityName);
+
     }
 
     /**

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 import colab.common.channel.Channel;
-import colab.common.channel.ChannelDescriptor;
 import colab.common.event.UserJoinedEvent;
 import colab.common.event.UserLeftEvent;
 import colab.common.event.UserListener;

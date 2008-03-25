@@ -13,7 +13,6 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
-import colab.server.user.Community;
 import colab.server.user.Password;
 
 /**
@@ -31,15 +30,14 @@ public interface ConnectionRemote extends Remote {
      *                 may be null, but authentication will fail
      * @throws RemoteException if an rmi error occurs
      */
-    public void logIn(UserName username, char[] password)
-        throws RemoteException;
+    void logIn(UserName username, char[] password) throws RemoteException;
 
     /**
      * Logs out the user.
      *
      * @throws RemoteException if an rmi error occurs
      */
-    public void logOutUser() throws RemoteException;
+    void logOutUser() throws RemoteException;
 
     /**
      * Attempts to log into a community, using the name and optional password.
@@ -52,7 +50,7 @@ public interface ConnectionRemote extends Remote {
      *                 community, may be null
      * @throws RemoteException if an rmi error occurs
      */
-    public void logIn(CommunityName communityName, char[] password)
+    void logIn(CommunityName communityName, char[] password)
         throws RemoteException;
 
     /**
@@ -60,7 +58,7 @@ public interface ConnectionRemote extends Remote {
      *
      * @throws RemoteException if an rmi error occurs
      */
-    public void logOutCommunity() throws RemoteException;
+    void logOutCommunity() throws RemoteException;
 
     /**
      * Retrieves the names of every community on the server.
@@ -68,7 +66,7 @@ public interface ConnectionRemote extends Remote {
      * @return a collection containing every community name
      * @throws RemoteException if an rmi error occurs
      */
-    public Collection<CommunityName> getAllCommunityNames()
+    Collection<CommunityName> getAllCommunityNames()
         throws RemoteException;
 
     /**
@@ -81,8 +79,7 @@ public interface ConnectionRemote extends Remote {
      *         in which the user has membership
      * @throws RemoteException if an rmi error occurs
      */
-    public Collection<CommunityName> getMyCommunityNames()
-        throws RemoteException;
+    Collection<CommunityName> getMyCommunityNames() throws RemoteException;
 
     /**
      * Retrieves a channel.
@@ -93,7 +90,7 @@ public interface ConnectionRemote extends Remote {
      * @param channelDescriptor the dsecriptor of the channel being joined
      * @throws RemoteException if an rmi error occurs
      */
-    public void joinChannel(ChannelRemote clientChannel,
+    void joinChannel(ChannelRemote clientChannel,
             ChannelDescriptor channelDescriptor) throws RemoteException;
 
     /**
@@ -103,7 +100,7 @@ public interface ConnectionRemote extends Remote {
      * @param channelName the name of the channel being left
      * @throws RemoteException if an rmi error occurs
      */
-    public void leaveChannel(ChannelName channelName) throws RemoteException;
+    void leaveChannel(ChannelName channelName) throws RemoteException;
 
     /**
      * Checks whether the logged in user is a member of a given community.
@@ -113,7 +110,7 @@ public interface ConnectionRemote extends Remote {
      * @throws CommunityDoesNotExistException if the community did not exist
      * @throws RemoteException if an rmi error occurs
      */
-    public boolean isMember(CommunityName communityName)
+    boolean isMember(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException;
 
     /**
@@ -124,7 +121,7 @@ public interface ConnectionRemote extends Remote {
      * @return a list of data objects
      * @throws RemoteException if an rmi error occurs
      */
-    public List<ChannelData> getLastData(ChannelName channelName, int count)
+    List<ChannelData> getLastData(ChannelName channelName, int count)
             throws RemoteException;
 
     /**
@@ -135,16 +132,17 @@ public interface ConnectionRemote extends Remote {
      * @return the id assigned to the data that was added
      * @throws RemoteException if an rmi error occurs
      */
-    public ChannelDataIdentifier add(ChannelName channelName, ChannelData data)
+    ChannelDataIdentifier add(ChannelName channelName, ChannelData data)
             throws RemoteException;
 
     /**
      * Get a list of all users currently joined to this channel.
+     *
      * @param channelName the channel to look up
      * @return a list of all the users in this channel
      * @throws RemoteException if a remote exception occurs
      */
-    public Collection<UserName> getActiveUsers(ChannelName channelName)
+    Collection<UserName> getActiveUsers(ChannelName channelName)
             throws RemoteException;
 
     /**
@@ -153,8 +151,9 @@ public interface ConnectionRemote extends Remote {
      * Throws IllegalStateException if no user is logged in.
      *
      * @return a user that has authenticated on this connection
+     * @throws RemoteException if an rmi error occurs
      */
-    public UserName getUserName() throws RemoteException;
+    UserName getUserName() throws RemoteException;
 
     /**
      * Creates a new user in this connection.
@@ -162,7 +161,7 @@ public interface ConnectionRemote extends Remote {
      * @param password the password to use
      * @throws RemoteException if an rmi error occurs
      */
-    public void createUser(String userName, char[] password)
+    void createUser(String userName, char[] password)
             throws RemoteException;
 
     /**
@@ -172,7 +171,7 @@ public interface ConnectionRemote extends Remote {
      * @param password the password used to join the community
      * @throws RemoteException if an rmi error occurs
      */
-    public void createCommunity(String name, char[] password)
+    void createCommunity(String name, char[] password)
         throws RemoteException;
 
     /**
@@ -183,23 +182,24 @@ public interface ConnectionRemote extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
 
-    public void createCommunity(CommunityName name, Password password)
+    void createCommunity(CommunityName name, Password password)
         throws RemoteException;
 
     /**
      * Creates a new channel in the currently logged-in community.
      *
      * @param channelDesc descriptor of the channel
+     * @throws RemoteException if an rmi error occurs
      */
-    public void createChannel(ChannelDescriptor channelDesc)
-        throws RemoteException ;
+    void createChannel(ChannelDescriptor channelDesc)
+        throws RemoteException;
 
     /**
      * Checks whether a user has logged into the program.
      *
      * @return true if the user has logged in
+     * @throws RemoteException if an rmi error occurs
      */
-    public boolean hasUserLogin()
-        throws RemoteException;
+    boolean hasUserLogin() throws RemoteException;
 
 }

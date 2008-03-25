@@ -10,14 +10,16 @@ import colab.common.naming.UserName;
 
 public class EditDocChannelData extends DocumentChannelData {
 
-    private final static long serialVersionUID = 1;
+    /** Serialization version number. */
+    private static final long serialVersionUID = 1L;
 
     private DocumentParagraphDiff differences;
 
     private ParagraphIdentifier paragraphID;
 
-    public EditDocChannelData(ParagraphIdentifier paragraphID, DocumentParagraphDiff differences,
-            UserName creator, Date timestamp) {
+    public EditDocChannelData(final ParagraphIdentifier paragraphID,
+            final DocumentParagraphDiff differences,
+            final UserName creator, final Date timestamp) {
         super(creator, timestamp, DocumentChannelDataType.EDIT);
 
         this.differences = differences;
@@ -25,19 +27,19 @@ public class EditDocChannelData extends DocumentChannelData {
     }
 
     @Override
-    public void apply(Document doc) throws Exception {
+    public void apply(final Document doc) throws Exception {
         doc.applyEdit(paragraphID, differences);
     }
-    
-    public void apply(DocumentParagraph para) {
+
+    public void apply(final DocumentParagraph para) {
         differences.apply(para);
     }
-    
+
     public DocumentParagraphDiff getDifferences() {
         return differences;
     }
 
-    public void setDifferences(DocumentParagraphDiff differences) {
+    public void setDifferences(final DocumentParagraphDiff differences) {
         this.differences = differences;
     }
 
@@ -45,7 +47,7 @@ public class EditDocChannelData extends DocumentChannelData {
         return paragraphID;
     }
 
-    public void setParagraphID(ParagraphIdentifier paragraphID) {
+    public void setParagraphID(final ParagraphIdentifier paragraphID) {
         this.paragraphID = paragraphID;
     }
 

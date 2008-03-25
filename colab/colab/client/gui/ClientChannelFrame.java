@@ -101,6 +101,8 @@ abstract class ClientChannelFrame extends JFrame {
      */
     private void leaveChannel() throws RemoteException  {
 
-        client.leaveChannel(clientChannel.getChannelDescriptor());
+        if (clientChannel != null) {
+            client.leaveChannel(clientChannel.getChannelDescriptor());
+        }
     }
 }

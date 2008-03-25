@@ -1,15 +1,17 @@
 package colab.client.gui;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +20,6 @@ import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
-import colab.common.naming.UserName;
 
 class ChooseCommunityPanel extends JPanel {
 
@@ -28,6 +29,8 @@ class ChooseCommunityPanel extends JPanel {
     private JLabel selectLabel;
     private JButton selectButton, newCommButton;
     private JComboBox selectBox;
+
+    private JCheckBox showAllCommCheckBox;
 
     private final List<ActionListener> listeners;
 
@@ -68,14 +71,28 @@ class ChooseCommunityPanel extends JPanel {
             }
         });
 
-        setLayout(new GridLayout(4, 1));
+        showAllCommCheckBox = new JCheckBox("Show all communities");
+        showAllCommCheckBox.setSelected(showAllCommunities);
+        showAllCommCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent arg0) {
+                // Toggle flag to show all communities
+                showAllCommunities = showAllCommCheckBox.isSelected();
+                refreshCommunityNames();
+            }
+
+        });
+        setLayout(new GridLayout(5, 1));
 
         add(selectLabel);
         add(selectBox);
+        add(showAllCommCheckBox);
         add(selectButton);
         add(newCommButton);
 
+
+
     }
+
 
     /**
      * Refreshes the list of communities.
@@ -109,7 +126,7 @@ class ChooseCommunityPanel extends JPanel {
 
         setCommunityNames(communityNames.toArray());
 
-        repaint();
+        //repaint();
     }
 
     public void setSelectedCommunity(final CommunityName communityName) {

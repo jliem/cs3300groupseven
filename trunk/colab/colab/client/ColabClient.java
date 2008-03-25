@@ -465,5 +465,25 @@ public final class ColabClient extends UnicastRemoteObject implements
 
         System.exit(0);
     }
+    
+    /**
+     * Checks with connection to see if the password is the community's joining password
+     * @param commName
+     * @param password
+     * @return whether the password was valid
+     * @throws RemoteException
+     */
+    
+    public boolean checkCommunityPassword(CommunityName commName, char[] password) throws RemoteException{
+    	
+    	return connection.checkCommunityPassword(commName, password);
+    	
+    }
+
+	public void addUserToCommunity(UserName currentUser, CommunityName comm) throws RemoteException {
+		// TODO Auto-generated method stub
+		connection.addUserToCommunity(currentUser, comm);		
+		
+	}
 
 }

@@ -70,6 +70,7 @@ public final class ChannelDescriptor implements Serializable,
     }
 
     /** {@inheritDoc} */
+    @Override
     public String toString() {
 
         // Because ChannelManagerPanel uses the toString() in the display,
@@ -98,6 +99,7 @@ public final class ChannelDescriptor implements Serializable,
      * @param o the Object to check
      * @return true if the objects are equal
      */
+    @Override
     public boolean equals(Object o) {
 
         if (o instanceof ChannelDescriptor) {

@@ -144,7 +144,13 @@ public abstract class ServerChannel<T extends ChannelData>
      */
     public final void removeClient(final Connection connection) {
 
-        clients.remove(connection.getId());
+        boolean removed = clients.remove(connection);
+
+        if (!removed) {
+            throw new IllegalStateException("Could not remove" +
+                    " connection on ServerChannel: " +
+                    connection);
+        }
 
         connection.removeDisconnectListener(this);
 

@@ -43,6 +43,9 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     //private final List<ActionListener> listeners;
 
+    /** A list of all channels in the community the client
+     * is connected to.
+     */
     private final Vector<ChannelDescriptor> channels;
 
     private ConnectionRemote connection;
@@ -195,6 +198,11 @@ public final class ColabClient extends UnicastRemoteObject implements
             throw new IllegalStateException();
         }
 
+        // Clear existing list of channels
+        // Should be done on log out already, but do it here
+        // also just in case.
+        this.clearJoinableChannels();
+
         try {
             this.connection.logIn(communityName, password);
         } catch (final ServerException serverException) {
@@ -308,13 +316,6 @@ public final class ColabClient extends UnicastRemoteObject implements
         channels.add(channelDescriptor);
     }
 
-    /** {@inheritDoc} */
-    public void removeAllChannels()
-        throws RemoteException {
-
-        channels.clear();
-    }
-
     /**
      * Returns an unsorted list of all channels this client
      * can access.
@@ -357,6 +358,9 @@ public final class ColabClient extends UnicastRemoteObject implements
     public void logOutCommunity() throws ConnectionDroppedException {
 
         this.connectionState = ConnectionState.LOGGED_IN;
+
+        // Clear our list of channels
+        this.clearJoinableChannels();
 
         try {
             connection.logOutCommunity();
@@ -480,4 +484,11 @@ public final class ColabClient extends UnicastRemoteObject implements
         System.exit(0);
     }
 
+
+    /**
+     * Clears the list of channels this client could potentially join.
+     */
+    private void clearJoinableChannels() {
+        channels.clear();
+    }
 }

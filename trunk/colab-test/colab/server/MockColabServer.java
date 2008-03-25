@@ -1,6 +1,10 @@
 package colab.server;
 
+import java.rmi.RemoteException;
+
+import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 import colab.server.channel.ChannelManager;
 import colab.server.user.Community;
 import colab.server.user.Password;
@@ -33,10 +37,10 @@ public final class MockColabServer extends ColabServer {
         Community groupSeven = new Community("Group Seven", "sevenPass");
         super.createCommunity(groupSeven.getId(),
                 groupSeven.getPassword());
-        super.addAsMember(johannes.getId(), groupSeven.getId());
-        super.addAsMember(pamela.getId(), groupSeven.getId());
-        super.addAsMember(matthew.getId(), groupSeven.getId());
-        super.addAsMember(chris.getId(), groupSeven.getId());
+        this.addAsMember(johannes.getId(), groupSeven.getId());
+        this.addAsMember(pamela.getId(), groupSeven.getId());
+        this.addAsMember(matthew.getId(), groupSeven.getId());
+        this.addAsMember(chris.getId(), groupSeven.getId());
 
 //        Community groupSeven = new Community("Group Seven", "sevenPass");
 //        groupSeven.getMembers().add(johannes.getId());
@@ -52,7 +56,7 @@ public final class MockColabServer extends ColabServer {
         Community teamAwesome = new Community("Team Awesome", "awesomePass");
         super.createCommunity(teamAwesome.getId(),
                 teamAwesome.getPassword());
-        super.addAsMember(chris.getId(), teamAwesome.getId());
+        this.addAsMember(chris.getId(), teamAwesome.getId());
 
         Community noMembers = new Community("The No-Members Community", "abcd");
         super.createCommunity(noMembers.getId(),
@@ -67,6 +71,25 @@ public final class MockColabServer extends ColabServer {
 //        channelManager.addChannel(groupSeven.getId(), lobbyDesc);
 //        channelManager.addChannel(teamAwesome.getId(), lobbyDesc);
 //        channelManager.addChannel(noMembers.getId(), lobbyDesc);
+
+    }
+
+    /**
+     * Adds a user as a member of a community.
+     *
+     * @param userName the user
+     * @param communityName the community
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void addAsMember(final UserName userName,
+            final CommunityName communityName)
+            throws RemoteException, CommunityDoesNotExistException {
+
+        // Look up the community
+        UserManager userManager = super.getUserManager();
+        Community comm = userManager.getCommunity(communityName);
+        if (comm != null)
+            comm.addMember(userName);
 
     }
 

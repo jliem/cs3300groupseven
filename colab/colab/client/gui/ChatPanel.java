@@ -88,7 +88,6 @@ final class ChatPanel extends ClientChannelPanel {
 
         add(chatScroll, BorderLayout.CENTER);
         add(sendScroll, BorderLayout.SOUTH);
-        add(getUserListPanel(), BorderLayout.EAST);
 
         lastSize = getSize();
 

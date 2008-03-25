@@ -1,5 +1,6 @@
 package colab.client.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -13,9 +14,7 @@ import colab.common.DebugManager;
 
 /**
  * Parent class for all client-side channel frames. This class
- * will set up the list of users but the panel (which should extend
- * ClientChannelPanel) is responsible for adding the actual user list to
- * the GUI.
+ * will set up the list of users and add the main panel.
  */
 abstract class ClientChannelFrame extends JFrame {
 
@@ -33,6 +32,12 @@ abstract class ClientChannelFrame extends JFrame {
     /** The channel associated with this frame. */
     protected final ClientChannel clientChannel;
 
+
+    /**
+     * A panel which contains a list of active users in the channel.
+     */
+    protected final UserListPanel userListPanel;
+
     /**
      * Creates a new ClientChannelFrame.
      * @param client the client for this frame
@@ -47,16 +52,20 @@ abstract class ClientChannelFrame extends JFrame {
         this.clientChannel = clientChannel;
         this.clientChannelPanel = clientChannelPanel;
 
+        this.userListPanel = new UserListPanel();
+
         if (clientChannelPanel != null && clientChannel != null) {
             // Set up the list of users
-            clientChannel.addUserListener(clientChannelPanel.getUserListPanel());
+            clientChannel.addUserListener(userListPanel);
             try {
                 // Download list of current users
-                clientChannelPanel.getUserListPanel().downloadActiveUsers(client,
+                userListPanel.downloadActiveUsers(client,
                         clientChannel);
             } catch (RemoteException ex) {
                 // TODO: Handle remote exception
-                ex.printStackTrace();
+                if (DebugManager.EXCEPTIONS) {
+                    ex.printStackTrace();
+                }
             }
         }
 
@@ -74,7 +83,12 @@ abstract class ClientChannelFrame extends JFrame {
             setTitle("(No Channel)");
         }
 
-        setSize(new Dimension(320, 300));
+        this.setSize(new Dimension(320, 300));
+
+        this.setLayout(new BorderLayout());
+
+        add(clientChannelPanel, BorderLayout.CENTER);
+        add(userListPanel, BorderLayout.EAST);
     }
 
     /**
@@ -93,6 +107,13 @@ abstract class ClientChannelFrame extends JFrame {
 
         setVisible(false);
         dispose();
+    }
+
+    /**
+     * @return a panel which contains a list of active users in the channel
+     */
+    public final UserListPanel getUserListPanel() {
+        return userListPanel;
     }
 
     /**

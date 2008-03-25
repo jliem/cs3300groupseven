@@ -78,7 +78,7 @@ class ColabClientGUI extends JFrame {
 
         this.communityPanel = new ChooseCommunityPanel(client);
         this.communityPanelWrapper = new FixedSizePanel(communityPanel,
-                new Dimension(420, 120));
+                new Dimension(420, 150));
 
         channelList = new ArrayList<ClientChannelFrame>();
 
@@ -363,7 +363,7 @@ class ColabClientGUI extends JFrame {
         setActivePanel(communityPanelWrapper);
         setTitle("Select Community");
         setResizable(false);
-        setSize(500, 200);
+        setSize(500, 230);
         communityPanel.updateUI();
 
     }

@@ -78,7 +78,7 @@ class ChooseCommunityPanel extends JPanel {
             }
 
         });
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridLayout(5, 1));
 
         add(selectLabel);
         add(selectBox);

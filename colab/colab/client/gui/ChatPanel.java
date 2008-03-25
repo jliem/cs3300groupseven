@@ -25,10 +25,6 @@ final class ChatPanel extends ClientChannelPanel {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
-    private ArrayList<ActionListener> listeners;
-
-    private final String user;
-
     private final JScrollPane chatScroll, sendScroll;
 
     private final JTextArea textArea, textbox;
@@ -46,11 +42,11 @@ final class ChatPanel extends ClientChannelPanel {
      */
     public ChatPanel(final UserName name) {
 
-        listeners = new ArrayList<ActionListener>();
+        super(name);
+
         textArea = new JTextArea(10, 30);
         textbox = new JTextArea(2, 20);
 
-        user = new String(name.toString());
         pendingMessages = new LinkedList<ChatChannelData>();
 
         chatScroll = new JScrollPane(textArea);
@@ -72,7 +68,7 @@ final class ChatPanel extends ClientChannelPanel {
                             // TODO: should probably be refactored to own method
                             pendingMessages.addLast(
                                     new ChatChannelData(textbox.getText(),
-                                            new UserName(user)));
+                                            username));
                             textbox.setText("");
                             fireActionPerformed(new ActionEvent(this,
                                     ActionEvent.ACTION_FIRST, "Message Sent"));
@@ -119,28 +115,6 @@ final class ChatPanel extends ClientChannelPanel {
         }
 
         return null;
-
-    }
-
-    /**
-     * Adds an ActionListener of a certain type to an element.
-     *
-     * @param listener the particular ActionListener
-     */
-    public final void addActionListener(final ActionListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * Fires when an ActionEvent occurs.
-     *
-     * @param event the ActionEvent that occurs
-     */
-    protected final void fireActionPerformed(final ActionEvent event) {
-
-        for (final ActionListener listener : listeners) {
-            listener.actionPerformed(event);
-        }
 
     }
 

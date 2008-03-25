@@ -27,7 +27,6 @@ import colab.common.naming.UserName;
 
 public final class ChatChannelFrame extends ClientChannelFrame {
 
-
     private final ClientChatChannel channel;
 
     private final ChatPanel chatPanel;

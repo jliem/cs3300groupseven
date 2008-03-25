@@ -72,8 +72,14 @@ public final class MockColabServer extends ColabServer {
 
     public static void main(final String[] args) throws Exception {
 
+
+        // Default port
+        Integer port = 9040;
+
         // Get arguments
-        Integer port = Integer.parseInt(args[0]);
+        if (args.length > 0)
+            port = Integer.parseInt(args[0]);
+
 
         // Create and initialize a server
         new MockColabServer().publish(port);

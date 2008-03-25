@@ -190,9 +190,10 @@ public final class ColabClient extends UnicastRemoteObject implements
             final char[] password) throws NetworkException,
             AuthenticationException {
 
+
         // Must not yet be logged in to a community
         if (this.connectionState.hasCommunityLogin()) {
-            System.err.println("[Connection] Attempt to perform community "
+            System.err.println("[ColabClient] Attempt to perform community "
                     + "login on connection in '" + this.connectionState
                     + "' state");
             throw new IllegalStateException();
@@ -355,6 +356,11 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     }
 
+    /**
+     * Logs out of a community.
+     *
+     * @throws ConnectionDroppedException
+     */
     public void logOutCommunity() throws ConnectionDroppedException {
 
         this.connectionState = ConnectionState.LOGGED_IN;

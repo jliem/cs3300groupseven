@@ -6,10 +6,9 @@ import java.rmi.RemoteException;
 import colab.common.channel.ChannelDescriptor;
 
 /**
- * A remote interface for a client-side object which the
- * server application uses when it needs to update the client
- * with some information that is not specific to any
- * particular channel.
+ * A remote interface for a client-side object which the server application
+ * uses when it needs to update the client with some information that is not
+ * specific to any particular channel.
  */
 public interface ColabClientRemote extends Remote {
 
@@ -26,9 +25,10 @@ public interface ColabClientRemote extends Remote {
     /**
      * Removes all channels from this client.
      *
-     * @throws RemoteException
+     * // TODO: This doesn't need to happen remotely -cmartin
+     *
+     * @throws RemoteException if an rmi error occurs
      */
-    void removeAllChannels()
-            throws RemoteException;
+    void removeAllChannels() throws RemoteException;
 
 }

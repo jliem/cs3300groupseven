@@ -10,7 +10,6 @@ import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
-import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChannelType;
 import colab.common.exception.AuthenticationException;
@@ -150,12 +149,12 @@ public class ColabServer extends UnicastRemoteObject
      * Creates a new community in this connection without specifying
      * any user as creator.
      *
-     * @param name the community name
+     * @param communityName the community name
      * @param password the password used to join the community
 
      * @throws RemoteException if an rmi error occurs
      */
-    public void createCommunity(final CommunityName communityName,
+    public final void createCommunity(final CommunityName communityName,
             final Password password) throws RemoteException {
 
         createCommunity(communityName, password, null);
@@ -164,12 +163,12 @@ public class ColabServer extends UnicastRemoteObject
     /**
      * Creates a new community in this connection.
      *
-     * @param name the community name
+     * @param communityName the community name
      * @param password the password used to join the community
      * @param creator the user who created this community
      * @throws RemoteException if an rmi error occurs
      */
-    public void createCommunity(final CommunityName communityName,
+    public final void createCommunity(final CommunityName communityName,
             final Password password, final UserName creator)
             throws RemoteException {
 
@@ -202,20 +201,22 @@ public class ColabServer extends UnicastRemoteObject
     /**
      * Creates a new channel.
      *
-     * @param channelDesc the channel descriptor
+     * TODO: Don't throw RemoteException from here.
+     *
+     * @param channelDescription the channel descriptor
      * @param communityName the community in which to create the channel
      * @throws RemoteException if an rmi error occurs
      */
-    public void createChannel(ChannelDescriptor channelDesc,
-            CommunityName communityName)
-            throws RemoteException {
+    public final void createChannel(final ChannelDescriptor channelDescription,
+            final CommunityName communityName) throws RemoteException {
 
         try {
 
             // Look up community to see if it exists
-            Community comm = getCommunity(communityName);
+            getCommunity(communityName);
 
-            channelManager.addChannel(communityName, channelDesc);
+            channelManager.addChannel(communityName, channelDescription);
+
         } catch (final ChannelAlreadyExistsException e) {
             throw new RemoteException(e.getMessage(), e);
         } catch (CommunityDoesNotExistException e) {
@@ -231,7 +232,7 @@ public class ColabServer extends UnicastRemoteObject
      * @throws UserAlreadyExistsException if a user with the given
      *                                    name already exists
      */
-    public void addUser(final User user)
+    public final void addUser(final User user)
             throws UserAlreadyExistsException {
 
         userManager.addUser(user);
@@ -245,11 +246,12 @@ public class ColabServer extends UnicastRemoteObject
      * @return true if the user is a member of the community, false otherwise
      * @throws CommunityDoesNotExistException if the community did not exist
      */
-    public boolean isMember(final UserName userName,
+    public final boolean isMember(final UserName userName,
             final CommunityName communityName)
             throws CommunityDoesNotExistException {
 
         return userManager.getCommunity(communityName).isMember(userName);
+
     }
 
     /**
@@ -261,10 +263,11 @@ public class ColabServer extends UnicastRemoteObject
      * @throws AuthenticationException if the password is incorrect
      *                                 for the user
      */
-    public boolean checkPassword(UserName username, char[] password)
-        throws AuthenticationException {
+    public final boolean checkPassword(final UserName username,
+            final char[] password) throws AuthenticationException {
 
         return userManager.checkPassword(username, password);
+
 
     }
 
@@ -276,10 +279,11 @@ public class ColabServer extends UnicastRemoteObject
      * @throws CommunityDoesNotExistException
      * @throws CommunityDoesNotExistException if the community does not exist
      */
-    public Community getCommunity(final CommunityName name)
+    public final Community getCommunity(final CommunityName name)
         throws CommunityDoesNotExistException {
 
         return userManager.getCommunity(name);
+
     }
 
     /**
@@ -287,11 +291,12 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @return a collection containing every community
      */
-    public Collection<Community> getAllCommunities() {
+    public final Collection<Community> getAllCommunities() {
+
         return userManager.getAllCommunities();
+
     }
 
-    /// ChannelManager
     /**
      * Returns a Collection of a Community's channels.
      *
@@ -300,10 +305,11 @@ public class ColabServer extends UnicastRemoteObject
      *         If there are no channels, the resulting
      *         Collection will have a size of 0.
      */
-    public Collection<ServerChannel> getChannels(
+    public final Collection<ServerChannel> getChannels(
             final CommunityName communityName) {
 
         return channelManager.getChannels(communityName);
+
     }
 
     /**
@@ -315,12 +321,22 @@ public class ColabServer extends UnicastRemoteObject
      * @return a remote reference to the requested channel
      * @throws ChannelDoesNotExistException if the channel does not exist
      */
-    public ServerChannel getChannel(final CommunityName communityName,
-            final ChannelName channelName)
-            throws ChannelDoesNotExistException {
+    public final ServerChannel getChannel(final CommunityName communityName,
+            final ChannelName channelName) throws ChannelDoesNotExistException {
 
         return channelManager.getChannel(communityName, channelName);
     }
+
+    /**
+     * Returns the user/community manager.
+     * Used for testing purposes in MockColabServer.
+     *
+     * @return the user manager for this server instance
+     */
+    protected final UserManager getUserManager() {
+        return this.userManager;
+    }
+
     /**
      * The entry point for launching the server application.
      *
@@ -342,17 +358,6 @@ public class ColabServer extends UnicastRemoteObject
         // Create and initialize a server
         new ColabServer(path).publish(port);
 
-    }
-
-
-    /**
-     * Returns the user/community manager.
-     * Used for testing purposes in MockColabServer.
-     *
-     * @return the user manager for this server instance
-     */
-    protected final UserManager getUserManager() {
-        return this.userManager;
     }
 
 }

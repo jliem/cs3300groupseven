@@ -14,7 +14,6 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.server.ColabServer;
 import colab.server.user.Community;
-import colab.server.user.UserManager;
 
 /**
  * A channel manager provides channels.  This implementation

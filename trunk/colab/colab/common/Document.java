@@ -1,13 +1,15 @@
 package colab.common;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import colab.common.identity.ParagraphIdentifier;
 
 public class Document {
-    private ArrayList<DocumentParagraph> paragraphs;
-    private ArrayList<InsertParagraphListener> insertListeners;
-    private ArrayList<DeleteParagraphListener> deleteListeners;
+	
+    private List<DocumentParagraph> paragraphs;
+    private List<InsertParagraphListener> insertListeners;
+    private List<DeleteParagraphListener> deleteListeners;
     
     public Document() {
         paragraphs = new ArrayList<DocumentParagraph>();
@@ -16,7 +18,7 @@ public class Document {
     }
     
     public void insert(int offset, DocumentParagraph paragraph) {
-        if(offset <= paragraphs.size() && offset >= 0) {
+        if (offset <= paragraphs.size() && offset >= 0) {
             paragraphs.add(offset, paragraph);
             fireOnInsert(offset, paragraph);
         }
@@ -25,22 +27,23 @@ public class Document {
     public void delete(ParagraphIdentifier id) {
         DocumentParagraph rem = null;
         
-        for(DocumentParagraph par : paragraphs) {
-            if(par.getId().equals(id)) {
+        for (DocumentParagraph par : paragraphs) {
+            if (par.getId().equals(id)) {
                 rem = par;
                 break;
             }
         }
         
-        if(rem!=null) {
+        if (rem != null) {
             paragraphs.remove(rem);
             fireOnDelete(id);
         }
     }
     
-    public void applyEdit(ParagraphIdentifier id, DocumentParagraphDiff diff) {
-        for(DocumentParagraph par : paragraphs) {
-            if(id.equals(par.getId())) {
+    public void applyEdit(final ParagraphIdentifier id,
+    		final DocumentParagraphDiff diff) {
+        for (DocumentParagraph par : paragraphs) {
+            if (id.equals(par.getId())) {
                 diff.apply(par);
                 break;
             }
@@ -64,13 +67,13 @@ public class Document {
     }
     
     protected void fireOnInsert(int offset, DocumentParagraph paragraph) {
-        for(InsertParagraphListener listener : insertListeners) {
+        for (InsertParagraphListener listener : insertListeners) {
             listener.onInsert(offset, paragraph);
         }
     }
     
     protected void fireOnDelete(ParagraphIdentifier id) {
-        for(DeleteParagraphListener listener : deleteListeners) {
+        for (DeleteParagraphListener listener : deleteListeners) {
             listener.onDelete(id);
         }
     }

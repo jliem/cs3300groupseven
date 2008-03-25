@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import colab.common.naming.UserName;
 
 /**
- * @author matt
  * A log for paragaph inserts, deletes, and header changes.
  * 
  * @see DocumentParagraph
  */
 public class DocumentParagraphDiff {
-    private interface Applicable {
+
+	private interface Applicable {
         public void apply(DocumentParagraph para) throws Exception;
     }
     
@@ -168,4 +168,5 @@ public class DocumentParagraphDiff {
         ArrayList<Applicable> list = new ArrayList<Applicable>(changes);
         return new DocumentParagraphDiff(list);
     }
+
 }

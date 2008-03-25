@@ -3,6 +3,7 @@ package colab.common;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import colab.common.identity.Identifiable;
 import colab.common.identity.Identifier;
@@ -10,9 +11,11 @@ import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
 public class DocumentParagraph implements Serializable, Identifiable {
-    public static final long serialVersionUID = 1;
 
-    private ArrayList<ParagraphListener> listeners;
+	/** Serialization version number. */
+	public static final long serialVersionUID = 1L;
+
+    private List<ParagraphListener> listeners;
 
     private int headerLevel;
 
@@ -28,7 +31,8 @@ public class DocumentParagraph implements Serializable, Identifiable {
         this("", 0, null, new Date());
     }
 
-    public DocumentParagraph(final String cont, int head, UserName creator, Date date) {
+    public DocumentParagraph(final String cont, final int head,
+    		final UserName creator, final Date date) {
         headerLevel = head;
         contents = new StringBuffer(cont);
         lockHolder = creator;
@@ -37,16 +41,17 @@ public class DocumentParagraph implements Serializable, Identifiable {
         listeners = new ArrayList<ParagraphListener>();
     }
 
-    protected DocumentParagraph(String cont, int head, UserName creator, DocumentParagraphDiff diff) {
+    protected DocumentParagraph(final String cont, final int head,
+    		final UserName creator, final DocumentParagraphDiff diff) {
         this(cont, head, creator, new Date());
         differences = diff;
     }
 
-    public void insert(int offset, String hunk) {
+    public void insert(final int offset, final String hunk) {
         contents.insert(offset, hunk);
     }
 
-    public void delete(int offset, int length) {
+    public void delete(final int offset, final int length) {
         contents.delete(offset, length);
     }
 
@@ -58,7 +63,7 @@ public class DocumentParagraph implements Serializable, Identifiable {
         return headerLevel;
     }
 
-    public void setHeaderLevel(int headerLevel) {
+    public void setHeaderLevel(final int headerLevel) {
         if (headerLevel > 0) {
             this.headerLevel = headerLevel;
         } else {
@@ -129,43 +134,44 @@ public class DocumentParagraph implements Serializable, Identifiable {
         return id;
     }
 
-    public void addParagraphListener(ParagraphListener listener) {
+    public void addParagraphListener(final ParagraphListener listener) {
         listeners.add(listener);
     }
     
-    protected void fireOnLock(UserName newOwner) {
-        for(ParagraphListener listener : listeners) {
+    protected void fireOnLock(final UserName newOwner) {
+        for (ParagraphListener listener : listeners) {
             listener.onLock(newOwner);
         }
     }
     
     protected void fireOnUnlock() {
-        for(ParagraphListener listener : listeners) {
+        for (ParagraphListener listener : listeners) {
             listener.onUnlock();
         }
     }
     
     protected void fireHeaderChange(int headerLevel) {
-        for(ParagraphListener listener : listeners) {
+        for (ParagraphListener listener : listeners) {
             listener.onHeaderChange(headerLevel);
         }
     }
     
     protected void fireOnInsert(int offset, String hunk) {
-        for(ParagraphListener listener : listeners) {
+        for (ParagraphListener listener : listeners) {
             listener.onInsert(offset, hunk);
         }
     }
     
     protected void fireOnDelete(int offset, int length) {
-        for(ParagraphListener listener : listeners) {
+        for (ParagraphListener listener : listeners) {
             listener.onDelete(offset, length);
         }
     }
 }
 
 interface ParagraphListener {
-    public void onLock(UserName newOwner);
+
+	public void onLock(UserName newOwner);
 
     public void onUnlock();
 
@@ -174,4 +180,5 @@ interface ParagraphListener {
     public void onInsert(int offset, String hunk);
 
     public void onDelete(int offset, int length);
+
 }

@@ -45,10 +45,14 @@ public final class ChatChannelFrame extends ClientChannelFrame {
     public ChatChannelFrame(final ColabClient client,
             final ClientChatChannel clientChannel, final UserName name) {
 
+        // TODO: This is ugly, think of a better way
+        // that doesn't involve passing a new panel to the parent
         super(client, clientChannel, new ChatPanel(name));
 
         channel = clientChannel;
 
+        // TODO: This is ugly, think of a better way
+        // that doesn't involve retrieving the panel from the parent
         // Cast the parent's generic version to a ChatPanel for convenience
         chatPanel = (ChatPanel)(super.clientChannelPanel);
 

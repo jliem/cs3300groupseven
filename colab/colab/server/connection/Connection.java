@@ -267,6 +267,8 @@ public final class Connection extends UnicastRemoteObject
                     + this.state + "' state");
         }
 
+        // TODO: Log out of any server and client channels
+
         this.community.removeClient(this);
 
         log("User " + username + " logged out of community " + community.getId().toString());

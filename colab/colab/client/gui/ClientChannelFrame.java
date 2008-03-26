@@ -83,12 +83,15 @@ abstract class ClientChannelFrame extends JFrame {
             setTitle("(No Channel)");
         }
 
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         this.setSize(new Dimension(320, 300));
 
         this.setLayout(new BorderLayout());
 
         add(clientChannelPanel, BorderLayout.CENTER);
         add(userListPanel, BorderLayout.EAST);
+
     }
 
     /**

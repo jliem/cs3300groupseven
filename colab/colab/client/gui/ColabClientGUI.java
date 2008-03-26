@@ -48,6 +48,8 @@ class ColabClientGUI extends JFrame {
 
     private ChannelManagerPanel channelPanel;
 
+    private final ChannelWindowListener channelWindowListener;
+
     private JPanel activePanel;
 
     private UserName currentUser;
@@ -163,6 +165,9 @@ class ColabClientGUI extends JFrame {
                 exit();
             }
         });
+
+        channelWindowListener = new ChannelWindowListener();
+
     }
 
     /**
@@ -265,17 +270,15 @@ class ColabClientGUI extends JFrame {
         });
     }
 
+    /**
+     * Creates a new channel and joins it.
+     *
+     * @param desc channel descriptor
+     */
     private void handleJoinChannel(ChannelDescriptor desc) {
 
         // Check whether we've already joined this channel
-        ClientChannelFrame existing = null;
-
-        for (ClientChannelFrame f : channelWindows) {
-            if (f.getChannel().getChannelDescriptor().equals(desc)) {
-                existing = f;
-                break;
-            }
-        }
+        ClientChannelFrame existing = this.getChannelFrame(desc);
 
         if (existing == null) {
             try {
@@ -283,6 +286,7 @@ class ColabClientGUI extends JFrame {
                         client, (ClientChatChannel) client.joinChannel(desc),
                         currentUser);
 
+                f.addWindowListener(channelWindowListener);
                 f.setVisible(true);
                 channelWindows.add(f);
             } catch (RemoteException e) {
@@ -290,6 +294,7 @@ class ColabClientGUI extends JFrame {
                 e.printStackTrace();
             }
         } else {
+            // There is already a window open for this channel.
             // Restore the window (if it's not minimized, this has
             // no effect)
             existing.setExtendedState(JFrame.NORMAL);
@@ -297,6 +302,24 @@ class ColabClientGUI extends JFrame {
             // Give focus to the window
             existing.setVisible(true);
         }
+    }
+
+    /**
+     * Retrieves the ClientChannelFrame with a matching ChannelDescriptor.
+     *
+     * @param desc the channel descriptor
+     * @return a reference to the open ClientChannelFrame, or null
+     * if none existed.
+     */
+    private ClientChannelFrame getChannelFrame(ChannelDescriptor desc) {
+
+        for (ClientChannelFrame f : channelWindows) {
+            if (f.getChannel().getChannelDescriptor().equals(desc)) {
+                return f;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -497,4 +520,31 @@ class ColabClientGUI extends JFrame {
 
     }
 
+    /**
+     * A listener for all ClientChannelFrames that are opened.
+     * This listener will have no effect if it's attached to
+     * something that isn't a ClientChannelFrame.
+     *
+     * @author JL
+     *
+     */
+    private class ChannelWindowListener extends WindowAdapter {
+        public void windowClosing(WindowEvent event) {
+
+            // Find the source frame
+            Object source = event.getSource();
+
+            // Only attempt removal if it was actually
+            // a ClientChannelFrame
+            if (source instanceof ClientChannelFrame) {
+                boolean removed = channelWindows.remove(source);
+
+                if (!removed) {
+                    throw new IllegalStateException("A ClientChannelFrame "
+                            + "just closed, but it was not "
+                             + "in ColabClientGUI's list of open windows.");
+                }
+            }
+        }
+    }
 }

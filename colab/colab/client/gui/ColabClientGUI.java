@@ -24,6 +24,7 @@ import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.type.ChannelType;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
@@ -307,36 +308,10 @@ class ColabClientGUI extends JFrame {
     private ClientChannelFrame createNewChannelFrame(ChannelDescriptor desc)
         throws RemoteException {
 
-        // Check whether type is supported
-        if (!client.isChannelTypeSupported(desc.getType())) {
-            throw new IllegalStateException("Channel type "
-                    + desc.getType() + " is not supported!");
-        }
-
-        ClientChannelFrame frame = null;
         ClientChannel channel = client.joinChannel(desc);
 
-        switch (desc.getType()) {
-        case CHAT:
-
-            frame = new ChatChannelFrame(
-                    client, (ClientChatChannel)channel,
-                    currentUser);
-            break;
-
-        case DOCUMENT:
-
-            frame = new DocumentChannelFrame(
-                    client, (ClientDocumentChannel)channel,
-                    currentUser);
-            break;
-
-        default:
-            throw new IllegalStateException("Channel type "
-                    + desc.getType() + " is not supported "
-                    + "in ColabClientGUI, but ColabClient says it is");
-
-        }
+        ChannelType type = desc.getType();
+        ClientChannelFrame frame = type.createClientChannelFrame(client, channel, currentUser);
 
         return frame;
     }

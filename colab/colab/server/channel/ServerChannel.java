@@ -10,6 +10,7 @@ import java.util.List;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.type.ChannelType;
 import colab.common.event.UserJoinedEvent;
 import colab.common.event.UserLeftEvent;
 import colab.common.identity.IdentitySet;
@@ -49,15 +50,9 @@ public abstract class ServerChannel<T extends ChannelData>
     public static ServerChannel create(final ChannelDescriptor channel,
             final File file) throws IOException {
 
-        switch (channel.getType()) {
-        case CHAT:
-            return new ServerChatChannel(channel.getName(), file);
-        case DOCUMENT:
-            return new ServerDocumentChannel(channel.getName(), file);
-        default:
-            throw new IllegalArgumentException(
-                    "Channel type unsupported: " + channel.getType());
-        }
+    	ChannelType type = channel.getType();
+
+    	return type.createServerChannel(channel.getName(), file);
 
     }
 
@@ -69,17 +64,9 @@ public abstract class ServerChannel<T extends ChannelData>
      */
     public static ServerChannel create(final ChannelDescriptor channel) {
 
-        switch (channel.getType()) {
-        case CHAT:
-            return new ServerChatChannel(channel.getName());
+    	ChannelType type = channel.getType();
 
-        case DOCUMENT:
-            return new ServerChatChannel(channel.getName());
-
-        default:
-            throw new IllegalArgumentException(
-                    "Channel type unsupported: " + channel.getType());
-        }
+    	return type.createServerChannel(channel.getName());
 
     }
 

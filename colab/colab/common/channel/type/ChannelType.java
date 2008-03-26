@@ -2,7 +2,9 @@ package colab.common.channel.type;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import colab.client.ClientChannel;
 import colab.client.ColabClient;

@@ -7,9 +7,9 @@ import java.util.List;
 
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
 import colab.common.channel.DocumentChannelData;
 import colab.common.channel.DocumentDataSet;
+import colab.common.channel.type.DocumentChannelType;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
@@ -86,7 +86,7 @@ public final class ServerDocumentChannel
     /** {@inheritDoc} */
     @Override
     public ChannelDescriptor getChannelDescriptor() {
-        return new ChannelDescriptor(this.getId(), ChannelType.DOCUMENT);
+        return new ChannelDescriptor(this.getId(), new DocumentChannelType());
     }
 
     /** {@inheritDoc} */

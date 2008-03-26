@@ -6,9 +6,9 @@ import java.util.List;
 
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
 import colab.common.channel.DocumentChannelData;
 import colab.common.channel.DocumentDataSet;
+import colab.common.channel.type.DocumentChannelType;
 import colab.common.naming.ChannelName;
 
 public final class ClientDocumentChannel extends ClientChannel {
@@ -41,7 +41,7 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     public ChannelDescriptor getChannelDescriptor() {
 
-        return new ChannelDescriptor(this.getId(), ChannelType.DOCUMENT);
+        return new ChannelDescriptor(this.getId(), new DocumentChannelType());
 
     }
 

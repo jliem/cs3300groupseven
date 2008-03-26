@@ -6,9 +6,9 @@ import java.util.List;
 
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
 import colab.common.channel.ChatChannelData;
 import colab.common.channel.ChatDataSet;
+import colab.common.channel.type.ChatChannelType;
 import colab.common.naming.ChannelName;
 
 public final class ClientChatChannel extends ClientChannel {
@@ -34,7 +34,7 @@ public final class ClientChatChannel extends ClientChannel {
     }
 
     public ChannelDescriptor getChannelDescriptor() {
-        return new ChannelDescriptor(this.getId(), ChannelType.CHAT);
+        return new ChannelDescriptor(this.getId(), new ChatChannelType());
     }
 
     public List<ChatChannelData> getLocalMessages() {

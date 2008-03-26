@@ -13,7 +13,7 @@ import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
+import colab.common.channel.type.ChannelType;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
@@ -282,25 +282,8 @@ public final class ColabClient extends UnicastRemoteObject implements
     public ClientChannel joinChannel(final ChannelDescriptor desc)
             throws RemoteException {
 
-        // Check for valid type
-        if (!this.isChannelTypeSupported(desc.getType())) {
-            throw new IllegalArgumentException("Channel type "
-                    + desc.getType() + " not supported");
-        }
-
-        ClientChannel channel;
-        switch (desc.getType()) {
-            case CHAT:
-                channel = new ClientChatChannel(desc.getName());
-                break;
-            case DOCUMENT:
-                channel = new ClientDocumentChannel(desc.getName());
-                break;
-            default:
-                throw new IllegalStateException("ColabClient#joinChannel does"
-                        + " not support type " + desc.getType() + ", but it"
-                        + " is listed as a supported type in ColabClient.");
-        }
+        ChannelType type = desc.getType();
+        ClientChannel channel = type.createClientChannel(desc.getName());
 
         connection.joinChannel(channel, desc);
         return channel;
@@ -433,34 +416,6 @@ public final class ColabClient extends UnicastRemoteObject implements
         throws RemoteException {
 
         return connection.getActiveUsers(channelName);
-    }
-
-    /**
-     * Returns all possible channel types supported by this
-     * client.
-     *
-     * @return a Vector with all possible channel types
-     */
-    public Vector<ChannelType> getSupportedChannelTypes() {
-        Vector<ChannelType> channelTypes = new Vector<ChannelType>();
-
-        channelTypes.add(ChannelType.CHAT);
-        channelTypes.add(ChannelType.DOCUMENT);
-
-        // TODO Uncomment line below in D3
-        //channelTypes.add(ChannelType.WHITE_BOARD);
-
-        return channelTypes;
-    }
-
-    /**
-     * Checks whether a channel type is supported by this client.
-     *
-     * @param channelType the channel type
-     * @return true if the channel type is supported, false otherwise
-     */
-    public boolean isChannelTypeSupported(ChannelType channelType) {
-        return getSupportedChannelTypes().contains(channelType);
     }
 
     /**

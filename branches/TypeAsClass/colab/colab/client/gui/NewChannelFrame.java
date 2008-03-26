@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
+import colab.common.channel.type.ChannelType;
 import colab.common.naming.ChannelName;
 
 public class NewChannelFrame extends JFrame {
@@ -47,7 +47,7 @@ public class NewChannelFrame extends JFrame {
 
         channelName = new JTextField("");
         JLabel nameLabel = new JLabel("Channel name:");
-        typeCombo = new JComboBox(client.getSupportedChannelTypes());
+        typeCombo = new JComboBox(ChannelType.getChannelTypes());
 
         JLabel typeLabel = new JLabel("Channel type:");
 

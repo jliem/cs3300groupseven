@@ -2,7 +2,9 @@ package colab.common.channel.type;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import colab.client.ClientChannel;
 import colab.client.ColabClient;
@@ -14,7 +16,7 @@ import colab.server.channel.ServerChannel;
 /**
  * Parent class to represent a channel type.
  */
-public abstract class ChannelType {
+public abstract class ChannelType implements Serializable {
 
     /** Human-readable representation */
     private final String string;
@@ -68,6 +70,14 @@ public abstract class ChannelType {
     public abstract ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException;
 
+    public static Vector<ChannelType> getChannelTypes() {
+    	Vector<ChannelType> result = new Vector<ChannelType>();
+
+    	result.add(new ChatChannelType());
+    	result.add(new DocumentChannelType());
+
+    	return result;
+    }
     public String toString() {
         return string;
     }

@@ -119,7 +119,6 @@ final class UserListPanel extends JPanel implements UserListener {
      */
     public void handleUserEvent(final UserLeftEvent leaveEvent) {
 
-        System.out.println("userpanel says " + leaveEvent.getUserName() + " has left");
         users.remove(leaveEvent.getUserName());
         this.refreshUsers();
     }

@@ -267,7 +267,13 @@ class ColabClientGUI extends JFrame {
                 while ((cd = channelPanel.dequeueJoinedChannel())
                         != null) {
 
-                    handleJoinChannel(cd);
+                	try {
+                		handleJoinChannel(cd);
+                	} catch (RemoteException re) {
+                		if (DebugManager.EXCEPTIONS) {
+                			re.printStackTrace();
+                		}
+                	}
                 }
             }
         });
@@ -277,23 +283,20 @@ class ColabClientGUI extends JFrame {
      * Creates a new channel and joins it.
      *
      * @param desc channel descriptor
+     * @throws RemoteException if an rmi error occurs
      */
-    private void handleJoinChannel(ChannelDescriptor desc) {
+    private void handleJoinChannel(ChannelDescriptor desc)
+    	throws RemoteException {
 
         // Check whether we've already joined this channel
         ClientChannelFrame existing = this.getChannelFrame(desc);
 
         if (existing == null) {
-            try {
-                ClientChannelFrame f = createNewChannelFrame(desc);
+            ClientChannelFrame f = createNewChannelFrame(desc);
 
-                f.addWindowListener(channelWindowListener);
-                f.setVisible(true);
-                channelWindows.add(f);
-            } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            f.addWindowListener(channelWindowListener);
+            f.setVisible(true);
+            channelWindows.add(f);
         } else {
             // There is already a window open for this channel.
             // Restore the window (if it's not minimized, this has
@@ -305,6 +308,12 @@ class ColabClientGUI extends JFrame {
         }
     }
 
+    /**
+     * Helper method to create a new ClientChannelFrame.
+     * @param desc the descriptor
+     * @return a new ClientChannelFrame
+     * @throws RemoteException if an RMI error occurs
+     */
     private ClientChannelFrame createNewChannelFrame(ChannelDescriptor desc)
         throws RemoteException {
 
@@ -357,16 +366,10 @@ class ColabClientGUI extends JFrame {
      * Attempts to close any windows opened by this frame.
      */
     private void closeOpenedChannelWindows() {
-        // Because the windows that were opened from this frame might
-        // have been closed since then, channelList may have invalid entries
-        // for windows which no longer exist
+        // channelWindows should contain only windows that are still open
         for (ClientChannelFrame channelFrame : channelWindows) {
             try {
-                // TODO: Think of some better way of detecting this
-                // This actually works, but is kind of hacky
-                if (channelFrame.isVisible()) {
-                    channelFrame.exit();
-                }
+            	channelFrame.exit();
             } catch (final Exception e) {
                 // TODO: Handle this?
                 // Probably don't need to worry about it

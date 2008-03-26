@@ -292,7 +292,7 @@ class ColabClientGUI extends JFrame {
         } else {
             // Restore the window (if it's not minimized, this has
             // no effect)
-            existing.setState(JFrame.NORMAL);
+            existing.setExtendedState(JFrame.NORMAL);
 
             // Give focus to the window
             existing.setVisible(true);

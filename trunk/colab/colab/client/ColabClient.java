@@ -293,6 +293,9 @@ public final class ColabClient extends UnicastRemoteObject implements
             case CHAT:
                 channel = new ClientChatChannel(desc.getName());
                 break;
+            case DOCUMENT:
+                channel = new ClientDocumentChannel(desc.getName());
+                break;
             default:
                 throw new IllegalStateException("ColabClient#joinChannel does"
                         + " not support type " + desc.getType() + ", but it"
@@ -443,6 +446,8 @@ public final class ColabClient extends UnicastRemoteObject implements
 
         channelTypes.add(ChannelType.CHAT);
         channelTypes.add(ChannelType.DOCUMENT);
+
+        // TODO Uncomment line below in D3
         //channelTypes.add(ChannelType.WHITE_BOARD);
 
         return channelTypes;

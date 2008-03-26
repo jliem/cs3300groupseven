@@ -70,6 +70,10 @@ public abstract class ServerChannel<T extends ChannelData>
         switch (channel.getType()) {
         case CHAT:
             return new ServerChatChannel(channel.getName());
+
+        case DOCUMENT:
+            return new ServerChatChannel(channel.getName());
+
         default:
             throw new IllegalArgumentException(
                     "Channel type unsupported: " + channel.getType());

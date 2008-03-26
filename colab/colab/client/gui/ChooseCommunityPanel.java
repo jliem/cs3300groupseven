@@ -38,7 +38,7 @@ class ChooseCommunityPanel extends JPanel {
     /** Flag to toggle whether all communities are shown
      * or just ones to which this user belongs.
      */
-    private boolean showAllCommunities = true;
+    private boolean showAllCommunities = false;
 
     public ChooseCommunityPanel(final ColabClient client) {
 

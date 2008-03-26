@@ -16,7 +16,7 @@ import colab.common.DebugManager;
  * Parent class for all client-side channel frames. This class
  * will set up the list of users and add the main panel.
  */
-abstract class ClientChannelFrame extends JFrame {
+public abstract class ClientChannelFrame extends JFrame {
 
     /**
      * Serial version UID.

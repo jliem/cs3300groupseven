@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChannelType;
 import colab.common.exception.ChannelDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;

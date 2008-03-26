@@ -2,6 +2,7 @@ package colab.common.channel;
 
 import java.io.Serializable;
 
+import colab.common.channel.type.ChannelType;
 import colab.common.naming.ChannelName;
 
 /**
@@ -29,6 +30,12 @@ public final class ChannelDescriptor implements Serializable,
             final ChannelName channelName, final ChannelType type) {
 
         this.channelName = channelName;
+
+        if (type == null) {
+        	throw new IllegalArgumentException("Can't create a channel "
+        			+ "with type null!");
+        }
+
         this.channelType = type;
 
     }
@@ -82,14 +89,8 @@ public final class ChannelDescriptor implements Serializable,
 
     /** {@inheritDoc} */
     public int compareTo(final ChannelDescriptor cd) {
-        // Sort by name, then type
-        int nameCompare = this.getName().compareTo(cd.getName());
-
-        if (nameCompare == 0) {
-            return this.getType().compareTo(cd.getType());
-        }
-
-        return nameCompare;
+        // Sort by name
+        return this.getName().compareTo(cd.getName());
     }
 
     /**

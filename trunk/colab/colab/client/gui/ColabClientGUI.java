@@ -44,7 +44,7 @@ class ColabClientGUI extends JFrame {
 
     private final FixedSizePanel communityPanelWrapper;
 
-    private ArrayList<ClientChannelFrame> channelList;
+    private ArrayList<ClientChannelFrame> channelWindows;
 
     private ChannelManagerPanel channelPanel;
 
@@ -80,7 +80,7 @@ class ColabClientGUI extends JFrame {
         this.communityPanelWrapper = new FixedSizePanel(communityPanel,
                 new Dimension(420, 150));
 
-        channelList = new ArrayList<ClientChannelFrame>();
+        channelWindows = new ArrayList<ClientChannelFrame>();
 
         menuBar = new JMenuBar();
         menu = new JMenu("File");
@@ -258,21 +258,45 @@ class ColabClientGUI extends JFrame {
 
                 while ((cd = channelPanel.dequeueJoinedChannel())
                         != null) {
-                    try {
-                        // TODO: this is a hack
-                        // rewrite with more protocol handling
-                        ChatChannelFrame f = new ChatChannelFrame(
-                                client, (ClientChatChannel) client
-                                        .joinChannel(cd),
-                                currentUser);
-                        f.setVisible(true);
-                        channelList.add(f);
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
-                    }
+
+                    handleJoinChannel(cd);
                 }
             }
         });
+    }
+
+    private void handleJoinChannel(ChannelDescriptor desc) {
+
+        // Check whether we've already joined this channel
+        ClientChannelFrame existing = null;
+
+        for (ClientChannelFrame f : channelWindows) {
+            if (f.getChannel().getChannelDescriptor().equals(desc)) {
+                existing = f;
+                break;
+            }
+        }
+
+        if (existing == null) {
+            try {
+                ClientChannelFrame f = new ChatChannelFrame(
+                        client, (ClientChatChannel) client.joinChannel(desc),
+                        currentUser);
+
+                f.setVisible(true);
+                channelWindows.add(f);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+            // Restore the window (if it's not minimized, this has
+            // no effect)
+            existing.setState(JFrame.NORMAL);
+
+            // Give focus to the window
+            existing.setVisible(true);
+        }
     }
 
     /**
@@ -301,7 +325,7 @@ class ColabClientGUI extends JFrame {
         // Because the windows that were opened from this frame might
         // have been closed since then, channelList may have invalid entries
         // for windows which no longer exist
-        for (ClientChannelFrame channelFrame : channelList) {
+        for (ClientChannelFrame channelFrame : channelWindows) {
             try {
                 // TODO: Think of some better way of detecting this
                 // This actually works, but is kind of hacky
@@ -321,7 +345,7 @@ class ColabClientGUI extends JFrame {
 
 
         // Reset the list
-        channelList.clear();
+        channelWindows.clear();
     }
 
     /**

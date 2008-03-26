@@ -30,7 +30,7 @@ abstract class ClientChannelFrame extends JFrame {
     protected final ClientChannelPanel clientChannelPanel;
 
     /** The channel associated with this frame. */
-    protected final ClientChannel clientChannel;
+    protected final ClientChannel channel;
 
 
     /**
@@ -49,7 +49,7 @@ abstract class ClientChannelFrame extends JFrame {
             final ClientChannelPanel clientChannelPanel) {
 
         this.client = client;
-        this.clientChannel = clientChannel;
+        this.channel = clientChannel;
         this.clientChannelPanel = clientChannelPanel;
 
         this.userListPanel = new UserListPanel();
@@ -110,6 +110,14 @@ abstract class ClientChannelFrame extends JFrame {
     }
 
     /**
+     * Returns the client channel.
+     * @return the client channel
+     */
+    public final ClientChannel getChannel() {
+        return channel;
+    }
+
+    /**
      * @return a panel which contains a list of active users in the channel
      */
     public final UserListPanel getUserListPanel() {
@@ -122,8 +130,8 @@ abstract class ClientChannelFrame extends JFrame {
      */
     private void leaveChannel() throws RemoteException  {
 
-        if (clientChannel != null) {
-            client.leaveChannel(clientChannel.getChannelDescriptor());
+        if (channel != null) {
+            client.leaveChannel(channel.getChannelDescriptor());
         }
     }
 }

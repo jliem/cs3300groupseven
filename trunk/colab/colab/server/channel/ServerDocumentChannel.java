@@ -1,5 +1,7 @@
 package colab.server.channel;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,15 +44,19 @@ public final class ServerDocumentChannel
     * @param file the file to use for data storage
     * @throws IOException if a file storage error occurs
     */
-   /*public ServerDocumentChannel(final ChannelName name, final File file)
+   public ServerDocumentChannel(final ChannelName name, final File file)
            throws IOException {
 
        super(name);
-       ChannelFile<DocumentChannelData> channelFile =
-           new ChannelFile<DocumentChannelData>(
-               file, DocumentChannelData.getXmlConstructor());
-       this.revisions = channelFile;
-   }*/
+
+       throw new IllegalStateException("ServerDocumentChannel's constructor "
+               + "with file parameter is not implemented");
+
+//       ChannelFile<DocumentChannelData> channelFile =
+//           new ChannelFile<DocumentChannelData>(
+//               file, DocumentChannelData.getXmlConstructor());
+//       this.revisions = channelFile;
+   }
 
     /** {@inheritDoc} */
     @Override

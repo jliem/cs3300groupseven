@@ -424,7 +424,8 @@ public final class ColabClient extends UnicastRemoteObject implements
      * @return true if the user has logged in
      */
     public boolean hasUserLogin() throws RemoteException {
-        return connection.hasUserLogin();
+    	// If no connection, there's definitely no user login
+        return (connection != null && connection.hasUserLogin());
     }
 
     /**

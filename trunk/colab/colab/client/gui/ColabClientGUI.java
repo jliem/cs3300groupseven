@@ -18,7 +18,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import colab.client.ClientChannel;
 import colab.client.ClientChatChannel;
+import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
@@ -282,9 +284,7 @@ class ColabClientGUI extends JFrame {
 
         if (existing == null) {
             try {
-                ClientChannelFrame f = new ChatChannelFrame(
-                        client, (ClientChatChannel) client.joinChannel(desc),
-                        currentUser);
+                ClientChannelFrame f = createNewChannelFrame(desc);
 
                 f.addWindowListener(channelWindowListener);
                 f.setVisible(true);
@@ -302,6 +302,43 @@ class ColabClientGUI extends JFrame {
             // Give focus to the window
             existing.setVisible(true);
         }
+    }
+
+    private ClientChannelFrame createNewChannelFrame(ChannelDescriptor desc)
+        throws RemoteException {
+
+        // Check whether type is supported
+        if (!client.isChannelTypeSupported(desc.getType())) {
+            throw new IllegalStateException("Channel type "
+                    + desc.getType() + " is not supported!");
+        }
+
+        ClientChannelFrame frame = null;
+        ClientChannel channel = client.joinChannel(desc);
+
+        switch (desc.getType()) {
+        case CHAT:
+
+            frame = new ChatChannelFrame(
+                    client, (ClientChatChannel)channel,
+                    currentUser);
+            break;
+
+        case DOCUMENT:
+
+            frame = new DocumentChannelFrame(
+                    client, (ClientDocumentChannel)channel,
+                    currentUser);
+            break;
+
+        default:
+            throw new IllegalStateException("Channel type "
+                    + desc.getType() + " is not supported "
+                    + "in ColabClientGUI, but ColabClient says it is");
+
+        }
+
+        return frame;
     }
 
     /**

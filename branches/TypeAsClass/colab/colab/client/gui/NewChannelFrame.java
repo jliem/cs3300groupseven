@@ -19,6 +19,8 @@ import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
+import colab.common.channel.type.ChatChannelType;
+import colab.common.channel.type.DocumentChannelType;
 import colab.common.naming.ChannelName;
 
 public class NewChannelFrame extends JFrame {
@@ -47,7 +49,11 @@ public class NewChannelFrame extends JFrame {
 
         channelName = new JTextField("");
         JLabel nameLabel = new JLabel("Channel name:");
-        typeCombo = new JComboBox(ChannelType.getChannelTypes());
+
+        // Build list of possible channel types
+        Vector<ChannelType> channelTypes = this.getChannelTypes();
+
+        typeCombo = new JComboBox(channelTypes);
 
         JLabel typeLabel = new JLabel("Channel type:");
 
@@ -84,11 +90,35 @@ public class NewChannelFrame extends JFrame {
     }
 
 
+    /**
+     * Get a list of possible channel types.
+     *
+     * @return a Vector of channel types
+     */
+    private Vector<ChannelType> getChannelTypes() {
+    	Vector<ChannelType> channelTypes = new Vector<ChannelType>();
+
+    	channelTypes.add(new ChatChannelType());
+    	channelTypes.add(new DocumentChannelType());
+    	// TODO
+    	// channelTypes.add(new WhiteboardChannelType());
+
+    	return channelTypes;
+    }
+
+    /**
+     * Show an error box.
+     * @param message the message
+     * @param title the title
+     */
     private void showErrorBox(final String message, final String title) {
         JOptionPane.showMessageDialog(
                 this, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Create a new channel.
+     */
     private void createChannel() {
 
         if (channelName.getText().length() > 0

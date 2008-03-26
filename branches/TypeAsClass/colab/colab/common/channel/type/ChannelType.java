@@ -70,14 +70,6 @@ public abstract class ChannelType implements Serializable {
     public abstract ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException;
 
-    public static Vector<ChannelType> getChannelTypes() {
-    	Vector<ChannelType> result = new Vector<ChannelType>();
-
-    	result.add(new ChatChannelType());
-    	result.add(new DocumentChannelType());
-
-    	return result;
-    }
     public String toString() {
         return string;
     }

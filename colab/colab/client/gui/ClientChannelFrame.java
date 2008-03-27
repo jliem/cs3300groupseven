@@ -91,6 +91,8 @@ public abstract class ClientChannelFrame extends JFrame {
         add(clientChannelPanel, BorderLayout.CENTER);
         add(userListPanel, BorderLayout.EAST);
 
+        pack();
+
     }
 
     /**

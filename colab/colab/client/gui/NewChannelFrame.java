@@ -87,6 +87,8 @@ public class NewChannelFrame extends JFrame {
         this.add(inputPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
 
+        pack();
+
     }
 
 

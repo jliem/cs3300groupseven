@@ -116,6 +116,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         export.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ExportChatFrame frame = new ExportChatFrame(channel);
+                frame.pack();
                 frame.setVisible(true);
             }
         });

@@ -267,13 +267,13 @@ class ColabClientGUI extends JFrame {
                 while ((cd = channelPanel.dequeueJoinedChannel())
                         != null) {
 
-                	try {
-                		handleJoinChannel(cd);
-                	} catch (RemoteException re) {
-                		if (DebugManager.EXCEPTIONS) {
-                			re.printStackTrace();
-                		}
-                	}
+                    try {
+                        handleJoinChannel(cd);
+                    } catch (RemoteException re) {
+                        if (DebugManager.EXCEPTIONS) {
+                            re.printStackTrace();
+                        }
+                    }
                 }
             }
         });
@@ -286,7 +286,7 @@ class ColabClientGUI extends JFrame {
      * @throws RemoteException if an rmi error occurs
      */
     private void handleJoinChannel(ChannelDescriptor desc)
-    	throws RemoteException {
+        throws RemoteException {
 
         // Check whether we've already joined this channel
         ClientChannelFrame existing = this.getChannelFrame(desc);
@@ -370,7 +370,7 @@ class ColabClientGUI extends JFrame {
         // channelWindows should contain only windows that are still open
         for (ClientChannelFrame channelFrame : channelWindows) {
             try {
-            	channelFrame.exit();
+                channelFrame.exit();
             } catch (final Exception e) {
                 // TODO: Handle this?
                 // Probably don't need to worry about it

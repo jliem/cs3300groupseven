@@ -35,7 +35,7 @@ public class ChatChannelType extends ChannelType {
             ClientChannel channel, UserName currentUser) throws RemoteException {
 
         return new ChatChannelFrame(
-        		client, (ClientChatChannel) channel, currentUser);
+                client, (ClientChatChannel) channel, currentUser);
 
     }
 

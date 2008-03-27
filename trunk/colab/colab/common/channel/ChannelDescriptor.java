@@ -1,9 +1,12 @@
 package colab.common.channel;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 
 import colab.common.channel.type.ChannelType;
 import colab.common.naming.ChannelName;
+import colab.server.channel.ServerChannel;
 
 /**
  * Descriptive data used to identify a channel.
@@ -74,6 +77,31 @@ public final class ChannelDescriptor implements Serializable,
      */
     public void setType(final ChannelType type) {
         this.channelType = type;
+    }
+
+    /**
+     * Constructs a new ServerChannel.
+     *
+     * @return the created channel
+     */
+    public ServerChannel createServerChannel() {
+
+        return channelType.createServerChannel(channelName);
+
+    }
+
+    /**
+     * Constructs a new ServerChannel.
+     *
+     * @param file a file to use for persistent data storage
+     * @return the created channel
+     * @throws IOException if a file storage error occurs
+     */
+    public ServerChannel createServerChannel(final File file)
+            throws IOException {
+
+        return channelType.createServerChannel(channelName, file);
+
     }
 
     /** {@inheritDoc} */

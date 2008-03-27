@@ -42,38 +42,6 @@ public abstract class ServerChannel<T extends ChannelData>
     /**
      * Constructs a new ServerChannel.
      *
-     * @param channel a description of the channel
-     * @param file a file to use for persistent data storage
-     * @return the created channel
-     * @throws IOException if a file storage error occurs
-     */
-    public static ServerChannel create(final ChannelDescriptor channel,
-            final File file) throws IOException {
-
-        ChannelType type = channel.getType();
-
-        return type.createServerChannel(channel.getName(), file);
-
-    }
-
-    /**
-     * Constructs a new ServerChannel.
-     *
-     * @param channel a description of the channel
-     * @return the created channel
-     */
-    public static ServerChannel create(final ChannelDescriptor channel) {
-
-        ChannelType type = channel.getType();
-
-        return type.createServerChannel(channel.getName());
-
-    }
-
-
-    /**
-     * Constructs a new ServerChannel.
-     *
      * @param name the name of the channel
      */
     protected ServerChannel(final ChannelName name) {

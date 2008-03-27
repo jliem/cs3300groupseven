@@ -295,6 +295,7 @@ class ColabClientGUI extends JFrame {
             ClientChannelFrame f = createNewChannelFrame(desc);
 
             f.addWindowListener(channelWindowListener);
+            f.pack();
             f.setVisible(true);
             channelWindows.add(f);
         } else {

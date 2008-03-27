@@ -34,13 +34,8 @@ public class ChatChannelType extends ChannelType {
     public ClientChannelFrame createClientChannelFrame(ColabClient client,
             ClientChannel channel, UserName currentUser) throws RemoteException {
 
-        ChatChannelFrame frame = new ChatChannelFrame(
-                client, (ClientChatChannel) channel, currentUser);
-
-        frame.pack();
-        frame.setVisible(true);
-
-        return frame;
+        return new ChatChannelFrame(
+        		client, (ClientChatChannel) channel, currentUser);
 
     }
 

@@ -32,8 +32,8 @@ public final class ChannelDescriptor implements Serializable,
         this.channelName = channelName;
 
         if (type == null) {
-        	throw new IllegalArgumentException("Can't create a channel "
-        			+ "with type null!");
+            throw new IllegalArgumentException("Can't create a channel "
+                    + "with type null!");
         }
 
         this.channelType = type;

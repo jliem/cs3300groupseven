@@ -50,9 +50,9 @@ public abstract class ServerChannel<T extends ChannelData>
     public static ServerChannel create(final ChannelDescriptor channel,
             final File file) throws IOException {
 
-    	ChannelType type = channel.getType();
+        ChannelType type = channel.getType();
 
-    	return type.createServerChannel(channel.getName(), file);
+        return type.createServerChannel(channel.getName(), file);
 
     }
 
@@ -64,9 +64,9 @@ public abstract class ServerChannel<T extends ChannelData>
      */
     public static ServerChannel create(final ChannelDescriptor channel) {
 
-    	ChannelType type = channel.getType();
+        ChannelType type = channel.getType();
 
-    	return type.createServerChannel(channel.getName());
+        return type.createServerChannel(channel.getName());
 
     }
 

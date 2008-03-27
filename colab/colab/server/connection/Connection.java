@@ -336,8 +336,8 @@ public final class Connection extends UnicastRemoteObject
             final ChannelDescriptor channelDescriptor) throws RemoteException {
 
         if (!this.state.hasUserLogin()) {
-            throw new IllegalStateException("Could not join channel " +
-                    "because user was not logged in");
+            throw new IllegalStateException("Could not join channel "
+                    + "because user was not logged in");
         }
 
         ChannelName channelName = channelDescriptor.getName();
@@ -351,7 +351,8 @@ public final class Connection extends UnicastRemoteObject
 
         // Check whether the user is already part of the channel
         if (!serverChannel.contains(username)) {
-            ChannelConnection client = new ChannelConnection(this, clientChannel);
+            ChannelConnection client = new ChannelConnection(
+                    this, clientChannel);
             serverChannel.addClient(client);
 
             joinedChannels.add(channelName);
@@ -368,8 +369,8 @@ public final class Connection extends UnicastRemoteObject
             throws RemoteException {
 
         if (!this.state.hasUserLogin()) {
-            throw new IllegalStateException("Could not leave channel " +
-                    "because user was not logged in");
+            throw new IllegalStateException("Could not leave channel "
+                    + "because user was not logged in");
         }
 
         ServerChannel serverChannel = getChannel(channelName);
@@ -390,14 +391,15 @@ public final class Connection extends UnicastRemoteObject
             // Sanity check: if server channel does not contain
             // this client, it shouldn't be in joined channels either
             if (joinedChannels.contains(channelName)) {
-                throw new IllegalStateException("Server channel says that " +
-                        this + " is not part of the channel, but the channel " +
-                        "is in the joined channels list in Connection");
+                throw new IllegalStateException("Server channel says that "
+                        + this + " is not part of the channel, but the channel "
+                        + "is in the joined channels list in Connection");
             }
 
 
-            DebugManager.debug(this.username + " tried to leave a channel " +
-                    "but was not a member.");
+            DebugManager.debug(this.username + " tried to leave a channel "
+                    + "but was not a member.");
+
         }
     }
 

@@ -96,14 +96,14 @@ public class NewChannelFrame extends JFrame {
      * @return a Vector of channel types
      */
     private Vector<ChannelType> getChannelTypes() {
-    	Vector<ChannelType> channelTypes = new Vector<ChannelType>();
+        Vector<ChannelType> channelTypes = new Vector<ChannelType>();
 
-    	channelTypes.add(new ChatChannelType());
-    	channelTypes.add(new DocumentChannelType());
-    	// TODO
-    	// channelTypes.add(new WhiteboardChannelType());
+        channelTypes.add(new ChatChannelType());
+        channelTypes.add(new DocumentChannelType());
+        // TODO
+        // channelTypes.add(new WhiteboardChannelType());
 
-    	return channelTypes;
+        return channelTypes;
     }
 
     /**
@@ -140,9 +140,7 @@ public class NewChannelFrame extends JFrame {
                 try {
                     client.createChannel(desc);
                 } catch (RemoteException re) {
-                    if (DebugManager.EXCEPTIONS) {
-                        re.printStackTrace();
-                    }
+                    DebugManager.exception(re);
                 }
 
                 // Show updated list

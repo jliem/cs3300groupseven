@@ -31,24 +31,27 @@ public class DocumentChannelType extends ChannelType {
     }
 
     @Override
-    public ClientChannelFrame createClientChannelFrame(ColabClient client,
-            ClientChannel channel, UserName currentUser) throws RemoteException {
+    public ClientChannelFrame createClientChannelFrame(
+            final ColabClient client, final ClientChannel channel,
+            final UserName currentUser) throws RemoteException {
 
         return new DocumentChannelFrame(
                 client, (ClientDocumentChannel)channel,
                 currentUser);
+
     }
 
     @Override
-    public ServerChannel createServerChannel(ChannelName name) {
+    public ServerChannel createServerChannel(final ChannelName name) {
         return new ServerDocumentChannel(name);
     }
 
     @Override
-    public ServerChannel createServerChannel(ChannelName name, File file)
-            throws IOException {
+    public ServerChannel createServerChannel(final ChannelName name,
+            final File file) throws IOException {
 
         return new ServerDocumentChannel(name, file);
+
     }
 
 

@@ -31,8 +31,9 @@ public class ChatChannelType extends ChannelType {
     }
 
     @Override
-    public ClientChannelFrame createClientChannelFrame(ColabClient client,
-            ClientChannel channel, UserName currentUser) throws RemoteException {
+    public ClientChannelFrame createClientChannelFrame(
+            final ColabClient client, final ClientChannel channel,
+            final UserName currentUser) throws RemoteException {
 
         return new ChatChannelFrame(
                 client, (ClientChatChannel) channel, currentUser);
@@ -40,16 +41,16 @@ public class ChatChannelType extends ChannelType {
     }
 
     @Override
-    public ServerChannel createServerChannel(ChannelName name) {
+    public ServerChannel createServerChannel(final ChannelName name) {
         return new ServerChatChannel(name);
     }
 
     @Override
-    public ServerChannel createServerChannel(ChannelName name, File file)
-            throws IOException {
+    public ServerChannel createServerChannel(final ChannelName name,
+            final File file) throws IOException {
 
         return new ServerChatChannel(name, file);
-    }
 
+    }
 
 }

@@ -73,6 +73,8 @@ public class NewCommunityFrame extends JFrame {
         add(confirmCommPass);
         add(createButton);
 
+        pack();
+
     }
 
     private void showErrorBox(final String message, final String title) {

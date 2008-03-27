@@ -187,6 +187,8 @@ public class ExportChatFrame extends JFrame {
         // We don't want closing the export window to close the whole app
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        pack();
+
     }
 
     private void exportAction() {

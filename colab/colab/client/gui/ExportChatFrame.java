@@ -83,7 +83,7 @@ public class ExportChatFrame extends JFrame {
 
         browseButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                if (fileChooser.showOpenDialog(ExportChatFrame.this)
+                if (fileChooser.showSaveDialog(ExportChatFrame.this)
                         == JFileChooser.APPROVE_OPTION) {
 
                     // Sets the file path in the text box

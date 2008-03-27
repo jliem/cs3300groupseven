@@ -32,8 +32,8 @@ import colab.server.user.Password;
 /**
  * The CoLab client application.
  */
-public final class ColabClient extends UnicastRemoteObject implements
-        ColabClientRemote {
+public class ColabClient extends UnicastRemoteObject
+        implements ColabClientRemote {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -41,11 +41,7 @@ public final class ColabClient extends UnicastRemoteObject implements
     /** The default port. */
     public static final int DEFAULT_PORT = 9040;
 
-    //private final List<ActionListener> listeners;
-
-    /** A list of all channels in the community the client
-     * is connected to.
-     */
+    /** All channels in the community to which the client is connected. */
     private final Vector<ChannelDescriptor> channels;
 
     private ConnectionRemote connection;
@@ -55,8 +51,7 @@ public final class ColabClient extends UnicastRemoteObject implements
     /**
      * Constructs the client application.
      *
-     * @throws RemoteException
-     *             if an rmi error occurs
+     * @throws RemoteException if an rmi error occurs
      */
     public ColabClient() throws RemoteException {
         //listeners = new ArrayList<ActionListener>();
@@ -67,10 +62,8 @@ public final class ColabClient extends UnicastRemoteObject implements
     /**
      * Receives the server address and attempts to connect to the server.
      *
-     * @param serverAddress
-     *            the address of the server
-     * @throws UnableToConnectException
-     *             if connection fails
+     * @param serverAddress the address of the server
+     * @throws UnableToConnectException if connection fails
      */
     public void connect(final String serverAddress)
             throws UnableToConnectException {
@@ -408,14 +401,16 @@ public final class ColabClient extends UnicastRemoteObject implements
 
     /**
      * Gets active users in a channel.
+     *
      * @param channelName the channel to look up
      * @return a list of all active users
-     * @throws RemoteException if a RemoteException occurs
+     * @throws RemoteException if an rmi error occurs
      */
-    public Collection<UserName> getActiveUsers(ChannelName channelName)
-        throws RemoteException {
+    public Collection<UserName> getActiveUsers(final ChannelName channelName)
+            throws RemoteException {
 
         return connection.getActiveUsers(channelName);
+
     }
 
     /**
@@ -424,7 +419,7 @@ public final class ColabClient extends UnicastRemoteObject implements
      * @return true if the user has logged in
      */
     public boolean hasUserLogin() throws RemoteException {
-    	// If no connection, there's definitely no user login
+        // If no connection, there's definitely no user login
         return (connection != null && connection.hasUserLogin());
     }
 
@@ -451,11 +446,11 @@ public final class ColabClient extends UnicastRemoteObject implements
         System.exit(0);
     }
 
-
     /**
      * Clears the list of channels this client could potentially join.
      */
     private void clearJoinableChannels() {
         channels.clear();
     }
+
 }

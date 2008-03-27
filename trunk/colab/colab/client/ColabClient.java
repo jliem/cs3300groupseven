@@ -74,10 +74,7 @@ public class ColabClient extends UnicastRemoteObject
                     .lookup("//" + serverAddress + "/COLAB_SERVER");
             connection = server.connect(this);
         } catch (final Exception e) {
-            if (DebugManager.EXCEPTIONS) {
-                e.printStackTrace();
-            }
-
+            DebugManager.exception(e);
             throw new UnableToConnectException();
         } finally {
             this.connectionState = ConnectionState.DISCONNECTED;
@@ -375,9 +372,10 @@ public class ColabClient extends UnicastRemoteObject
      *
      * @param name the community name
      * @param password the community password
-     * @throws NetworkException
-     * @throws CommunityAlreadyExistsException
-     * @throws RemoteException
+     * @throws NetworkException if some network I/O error occurs
+     * @throws CommunityAlreadyExistsException if a community with the
+     *                                         given name already exists
+     * @throws RemoteException if an rmi error occurs
      */
     public void createCommunity(final CommunityName name,
             final Password password) throws NetworkException,
@@ -394,9 +392,10 @@ public class ColabClient extends UnicastRemoteObject
      * @throws RemoteException if an rmi error occurs
      */
     public void createChannel(final ChannelDescriptor channelDesc)
-        throws RemoteException {
+            throws RemoteException {
 
         connection.createChannel(channelDesc);
+
     }
 
     /**
@@ -417,6 +416,7 @@ public class ColabClient extends UnicastRemoteObject
      * Checks whether a user has logged into the program.
      *
      * @return true if the user has logged in
+     * @throws RemoteException if an rmi error occurs
      */
     public boolean hasUserLogin() throws RemoteException {
         // If no connection, there's definitely no user login
@@ -433,17 +433,12 @@ public class ColabClient extends UnicastRemoteObject
             if (this.hasUserLogin()) {
                 logOutUser();
             }
-        } catch (ConnectionDroppedException e1) {
-            if (DebugManager.EXIT) {
-                e1.printStackTrace();
-            }
-        } catch (Exception e) {
-            if (DebugManager.EXIT) {
-                e.printStackTrace();
-            }
+        } catch (final Exception e) {
+            DebugManager.windowClose(e);
         }
 
         System.exit(0);
+
     }
 
     /**

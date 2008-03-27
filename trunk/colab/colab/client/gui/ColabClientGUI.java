@@ -215,17 +215,9 @@ class ColabClientGUI extends JFrame {
                     "You are unauthorized to join this community.",
                     "Unable to join community");
         } catch (final NetworkException ne) {
-
-            if (DebugManager.NETWORK) {
-                ne.printStackTrace();
-            }
-
+            DebugManager.network(ne);
         } catch (RemoteException re) {
-
-            if (DebugManager.EXCEPTIONS) {
-                re.printStackTrace();
-            }
-
+            DebugManager.exception(re);
         }
 
         // Exit method if an exception occurred while
@@ -270,9 +262,7 @@ class ColabClientGUI extends JFrame {
                     try {
                         handleJoinChannel(cd);
                     } catch (RemoteException re) {
-                        if (DebugManager.EXCEPTIONS) {
-                            re.printStackTrace();
-                        }
+                        DebugManager.exception(re);
                     }
                 }
             }
@@ -321,7 +311,8 @@ class ColabClientGUI extends JFrame {
         ClientChannel channel = client.joinChannel(desc);
 
         ChannelType type = desc.getType();
-        ClientChannelFrame frame = type.createClientChannelFrame(client, channel, currentUser);
+        ClientChannelFrame frame = type.createClientChannelFrame(
+                client, channel, currentUser);
 
         return frame;
     }
@@ -375,9 +366,7 @@ class ColabClientGUI extends JFrame {
                 // TODO: Handle this?
                 // Probably don't need to worry about it
                 // as the window is closing anyway
-                if (DebugManager.EXIT) {
-                    e.printStackTrace();
-                }
+                DebugManager.windowClose(e);
             }
         }
 
@@ -406,14 +395,8 @@ class ColabClientGUI extends JFrame {
             // the parent which triggers another logoff)
 
             // TODO: Think of a better way of handling such situations
-        } catch (final NullPointerException ne) {
-            if (DebugManager.EXIT) {
-                ne.printStackTrace();
-            }
         } catch (final Exception e) {
-            if (DebugManager.EXIT) {
-                e.printStackTrace();
-            }
+            DebugManager.windowClose(e);
         }
     }
 

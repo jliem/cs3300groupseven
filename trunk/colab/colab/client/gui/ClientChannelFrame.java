@@ -62,9 +62,7 @@ public abstract class ClientChannelFrame extends JFrame {
                         clientChannel);
             } catch (RemoteException ex) {
                 // TODO: Handle remote exception
-                if (DebugManager.EXCEPTIONS) {
-                    ex.printStackTrace();
-                }
+                DebugManager.exception(ex);
             }
         }
 
@@ -104,9 +102,7 @@ public abstract class ClientChannelFrame extends JFrame {
         try {
             leaveChannel();
         } catch (RemoteException re) {
-            if (DebugManager.EXIT) {
-                re.printStackTrace();
-            }
+            DebugManager.windowClose(re);
         }
 
         setVisible(false);

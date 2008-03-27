@@ -107,10 +107,7 @@ class ChooseCommunityPanel extends JPanel {
                 communities = client.getMyCommunityNames();
             }
         } catch (final NetworkException e) {
-            if (DebugManager.NETWORK) {
-                e.printStackTrace();
-            }
-
+            DebugManager.network(e);
             return; // <(^.^)>
         }
 

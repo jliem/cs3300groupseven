@@ -18,7 +18,7 @@ import colab.server.channel.ServerChannel;
  */
 public abstract class ChannelType implements Serializable {
 
-    /** Human-readable representation */
+    /** Human-readable representation. */
     private final String string;
 
     /**

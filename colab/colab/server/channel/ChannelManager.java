@@ -110,7 +110,7 @@ public final class ChannelManager {
         }
 
         // Create the new channel
-        ServerChannel channel = ServerChannel.create(channelDescriptor);
+        ServerChannel channel = channelDescriptor.createServerChannel();
 
         // Check whether a community entry exists
         HashMap<ChannelName, ServerChannel> subMap = null;

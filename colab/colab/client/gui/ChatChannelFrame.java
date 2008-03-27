@@ -1,12 +1,11 @@
 package colab.client.gui;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -17,7 +16,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import colab.client.ClientChannel;
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.common.channel.ChannelData;
@@ -150,12 +148,21 @@ public final class ChatChannelFrame extends ClientChannelFrame {
 
     public static void main(final String[] args) throws RemoteException {
 
-        ColabClient client = new ColabClient();
+        ColabClient client = new ColabClient() {
+            public Collection<UserName> getActiveUsers(ChannelName name) {
+                return new ArrayList<UserName>();
+            }
+            public List<ChannelData> getLastData(final ChannelName a, int c) {
+                return new ArrayList<ChannelData>();
+            }
+        };
+
         ChannelName channelName = new ChannelName("Test Channel");
         ClientChatChannel channel = new ClientChatChannel(channelName);
         UserName username = new UserName("test");
 
         ChatChannelFrame chat = new ChatChannelFrame(client, channel, username);
+        chat.pack();
         chat.setVisible(true);
 
     }

@@ -32,7 +32,6 @@ public abstract class ClientChannelFrame extends JFrame {
     /** The channel associated with this frame. */
     protected final ClientChannel channel;
 
-
     /**
      * A panel which contains a list of active users in the channel.
      */
@@ -77,11 +76,13 @@ public abstract class ClientChannelFrame extends JFrame {
         });
 
         // Set default title and size
+        String title;
         if (clientChannel != null) {
-            setTitle(clientChannel.getId().toString());
+            title = clientChannel.getId().toString();
         } else {
-            setTitle("(No Channel)");
+            title = "(No Channel)";
         }
+        setTitle(title);
 
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -96,9 +97,9 @@ public abstract class ClientChannelFrame extends JFrame {
 
     /**
      * Perform cleanup before exiting this window.
-     * @throws RemoteException
      */
     public void exit() {
+
         // Before closing window, try to exit the channel
         try {
             leaveChannel();
@@ -110,6 +111,7 @@ public abstract class ClientChannelFrame extends JFrame {
 
         setVisible(false);
         dispose();
+
     }
 
     /**
@@ -129,7 +131,8 @@ public abstract class ClientChannelFrame extends JFrame {
 
     /**
      * Indicates that this client is leaving this channel.
-     * @throws RemoteException
+     *
+     * @throws RemoteException if an rmi error occurs
      */
     private void leaveChannel() throws RemoteException  {
 
@@ -137,4 +140,5 @@ public abstract class ClientChannelFrame extends JFrame {
             client.leaveChannel(channel.getChannelDescriptor());
         }
     }
+
 }

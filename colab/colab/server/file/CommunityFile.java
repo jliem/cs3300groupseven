@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.naming.CommunityName;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlNode;
@@ -65,7 +66,7 @@ public final class CommunityFile implements CommunityStore {
         try {
             FileUtils.appendLine(file, str);
         } catch (final IOException ioe) {
-            ioe.printStackTrace();
+            DebugManager.ioException(ioe);
         }
 
     }

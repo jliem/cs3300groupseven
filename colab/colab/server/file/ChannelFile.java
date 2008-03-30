@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
@@ -67,7 +68,7 @@ public final class ChannelFile<T extends ChannelData>
         try {
             FileUtils.appendLine(file, xmlString);
         } catch (final IOException ioe) {
-            ioe.printStackTrace();
+            DebugManager.ioException(ioe);
         }
 
     }

@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.ChannelName;
@@ -62,7 +63,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
             // TODO: handler remote chat exceptions
             // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
             // ~ <(^.^)> ~
-            ex.printStackTrace();
+            DebugManager.remote(ex);
         }
 
         chatPanel.addActionListener(new ActionListener() {
@@ -76,7 +77,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
                         // TODO: handler remote chat exceptions
                         // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
                         // ~ <(^.^)> ~
-                        ex.printStackTrace();
+                        DebugManager.remote(ex);
                     }
                 }
 

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.ChannelDoesNotExistException;
@@ -156,7 +157,7 @@ public final class ChannelManager {
             }
             channel = channelDescriptor.createServerChannel(file);
         } catch (final IOException e) {
-            e.printStackTrace();
+            DebugManager.ioException(e);
             System.exit(1);
             return null;
         }

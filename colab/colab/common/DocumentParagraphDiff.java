@@ -131,7 +131,7 @@ public final class DocumentParagraphDiff {
             try {
                 change.apply(ret);
             } catch (Exception e) {
-                e.printStackTrace();
+                DebugManager.exception(e);
                 ret = null;
                 break;
             }

@@ -3,9 +3,41 @@ package colab.common;
 public class DebugManager {
 
     /**
-     * Flag for printing any exception stack trace.
+     * Flag for printing any exception stack trace whether low,
+     * normal or high priority. When possible, use the
+     * priority flags instead of switching this one off.
      */
     private static final boolean EXCEPTIONS = true;
+
+    /**
+     * Flag for printing debug messages.
+     */
+    private static final boolean PRINT_DEBUG_MESSAGES = true;
+
+    /**
+     * Flag for printing any exception stack trace (i.e. it will probably
+     * be ignored or the stack trace is not useful, like if the window is closing).
+     */
+    private static final boolean LOW_PRIORITY = true;
+
+    /**
+     * Flag for printing any normal exception stack trace.
+     */
+    private static final boolean NORMAL_PRIORITY = true;
+
+    /**
+     * Flag for printing any high priority exception stack trace
+     * (i.e. we don't mind it showing up in the demo because it might
+     * not be our fault).
+     */
+    private static final boolean HIGH_PRIORITY = true;
+
+    /**
+     * Flag for printing exceptions that
+     * we expect should never happen (and therefore
+     * are extremely high priority).
+     */
+    private static final boolean SHOULD_NOT_HAPPEN = true;
 
     /**
      * Flag for printing exceptions produced when a window
@@ -29,16 +61,20 @@ public class DebugManager {
     private static final boolean ILLEGAL_STATE = true;
 
     /**
-     * Flag for printing connection dropped exceptions
+     * Flag for printing connection dropped exceptions.
      */
     private static final boolean CONNECTION_DROPPED = true;
 
     /**
-     * Flag for printing i/o exceptions
+     * Flag for printing i/o exceptions.
      */
     private static final boolean IO = true;
 
-    private static final boolean PRINT_DEBUG_MESSAGES = true;
+    /**
+     * Flag for printing unable to connect exceptions
+     */
+    private static final boolean UNABLE_TO_CONNECT = true;
+
 
     /**
      * Handles general exceptions.
@@ -50,12 +86,23 @@ public class DebugManager {
         }
     }
 
+
+    /**
+     * Handle exceptions thrown that we expect should never happen.
+     * @param t the Throwable
+     */
+    public static void shouldNotHappen(final Throwable t) {
+        if (SHOULD_NOT_HAPPEN && HIGH_PRIORITY && EXCEPTIONS) {
+            t.printStackTrace();
+        }
+    }
+
     /**
      * Handles exceptions which occur while a window is closing.
      * @param t the Throwable
      */
     public static void windowClose(final Throwable t) {
-        if (WINDOW_CLOSE && EXCEPTIONS) {
+        if (WINDOW_CLOSE && EXCEPTIONS && LOW_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -65,7 +112,7 @@ public class DebugManager {
      * @param t the Throwable
      */
     public static void remote(final Throwable t) {
-        if (REMOTE && EXCEPTIONS) {
+        if (REMOTE && EXCEPTIONS && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -75,7 +122,7 @@ public class DebugManager {
      * @param t the Throwable
      */
     public static void network(final Throwable t) {
-        if (NETWORK && EXCEPTIONS) {
+        if (NETWORK && EXCEPTIONS && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -85,7 +132,7 @@ public class DebugManager {
      * @param t the Throwable
      */
     public static void illegalState(final Throwable t) {
-        if (ILLEGAL_STATE && EXCEPTIONS) {
+        if (ILLEGAL_STATE && EXCEPTIONS && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -95,7 +142,7 @@ public class DebugManager {
      * @param t the Throwable
      */
     public static void ioException(final Throwable t) {
-        if (IO && EXCEPTIONS) {
+        if (IO && EXCEPTIONS && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -105,7 +152,17 @@ public class DebugManager {
      * @param t the Throwable
      */
     public static void connectionDropped(final Throwable t) {
-        if (CONNECTION_DROPPED && EXCEPTIONS) {
+        if (CONNECTION_DROPPED && EXCEPTIONS && NORMAL_PRIORITY) {
+            t.printStackTrace();
+        }
+    }
+
+    /**
+     * Handle exceptions thrown when a connection was not made.
+     * @param t the Throwable
+     */
+    public static void unableToConnect(final Throwable t) {
+        if (UNABLE_TO_CONNECT && EXCEPTIONS && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }

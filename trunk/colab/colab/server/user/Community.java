@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.identity.Identifiable;
 import colab.common.identity.IdentitySet;
@@ -144,6 +145,7 @@ public final class Community implements Identifiable<CommunityName>,
             try {
                 client.channelAdded(channelDescriptor);
             } catch (final RemoteException re) {
+                DebugManager.remote(re);
                 connection.disconnect(re);
             }
         }

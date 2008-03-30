@@ -325,7 +325,7 @@ public final class Connection extends UnicastRemoteObject
             } catch (CommunityDoesNotExistException ce) {
                 // This should never happen since we just downloaded
                 // the list of communities
-                DebugManager.exception(ce);
+                DebugManager.shouldNotHappen(ce);
             }
         }
 
@@ -603,6 +603,8 @@ public final class Connection extends UnicastRemoteObject
         for (DisconnectListener listener : disconnectListeners) {
             listener.handleDisconnect(event);
         }
+
+        DebugManager.connectionDropped(e);
 
     }
 

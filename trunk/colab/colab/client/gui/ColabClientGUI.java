@@ -177,7 +177,7 @@ class ColabClientGUI extends JFrame {
      * Display window for creating a new community.
      */
     private void handleNewCommunity() {
-        NewCommunityFrame frame = new NewCommunityFrame(communityPanel, client);
+        NewCommunityDialog frame = new NewCommunityDialog(communityPanel, client);
         frame.pack();
         frame.setVisible(true);
         frame.setPreferredSize(new Dimension(400, 800));

@@ -96,7 +96,7 @@ final class ChannelManagerPanel extends JPanel {
      * a new channel.
      */
     public void handleCreateNewChannel() {
-        NewChannelFrame ncf = new NewChannelFrame(this, client);
+        NewChannelDialog ncf = new NewChannelDialog(this, client);
 
         ncf.pack();
         ncf.setVisible(true);

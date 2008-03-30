@@ -53,13 +53,13 @@
         <module name="JavadocMethod">
             <property name="logLoadErrors" value="true"/>
             <property name="suppressLoadErrors" value="true"/>
-            <property name="scope" value="protected"/>
+            <property name="scope" value="package"/>
         </module>
         <module name="JavadocType">
-            <property name="scope" value="protected"/>
+            <property name="scope" value="package"/>
         </module>
         <module name="JavadocVariable">
-            <property name="scope" value="protected"/>
+            <property name="scope" value="package"/>
         </module>
         <module name="JavadocStyle"/>
 

@@ -15,6 +15,7 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.exception.AuthenticationException;
+import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.ConnectionDroppedException;
@@ -27,10 +28,9 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
-import colab.server.user.Password;
 
 /**
- * The CoLab client application.
+ * The CoLab client application which is used to make requests to the server.
  */
 public class ColabClient extends UnicastRemoteObject
         implements ColabClientRemote {
@@ -91,16 +91,11 @@ public class ColabClient extends UnicastRemoteObject
      * username does not exist, then the GUI asks the user if a new user should
      * be added.
      *
-     * @param username
-     *            received from the GUI text field
-     * @param password
-     *            received from the GUI password field
-     * @param serverAddress
-     *            address received from the GUI text field
-     * @throws NetworkException
-     *             if connection fails
-     * @throws AuthenticationException
-     *             if user credentials are wrong
+     * @param username received from the GUI text field
+     * @param password received from the GUI password field
+     * @param serverAddress address received from the GUI text field
+     * @throws NetworkException if connection fails
+     * @throws AuthenticationException if user credentials are wrong
      */
 
     public void loginUser(final String username, final char[] password,
@@ -142,12 +137,12 @@ public class ColabClient extends UnicastRemoteObject
      *
      * @param userName the name of the user to create
      * @param password the desired password for the new user
-     * @throws NetworkException if a network I/O error occurs
+     * @throws ConnectionDroppedException if the connection is lost
      * @throws UserAlreadyExistsException if a user with the specified
      *                                    name already exists on the server
      */
     public void createUser(final UserName userName, final char[] password)
-            throws NetworkException, UserAlreadyExistsException {
+            throws ConnectionDroppedException, UserAlreadyExistsException {
 
         try {
             connection.createUser(userName.getValue(), password);
@@ -170,13 +165,13 @@ public class ColabClient extends UnicastRemoteObject
      *
      * @param communityName the name of community to log in to
      * @param password the community's password
-     * @throws NetworkException if a network I/O error occurs
+     * @throws ConnectionDroppedException if the connection is lost
      * @throws AuthenticationException if the server rejected the login
      *                                 because the user is not a member
      *                                 of the community
      */
     public void loginCommunity(final CommunityName communityName,
-            final char[] password) throws NetworkException,
+            final char[] password) throws ConnectionDroppedException,
             AuthenticationException {
 
 
@@ -215,13 +210,13 @@ public class ColabClient extends UnicastRemoteObject
      * Logs into a community.
      *
      * @param communityName the name of community to log in to
-     * @throws NetworkException if a network I/O error occurs
+     * @throws ConnectionDroppedException if the connection is lost
      * @throws AuthenticationException if the server rejected the login
      *                                 because the user is not a member
      *                                 of the community
      */
     public void loginCommmunity(final CommunityName communityName)
-            throws NetworkException, AuthenticationException {
+            throws ConnectionDroppedException, AuthenticationException {
 
         this.loginCommunity(communityName, null);
     }
@@ -230,10 +225,10 @@ public class ColabClient extends UnicastRemoteObject
      * Retrieves the names of all of the communities on the server.
      *
      * @return a collection containing the name of every community
-     * @throws NetworkException if a network I/O error occurs
+     * @throws ConnectionDroppedException if the connection is lost
      */
     public Collection<CommunityName> getAllCommunityNames()
-            throws NetworkException {
+            throws ConnectionDroppedException {
 
         try {
             return connection.getAllCommunityNames();
@@ -248,10 +243,10 @@ public class ColabClient extends UnicastRemoteObject
      * of which the currently logged-in user is a member.
      *
      * @return a collection containing the name of communities
-     * @throws NetworkException if a network I/O error occurs
+     * @throws ConnectionDroppedException if the connection is lost
      */
     public Collection<CommunityName> getMyCommunityNames()
-            throws NetworkException {
+            throws ConnectionDroppedException {
 
         try {
             return connection.getMyCommunityNames();
@@ -279,10 +274,18 @@ public class ColabClient extends UnicastRemoteObject
 
     }
 
-    public void leaveChannel(final ChannelDescriptor desc)
-        throws RemoteException {
+    /**
+     * Inform the server that the user is no longer active
+     * in the given channel.
+     *
+     * @param descriptor the channel to leave
+     * @throws RemoteException if an rmi error occurs
+     */
+    public void leaveChannel(final ChannelDescriptor descriptor)
+            throws RemoteException {
 
-        connection.leaveChannel(desc.getName());
+        connection.leaveChannel(descriptor.getName());
+
     }
 
     /** {@inheritDoc} */
@@ -290,6 +293,7 @@ public class ColabClient extends UnicastRemoteObject
             throws RemoteException {
 
         channels.add(channelDescriptor);
+
     }
 
     /**
@@ -302,6 +306,13 @@ public class ColabClient extends UnicastRemoteObject
         return channels;
     }
 
+    /**
+     * Sends a new piece of channel data to the server.
+     *
+     * @param channelName the name of the channel to add to
+     * @param data the data to add
+     * @throws ConnectionDroppedException if the connection is lost
+     */
     public void add(final ChannelName channelName, final ChannelData data)
             throws ConnectionDroppedException {
 
@@ -316,6 +327,14 @@ public class ColabClient extends UnicastRemoteObject
 
     }
 
+    /**
+     * Retrieves the last n data items posted to a given channel.
+     *
+     * @param channelName the name of the channel from which to fetch data
+     * @param count the number of items requested
+     * @return the last n data items
+     * @throws ConnectionDroppedException if the connection is lost
+     */
     public List<ChannelData> getLastData(final ChannelName channelName,
             final int count) throws ConnectionDroppedException {
 
@@ -328,6 +347,11 @@ public class ColabClient extends UnicastRemoteObject
 
     }
 
+    /**
+     * Logs out of the user account.
+     *
+     * @throws ConnectionDroppedException if the connection is lost
+     */
     public void logOutUser() throws ConnectionDroppedException {
 
         this.connectionState = ConnectionState.CONNECTED;
@@ -372,9 +396,10 @@ public class ColabClient extends UnicastRemoteObject
      * @throws CommunityDoesNotExistException if the community did not exist
      */
     public boolean isMember(final CommunityName communityName)
-        throws RemoteException, CommunityDoesNotExistException {
+            throws RemoteException, CommunityDoesNotExistException {
 
         return connection.isMember(communityName);
+
     }
 
     /**
@@ -382,16 +407,28 @@ public class ColabClient extends UnicastRemoteObject
      *
      * @param name the community name
      * @param password the community password
-     * @throws NetworkException if some network I/O error occurs
      * @throws CommunityAlreadyExistsException if a community with the
      *                                         given name already exists
-     * @throws RemoteException if an rmi error occurs
+     * @throws ConnectionDroppedException if the connection is lost
      */
     public void createCommunity(final CommunityName name,
-            final Password password) throws NetworkException,
-            CommunityAlreadyExistsException, RemoteException {
+            final char[] password) throws CommunityAlreadyExistsException,
+            ConnectionDroppedException {
 
-        connection.createCommunity(name, password);
+        try {
+            connection.createCommunity(name.getValue(), password);
+        } catch (final ServerException serverException) {
+            try {
+                throw serverException.getCause().getCause();
+            } catch (final CommunityAlreadyExistsException e) {
+                throw e;
+            } catch (final Throwable t) {
+                throw new ConnectionDroppedException(serverException);
+            }
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
+        }
+
     }
 
     /**
@@ -399,12 +436,27 @@ public class ColabClient extends UnicastRemoteObject
      * currently logged-in community.
      *
      * @param channelDesc channel descriptor
-     * @throws RemoteException if an rmi error occurs
+     * @throws ChannelAlreadyExistsException if the channel already exists
+     * @throws ConnectionDroppedException if the connection is lost
      */
     public void createChannel(final ChannelDescriptor channelDesc)
-            throws RemoteException {
+            throws ChannelAlreadyExistsException, ConnectionDroppedException {
 
-        connection.createChannel(channelDesc);
+        try {
+            connection.createChannel(channelDesc);
+        } catch (final ServerException serverException) {
+            try {
+                throw serverException.getCause().getCause();
+            } catch (final ChannelAlreadyExistsException e) {
+                throw e;
+            } catch (final Throwable t) {
+                throw new ConnectionDroppedException(serverException);
+            }
+        } catch (final RemoteException remoteException) {
+            throw new ConnectionDroppedException(remoteException);
+        } finally {
+            this.connectionState = ConnectionState.LOGGED_IN;
+        }
 
     }
 

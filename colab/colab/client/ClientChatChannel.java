@@ -11,6 +11,9 @@ import colab.common.channel.ChatDataSet;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.naming.ChannelName;
 
+/**
+ * A ClientChannel that handles chat-protocol channels.
+ */
 public final class ClientChatChannel extends ClientChannel {
 
     /** Serialization version number. */
@@ -33,7 +36,7 @@ public final class ClientChatChannel extends ClientChannel {
 
     /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
-        addLocal(data);
+        addLocal((ChatChannelData) data);
     }
 
     /**
@@ -41,9 +44,8 @@ public final class ClientChatChannel extends ClientChannel {
      *
      * @param data the piece of data
      */
-    public void addLocal(final ChannelData data) {
-        ChatChannelData chatData = (ChatChannelData) data;
-        messages.add(chatData);
+    public void addLocal(final ChatChannelData data) {
+        messages.add(data);
         newMessages++;
         fireActionPerformed(new ActionEvent(
                 this, ActionEvent.ACTION_FIRST, "Message Added"));

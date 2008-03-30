@@ -28,6 +28,7 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     }
 
+    /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
 
         revisions.add((DocumentChannelData)data);
@@ -39,6 +40,7 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     }
 
+    /** {@inheritDoc} */
     public ChannelDescriptor getChannelDescriptor() {
 
         return new ChannelDescriptor(this.getId(), new DocumentChannelType());

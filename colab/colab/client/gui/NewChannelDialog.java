@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,7 +23,7 @@ import colab.common.channel.type.ChatChannelType;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.naming.ChannelName;
 
-public class NewChannelFrame extends JFrame {
+public class NewChannelDialog extends JDialog {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public class NewChannelFrame extends JFrame {
 
     private final ChannelManagerPanel parentPanel;
 
-    public NewChannelFrame(final ChannelManagerPanel parentPanel,
+    public NewChannelDialog(final ChannelManagerPanel parentPanel,
             final ColabClient client) {
 
         this.client = client;
@@ -89,6 +89,7 @@ public class NewChannelFrame extends JFrame {
 
         pack();
 
+        this.setModal(true);
     }
 
 
@@ -135,7 +136,7 @@ public class NewChannelFrame extends JFrame {
             Vector<ChannelDescriptor> channels = client.getChannels();
             if (channels.contains(desc)) {
                 showErrorBox(
-                        "A channel with that name and type already exists.",
+                        "A channel with that name already exists. Please enter a unique name for the channel.",
                         "Duplicate Channel");
             } else {
 

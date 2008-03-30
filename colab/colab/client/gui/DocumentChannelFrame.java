@@ -1,6 +1,7 @@
 package colab.client.gui;
 
-import colab.client.ClientChatChannel;
+import java.awt.Dimension;
+
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.common.naming.UserName;
@@ -42,6 +43,8 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         // that doesn't involve retrieving the panel from the parent
         // Cast the parent's generic version to a ChatPanel for convenience
         documentPanel = (DocumentPanel)(super.clientChannelPanel);
+
+        this.setPreferredSize(new Dimension(800,600));
 
     }
 

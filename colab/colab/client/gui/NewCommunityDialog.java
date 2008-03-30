@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -20,12 +20,10 @@ import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
 import colab.server.user.Password;
 
-public class NewCommunityFrame extends JFrame {
+public class NewCommunityDialog extends JDialog {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
-
-    private final JButton createButton;
 
     private final JTextField commName;
 
@@ -33,33 +31,34 @@ public class NewCommunityFrame extends JFrame {
 
     private final JPasswordField confirmCommPass;
 
-    private final JLabel nameLabel;
-
-    private final JLabel passLabel;
-
-    private final JLabel confirmPassLabel;
-
     private final ColabClient client;
 
     private final ChooseCommunityPanel parentPanel;
 
-    public NewCommunityFrame(final ChooseCommunityPanel parentPanel,
+    public NewCommunityDialog(final ChooseCommunityPanel parentPanel,
             final ColabClient client) {
 
         this.client = client;
         this.parentPanel = parentPanel;
 
-        createButton = new JButton("Create Community");
+        JButton createButton = new JButton("Create Community");
         commName = new JTextField("");
         commPass = new JPasswordField("");
         confirmCommPass = new JPasswordField("");
-        nameLabel = new JLabel("Community name: ");
-        passLabel = new JLabel("Community password: ");
-        confirmPassLabel = new JLabel("Confirm community password: ");
+        JLabel nameLabel = new JLabel("Community name: ");
+        JLabel passLabel = new JLabel("Community password: ");
+        JLabel confirmPassLabel = new JLabel("Confirm community password: ");
 
         createButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 handleCreate(e);
+            }
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                closeWindow();
             }
         });
 
@@ -72,8 +71,11 @@ public class NewCommunityFrame extends JFrame {
         add(confirmPassLabel);
         add(confirmCommPass);
         add(createButton);
+        add(cancelButton);
 
         pack();
+
+        this.setModal(true);
 
     }
 
@@ -155,9 +157,16 @@ public class NewCommunityFrame extends JFrame {
             parentPanel.setSelectedCommunity(name);
 
             // Destroy this window
-            this.dispose();
+            this.closeWindow();
         }
 
+    }
+
+    /**
+     * Closes this window.
+     */
+    private void closeWindow() {
+        this.dispose();
     }
 
 }

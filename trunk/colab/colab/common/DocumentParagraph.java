@@ -155,19 +155,19 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         }
     }
 
-    protected void fireHeaderChange(int headerLevel) {
+    protected void fireHeaderChange(final int headerLevel) {
         for (ParagraphListener listener : listeners) {
             listener.onHeaderChange(headerLevel);
         }
     }
 
-    protected void fireOnInsert(int offset, String hunk) {
+    protected void fireOnInsert(final int offset, final String hunk) {
         for (ParagraphListener listener : listeners) {
             listener.onInsert(offset, hunk);
         }
     }
 
-    protected void fireOnDelete(int offset, int length) {
+    protected void fireOnDelete(final int offset, final int length) {
         for (ParagraphListener listener : listeners) {
             listener.onDelete(offset, length);
         }

@@ -1,6 +1,13 @@
 package colab.common;
 
-public class DebugManager {
+/**
+ * DebugMananger provides static methods for printing errors.
+ */
+public final class DebugManager {
+
+    /** Hidden default constructor. */
+    private DebugManager() {
+    }
 
     /**
      * Flag for printing any exception stack trace whether low,
@@ -15,8 +22,9 @@ public class DebugManager {
     private static final boolean PRINT_DEBUG_MESSAGES = true;
 
     /**
-     * Flag for printing any exception stack trace (i.e. it will probably
-     * be ignored or the stack trace is not useful, like if the window is closing).
+     * Flag for printing any exception stack trace (it will probably
+     * be ignored or the stack trace is not useful, like if the window
+     * is closing).
      */
     private static final boolean LOW_PRIORITY = true;
 
@@ -71,7 +79,7 @@ public class DebugManager {
     private static final boolean IO = true;
 
     /**
-     * Flag for printing unable to connect exceptions
+     * Flag for printing unable to connect exceptions.
      */
     private static final boolean UNABLE_TO_CONNECT = true;
 
@@ -167,6 +175,11 @@ public class DebugManager {
         }
     }
 
+    /**
+     * Prints a debugging message to the console, if enabled.
+     *
+     * @param message the message to print
+     */
     public static void debug(final String message) {
         if (PRINT_DEBUG_MESSAGES) {
             System.out.println("*** DEBUG *** " + message);

@@ -136,7 +136,8 @@ public class NewChannelDialog extends JDialog {
             Vector<ChannelDescriptor> channels = client.getChannels();
             if (channels.contains(desc)) {
                 showErrorBox(
-                        "A channel with that name already exists. Please enter a unique name for the channel.",
+                        "A channel with that name already exists. "
+                        + "Please enter a unique name for the channel.",
                         "Duplicate Channel");
             } else {
 

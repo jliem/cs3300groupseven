@@ -22,13 +22,13 @@ public final class DocumentParagraphDiff {
 
         private int offset;
 
-        public Insert(int offset, String contents) {
+        public Insert(final int offset, final String contents) {
             super();
             this.contents = contents;
             this.offset = offset;
         }
 
-        public void apply(DocumentParagraph para) throws Exception {
+        public void apply(final DocumentParagraph para) throws Exception {
             if (offset >= para.getLength()) {
                 throw new Exception("Insert outside of range of paragraph.");
             } else {

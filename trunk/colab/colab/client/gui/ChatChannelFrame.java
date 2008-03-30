@@ -115,7 +115,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
                 "Enables/disables chat timestamps.");
 
         export.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 ExportChatFrame frame = new ExportChatFrame(channel);
                 frame.pack();
                 frame.setVisible(true);
@@ -123,13 +123,13 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         });
 
         exit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 exit();
             }
         });
 
         timestampCheckBox.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
+            public void stateChanged(final ChangeEvent e) {
                 setTimestampEnabled(timestampCheckBox.getState());
             }
         });
@@ -151,10 +151,11 @@ public final class ChatChannelFrame extends ClientChannelFrame {
     public static void main(final String[] args) throws RemoteException {
 
         ColabClient client = new ColabClient() {
-            public Collection<UserName> getActiveUsers(ChannelName name) {
+            public Collection<UserName> getActiveUsers(final ChannelName name) {
                 return new ArrayList<UserName>();
             }
-            public List<ChannelData> getLastData(final ChannelName a, int c) {
+            public List<ChannelData> getLastData(
+                    final ChannelName a, final int c) {
                 return new ArrayList<ChannelData>();
             }
         };

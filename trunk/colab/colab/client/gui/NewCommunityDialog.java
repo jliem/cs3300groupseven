@@ -72,7 +72,8 @@ public class NewCommunityDialog extends JDialog {
 
                     // TODO Handle this in parent
                     JOptionPane.showMessageDialog(NewCommunityDialog.this,
-                            "The connection to the server was lost. Double-check that the server is running.",
+                            "The connection to the server was lost. "
+                            + "Double-check that the server is running.",
                             "Connection to Server Lost",
                             JOptionPane.ERROR_MESSAGE);
 

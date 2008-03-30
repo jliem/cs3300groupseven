@@ -20,6 +20,8 @@ import javax.swing.ListSelectionModel;
 
 import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.event.ChannelEvent;
+import colab.common.event.ChannelListener;
 
 final class ChannelManagerPanel extends JPanel {
 
@@ -39,6 +41,13 @@ final class ChannelManagerPanel extends JPanel {
     public ChannelManagerPanel(final ColabClient client) {
 
         this.client = client;
+
+
+        client.addChannelListener(new ChannelListener() {
+            public void handleChannelEvent(ChannelEvent event) {
+                refreshChannels();
+            }
+        });
 
         this.setLayout(new BorderLayout());
 

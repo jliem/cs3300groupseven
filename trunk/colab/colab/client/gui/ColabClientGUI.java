@@ -23,6 +23,8 @@ import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
+import colab.common.event.ChannelEvent;
+import colab.common.event.ChannelListener;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
@@ -464,7 +466,7 @@ class ColabClientGUI extends JFrame {
         menu.add(changeCommItem);
         menu.add(logoutItem);
         menu.add(quitItem);
-        channelPanel = new ChannelManagerPanel(client);
+        //channelPanel = new ChannelManagerPanel(client);
         setActivePanel(channelPanel);
         if (communityName == null) {
             setTitle("");

@@ -13,7 +13,9 @@ import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.exception.AuthenticationException;
+import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.ChannelDoesNotExistException;
+import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.UserAlreadyExistsException;
 import colab.common.exception.UserAlreadyLoggedInException;
@@ -444,20 +446,6 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /**
-     * Retrieves a community from the server's UserManager.
-     * @param communityName the name of the community to retrieve
-     * @return the community
-     * @throws CommunityDoesNotExistException if no community
-     * with that name exists
-     */
-    private Community getCommunity(final CommunityName communityName)
-        throws CommunityDoesNotExistException {
-
-        return server.getCommunity(communityName);
-
-    }
-
-    /**
      * Retrieves all of the communities on the server.
      *
      * @return a collection containing every community
@@ -547,9 +535,14 @@ public final class Connection extends UnicastRemoteObject
         if (!this.state.hasUserLogin()) {
             throw new IllegalStateException("Could not create community"
                     + " because the user was not logged in");
-        } else {
-            server.createCommunity(communityName, password, username);
         }
+
+        try {
+            server.createCommunity(communityName, password, username);
+        } catch (final CommunityAlreadyExistsException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
+
     }
 
     /** {@inheritDoc} */
@@ -561,7 +554,14 @@ public final class Connection extends UnicastRemoteObject
                 + " because the user was not logged in");
         }
 
-        server.createChannel(channelDesc, community.getId());
+        try {
+            server.createChannel(channelDesc, community.getId());
+        } catch (final ChannelAlreadyExistsException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (CommunityDoesNotExistException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
+
     }
 
     /**

@@ -157,13 +157,13 @@ public class ColabServer extends UnicastRemoteObject
      *
      * @param communityName the community name
      * @param password the password used to join the community
-
-     * @throws RemoteException if an rmi error occurs
+     * @throws CommunityAlreadyExistsException if the community already exists
      */
     public final void createCommunity(final CommunityName communityName,
-            final Password password) throws RemoteException {
+            final Password password) throws CommunityAlreadyExistsException {
 
         createCommunity(communityName, password, null);
+
     }
 
     /**
@@ -172,11 +172,11 @@ public class ColabServer extends UnicastRemoteObject
      * @param communityName the community name
      * @param password the password used to join the community
      * @param creator the user who created this community
-     * @throws RemoteException if an rmi error occurs
+     * @throws CommunityAlreadyExistsException if the community already exists
      */
     public final void createCommunity(final CommunityName communityName,
             final Password password, final UserName creator)
-            throws RemoteException {
+            throws CommunityAlreadyExistsException {
 
         Community community = new Community(communityName,
                 password);
@@ -187,47 +187,41 @@ public class ColabServer extends UnicastRemoteObject
             community.addMember(creator);
         }
 
-        // Try to add the community
-        try {
-            userManager.addCommunity(community);
-        } catch (final CommunityAlreadyExistsException e) {
-            throw new RemoteException(e.getMessage(), e);
-        }
+        // Add the community
+        userManager.addCommunity(community);
 
         // If the community was added successfully, add
         // the default lobby
         ChannelDescriptor lobbyDesc = new ChannelDescriptor(
                  new ChannelName("*** Lobby ***"), new ChatChannelType());
 
-        createChannel(lobbyDesc, communityName);
-
+        try {
+            createChannel(lobbyDesc, communityName);
+        } catch (final ChannelAlreadyExistsException e) {
+            System.exit(1); // impossible
+        } catch (final CommunityDoesNotExistException e) {
+            System.exit(1); // impossible
+        }
 
     }
 
     /**
      * Creates a new channel.
      *
-     * TODO: Don't throw RemoteException from here.
-     *
      * @param channelDescription the channel descriptor
      * @param communityName the community in which to create the channel
-     * @throws RemoteException if an rmi error occurs
+     * @throws CommunityDoesNotExistException if the community does not exist
+     * @throws ChannelAlreadyExistsException if the channel already exists
      */
     public final void createChannel(final ChannelDescriptor channelDescription,
-            final CommunityName communityName) throws RemoteException {
+            final CommunityName communityName)
+            throws CommunityDoesNotExistException,
+            ChannelAlreadyExistsException {
 
-        try {
+        // Look up community to see if it exists
+        getCommunity(communityName);
 
-            // Look up community to see if it exists
-            getCommunity(communityName);
-
-            channelManager.addChannel(communityName, channelDescription);
-
-        } catch (final ChannelAlreadyExistsException e) {
-            throw new RemoteException(e.getMessage(), e);
-        } catch (CommunityDoesNotExistException e) {
-            throw new RemoteException(e.getMessage(), e);
-        }
+        channelManager.addChannel(communityName, channelDescription);
 
     }
 

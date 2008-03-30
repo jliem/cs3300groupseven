@@ -9,8 +9,11 @@ import colab.common.identity.Identifiable;
 import colab.common.identity.Identifier;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlSerializable;
 
-public final class DocumentParagraph implements Serializable, Identifiable {
+public final class DocumentParagraph
+        implements Serializable, Identifiable, XmlSerializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -155,23 +158,38 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         }
     }
 
-    protected void fireHeaderChange(int headerLevel) {
+    protected void fireHeaderChange(final int headerLevel) {
         for (ParagraphListener listener : listeners) {
             listener.onHeaderChange(headerLevel);
         }
     }
 
-    protected void fireOnInsert(int offset, String hunk) {
+    protected void fireOnInsert(final int offset, final String hunk) {
         for (ParagraphListener listener : listeners) {
             listener.onInsert(offset, hunk);
         }
     }
 
-    protected void fireOnDelete(int offset, int length) {
+    protected void fireOnDelete(final int offset, final int length) {
         for (ParagraphListener listener : listeners) {
             listener.onDelete(offset, length);
         }
     }
+
+    /** {@inheritDoc} */
+    public XmlNode toXml() {
+        XmlNode node = new XmlNode("Paragraph");
+        node.setAttribute("id", id.toString());
+        node.setAttribute("headerLevel", Integer.toString(headerLevel));
+        node.setContent(contents.toString());
+        return node;
+    }
+
+    public DocumentParagraph(final XmlNode node) {
+        this.id = new ParagraphIdentifier(
+                Integer.parseInt(node.getAttribute("id")));
+    }
+
 }
 
 interface ParagraphListener {

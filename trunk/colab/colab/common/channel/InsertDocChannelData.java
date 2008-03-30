@@ -5,6 +5,7 @@ import java.util.Date;
 import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
 
 public final class InsertDocChannelData extends DocumentChannelData {
 
@@ -48,6 +49,14 @@ public final class InsertDocChannelData extends DocumentChannelData {
 
     public void setParagraph(final DocumentParagraph paragraph) {
         this.paragraph = paragraph;
+    }
+
+    /** {@inheritDoc} */
+    public XmlNode toXml() {
+        XmlNode node = new XmlNode("Insert");
+        node.setAttribute("offset", Integer.toString(offset));
+        node.setContent(differences.toXml());
+        return node;
     }
 
 }

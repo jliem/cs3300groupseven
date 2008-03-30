@@ -524,21 +524,16 @@ public final class Connection extends UnicastRemoteObject
     public void createCommunity(final String communityName,
             final char[] password) throws RemoteException {
 
-        createCommunity(new CommunityName(communityName),
-                new Password(password));
-    }
-
-    /** {@inheritDoc} */
-    public void createCommunity(final CommunityName communityName,
-            final Password password) throws RemoteException {
-
         if (!this.state.hasUserLogin()) {
             throw new IllegalStateException("Could not create community"
                     + " because the user was not logged in");
         }
 
         try {
-            server.createCommunity(communityName, password, username);
+            server.createCommunity(
+                    new CommunityName(communityName),
+                    new Password(password),
+                    username);
         } catch (final CommunityAlreadyExistsException e) {
             throw new RemoteException(e.getMessage(), e);
         }

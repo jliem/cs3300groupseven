@@ -155,14 +155,11 @@ public class NewCommunityDialog extends JDialog {
         }
 
         if (!flagged) {
-            Password password = new Password(
-                    commPass.getPassword());
-            CommunityName name = new CommunityName(
-                    commName.getText());
 
+            char[] password = commPass.getPassword();
+            CommunityName name = new CommunityName(commName.getText());
 
             client.createCommunity(name, password);
-
 
             // Show updated list
             parentPanel.refreshCommunityNames();
@@ -172,6 +169,7 @@ public class NewCommunityDialog extends JDialog {
 
             // Destroy this window
             this.closeWindow();
+
         }
 
     }

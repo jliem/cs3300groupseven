@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -21,6 +20,8 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.channel.type.DocumentChannelType;
+import colab.common.exception.ChannelAlreadyExistsException;
+import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
 
 public class NewChannelDialog extends JDialog {
@@ -143,8 +144,10 @@ public class NewChannelDialog extends JDialog {
 
                 try {
                     client.createChannel(desc);
-                } catch (RemoteException re) {
-                    DebugManager.exception(re);
+                } catch (final ChannelAlreadyExistsException e) {
+                    DebugManager.exception(e);
+                } catch (final ConnectionDroppedException e) {
+                    DebugManager.exception(e);
                 }
 
                 // Show updated list

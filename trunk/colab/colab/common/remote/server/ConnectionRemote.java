@@ -175,17 +175,6 @@ public interface ConnectionRemote extends Remote {
         throws RemoteException;
 
     /**
-     * Creates a new community in this connection.
-     *
-     * @param name the community name
-     * @param password the password used to join the community
-     * @throws RemoteException if an rmi error occurs
-     */
-
-    void createCommunity(CommunityName name, Password password)
-        throws RemoteException;
-
-    /**
      * Creates a new channel in the currently logged-in community.
      *
      * @param channelDesc descriptor of the channel

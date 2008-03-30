@@ -325,7 +325,7 @@ public final class Connection extends UnicastRemoteObject
             } catch (CommunityDoesNotExistException ce) {
                 // This should never happen since we just downloaded
                 // the list of communities
-                ce.printStackTrace();
+                DebugManager.exception(ce);
             }
         }
 

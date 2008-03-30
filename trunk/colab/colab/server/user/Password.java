@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import colab.common.DebugManager;
 import colab.common.util.StringUtils;
 
 /**
@@ -28,7 +29,7 @@ public final class Password implements Serializable {
         try {
             digest = java.security.MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            DebugManager.exception(e);
         }
     }
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlNode;
@@ -59,7 +60,7 @@ public final class UserFile implements UserStore {
         try {
             FileUtils.appendLine(file, str);
         } catch (final IOException ioe) {
-            ioe.printStackTrace();
+            DebugManager.ioException(ioe);
         }
 
     }

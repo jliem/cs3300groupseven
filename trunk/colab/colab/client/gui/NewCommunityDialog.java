@@ -15,6 +15,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import colab.client.ColabClient;
+import colab.common.DebugManager;
 import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
@@ -51,7 +52,32 @@ public class NewCommunityDialog extends JDialog {
 
         createButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                handleCreate(e);
+
+                boolean createOK = false;
+
+                try {
+                    handleCreate(e);
+
+                    createOK = true;
+
+                } catch (NetworkException e1) {
+                    DebugManager.network(e1);
+                } catch (CommunityAlreadyExistsException ce) {
+                    DebugManager.exception(ce);
+                } catch (RemoteException re) {
+                    DebugManager.remote(re);
+                }
+
+                if (!createOK) {
+
+                    // TODO Handle this in parent
+                    JOptionPane.showMessageDialog(NewCommunityDialog.this,
+                            "The connection to the server was lost. Double-check that the server is running.",
+                            "Connection to Server Lost",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    client.exitProgram();
+                }
             }
         });
 
@@ -84,7 +110,8 @@ public class NewCommunityDialog extends JDialog {
                 this, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
-    private void handleCreate(final ActionEvent e) {
+    private void handleCreate(final ActionEvent e) throws NetworkException,
+        RemoteException, CommunityAlreadyExistsException {
 
         if (commName.getText().compareTo("") == 0
                 || commPass.getPassword().length == 0
@@ -113,13 +140,8 @@ public class NewCommunityDialog extends JDialog {
         boolean flagged = false;
 
         Collection<CommunityName> allCommunities;
-        try {
-            allCommunities = client.getAllCommunityNames();
-        } catch (final NetworkException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-            return;
-        }
+
+        allCommunities = client.getAllCommunityNames();
 
         for (final CommunityName name : allCommunities) {
             if (name.toString().equalsIgnoreCase(commName.getText())) {
@@ -136,18 +158,9 @@ public class NewCommunityDialog extends JDialog {
                     commPass.getPassword());
             CommunityName name = new CommunityName(
                     commName.getText());
-            try {
-                client.createCommunity(name, password);
-            } catch (RemoteException re) {
-                // TODO: Handle remote exception
-                re.printStackTrace();
-            } catch (NetworkException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (CommunityAlreadyExistsException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+
+
+            client.createCommunity(name, password);
 
 
             // Show updated list

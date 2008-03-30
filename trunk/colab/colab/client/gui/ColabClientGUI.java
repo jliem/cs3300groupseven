@@ -75,6 +75,11 @@ class ColabClientGUI extends JFrame {
                 "logo.png")).getImage();
         this.setIconImage(icon);
 
+        if (client == null) {
+            throw new IllegalArgumentException("Cannot create ColabClientGUI with " +
+                    "a null ColabClient");
+        }
+
         this.client = client;
 
         this.loginPanel = new LoginPanel(client);
@@ -103,8 +108,8 @@ class ColabClientGUI extends JFrame {
                         closeOpenedChannelWindows();
                         client.logOutUser();
                     } catch (ConnectionDroppedException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                        handleConnectionDropped();
+                        DebugManager.connectionDropped(e1);
                     }
                 }
 
@@ -113,8 +118,8 @@ class ColabClientGUI extends JFrame {
                         closeOpenedChannelWindows();
                         client.logOutCommunity();
                     } catch (ConnectionDroppedException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                        handleConnectionDropped();
+                        DebugManager.connectionDropped(e1);
                     }
                     gotoCommunityLoginView();
                 }
@@ -184,6 +189,23 @@ class ColabClientGUI extends JFrame {
     }
 
     /**
+     * Closes cleanly when connection is dropped.
+     */
+    private void handleConnectionDropped() {
+        JOptionPane.showMessageDialog(activePanel,
+                "The connection to the server was lost. Double-check that the server is running.",
+                "Connection to Server Lost",
+                JOptionPane.ERROR_MESSAGE);
+
+        // On error, return to login screen and pray that the server will
+        // be restarted into a clean state
+
+        // TODO If the server is not restarted, we could get
+        // into an inconsistent state when we try to log back in.
+        this.gotoUserLoginView(true);
+    }
+
+    /**
      * Code that runs when a user attempts to log into
      * a community.
      */
@@ -241,8 +263,8 @@ class ColabClientGUI extends JFrame {
                         gotoUserLoginView(true);
 
                     } catch (ConnectionDroppedException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                        handleConnectionDropped();
+                        DebugManager.connectionDropped(e1);
                     }
 
                 } else if (e.getActionCommand().equalsIgnoreCase(
@@ -250,8 +272,8 @@ class ColabClientGUI extends JFrame {
                     try {
                         client.logOutCommunity();
                     } catch (ConnectionDroppedException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
+                        handleConnectionDropped();
+                        DebugManager.connectionDropped(e1);
                     }
                     gotoCommunityLoginView();
                 }
@@ -361,7 +383,9 @@ class ColabClientGUI extends JFrame {
         // channelWindows should contain only windows that are still open
         for (ClientChannelFrame channelFrame : channelWindows) {
             try {
-                channelFrame.exit();
+                if (channelFrame != null) {
+                    channelFrame.exit();
+                }
             } catch (final Exception e) {
                 // TODO: Handle this?
                 // Probably don't need to worry about it
@@ -473,14 +497,11 @@ class ColabClientGUI extends JFrame {
 
     /**
      * Logs out and returns to the user login view.
+     * @throws ConnectionDroppedException if the connection is dropped
      */
-    public void logout() {
+    public void logout() throws ConnectionDroppedException {
 
-        try {
-            client.logOutUser();
-        } catch (final ConnectionDroppedException e) {
-            e.printStackTrace();
-        }
+        client.logOutUser();
 
         gotoUserLoginView(true);
 
@@ -489,14 +510,11 @@ class ColabClientGUI extends JFrame {
     /**
      * Logs out of the community and moves into the
      * community selection view.
+     * @throws ConnectionDroppedException if the connection is dropped
      */
-    public void switchCommunity() {
+    public void switchCommunity() throws ConnectionDroppedException {
 
-        try {
-            client.logOutCommunity();
-        } catch (final ConnectionDroppedException e) {
-            e.printStackTrace();
-        }
+        client.logOutCommunity();
 
         gotoCommunityLoginView();
 

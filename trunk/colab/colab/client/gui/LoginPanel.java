@@ -20,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import colab.client.ColabClient;
+import colab.common.DebugManager;
 import colab.common.exception.IncorrectPasswordException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UnableToConnectException;
@@ -130,7 +131,7 @@ public final class LoginPanel extends JPanel {
 
                     fireActionPerformed(new ActionEvent(this,
                             ActionEvent.ACTION_FIRST, "Login Failed!"));
-                    e.printStackTrace();
+                    DebugManager.exception(e);
 
                 }
             }

@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
+import colab.common.DebugManager;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.ChannelName;
 
@@ -220,7 +221,7 @@ public class ExportChatFrame extends JFrame {
             }
         } catch(final IOException ex) {
             showErrorBox("Error writing to file.", "File Error");
-            ex.printStackTrace();
+
             return;
         }
 

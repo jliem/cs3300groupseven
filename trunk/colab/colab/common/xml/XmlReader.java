@@ -45,6 +45,9 @@ public final class XmlReader {
         stack.push(new XmlNode(""));
         while (in.hasNextLine()) {
             String line = in.nextLine().trim();
+            if (line.length() == 0) {
+                continue;
+            }
             if (line.charAt(0) != '<') {
                 throw new XmlParseException();
             } else if (line.charAt(1) == '/') {

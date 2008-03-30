@@ -11,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.type.ChannelType;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelAlreadyExistsException;
@@ -41,6 +42,11 @@ public class ColabServer extends UnicastRemoteObject
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
+
+    static {
+        ChannelType.registerType("Chat", new ChatChannelType());
+        ChannelType.registerType("Document", new ChatChannelType());
+    }
 
     /**
      * The manager object that keeps track of users

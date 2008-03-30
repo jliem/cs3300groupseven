@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 
 import colab.client.ClientChannel;
 import colab.client.ColabClient;
@@ -18,6 +19,9 @@ import colab.server.channel.ServerChannel;
  */
 public abstract class ChannelType implements Serializable {
 
+    private static final Map<String, ChannelType> registeredTypes
+        = new HashMap<String, ChannelType>();
+
     /** Human-readable representation. */
     private final String string;
 
@@ -29,6 +33,17 @@ public abstract class ChannelType implements Serializable {
      */
     public ChannelType(final String string) {
         this.string = string;
+    }
+
+    public static ChannelType get(final String string) {
+        return registeredTypes.get(string);
+    }
+
+    public static void registerType(final String string,
+            final ChannelType type) {
+
+        registeredTypes.put(string, type);
+
     }
 
     /**
@@ -70,7 +85,9 @@ public abstract class ChannelType implements Serializable {
     public abstract ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException;
 
+    /** {@inheritDoc} */
     public String toString() {
         return string;
     }
+
 }

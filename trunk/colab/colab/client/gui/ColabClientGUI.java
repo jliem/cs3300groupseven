@@ -83,6 +83,54 @@ class ColabClientGUI extends JFrame {
 
         this.client = client;
 
+
+        channelPanel = new ChannelManagerPanel(client);
+
+        channelPanel.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                ChannelDescriptor cd;
+
+                if (e.getActionCommand()
+                        .equalsIgnoreCase("Logout!")) {
+                    try {
+                        client.logOutUser();
+                        gotoUserLoginView(true);
+
+                    } catch (ConnectionDroppedException e1) {
+                        handleConnectionDropped();
+                        DebugManager.connectionDropped(e1);
+                    }
+
+                } else if (e.getActionCommand().equalsIgnoreCase(
+                        "Change!")) {
+                    try {
+                        client.logOutCommunity();
+                    } catch (ConnectionDroppedException e1) {
+                        handleConnectionDropped();
+                        DebugManager.connectionDropped(e1);
+                    }
+                    gotoCommunityLoginView();
+                }
+
+                while ((cd = channelPanel.dequeueJoinedChannel())
+                        != null) {
+
+                    try {
+                        handleJoinChannel(cd);
+                    } catch (RemoteException re) {
+                        DebugManager.exception(re);
+                    }
+                }
+            }
+        });
+
+        // Listen for channel changes
+        client.addChannelListener(new ChannelListener() {
+            public void handleChannelEvent(ChannelEvent event) {
+                channelPanel.refreshChannels();
+            }
+        });
+
         this.loginPanel = new LoginPanel(client);
         this.loginPanelWrapper = new FixedSizePanel(loginPanel, new Dimension(
                 420, 120));
@@ -251,47 +299,7 @@ class ColabClientGUI extends JFrame {
             return;
         }
 
-        channelPanel = new ChannelManagerPanel(client);
-
-        gotoChannelView();
-
-        channelPanel.addActionListener(new ActionListener() {
-            public void actionPerformed(final ActionEvent e) {
-                ChannelDescriptor cd;
-
-                if (e.getActionCommand()
-                        .equalsIgnoreCase("Logout!")) {
-                    try {
-                        client.logOutUser();
-                        gotoUserLoginView(true);
-
-                    } catch (ConnectionDroppedException e1) {
-                        handleConnectionDropped();
-                        DebugManager.connectionDropped(e1);
-                    }
-
-                } else if (e.getActionCommand().equalsIgnoreCase(
-                        "Change!")) {
-                    try {
-                        client.logOutCommunity();
-                    } catch (ConnectionDroppedException e1) {
-                        handleConnectionDropped();
-                        DebugManager.connectionDropped(e1);
-                    }
-                    gotoCommunityLoginView();
-                }
-
-                while ((cd = channelPanel.dequeueJoinedChannel())
-                        != null) {
-
-                    try {
-                        handleJoinChannel(cd);
-                    } catch (RemoteException re) {
-                        DebugManager.exception(re);
-                    }
-                }
-            }
-        });
+        this.gotoChannelView();
     }
 
     /**
@@ -466,7 +474,9 @@ class ColabClientGUI extends JFrame {
         menu.add(changeCommItem);
         menu.add(logoutItem);
         menu.add(quitItem);
-        //channelPanel = new ChannelManagerPanel(client);
+
+        channelPanel.refreshChannels();
+
         setActivePanel(channelPanel);
         if (communityName == null) {
             setTitle("");

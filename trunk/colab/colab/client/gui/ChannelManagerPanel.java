@@ -42,13 +42,6 @@ final class ChannelManagerPanel extends JPanel {
 
         this.client = client;
 
-
-        client.addChannelListener(new ChannelListener() {
-            public void handleChannelEvent(ChannelEvent event) {
-                refreshChannels();
-            }
-        });
-
         this.setLayout(new BorderLayout());
 
         listeners = new ArrayList<ActionListener>();

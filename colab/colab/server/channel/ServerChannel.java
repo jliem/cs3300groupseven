@@ -1,7 +1,5 @@
 package colab.server.channel;
 
-import java.io.File;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,7 +8,6 @@ import java.util.List;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.type.ChannelType;
 import colab.common.event.UserJoinedEvent;
 import colab.common.event.UserLeftEvent;
 import colab.common.identity.IdentitySet;

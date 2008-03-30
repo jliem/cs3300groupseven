@@ -42,7 +42,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         // TODO: This is ugly, think of a better way
         // that doesn't involve retrieving the panel from the parent
         // Cast the parent's generic version to a ChatPanel for convenience
-        documentPanel = (DocumentPanel)(super.clientChannelPanel);
+        documentPanel = (DocumentPanel) getClientChannelPanel();
 
         this.setPreferredSize(new Dimension(800, 600));
 

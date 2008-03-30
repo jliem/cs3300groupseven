@@ -18,9 +18,9 @@ import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
-import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChatChannelData;
+import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
@@ -52,40 +52,33 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         // TODO: This is ugly, think of a better way
         // that doesn't involve retrieving the panel from the parent
         // Cast the parent's generic version to a ChatPanel for convenience
-        chatPanel = (ChatPanel)(super.clientChannelPanel);
+        chatPanel = (ChatPanel) getClientChannelPanel();
 
         try {
             List<ChannelData> data = client.getLastData(channel.getId(), -1);
             for (final ChannelData d : data) {
                 chatPanel.writeMessage((ChatChannelData) d);
             }
-        } catch (RemoteException ex) {
-            // TODO: handler remote chat exceptions
-            // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
-            // ~ <(^.^)> ~
-            DebugManager.remote(ex);
+        } catch (final ConnectionDroppedException cde) {
+            System.exit(1);
         }
 
         chatPanel.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 ChatChannelData mess;
                 while ((mess = chatPanel.dequeuePendingMessage()) != null) {
+                    clientChannel.addLocal(mess);
                     try {
-                        clientChannel.add(mess);
                         client.add(channel.getId(), mess);
-                    } catch (RemoteException ex) {
-                        // TODO: handler remote chat exceptions
-                        // REALLY CUTESY FLAG FOR CHRIS!!!!!!!!!!!!!!!!!!
-                        // ~ <(^.^)> ~
-                        DebugManager.remote(ex);
+                    } catch (ConnectionDroppedException cde) {
+                        System.exit(1);
                     }
                 }
-
             }
         });
 
         channel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 for (ChatChannelData mess : channel.getNewMessages()) {
                     chatPanel.writeMessage(mess);
                 }
@@ -151,13 +144,19 @@ public final class ChatChannelFrame extends ClientChannelFrame {
     public static void main(final String[] args) throws RemoteException {
 
         ColabClient client = new ColabClient() {
+
+            /** Serialization version number. */
+            public static final long serialVersionUID = 1L;
+
             public Collection<UserName> getActiveUsers(final ChannelName name) {
                 return new ArrayList<UserName>();
             }
+
             public List<ChannelData> getLastData(
                     final ChannelName a, final int c) {
                 return new ArrayList<ChannelData>();
             }
+
         };
 
         ChannelName channelName = new ChannelName("Test Channel");

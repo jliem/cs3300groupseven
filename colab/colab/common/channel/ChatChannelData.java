@@ -1,8 +1,6 @@
 package colab.common.channel;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import colab.common.naming.UserName;

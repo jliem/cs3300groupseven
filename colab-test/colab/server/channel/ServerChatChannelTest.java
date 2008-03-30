@@ -3,9 +3,10 @@ package colab.server.channel;
 import java.rmi.RemoteException;
 
 import junit.framework.TestCase;
-import colab.server.channel.ServerChatChannel;
-import colab.common.naming.*;
-import colab.common.channel.*;
+import colab.common.channel.ChannelDataIdentifier;
+import colab.common.channel.ChatChannelData;
+import colab.common.naming.ChannelName;
+import colab.common.naming.UserName;
 
 public final class ServerChatChannelTest extends TestCase {
 

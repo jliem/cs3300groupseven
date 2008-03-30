@@ -13,12 +13,15 @@ import colab.common.naming.UserName;
  */
 abstract class ClientChannelPanel extends JPanel {
 
+    private final UserName username;
 
-    protected final UserName username;
+    protected UserName getUsername() {
+        return username;
+    }
 
     private ArrayList<ActionListener> listeners;
 
-    public ClientChannelPanel(UserName username) {
+    public ClientChannelPanel(final UserName username) {
 
         this.username = username;
 

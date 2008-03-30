@@ -303,17 +303,28 @@ public class ColabClient extends UnicastRemoteObject
     }
 
     public void add(final ChannelName channelName, final ChannelData data)
-            throws RemoteException {
+            throws ConnectionDroppedException {
 
-        ChannelDataIdentifier id = connection.add(channelName, data);
+        ChannelDataIdentifier id;
+        try {
+           id = connection.add(channelName, data);
+        } catch (final RemoteException remoteException) {
+            DebugManager.remote(remoteException);
+            throw new ConnectionDroppedException(remoteException);
+        }
         data.setId(id);
 
     }
 
     public List<ChannelData> getLastData(final ChannelName channelName,
-            final int count) throws RemoteException {
+            final int count) throws ConnectionDroppedException {
 
-        return connection.getLastData(channelName, count);
+        try {
+            return connection.getLastData(channelName, count);
+        } catch (final RemoteException remoteException) {
+            DebugManager.remote(remoteException);
+            throw new ConnectionDroppedException(remoteException);
+        }
 
     }
 

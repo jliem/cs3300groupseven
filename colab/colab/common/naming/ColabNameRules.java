@@ -38,6 +38,26 @@ public final class ColabNameRules {
     }
 
     /**
+     * Characters than can be used in a channel name.
+     *
+     * Explicitly unallowed characters:
+     *  - Period
+     *  - Any character that is not allowed in a file name
+     */
+    private static final String CHANNEL_CHARACTERS =
+        ALPHANUMERIC + "_-";
+
+    /** The maximum length of a channel name. */
+    private static final int CHANNEL_MAX_LENGTH = 25;
+
+    /**
+     * @return the maximum length of a channel name
+     */
+    public static int getChannelMaxLength() {
+        return CHANNEL_MAX_LENGTH;
+    }
+
+    /**
      * Characters than can be used in a user name.
      *
      * Explicitly unallowed characters:
@@ -77,6 +97,17 @@ public final class ColabNameRules {
     public static boolean isValidUserName(final String str) {
         return str.length() <= USER_MAX_LENGTH
             && StringUtils.containsOnlyCharacters(str, USER_CHARACTERS);
+    }
+
+    /**
+     * Determines whether a string is a valid channel name.
+     *
+     * @param str a potential channel name
+     * @return true if the name is valid, false otherwise
+     */
+    public static boolean isValidChannelName(final String str) {
+        return str.length() <= CHANNEL_MAX_LENGTH
+            && StringUtils.containsOnlyCharacters(str, CHANNEL_CHARACTERS);
     }
 
 }

@@ -1,6 +1,7 @@
 package colab.server.channel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import colab.common.exception.ChannelDoesNotExistException;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
+import colab.common.util.FileUtils;
 import colab.server.ColabServer;
 import colab.server.user.Community;
 
@@ -26,11 +28,17 @@ public final class ChannelManager {
     public static final long serialVersionUID = 1L;
 
     /** Map of all channels, indexed by community name, then channel name. */
-    private final HashMap<CommunityName,
-                    HashMap<ChannelName, ServerChannel>> channelMap;
+    private final Map<CommunityName,
+                    Map<ChannelName, ServerChannel>> channelMap;
 
     /** The server this channel manager is running on. */
     private final ColabServer server;
+
+    /**
+     * The directory in which to store channel data.
+     * Null if not saving any data.
+     */
+    private File baseDirectory;
 
     /**
      * Constructs a new channel manager.
@@ -40,7 +48,7 @@ public final class ChannelManager {
     public ChannelManager(final ColabServer server) {
         this.server = server;
         this.channelMap =
-            new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
+            new HashMap<CommunityName, Map<ChannelName, ServerChannel>>();
     }
 
     /**
@@ -50,9 +58,35 @@ public final class ChannelManager {
      * @param directory the directory used to store channel information.
      */
     public ChannelManager(final ColabServer server, final File directory) {
-        this.server = server;
-        this.channelMap =
-            new HashMap<CommunityName, HashMap<ChannelName, ServerChannel>>();
+        this(server);
+        this.baseDirectory = directory;
+        for (File communityDirectory : directory.listFiles()) {
+            if (communityDirectory.getName().charAt(0) == '.') {
+                continue;
+            }
+            CommunityName communityName =
+                new CommunityName(communityDirectory.getName());
+            Map<ChannelName, ServerChannel> subMap =
+                new HashMap<ChannelName, ServerChannel>();
+            channelMap.put(communityName, subMap);
+            for (File channelFile : communityDirectory.listFiles()) {
+                if (channelFile.getName().charAt(0) == '.') {
+                    continue;
+                }
+                String[] nameBreakdown = channelFile.getName().split("\\.");
+                ChannelName channelName = new ChannelName(nameBreakdown[0]);
+                String channelType = nameBreakdown[1];
+                ChannelDescriptor channelDescriptor =
+                    new ChannelDescriptor(channelName, channelType);
+                try {
+                    this.addChannel(communityName, channelDescriptor);
+                } catch (final CommunityDoesNotExistException e) {
+                    System.exit(1); // should not happen
+                } catch (final ChannelAlreadyExistsException e) {
+                    System.exit(1); // should not happen
+                }
+            }
+        }
     }
 
     /**
@@ -69,13 +103,13 @@ public final class ChannelManager {
         Collection<ServerChannel> result = null;
 
         if (channelMap.containsKey(communityName)) {
+
             // The community is in the map, so find what channels it has
-            HashMap<ChannelName, ServerChannel> subMap =
+            Map<ChannelName, ServerChannel> subMap =
                 channelMap.get(communityName);
 
-            // Does this return null if there are no values,
-            // or just an empty list?
             result = subMap.values();
+
         }
 
         if (result == null) {
@@ -110,10 +144,25 @@ public final class ChannelManager {
         }
 
         // Create the new channel
-        ServerChannel channel = channelDescriptor.createServerChannel();
+        ServerChannel channel;
+        try {
+            File file = null;
+            if (this.baseDirectory != null) {
+                File communityDirectory = FileUtils.getDirectory(baseDirectory,
+                        communityName.getValue());
+                String filename = channelName.getValue()
+                        + "." + channelDescriptor.getType().toString();
+                file = FileUtils.getFile(communityDirectory, filename);
+            }
+            channel = channelDescriptor.createServerChannel(file);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+            return null;
+        }
 
         // Check whether a community entry exists
-        HashMap<ChannelName, ServerChannel> subMap = null;
+        Map<ChannelName, ServerChannel> subMap = null;
 
         if (channelMap.containsKey(communityName)) {
             subMap = channelMap.get(communityName);
@@ -180,7 +229,7 @@ public final class ChannelManager {
             final ChannelName channelName) {
 
         if (channelMap.containsKey(communityName)) {
-            HashMap<ChannelName, ServerChannel> subMap =
+            Map<ChannelName, ServerChannel> subMap =
                 channelMap.get(communityName);
 
             if (subMap != null

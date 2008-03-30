@@ -43,6 +43,12 @@ public final class ChannelDescriptor implements Serializable,
 
     }
 
+    public ChannelDescriptor(final ChannelName channelName, final String type) {
+
+        this(channelName, ChannelType.get(type));
+
+    }
+
     /**
      * Retrieves the name of the channel.
      *
@@ -93,12 +99,19 @@ public final class ChannelDescriptor implements Serializable,
     /**
      * Constructs a new ServerChannel.
      *
+     * If file is null, data will not be stored persistently;
+     * createServerChannel(null) is equivalent to createServerChannel().
+     *
      * @param file a file to use for persistent data storage
      * @return the created channel
      * @throws IOException if a file storage error occurs
      */
     public ServerChannel createServerChannel(final File file)
             throws IOException {
+
+        if (file == null) {
+            return createServerChannel();
+        }
 
         return channelType.createServerChannel(channelName, file);
 

@@ -12,7 +12,6 @@ import colab.common.channel.DocumentDataSet;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
-import colab.server.file.ChannelFile;
 
 /**
  * ServerChatChannel is a type of {@link ServerChannel} which
@@ -36,23 +35,27 @@ public final class ServerDocumentChannel
 
     }
 
-    /**
-     * Constructs a new server-side chat channel.
-     *
-     * @param name the name of the channel
-     * @param file the file to use for data storage
-     * @throws IOException if a file storage error occurs
-     */
+
+    //TODO: implement file stuff for document channels
+    //A BIG DEAL
+    /** Constructs a new server-side chat channel.
+    *
+    * @param name the name of the channel
+    * @param file the file to use for data storage
+    * @throws IOException if a file storage error occurs
+    */
    public ServerDocumentChannel(final ChannelName name, final File file)
            throws IOException {
 
        super(name);
 
-       ChannelFile<DocumentChannelData> channelFile =
-           new ChannelFile<DocumentChannelData>(
-               file, DocumentChannelData.getXmlConstructor());
-       this.revisions = channelFile;
+       throw new IllegalStateException("ServerDocumentChannel's constructor "
+               + "with file parameter is not implemented");
 
+//       ChannelFile<DocumentChannelData> channelFile =
+//           new ChannelFile<DocumentChannelData>(
+//               file, DocumentChannelData.getXmlConstructor());
+//       this.revisions = channelFile;
    }
 
     /** {@inheritDoc} */

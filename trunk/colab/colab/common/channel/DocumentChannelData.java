@@ -32,17 +32,14 @@ public abstract class DocumentChannelData extends ChannelData {
         EDIT
     }
 
-    /** Serialization version number. */
-    public static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1;
 
     private DocumentChannelDataType type;
 
     protected DocumentChannelData(final UserName creator, final Date timestamp,
             final DocumentChannelDataType type) {
-
         super(creator, timestamp);
         this.type = type;
-
     }
 
     public final DocumentChannelDataType getType() {
@@ -50,6 +47,11 @@ public abstract class DocumentChannelData extends ChannelData {
     }
 
     public abstract void apply(final Document doc) throws Exception;
+
+    public XmlNode toXml() {
+        // TODO: Auto-generated method stub
+        return null;
+    }
 
     /**
      * A closure which constructs a ChatChannelData from an xml node.

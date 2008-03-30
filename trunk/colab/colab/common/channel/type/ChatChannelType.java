@@ -20,12 +20,15 @@ import colab.server.channel.ServerChatChannel;
  */
 public class ChatChannelType extends ChannelType {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     public ChatChannelType() {
         super("Chat");
     }
 
     @Override
-    public ClientChannel createClientChannel(ChannelName name)
+    public ClientChannel createClientChannel(final ChannelName name)
             throws RemoteException {
         return new ClientChatChannel(name);
     }

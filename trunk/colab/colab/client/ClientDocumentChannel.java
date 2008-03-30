@@ -18,7 +18,7 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     private int newRevisions = 0;
 
-    protected DocumentDataSet revisions;
+    private DocumentDataSet revisions;
 
     public ClientDocumentChannel(final ChannelName name)
             throws RemoteException {

@@ -18,21 +18,38 @@ public final class ClientChatChannel extends ClientChannel {
 
     private int newMessages = 0;
 
-    protected ChatDataSet messages;
+    private ChatDataSet messages;
 
+    /**
+     * Constructs a new ClientChatChannel.
+     *
+     * @param name the name of the channel
+     * @throws RemoteException if an rmi error occurs
+     */
     public ClientChatChannel(final ChannelName name) throws RemoteException {
         super(name);
         messages = new ChatDataSet();
     }
 
+    /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
+        addLocal(data);
+    }
+
+    /**
+     * Adds data to the channel.
+     *
+     * @param data the piece of data
+     */
+    public void addLocal(final ChannelData data) {
         ChatChannelData chatData = (ChatChannelData) data;
         messages.add(chatData);
         newMessages++;
-        fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST,
-                "Message Added"));
+        fireActionPerformed(new ActionEvent(
+                this, ActionEvent.ACTION_FIRST, "Message Added"));
     }
 
+    /** {@inheritDoc} */
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), new ChatChannelType());
     }

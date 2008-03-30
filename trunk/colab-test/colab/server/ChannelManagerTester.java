@@ -1,13 +1,7 @@
 package colab.server;
 
-import java.util.Collection;
-
 import junit.framework.TestCase;
-import colab.common.channel.ChannelDescriptor;
-import colab.common.exception.ChannelDoesNotExistException;
-import colab.common.naming.ChannelName;
-import colab.common.naming.CommunityName;
-import colab.server.channel.ServerChannel;
+import colab.server.channel.ChannelManager;
 
 /**
  * Test cases for {@link ChannelManager}.

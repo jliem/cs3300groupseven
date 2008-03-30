@@ -20,12 +20,15 @@ import colab.server.channel.ServerDocumentChannel;
  */
 public class DocumentChannelType extends ChannelType {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     public DocumentChannelType() {
         super("Document");
     }
 
     @Override
-    public ClientChannel createClientChannel(ChannelName name)
+    public ClientChannel createClientChannel(final ChannelName name)
             throws RemoteException {
         return new ClientDocumentChannel(name);
     }

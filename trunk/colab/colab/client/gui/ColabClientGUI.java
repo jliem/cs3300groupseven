@@ -19,8 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import colab.client.ClientChannel;
-import colab.client.ClientChatChannel;
-import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
@@ -549,7 +547,7 @@ class ColabClientGUI extends JFrame {
      *
      */
     private class ChannelWindowListener extends WindowAdapter {
-        public void windowClosing(WindowEvent event) {
+        public void windowClosing(final WindowEvent event) {
 
             // Find the source frame
             Object source = event.getSource();

@@ -29,8 +29,6 @@ final class ChatPanel extends ClientChannelPanel {
 
     private LinkedList<ChatChannelData> pendingMessages;
 
-    private Dimension lastSize;
-
     private boolean timestampEnabled = false;
 
     /**
@@ -66,7 +64,7 @@ final class ChatPanel extends ClientChannelPanel {
                             // TODO: should probably be refactored to own method
                             pendingMessages.addLast(
                                     new ChatChannelData(textbox.getText(),
-                                            username));
+                                            getUsername()));
                             textbox.setText("");
                             fireActionPerformed(new ActionEvent(this,
                                     ActionEvent.ACTION_FIRST, "Message Sent"));
@@ -83,8 +81,6 @@ final class ChatPanel extends ClientChannelPanel {
         add(chatScroll, BorderLayout.CENTER);
         add(sendScroll, BorderLayout.SOUTH);
 
-        lastSize = getSize();
-
     }
 
     /**
@@ -92,7 +88,7 @@ final class ChatPanel extends ClientChannelPanel {
      *
      * @param message the message posted by the user
      */
-    public final void writeMessage(final ChatChannelData message) {
+    public void writeMessage(final ChatChannelData message) {
 
         textArea.append(message.getMessageString(timestampEnabled) + "\n");
 

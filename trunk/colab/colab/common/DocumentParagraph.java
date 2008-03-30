@@ -176,14 +176,14 @@ public final class DocumentParagraph implements Serializable, Identifiable {
 
 interface ParagraphListener {
 
-    public void onLock(UserName newOwner);
+    void onLock(UserName newOwner);
 
-    public void onUnlock();
+    void onUnlock();
 
-    public void onHeaderChange(int headerLevel);
+    void onHeaderChange(int headerLevel);
 
-    public void onInsert(int offset, String hunk);
+    void onInsert(int offset, String hunk);
 
-    public void onDelete(int offset, int length);
+    void onDelete(int offset, int length);
 
 }

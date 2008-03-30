@@ -24,17 +24,22 @@ import colab.common.remote.client.ChannelRemote;
 public abstract class ClientChannel extends UnicastRemoteObject
         implements Channel, ChannelRemote {
 
-    /**
-     * The name of the channel.
-     */
+    /** The name of the channel. */
     private final ChannelName name;
 
-    private ArrayList<ActionListener> listeners;
+    private List<ActionListener> listeners;
 
-    protected final Set<UserName> members;
+    /** Active users in the channel. */
+    private final Set<UserName> members;
 
     private List<UserListener> userListeners;
 
+    /**
+     * Constructs a new ClientChannel.
+     *
+     * @param name the name of the channel
+     * @throws RemoteException if an rmi error occurs
+     */
     public ClientChannel(final ChannelName name) throws RemoteException {
 
         this.name = name;
@@ -47,14 +52,28 @@ public abstract class ClientChannel extends UnicastRemoteObject
 
     }
 
+    /**
+     * @return the descriptor for this channel.
+     */
     public abstract ChannelDescriptor getChannelDescriptor();
 
+    /**
+     * Adds a listener who is concerned with user
+     * events (who joined/left the channel).
+     *
+     * @param listener the listener to add
+     */
     public final void addUserListener(final UserListener listener) {
         userListeners.add(listener);
     }
 
-    public final boolean removeUserListener(final UserListener listener) {
-        return userListeners.remove(listener);
+    /**
+     * Removes a user listener.
+     *
+     * @param listener the listener to remove
+     */
+    public final void removeUserListener(final UserListener listener) {
+        userListeners.remove(listener);
     }
 
     /** {@inheritDoc} */
@@ -93,18 +112,33 @@ public abstract class ClientChannel extends UnicastRemoteObject
         return this.members;
     }
 
-    protected final void fireActionPerformed(final ActionEvent e) {
-        for (final ActionListener l : listeners) {
-            l.actionPerformed(e);
+    /**
+     * Notifies all listeners of an event.
+     *
+     * @param event the event being fired
+     */
+    protected final void fireActionPerformed(final ActionEvent event) {
+        for (final ActionListener listener : listeners) {
+            listener.actionPerformed(event);
         }
     }
 
-    public final void addActionListener(final ActionListener l) {
-        listeners.add(l);
+    /**
+     * Adds a generic listener who listens on some kind of event.
+     *
+     * @param listener the listener to add
+     */
+    public final void addActionListener(final ActionListener listener) {
+        listeners.add(listener);
     }
 
-    public final void removeActionListener(final ActionListener l) {
-        listeners.remove(l);
+    /**
+     * Removes a generic listener.
+     *
+     * @param listener the listener to remove
+     */
+    public final void removeActionListener(final ActionListener listener) {
+        listeners.remove(listener);
     }
 
 }

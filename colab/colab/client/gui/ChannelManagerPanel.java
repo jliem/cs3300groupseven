@@ -36,7 +36,7 @@ final class ChannelManagerPanel extends JPanel {
 
     private final ColabClient client;
 
-    public ChannelManagerPanel(ColabClient client) {
+    public ChannelManagerPanel(final ColabClient client) {
 
         this.client = client;
 
@@ -70,13 +70,13 @@ final class ChannelManagerPanel extends JPanel {
         JButton createChannelButton = new JButton("Create New Channel");
 
         joinButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(final ActionEvent ae) {
                 joinSelectedChannel();
             }
         });
 
         createChannelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(final ActionEvent ae) {
                 handleCreateNewChannel();
             }
         });
@@ -125,7 +125,7 @@ final class ChannelManagerPanel extends JPanel {
      *
      * @param desc the channel descriptor
      */
-    public void setSelectedChannel(ChannelDescriptor desc) {
+    public void setSelectedChannel(final ChannelDescriptor desc) {
         channelList.setSelectedValue(desc, true);
     }
 
@@ -154,18 +154,18 @@ final class ChannelManagerPanel extends JPanel {
         listeners.remove(listener);
     }
 
-    public void fireActionPerformed(ActionEvent event) {
+    public void fireActionPerformed(final ActionEvent event) {
         for (final ActionListener listener : listeners) {
             listener.actionPerformed(event);
         }
     }
 
-    public void showInfoDialog(String message, String title) {
+    public void showInfoDialog(final String message, final String title) {
         JOptionPane.showMessageDialog(this,
                 message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void showErrorDialog(String message, String title) {
+    public void showErrorDialog(final String message, final String title) {
         JOptionPane.showMessageDialog(this,
                 message, title, JOptionPane.ERROR_MESSAGE);
     }
@@ -176,4 +176,5 @@ final class ChannelManagerPanel extends JPanel {
         Arrays.sort(arr);
         return arr;
     }
+
 }

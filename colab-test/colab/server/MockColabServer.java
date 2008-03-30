@@ -1,7 +1,5 @@
 package colab.server;
 
-import java.rmi.RemoteException;
-
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
@@ -9,12 +7,23 @@ import colab.server.user.Community;
 import colab.server.user.User;
 import colab.server.user.UserManager;
 
+/**
+ * The Mock Colab Server is a server implementation which comes
+ * with some pre-loaded data and does not save anything to the
+ * filesystem.  It is intended only for demonstration and testing.
+ */
 public final class MockColabServer extends ColabServer {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
+    /**
+     * Constructs a new MockColabServer, populated with some
+     * basic user and community data.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public MockColabServer() throws Exception {
-//
-//        UserManager userManager = getUserManager();
-//        ChannelManager channelManager = getChannelManager();
 
         // Populate a few test users
 
@@ -33,42 +42,18 @@ public final class MockColabServer extends ColabServer {
         // Populate a few test communities
 
         Community groupSeven = new Community("Group Seven", "sevenPass");
-        super.createCommunity(groupSeven.getId(),
-                groupSeven.getPassword());
-        this.addAsMember(johannes.getId(), groupSeven.getId());
-        this.addAsMember(pamela.getId(), groupSeven.getId());
-        this.addAsMember(matthew.getId(), groupSeven.getId());
-        this.addAsMember(chris.getId(), groupSeven.getId());
-
-//        Community groupSeven = new Community("Group Seven", "sevenPass");
-//        groupSeven.getMembers().add(johannes.getId());
-//        groupSeven.getMembers().add(pamela.getId());
-//        groupSeven.getMembers().add(matthew.getId());
-//        groupSeven.getMembers().add(chris.getId());
-//        userManager.addCommunity(groupSeven);
-//
-//
-//        teamAwesome.getMembers().add(chris.getId());
-//        userManager.addCommunity(teamAwesome);
+        createCommunity(groupSeven.getId(), groupSeven.getPassword());
+        addAsMember(johannes.getId(), groupSeven.getId());
+        addAsMember(pamela.getId(), groupSeven.getId());
+        addAsMember(matthew.getId(), groupSeven.getId());
+        addAsMember(chris.getId(), groupSeven.getId());
 
         Community teamAwesome = new Community("Team Awesome", "awesomePass");
-        super.createCommunity(teamAwesome.getId(),
-                teamAwesome.getPassword());
-        this.addAsMember(chris.getId(), teamAwesome.getId());
+        createCommunity(teamAwesome.getId(), teamAwesome.getPassword());
+        addAsMember(chris.getId(), teamAwesome.getId());
 
         Community noMembers = new Community("The No-Members Community", "abcd");
-        super.createCommunity(noMembers.getId(),
-                noMembers.getPassword());
-
-//
-//        // Add a lobby to each community
-//
-//        ChannelDescriptor lobbyDesc = new ChannelDescriptor(
-//                 new ChannelName("Lobby"), ChannelType.CHAT);
-//
-//        channelManager.addChannel(groupSeven.getId(), lobbyDesc);
-//        channelManager.addChannel(teamAwesome.getId(), lobbyDesc);
-//        channelManager.addChannel(noMembers.getId(), lobbyDesc);
+        createCommunity(noMembers.getId(), noMembers.getPassword());
 
     }
 
@@ -76,12 +61,12 @@ public final class MockColabServer extends ColabServer {
      * Adds a user as a member of a community.
      *
      * @param userName the user
-     * @param communityName the community
-     * @throws RemoteException if an rmi error occurs
+     * @param communityName the name of the community
+     * @throws CommunityDoesNotExistException if no such community exists
      */
     public void addAsMember(final UserName userName,
             final CommunityName communityName)
-            throws RemoteException, CommunityDoesNotExistException {
+            throws CommunityDoesNotExistException {
 
         // Look up the community
         UserManager userManager = super.getUserManager();
@@ -92,6 +77,13 @@ public final class MockColabServer extends ColabServer {
 
     }
 
+    /**
+     * Entry point which launches a mock colab server application.
+     *
+     * @param args one argument is accepted:
+     *             [optional] an integer specifying which port to run on
+     * @throws Exception if any exception is thrown
+     */
     public static void main(final String[] args) throws Exception {
 
 

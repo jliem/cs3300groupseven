@@ -19,7 +19,7 @@ import colab.server.channel.ServerChannel;
  */
 public abstract class ChannelType implements Serializable {
 
-    private static final Map<String, ChannelType> registeredTypes
+    private static final Map<String, ChannelType> REGISTERED_TYPES
         = new HashMap<String, ChannelType>();
 
     /** Human-readable representation. */
@@ -35,14 +35,24 @@ public abstract class ChannelType implements Serializable {
         this.string = string;
     }
 
+    /**
+     * @param string the name of a channel type
+     * @return a channel type associate with the given name
+     */
     public static ChannelType get(final String string) {
-        return registeredTypes.get(string);
+        return REGISTERED_TYPES.get(string);
     }
 
+    /**
+     * Associates a channel type with a name.
+     *
+     * @param string the name of the channel type
+     * @param type an instance of the channel type
+     */
     public static void registerType(final String string,
             final ChannelType type) {
 
-        registeredTypes.put(string, type);
+        REGISTERED_TYPES.put(string, type);
 
     }
 
@@ -51,6 +61,7 @@ public abstract class ChannelType implements Serializable {
      *
      * @param name the channel name
      * @return a reference to a new ClientChannel subclass object
+     * @throws RemoteException if an rmi error occurs
      */
     public abstract ClientChannel createClientChannel(
             final ChannelName name) throws RemoteException;
@@ -62,6 +73,7 @@ public abstract class ChannelType implements Serializable {
      * @param channel the channel
      * @param currentUser the user currently logged in
      * @return a reference to a new ClientChannelFrame subclass object
+     * @throws RemoteException if an rmi error occurs
      */
     public abstract ClientChannelFrame createClientChannelFrame(
             final ColabClient client, final ClientChannel channel,
@@ -81,6 +93,7 @@ public abstract class ChannelType implements Serializable {
      * @param name the name of the channel
      * @param file the file to create this channel from
      * @return a reference to a new ServerChannel subclass object
+     * @throws IOException if a file I/O error occurs
      */
     public abstract ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException;
@@ -88,6 +101,25 @@ public abstract class ChannelType implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         return string;
+    }
+
+    /** {@inheritDoc} */
+    public final boolean equals(final Object object) {
+
+        if (!(object instanceof ChannelType)) {
+            return false;
+        }
+
+        ChannelType ct = (ChannelType) object;
+        return toString().equals(ct.toString());
+
+    }
+
+    /** {@inheritDoc} */
+    public final int hashCode() {
+
+        return toString().hashCode();
+
     }
 
 }

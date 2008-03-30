@@ -73,7 +73,7 @@ class ChooseCommunityPanel extends JPanel {
         showAllCommCheckBox = new JCheckBox("Show all communities");
         showAllCommCheckBox.setSelected(showAllCommunities);
         showAllCommCheckBox.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent arg0) {
+            public void itemStateChanged(final ItemEvent arg0) {
                 // Toggle flag to show all communities
                 showAllCommunities = showAllCommCheckBox.isSelected();
                 refreshCommunityNames();

@@ -145,15 +145,22 @@ public final class ChannelDescriptor implements Serializable,
     @Override
     public boolean equals(final Object o) {
 
-        if (o instanceof ChannelDescriptor) {
-            ChannelDescriptor cd = (ChannelDescriptor)o;
-//            return (channelName.equals(cd.getName()) &&
-//                    channelType.equals(cd.getType()));
-
-            return (channelName.equals(cd.getName()));
+        if (!(o instanceof ChannelDescriptor)) {
+            return false;
         }
 
-        return false;
+        ChannelDescriptor cd = (ChannelDescriptor) o;
+        boolean nameEquals = channelName.equals(cd.getName());
+        boolean typeEquals = channelType.equals(cd.getType());
+        return (nameEquals && typeEquals);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+
+        return channelName.hashCode() + channelType.hashCode();
 
     }
 

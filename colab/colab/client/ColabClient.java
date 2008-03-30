@@ -334,7 +334,7 @@ public class ColabClient extends UnicastRemoteObject
     /**
      * Logs out of a community.
      *
-     * @throws ConnectionDroppedException
+     * @throws ConnectionDroppedException if the connection is lost
      */
     public void logOutCommunity() throws ConnectionDroppedException {
 

@@ -76,8 +76,9 @@ class ColabClientGUI extends JFrame {
         this.setIconImage(icon);
 
         if (client == null) {
-            throw new IllegalArgumentException("Cannot create ColabClientGUI with " +
-                    "a null ColabClient");
+            throw new IllegalArgumentException(
+                    "Cannot create ColabClientGUI with "
+                    + "a null ColabClient");
         }
 
         this.client = client;
@@ -182,7 +183,8 @@ class ColabClientGUI extends JFrame {
      * Display window for creating a new community.
      */
     private void handleNewCommunity() {
-        NewCommunityDialog frame = new NewCommunityDialog(communityPanel, client);
+        NewCommunityDialog frame = new NewCommunityDialog(
+                communityPanel, client);
         frame.pack();
         frame.setVisible(true);
         frame.setPreferredSize(new Dimension(400, 800));
@@ -193,7 +195,8 @@ class ColabClientGUI extends JFrame {
      */
     private void handleConnectionDropped() {
         JOptionPane.showMessageDialog(activePanel,
-                "The connection to the server was lost. Double-check that the server is running.",
+                "The connection to the server was lost. "
+                + "Double-check that the server is running.",
                 "Connection to Server Lost",
                 JOptionPane.ERROR_MESSAGE);
 
@@ -297,7 +300,7 @@ class ColabClientGUI extends JFrame {
      * @param desc channel descriptor
      * @throws RemoteException if an rmi error occurs
      */
-    private void handleJoinChannel(ChannelDescriptor desc)
+    private void handleJoinChannel(final ChannelDescriptor desc)
         throws RemoteException {
 
         // Check whether we've already joined this channel
@@ -325,10 +328,10 @@ class ColabClientGUI extends JFrame {
      * Helper method to create a new ClientChannelFrame.
      * @param desc the descriptor
      * @return a new ClientChannelFrame
-     * @throws RemoteException if an RMI error occurs
+     * @throws RemoteException if an rmi error occurs
      */
-    private ClientChannelFrame createNewChannelFrame(ChannelDescriptor desc)
-        throws RemoteException {
+    private ClientChannelFrame createNewChannelFrame(
+            final ChannelDescriptor desc) throws RemoteException {
 
         ClientChannel channel = client.joinChannel(desc);
 
@@ -346,7 +349,7 @@ class ColabClientGUI extends JFrame {
      * @return a reference to the open ClientChannelFrame, or null
      * if none existed.
      */
-    private ClientChannelFrame getChannelFrame(ChannelDescriptor desc) {
+    private ClientChannelFrame getChannelFrame(final ChannelDescriptor desc) {
 
         for (ClientChannelFrame f : channelWindows) {
             if (f.getChannel().getChannelDescriptor().equals(desc)) {

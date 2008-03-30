@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.naming.UserName;
-import colab.common.xml.XmlNode;
 
 /**
  * A log for paragaph inserts, deletes, and header changes.
@@ -177,12 +176,6 @@ public final class DocumentParagraphDiff {
     public DocumentParagraphDiff copy() {
         List<Applicable> list = new ArrayList<Applicable>(changes);
         return new DocumentParagraphDiff(list);
-    }
-
-    public List<XmlNode> toXml() {
-        List<XmlNode> nodes = new ArrayList<XmlNode>();
-        // TODO: not implemented
-        return nodes;
     }
 
 }

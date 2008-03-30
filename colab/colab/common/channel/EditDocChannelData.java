@@ -7,7 +7,6 @@ import colab.common.DocumentParagraph;
 import colab.common.DocumentParagraphDiff;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
-import colab.common.xml.XmlNode;
 
 public final class EditDocChannelData extends DocumentChannelData {
 
@@ -16,20 +15,20 @@ public final class EditDocChannelData extends DocumentChannelData {
 
     private DocumentParagraphDiff differences;
 
-    private ParagraphIdentifier paragraphId;
+    private ParagraphIdentifier paragraphID;
 
-    public EditDocChannelData(final ParagraphIdentifier paragraphId,
+    public EditDocChannelData(final ParagraphIdentifier paragraphID,
             final DocumentParagraphDiff differences,
             final UserName creator, final Date timestamp) {
         super(creator, timestamp, DocumentChannelDataType.EDIT);
 
         this.differences = differences;
-        this.paragraphId = paragraphId;
+        this.paragraphID = paragraphID;
     }
 
     @Override
     public void apply(final Document doc) throws Exception {
-        doc.applyEdit(paragraphId, differences);
+        doc.applyEdit(paragraphID, differences);
     }
 
     public void apply(final DocumentParagraph para) {
@@ -44,20 +43,12 @@ public final class EditDocChannelData extends DocumentChannelData {
         this.differences = differences;
     }
 
-    public ParagraphIdentifier getParagraphId() {
-        return paragraphId;
+    public ParagraphIdentifier getParagraphID() {
+        return paragraphID;
     }
 
-    public void setParagraphID(final ParagraphIdentifier paragraphId) {
-        this.paragraphId = paragraphId;
-    }
-
-    /** {@inheritDoc} */
-    public XmlNode toXml() {
-        XmlNode node = new XmlNode("Edit");
-        node.setAttribute("paragraphId", paragraphId.toString());
-        node.setContent(differences.toXml());
-        return node;
+    public void setParagraphID(final ParagraphIdentifier paragraphID) {
+        this.paragraphID = paragraphID;
     }
 
 }

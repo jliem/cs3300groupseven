@@ -14,6 +14,8 @@ import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
+import colab.common.event.ChannelEvent;
+import colab.common.event.ChannelListener;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.CommunityAlreadyExistsException;
@@ -44,6 +46,8 @@ public class ColabClient extends UnicastRemoteObject
     /** All channels in the community to which the client is connected. */
     private final Vector<ChannelDescriptor> channels;
 
+    private Vector<ChannelListener> channelListeners;
+
     private ConnectionRemote connection;
 
     private ConnectionState connectionState;
@@ -56,6 +60,8 @@ public class ColabClient extends UnicastRemoteObject
     public ColabClient() throws RemoteException {
         //listeners = new ArrayList<ActionListener>();
         channels = new Vector<ChannelDescriptor>();
+        channelListeners = new Vector<ChannelListener>();
+
         connectionState = ConnectionState.DISCONNECTED;
     }
 
@@ -291,9 +297,27 @@ public class ColabClient extends UnicastRemoteObject
     /** {@inheritDoc} */
     public void channelAdded(final ChannelDescriptor channelDescriptor)
             throws RemoteException {
-
         channels.add(channelDescriptor);
 
+        this.fireChannelEvent(new ChannelEvent(channelDescriptor));
+
+    }
+
+    /**
+     * Adds a channel listener.
+     * @param listener the listener
+     */
+    public void addChannelListener(ChannelListener listener) {
+        channelListeners.add(listener);
+    }
+
+    /**
+     * Removes a channel listener.
+     * @param listener the listener
+     * @return true if the remove was successful, false otherwise
+     */
+    public boolean removeChannelListener(ChannelListener listener) {
+        return channelListeners.remove(listener);
     }
 
     /**
@@ -501,6 +525,16 @@ public class ColabClient extends UnicastRemoteObject
 
         System.exit(0);
 
+    }
+
+    /**
+     * Notifies all channel listeners of a new event.
+     * @param channelEvent the channel event
+     */
+    private void fireChannelEvent(ChannelEvent channelEvent) {
+        for (ChannelListener cl : channelListeners) {
+            cl.handleChannelEvent(channelEvent);
+        }
     }
 
     /**

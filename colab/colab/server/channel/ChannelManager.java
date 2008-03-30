@@ -82,8 +82,10 @@ public final class ChannelManager {
                 try {
                     this.addChannel(communityName, channelDescriptor);
                 } catch (final CommunityDoesNotExistException e) {
+                    DebugManager.shouldNotHappen(e);
                     System.exit(1); // should not happen
                 } catch (final ChannelAlreadyExistsException e) {
+                    DebugManager.shouldNotHappen(e);
                     System.exit(1); // should not happen
                 }
             }

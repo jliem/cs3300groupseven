@@ -219,8 +219,9 @@ public class ExportChatFrame extends JFrame {
                 // TODO: total export, requires some server-side
                 // fixes (retrieving old history)
             }
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             showErrorBox("Error writing to file.", "File Error");
+            DebugManager.ioException(ex);
 
             return;
         }

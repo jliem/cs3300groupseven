@@ -10,6 +10,7 @@ import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
+import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.channel.type.ChatChannelType;
@@ -198,8 +199,10 @@ public class ColabServer extends UnicastRemoteObject
         try {
             createChannel(lobbyDesc, communityName);
         } catch (final ChannelAlreadyExistsException e) {
+            DebugManager.shouldNotHappen(e);
             System.exit(1); // impossible
         } catch (final CommunityDoesNotExistException e) {
+            DebugManager.shouldNotHappen(e);
             System.exit(1); // impossible
         }
 

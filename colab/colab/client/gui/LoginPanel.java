@@ -94,7 +94,7 @@ public final class LoginPanel extends JPanel {
                                     "Failed to create user");
                             return;
                         } catch (final NetworkException networkException) {
-                            // <(^.^)>
+                            DebugManager.network(networkException);
                             return;
                         }
 
@@ -126,6 +126,8 @@ public final class LoginPanel extends JPanel {
                     showErrorBox("Unable to connect to the server. "
                           + "Double-check that the server is running.",
                           "Unable to Connect");
+
+                    DebugManager.unableToConnect(ue);
 
                 } catch (final Exception e) {
 

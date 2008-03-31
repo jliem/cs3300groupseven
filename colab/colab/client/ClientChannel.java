@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import colab.common.channel.Channel;
+import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.event.UserJoinedEvent;
 import colab.common.event.UserLeftEvent;
@@ -21,7 +23,7 @@ import colab.common.remote.client.ChannelRemote;
 /**
  * A client-side remote Channel object.
  */
-public abstract class ClientChannel extends UnicastRemoteObject
+public abstract class ClientChannel<T extends ChannelData> extends UnicastRemoteObject
         implements Channel, ChannelRemote {
 
     /** The name of the channel. */
@@ -56,6 +58,13 @@ public abstract class ClientChannel extends UnicastRemoteObject
      * @return the descriptor for this channel.
      */
     public abstract ChannelDescriptor getChannelDescriptor();
+
+    /**
+     * Get the channel data.
+     *
+     * @return the channel data
+     */
+    public abstract ChannelDataSet<T> getChannelData();
 
     /**
      * Adds a listener who is concerned with user

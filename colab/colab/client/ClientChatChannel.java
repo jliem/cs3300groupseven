@@ -14,7 +14,7 @@ import colab.common.naming.ChannelName;
 /**
  * A ClientChannel that handles chat-protocol channels.
  */
-public final class ClientChatChannel extends ClientChannel {
+public final class ClientChatChannel extends ClientChannel<ChatChannelData> {
 
     /** Serialization version number. */
     private static final long serialVersionUID = 1L;
@@ -32,6 +32,10 @@ public final class ClientChatChannel extends ClientChannel {
     public ClientChatChannel(final ChannelName name) throws RemoteException {
         super(name);
         messages = new ChatDataSet();
+    }
+
+    public ChatDataSet getChannelData() {
+        return messages;
     }
 
     /** {@inheritDoc} */

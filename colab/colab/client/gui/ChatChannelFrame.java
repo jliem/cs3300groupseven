@@ -18,6 +18,8 @@ import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
+import colab.client.gui.revisions.RevisionChatPanel;
+import colab.client.gui.revisions.RevisionFrame;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChatChannelData;
 import colab.common.exception.ConnectionDroppedException;
@@ -91,6 +93,19 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         optionsMenu = new JMenu("Options");
         optionsMenu.setMnemonic(KeyEvent.VK_O);
 
+        JMenuItem revisionMode = new JMenuItem("Revision mode");
+        revisionMode.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent arg0) {
+                RevisionFrame frame = new RevisionFrame(
+                        new RevisionChatPanel(channel, channel.getChannelData()));
+
+                frame.pack();
+                frame.setVisible(true);
+            }
+
+        });
+
         export = new JMenuItem("Export Chat");
         export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
                 ActionEvent.ALT_MASK));
@@ -128,6 +143,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         });
         timestampCheckBox.setSelected(false);
 
+        fileMenu.add(revisionMode);
         fileMenu.add(export);
         fileMenu.add(exit);
 

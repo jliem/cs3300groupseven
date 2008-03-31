@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
+import colab.common.Document;
 import colab.common.naming.UserName;
 
 /**
@@ -35,7 +36,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         // TODO: This is ugly, think of a better way
         // that doesn't involve passing a new panel to the parent
-        super(client, clientChannel, new DocumentPanel(name));
+        super(client, clientChannel, new DocumentPanel(name, clientChannel.getCurrentDocument()));
 
         channel = clientChannel;
 

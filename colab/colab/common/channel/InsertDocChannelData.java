@@ -4,6 +4,7 @@ import java.util.Date;
 
 import colab.common.Document;
 import colab.common.DocumentParagraph;
+import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
 
 public final class InsertDocChannelData extends DocumentChannelData {
@@ -27,9 +28,9 @@ public final class InsertDocChannelData extends DocumentChannelData {
     }
 
     @Override
-    public void apply(final Document doc) throws Exception {
+    public void apply(final Document doc) throws NotApplicableException {
         if(offset > doc.getNumberParagraphs()) {
-            throw new Exception("Offset outside of document limits.");
+            throw new NotApplicableException("Offset outside of document limits.");
         }
         doc.insert(offset, paragraph);
     }

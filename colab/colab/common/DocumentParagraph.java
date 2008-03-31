@@ -31,8 +31,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         this("", 0, null, new Date());
     }
 
-    public DocumentParagraph(final String cont, final int head,
-            final UserName creator, final Date date) {
+    public DocumentParagraph(final String cont, final int head, final UserName creator, final Date date) {
         headerLevel = head;
         contents = new StringBuffer(cont);
         lockHolder = creator;
@@ -41,8 +40,8 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         listeners = new ArrayList<ParagraphListener>();
     }
 
-    protected DocumentParagraph(final String cont, final int head,
-            final UserName creator, final DocumentParagraphDiff diff) {
+    protected DocumentParagraph(final String cont, final int head, final UserName creator,
+            final DocumentParagraphDiff diff) {
         this(cont, head, creator, new Date());
         differences = diff;
     }
@@ -106,10 +105,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     public DocumentParagraph copy() {
         // TODO: username copy method, otherwise copy could change lock in this
         // instantiation
-        return new DocumentParagraph(
-                this.contents.toString(),
-                this.headerLevel,
-                this.lockHolder,
+        return new DocumentParagraph(this.contents.toString(), this.headerLevel, this.lockHolder,
                 this.differences.copy());
     }
 
@@ -172,18 +168,4 @@ public final class DocumentParagraph implements Serializable, Identifiable {
             listener.onDelete(offset, length);
         }
     }
-}
-
-interface ParagraphListener {
-
-    void onLock(UserName newOwner);
-
-    void onUnlock();
-
-    void onHeaderChange(int headerLevel);
-
-    void onInsert(int offset, String hunk);
-
-    void onDelete(int offset, int length);
-
 }

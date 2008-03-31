@@ -122,14 +122,3 @@ public final class Document {
 
 }
 
-interface InsertParagraphListener {
-
-    void onInsert(int offset, DocumentParagraph paragraph);
-
-}
-
-interface DeleteParagraphListener {
-
-    void onDelete(ParagraphIdentifier id);
-
-}

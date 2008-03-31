@@ -35,15 +35,20 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         headerLevel = head;
         contents = new StringBuffer(cont);
         lockHolder = creator;
-        id = new ParagraphIdentifier(creator, date);
         differences = new DocumentParagraphDiff();
         listeners = new ArrayList<ParagraphListener>();
     }
 
-    protected DocumentParagraph(final String cont, final int head, final UserName creator,
-            final DocumentParagraphDiff diff) {
+    public void setId(final ParagraphIdentifier id) {
+        this.id = id;
+    }
+
+    protected DocumentParagraph(final String cont, final int head,
+            final UserName creator, final DocumentParagraphDiff diff) {
+
         this(cont, head, creator, new Date());
         differences = diff;
+
     }
 
     public void insert(final int offset, final String hunk) {
@@ -168,4 +173,5 @@ public final class DocumentParagraph implements Serializable, Identifiable {
             listener.onDelete(offset, length);
         }
     }
+
 }

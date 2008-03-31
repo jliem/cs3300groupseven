@@ -5,22 +5,12 @@ import java.util.Date;
 import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
-import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlNode;
 import colab.server.channel.ServerDocumentChannel;
 
-
 /**
- * @author matt The ChannelData flavor for document editing functionality.
- *
- * This class, through its subclasses, represents a few more architectural
- * problems we've got on our plate- namely, that of wide-spread synchronization.
- * The most obvious issue is this- if I want to insert a paragraph, and I do
- * that using an index, how do I know that my index is correct? We can't get
- * locks on the whole paragraph structure... I've temporarily solved the most
- * obvious aspects of the problem with {@link ParagraphIdentifier}, but that
- * really doesn't cut it, since it has its own drawbacks.
+ * The ChannelData flavor for document editing functionality.
  *
  * @see ServerDocumentChannel
  * @see DocumentParagraph
@@ -33,18 +23,23 @@ public abstract class DocumentChannelData extends ChannelData {
         EDIT
     }
 
-    public static final long serialVersionUID = 1;
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private DocumentChannelDataType type;
 
     protected DocumentChannelData(final UserName creator, final Date timestamp,
             final DocumentChannelDataType type) {
+
         super(creator, timestamp);
         this.type = type;
+
     }
 
     public final DocumentChannelDataType getType() {
+
         return type;
+
     }
 
     public abstract void apply(final Document doc) throws NotApplicableException;

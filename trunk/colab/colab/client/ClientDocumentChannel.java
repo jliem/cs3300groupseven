@@ -74,8 +74,11 @@ public final class ClientDocumentChannel extends ClientChannel {
         return list;
     }
 
+    public Document getCurrentDocument() {
+        return currentDocument;
+    }
+
     public DocumentDataSet getChannelData() {
         return revisions;
     }
-
 }

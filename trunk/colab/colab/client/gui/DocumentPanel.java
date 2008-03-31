@@ -1,11 +1,13 @@
 package colab.client.gui;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.swing.BoxLayout;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -41,20 +43,28 @@ final class DocumentPanel extends ClientChannelPanel {
      *
      * @param name the name of the currently logged-in user
      */
-    public DocumentPanel(final UserName name) {
+    public DocumentPanel(final UserName name, final Document document) {
         super(name);
 
         mainPanel = new JPanel();
         scroll = new JScrollPane(mainPanel);
         
+        setLayout(new BorderLayout());
+        
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
        
-        document = new Document();
+        this.document = document;
         editors = new ArrayList<ParagraphEditor>();
+        
+        //TODO: add pagragraph editors already present
         
         document.addInsertParagraphListener(new InsertParagraphListener() {
             public void onInsert(int offset, DocumentParagraph paragraph) {
-                editors.add(offset, new ParagraphEditor(paragraph, name));
+                ParagraphEditor editor = new ParagraphEditor(paragraph, name);
+                
+                //TODO: listeners
+                
+                editors.add(offset, editor);
             }
         });
         
@@ -72,11 +82,27 @@ final class DocumentPanel extends ClientChannelPanel {
             } 
         });
         
-        add(scroll);
+        add(scroll, BorderLayout.CENTER);
     }
 
     public void apply(DocumentChannelData dcd) throws NotApplicableException {
         dcd.apply(document);
+    }
+    
+    public static void main(String args[]) {
+        JFrame f = new JFrame();
+        f.setPreferredSize(new Dimension(320, 300));
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Document doc = new Document();
+        
+        DocumentPanel p = new DocumentPanel(new UserName("Matt"), doc);
+        f.setContentPane(p);
+        
+        f.pack();
+        f.setVisible(true);
+        
+        doc.insert(0, new DocumentParagraph("Our first paragraph.", 0, new UserName("Matt"), new Date()));
     }
 }
 
@@ -86,22 +112,18 @@ class ParagraphEditor extends JTextPane {
     
     private final UserName user;
     
+    private static final long serialVersionUID = 1;
+    
     public ParagraphEditor(final DocumentParagraph paragraph, final UserName user) {
         this.paragraph = paragraph;
         this.user = user;
         
-        addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent arg0) {
-                super.focusGained(arg0);
-                
-            }
-        });
+        
         
         paragraph.addParagraphListener(new ParagraphListener() {
            public void onHeaderChange(int headerLevel) {
             // TODO Auto-generated method stub
-            
+               
            }
            public void onDelete(int offset, int length) {
                StringBuffer buffer = new StringBuffer(getText());
@@ -118,12 +140,19 @@ class ParagraphEditor extends JTextPane {
                setText(buffer.toString());
            }
            public void onLock(UserName newOwner) {
-            // TODO Auto-generated method stub
-            
+               if(newOwner.equals(user)) {
+                
+                   
+               }
+               else {
+                   
+                   setEditable(false);
+               }
            }
            public void onUnlock() {
             // TODO Auto-generated method stub
-            
+               
+               setEditable(true);
            }
         });
     }

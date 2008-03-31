@@ -1,1 +1,1 @@
-java -cp colab/bin;colab-test/bin colab.server.ColabServer 9040
+java -cp colab/bin;colab-test/bin colab.server.ColabServer data 9040

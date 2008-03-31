@@ -22,6 +22,7 @@ import colab.common.exception.UserAlreadyLoggedInException;
 import colab.common.identity.Identifiable;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
+import colab.common.naming.InvalidChannelNameException;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
 import colab.common.remote.client.ColabClientRemote;
@@ -543,6 +544,12 @@ public final class Connection extends UnicastRemoteObject
     /** {@inheritDoc} */
     public void createChannel(final ChannelDescriptor channelDesc)
         throws RemoteException {
+
+        try {
+            new ChannelName(channelDesc.getName().getValue());
+        } catch (final InvalidChannelNameException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
 
         if (!this.state.hasCommunityLogin()) {
             throw new IllegalStateException("Could not create channel"

@@ -194,7 +194,7 @@ public class ColabServer extends UnicastRemoteObject
         // If the community was added successfully, add
         // the default lobby
         ChannelDescriptor lobbyDesc = new ChannelDescriptor(
-                 new ChannelName("*** Lobby ***"), new ChatChannelType());
+                 new ChannelName("___ Lobby ___"), new ChatChannelType());
 
         try {
             createChannel(lobbyDesc, communityName);

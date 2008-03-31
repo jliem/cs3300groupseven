@@ -42,6 +42,8 @@ public class NewChannelDialog extends JDialog {
         this.client = client;
         this.parentPanel = parentPanel;
 
+        this.setLocationRelativeTo(parentPanel);
+
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new GridLayout(2, 2));
 

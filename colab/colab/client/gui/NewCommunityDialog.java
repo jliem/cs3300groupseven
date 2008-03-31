@@ -42,6 +42,8 @@ public class NewCommunityDialog extends JDialog {
         this.client = client;
         this.parentPanel = parentPanel;
 
+        this.setLocationRelativeTo(parentPanel);
+
         JButton createButton = new JButton("Create Community");
         commName = new JTextField("");
         commPass = new JPasswordField("");

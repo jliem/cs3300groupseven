@@ -4,6 +4,7 @@ import java.util.Date;
 
 import colab.common.Document;
 import colab.common.DocumentParagraph;
+import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlNode;
@@ -46,7 +47,7 @@ public abstract class DocumentChannelData extends ChannelData {
         return type;
     }
 
-    public abstract void apply(final Document doc) throws Exception;
+    public abstract void apply(final Document doc) throws NotApplicableException;
 
     public XmlNode toXml() {
         // TODO: Auto-generated method stub

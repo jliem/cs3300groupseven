@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.Document;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.DocumentChannelData;
 import colab.common.channel.DocumentDataSet;
 import colab.common.channel.type.DocumentChannelType;
+import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
@@ -23,6 +25,8 @@ public final class ServerDocumentChannel
     /** The channel data. */
     private ChannelDataStore<DocumentChannelData> revisions;
 
+    private Document currentDocument;
+    
     /**
      * Constructs a new server-side chat channel.
      *
@@ -32,9 +36,8 @@ public final class ServerDocumentChannel
 
         super(name);
         this.revisions = new DocumentDataSet();
-
+        this.currentDocument = new Document();
     }
-
 
     //TODO: implement file stuff for document channels
     //A BIG DEAL
@@ -62,6 +65,22 @@ public final class ServerDocumentChannel
     @Override
     public void add(final DocumentChannelData data) {
 
+        Document test = currentDocument.copy();
+        //check for channel data validity
+        try {
+            data.apply(test);
+        }
+        catch(NotApplicableException ex){ 
+            return;
+        }
+        
+        try {
+            data.apply(currentDocument);
+        }
+        catch(NotApplicableException e) { 
+            //guaranteed to never happen =)
+        }
+        
         // Store the data, and assign it an identifier.
         data.setId(null);
         revisions.add(data);

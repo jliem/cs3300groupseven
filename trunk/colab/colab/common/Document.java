@@ -3,6 +3,7 @@ package colab.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 
 public final class Document {
@@ -48,9 +49,24 @@ public final class Document {
             fireOnDelete(id);
         }
     }
+    
+    /**
+     * Returns a deep copy of this Document object.
+     * Guarantees that this != this.copy(), and this.get(i)
+     * != this.copy().get(i).
+     * @return a new Document object
+     */
+    public Document copy() { 
+        Document cop = new Document();
+        for(DocumentParagraph p : paragraphs) {
+            cop.insert(cop.getNumberParagraphs(), p.copy());
+        }
+        
+        return cop;
+    }
 
-    public void applyEdit(final ParagraphIdentifier id,
-            final DocumentParagraphDiff diff) {
+    public void applyEdit (final ParagraphIdentifier id,
+            final DocumentParagraphDiff diff) throws NotApplicableException {
 
         for (DocumentParagraph par : paragraphs) {
             if (id.equals(par.getId())) {

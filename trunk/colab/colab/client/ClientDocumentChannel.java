@@ -4,11 +4,13 @@ import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import colab.common.Document;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.DocumentChannelData;
 import colab.common.channel.DocumentDataSet;
 import colab.common.channel.type.DocumentChannelType;
+import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;
 
 public final class ClientDocumentChannel extends ClientChannel {
@@ -20,22 +22,28 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     private DocumentDataSet revisions;
 
-    public ClientDocumentChannel(final ChannelName name)
-            throws RemoteException {
+    private Document currentDocument;
+
+    public ClientDocumentChannel(final ChannelName name) throws RemoteException {
 
         super(name);
         revisions = new DocumentDataSet();
-
+        currentDocument = new Document();
     }
 
     /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
 
-        revisions.add((DocumentChannelData)data);
+        revisions.add((DocumentChannelData) data);
         newRevisions++;
 
-        ActionEvent event = new ActionEvent(
-                this, ActionEvent.ACTION_FIRST, "Message Added");
+        try {
+            ((DocumentChannelData) data).apply(currentDocument);
+        } catch (NotApplicableException e) {
+            // guaranteed to never happen =)
+        }
+
+        ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_FIRST, "Message Added");
         fireActionPerformed(event);
 
     }
@@ -60,7 +68,7 @@ public final class ClientDocumentChannel extends ClientChannel {
     }
 
     public List<DocumentChannelData> getNewMessages() {
-        List <DocumentChannelData> list = revisions.getLast(newRevisions);
+        List<DocumentChannelData> list = revisions.getLast(newRevisions);
         newRevisions = 0;
         return list;
     }

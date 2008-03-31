@@ -11,6 +11,7 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.DocumentChannelData;
 import colab.common.channel.DocumentDataSet;
 import colab.common.channel.type.DocumentChannelType;
+import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;
 
 public final class ClientDocumentChannel extends ClientChannel {

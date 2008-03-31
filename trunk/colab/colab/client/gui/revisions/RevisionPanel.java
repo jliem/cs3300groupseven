@@ -1,7 +1,7 @@
 package colab.client.gui.revisions;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
@@ -44,9 +44,9 @@ public abstract class RevisionPanel extends JPanel {
             }
         });
 
-        this.setLayout(new BorderLayout());
-        add(revisionScroll, BorderLayout.NORTH);
-        add(display, BorderLayout.CENTER);
+        this.setLayout(new GridLayout(2, 1));
+        add(revisionScroll);
+        add(display);
     }
 
     protected Component addToDisplay(Component c) {

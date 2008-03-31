@@ -3,6 +3,7 @@ package colab.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
 
 /**
@@ -13,7 +14,7 @@ import colab.common.naming.UserName;
 public final class DocumentParagraphDiff {
 
     private interface Applicable {
-        void apply(DocumentParagraph para) throws Exception;
+        void apply(DocumentParagraph para) throws NotApplicableException;
     }
 
     private class Insert implements Applicable {
@@ -28,9 +29,9 @@ public final class DocumentParagraphDiff {
             this.offset = offset;
         }
 
-        public void apply(final DocumentParagraph para) throws Exception {
+        public void apply(final DocumentParagraph para) throws NotApplicableException {
             if (offset >= para.getLength()) {
-                throw new Exception("Insert outside of range of paragraph.");
+                throw new NotApplicableException("Insert outside of range of paragraph.");
             } else {
                 para.insert(offset, contents);
             }
@@ -58,9 +59,9 @@ public final class DocumentParagraphDiff {
             this.length = length;
         }
 
-        public void apply(final DocumentParagraph para) throws Exception {
+        public void apply(final DocumentParagraph para) throws NotApplicableException {
             if (offset + length > para.getLength()) {
-                throw new Exception("Delete not in range of paragraph.");
+                throw new NotApplicableException("Delete not in range of paragraph.");
             } else {
                 para.delete(offset, length);
             }
@@ -85,8 +86,10 @@ public final class DocumentParagraphDiff {
             this.headerLevel = headerLevel;
         }
 
-        public void apply(final DocumentParagraph para) throws Exception {
-            para.setHeaderLevel(headerLevel);
+        public void apply(final DocumentParagraph para) throws NotApplicableException {
+            if(headerLevel<0) {
+                para.setHeaderLevel(headerLevel);
+            }
         }
 
         public int getHeaderLevel() {
@@ -104,7 +107,7 @@ public final class DocumentParagraphDiff {
             this.newOwner = newOwner;
         }
 
-        public void apply(final DocumentParagraph para) throws Exception {
+        public void apply(final DocumentParagraph para) {
             para.lock(newOwner);
         }
 
@@ -123,7 +126,7 @@ public final class DocumentParagraphDiff {
         this.changes = changes;
     }
 
-    public DocumentParagraph apply(final DocumentParagraph paragraph) {
+    public DocumentParagraph apply(final DocumentParagraph paragraph) throws NotApplicableException {
 
         DocumentParagraph ret = paragraph.copy();
 
@@ -131,9 +134,7 @@ public final class DocumentParagraphDiff {
             try {
                 change.apply(ret);
             } catch (Exception e) {
-                DebugManager.exception(e);
-                ret = null;
-                break;
+                throw new NotApplicableException(e);
             }
         }
 

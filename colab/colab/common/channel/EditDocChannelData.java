@@ -5,6 +5,7 @@ import java.util.Date;
 import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.DocumentParagraphDiff;
+import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
@@ -27,11 +28,14 @@ public final class EditDocChannelData extends DocumentChannelData {
     }
 
     @Override
-    public void apply(final Document doc) throws Exception {
+    public void apply(final Document doc) throws NotApplicableException {
         doc.applyEdit(paragraphID, differences);
     }
 
-    public void apply(final DocumentParagraph para) {
+    public void apply(final DocumentParagraph para) throws NotApplicableException {
+        if(!getCreator().equals(para.getLockHolder())) {
+            throw new NotApplicableException("Editor does not hold lock.");
+        }
         differences.apply(para);
     }
 

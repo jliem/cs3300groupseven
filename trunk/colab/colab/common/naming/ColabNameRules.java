@@ -45,7 +45,7 @@ public final class ColabNameRules {
      *  - Any character that is not allowed in a file name
      */
     private static final String CHANNEL_CHARACTERS =
-        ALPHANUMERIC + "_-";
+        ALPHANUMERIC + "_- ";
 
     /** The maximum length of a channel name. */
     private static final int CHANNEL_MAX_LENGTH = 25;
@@ -109,5 +109,4 @@ public final class ColabNameRules {
         return str.length() <= CHANNEL_MAX_LENGTH
             && StringUtils.containsOnlyCharacters(str, CHANNEL_CHARACTERS);
     }
-
 }

@@ -25,5 +25,8 @@ public final class ChannelName extends StringIdentifier {
      */
     public ChannelName(final String name) {
         super(name);
+        if (!ColabNameRules.isValidChannelName(name)) {
+            throw new InvalidChannelNameException();
+        }
     }
 }

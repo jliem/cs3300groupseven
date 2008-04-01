@@ -57,7 +57,7 @@ final class DocumentPanel extends ClientChannelPanel {
         super(name);
 
         mainPanel = new JPanel();
-        scroll = new JScrollPane(mainPanel);
+        scroll = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         listeners = new ArrayList<ChannelPanelListener>();
         
@@ -148,6 +148,25 @@ final class DocumentPanel extends ClientChannelPanel {
                     }
                     arg0.consume();
                 }
+                else if(arg0.getKeyCode() == KeyEvent.VK_TAB){
+                    if(arg0.isShiftDown()) {
+                        editor.append("\t");
+                    }
+                    else {
+                        shiftFocus();
+                    }
+                    arg0.consume();
+                }
+                else if(arg0.getKeyCode()== KeyEvent.VK_UP && arg0.isControlDown()) {
+                    DocumentParagraph p = editor.getParagraph();
+                    p.setHeaderLevel(p.getHeaderLevel()+1);
+                    //TODO: - signal insert to server, still not sure how this will work- maybe some unified object that i can send all this too, will use timers to send updates?
+                }
+                else if(arg0.getKeyCode() == KeyEvent.VK_DOWN && arg0.isControlDown()) {
+                    DocumentParagraph p = editor.getParagraph();
+                    p.setHeaderLevel(p.getHeaderLevel()-1);
+                    //TODO: signal server
+                }
             } 
         });
         
@@ -166,8 +185,12 @@ final class DocumentPanel extends ClientChannelPanel {
         insertParagraphEditor(i, paragraph);
     }
     
+    private void shiftFocus() {
+        //TODO: add "circularly linked list" focus traversal with editors
+    }
+    
     public static void main(String args[]) {
-        JFrame f = new JFrame();
+        JFrame f = new JFrame("Document Editor");
         f.setPreferredSize(new Dimension(320, 300));
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -179,7 +202,7 @@ final class DocumentPanel extends ClientChannelPanel {
         f.pack();
         f.setVisible(true);
         
-        doc.insert(0, new DocumentParagraph("Our first paragraph.", 0, new UserName("Matt"), new ParagraphIdentifier("Test"), new Date()));
+        doc.insert(0, new DocumentParagraph("Our first paragraph!", 4, new UserName("Matt"), new ParagraphIdentifier("Test"), new Date()));
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.lock(new UserName("Matt"));
         
@@ -194,6 +217,9 @@ final class DocumentPanel extends ClientChannelPanel {
         doc.get(0).lock(new UserName("Alex"));
         
         doc.insert(1, new DocumentParagraph("Our next paragraph.", 0, new UserName("Matt"), new ParagraphIdentifier("Test2"), new Date()));
+        DocumentParagraph last = new DocumentParagraph("This paragraph currently has no lock.", 1, new UserName("Chris"), new ParagraphIdentifier("Newest"), new Date());
+        doc.insert(2, last);
+        last.unlock();
     }
 }
 
@@ -219,12 +245,15 @@ class ParagraphEditor extends JTextArea {
         this.defaultBG = getBackground();
         
         setText(this.paragraph.getContents());
-        setHeader(this.paragraph.getHeaderLevel());
-        setLock(this.paragraph.getLockHolder());
+        showHeader(this.paragraph.getHeaderLevel());
+        showLock(this.paragraph.getLockHolder());
+        
+        setLineWrap(true);
+        setWrapStyleWord(true);
         
         paragraph.addParagraphListener(new ParagraphListener() {
            public void onHeaderChange(int headerLevel) {
-               setHeader(headerLevel);
+               showHeader(headerLevel);
            }
            public void onDelete(int offset, int length) {
                setText(paragraph.getContents());
@@ -233,15 +262,15 @@ class ParagraphEditor extends JTextArea {
                setText(paragraph.getContents());
            }
            public void onLock(UserName newOwner) {
-               setLock(newOwner);
+               showLock(newOwner);
            }
            public void onUnlock() {
-               unlock();
+               showUnlock();
            }
         });
     }
     
-    private void setHeader(int headerLevel) {
+    public void showHeader(int headerLevel) {
         int newSize = defaultFont.getSize();
         int style = Font.PLAIN;
         
@@ -256,11 +285,13 @@ class ParagraphEditor extends JTextArea {
         setFont(new Font(defaultFont.getFontName(), style, newSize));
     }
     
-    private void setLock(final UserName newOwner) {
+    public void showLock(final UserName newOwner) {
         if(newOwner != null) {
             if(newOwner.equals(ParagraphEditor.this.user)) {
                 setBackground(Color.BLUE);
                 setForeground(Color.WHITE);
+                
+                setToolTipText("");
                 
                 requestFocus();
             }
@@ -268,15 +299,17 @@ class ParagraphEditor extends JTextArea {
                 setBackground(Color.GREEN);
                 setForeground(Color.BLACK);
                 
+                setToolTipText(newOwner.toString() + " is editing...");
+                
                 setEditable(false);
             }
         }
         else {
-            unlock();
+            showUnlock();
         }
     }
     
-    private void unlock() {
+    public void showUnlock() {
         setForeground(defaultFG);
         setBackground(defaultBG);
         

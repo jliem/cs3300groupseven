@@ -1,9 +1,19 @@
 package colab.common.util;
 
+import java.util.Random;
+
 /**
  * A utility class containing methods for dealing with strings.
  */
 public final class StringUtils {
+
+    private static final Random RANDOM = new Random();
+
+    /** All letters and numbers. */
+    private static final String ALPHANUMERIC =
+          "0123456789"
+        + "abcdefghijklmnopqrstuvwxyz"
+        + "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     /** Hidden default constructor. */
     private StringUtils() {
@@ -88,6 +98,30 @@ public final class StringUtils {
             out.append(str);
         }
         return out.toString();
+    }
+
+    public static char random(final String charSet) {
+        int index = RANDOM.nextInt(charSet.length());
+        char character = charSet.charAt(index);
+        return character;
+    }
+
+    public static String random(final int count, final String charSet) {
+
+        StringBuilder str = new StringBuilder();
+
+        for (int i = 0; i < count; i++) {
+            str.append(random(charSet));
+        }
+
+        return str.toString();
+
+    }
+
+    public static String randomAlphanumeric(final int count) {
+
+        return random(count, ALPHANUMERIC);
+
     }
 
 }

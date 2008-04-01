@@ -45,15 +45,10 @@ public final class ChatChannelFrame extends ClientChannelFrame {
     public ChatChannelFrame(final ColabClient client,
             final ClientChatChannel clientChannel, final UserName name) {
 
-        // TODO: This is ugly, think of a better way
-        // that doesn't involve passing a new panel to the parent
         super(client, clientChannel, new ChatPanel(name));
 
         channel = clientChannel;
 
-        // TODO: This is ugly, think of a better way
-        // that doesn't involve retrieving the panel from the parent
-        // Cast the parent's generic version to a ChatPanel for convenience
         chatPanel = (ChatPanel) getClientChannelPanel();
 
         try {
@@ -96,9 +91,10 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         JMenuItem revisionMode = new JMenuItem("Revision mode");
         revisionMode.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 RevisionFrame frame = new RevisionFrame(
-                        new RevisionChatPanel(channel, channel.getChannelData()));
+                        new RevisionChatPanel(channel,
+                                channel.getChannelData()));
 
                 frame.pack();
                 frame.setVisible(true);

@@ -1,11 +1,13 @@
 package colab.common.channel;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
 import colab.server.channel.ServerDocumentChannel;
 
@@ -42,47 +44,41 @@ public abstract class DocumentChannelData extends ChannelData {
 
     }
 
-    public abstract void apply(final Document doc) throws NotApplicableException;
+    public abstract void apply(final Document doc)
+            throws NotApplicableException;
 
     public XmlNode toXml() {
-        // TODO: Auto-generated method stub
-        return null;
+
+        return null; // TODO:
+
     }
 
     /**
-     * A closure which constructs a ChatChannelData from an xml node.
+     * @return an XmlConstructor for DocumentChannelData.
      */
-    /*private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
-            new XmlConstructor<DocumentChannelData>() {
-        public ChatChannelData fromXml(final XmlNode node)
-                throws ParseException {
-            ChannelDataIdentifier id = new ChannelDataIdentifier(
-                    Integer.parseInt(node.getAttribute("id")));
-            Date time = DATE_FORMAT.parse(node.getAttribute("time"));
-            UserName creator = new UserName(node.getAttribute("creator"));
-            String message = node.getBody();
-            return new ChatChannelData(id, message, creator, time);
-        }
-    };
-*/
-    /**
-     * @return an XmlConstructor for ChatChannelData.
-     */
-    /*public static XmlConstructor<ChatChannelData> getXmlConstructor() {
+    public static XmlConstructor<DocumentChannelData> getXmlConstructor() {
         return XML_CONSTRUCTOR;
-    }*/
+    }
 
-   /*private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
+   private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
            new XmlConstructor<DocumentChannelData>() {
+
        public DocumentChannelData fromXml(final XmlNode node)
                throws ParseException {
+
+           /*
            ChannelDataIdentifier id = new ChannelDataIdentifier(
                    Integer.parseInt(node.getAttribute("id")));
            Date time = DATE_FORMAT.parse(node.getAttribute("time"));
            UserName creator = new UserName(node.getAttribute("creator"));
            String message = node.getBody();
            return new DocumentChannelData(id, message, creator, time);
+           */
+
+           return null; // TODO:
+
        }
-   };*/
+
+   };
 
 }

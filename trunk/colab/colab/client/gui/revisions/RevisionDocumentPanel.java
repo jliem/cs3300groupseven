@@ -7,17 +7,17 @@ import colab.common.DebugManager;
 import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.channel.ChannelDataIdentifier;
+import colab.common.channel.ChannelDataSet;
 import colab.common.channel.DocumentChannelData;
-import colab.common.channel.DocumentDataSet;
 
 public class RevisionDocumentPanel extends RevisionPanel {
 
-    private final DocumentDataSet dataSet;
+    private final ChannelDataSet<DocumentChannelData> dataSet;
 
     private final JTextArea text;
 
-    public RevisionDocumentPanel(ClientChannel channel,
-            final DocumentDataSet dataSet) {
+    public RevisionDocumentPanel(final ClientChannel channel,
+            final ChannelDataSet<DocumentChannelData> dataSet) {
 
         super(channel);
 
@@ -30,7 +30,7 @@ public class RevisionDocumentPanel extends RevisionPanel {
         addToDisplay(text);
     }
 
-    protected void showRevision(ChannelDataIdentifier dataID) {
+    protected void showRevision(final ChannelDataIdentifier dataID) {
 
         Document doc = new Document();
 

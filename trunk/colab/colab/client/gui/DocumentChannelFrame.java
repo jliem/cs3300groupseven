@@ -1,15 +1,20 @@
 package colab.client.gui;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.JFrame;
 
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
-import colab.common.Document;
+import colab.common.channel.ChannelData;
+import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
 /**
  * Frame for a document channel.
- *
  */
 public class DocumentChannelFrame extends ClientChannelFrame {
 
@@ -34,14 +39,11 @@ public class DocumentChannelFrame extends ClientChannelFrame {
     public DocumentChannelFrame(final ColabClient client,
             final ClientDocumentChannel clientChannel, final UserName name) {
 
-        // TODO: This is ugly, think of a better way
-        // that doesn't involve passing a new panel to the parent
-        super(client, clientChannel, new DocumentPanel(name, clientChannel.getCurrentDocument()));
+        super(client, clientChannel,
+                new DocumentPanel(name, clientChannel.getCurrentDocument()));
 
         channel = clientChannel;
 
-        // TODO: This is ugly, think of a better way
-        // that doesn't involve retrieving the panel from the parent
         // Cast the parent's generic version to a ChatPanel for convenience
         documentPanel = (DocumentPanel) getClientChannelPanel();
 
@@ -49,5 +51,33 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
     }
 
+    public static void main(final String[] args) throws Exception {
+
+        ColabClient client = new ColabClient() {
+
+            /** Serialization version number. */
+            public static final long serialVersionUID = 1L;
+
+            public Collection<UserName> getActiveUsers(final ChannelName name) {
+                return new ArrayList<UserName>();
+            }
+
+            public List<ChannelData> getLastData(
+                    final ChannelName a, final int c) {
+                return new ArrayList<ChannelData>();
+            }
+
+        };
+
+        ChannelName channelName = new ChannelName("Test Channel");
+        ClientDocumentChannel channel = new ClientDocumentChannel(channelName);
+        UserName username = new UserName("test");
+
+        DocumentChannelFrame docFrame =
+            new DocumentChannelFrame(client, channel, username);
+        docFrame.pack();
+        docFrame.setVisible(true);
+
+    }
 
 }

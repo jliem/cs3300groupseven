@@ -53,10 +53,12 @@ public final class DocumentParagraph implements Serializable, Identifiable {
 
     public void insert(final int offset, final String hunk) {
         contents.insert(offset, hunk);
+        fireOnInsert(offset, hunk);
     }
 
     public void delete(final int offset, final int length) {
         contents.delete(offset, length);
+        fireOnDelete(offset, length);
     }
 
     public int getLength() {
@@ -73,10 +75,12 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         } else {
             this.headerLevel = 0;
         }
+        fireHeaderChange(headerLevel);
     }
 
     public void unlock() {
         lockHolder = null;
+        fireOnUnlock();
     }
 
     public boolean isLocked() {
@@ -91,9 +95,15 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     public boolean lock(final UserName holder) {
         boolean ret = false;
 
+        if(holder==null) {
+            unlock();
+            return;
+        }
+        
         if (lockHolder == null) {
             lockHolder = holder;
             ret = true;
+            fireOnLock(holder);
         }
 
         return ret;

@@ -13,11 +13,20 @@ public interface ChannelDataStore<T extends ChannelData> {
      * Adds one data item to the store.
      *
      * If the data object's identifier is null,
-     * a new identifier will be assigned to it.
+     * a new identifier will be assigned to it
+     * (equivalent to addAndAssignId()).
      *
      * @param data the data item to add
      */
     void add(T data);
+
+    /**
+     * Adds one data item to the store, and
+     * assign a new identifier to it.
+     *
+     * @param data the data item to add
+     */
+    void addAndAssignId(T data);
 
     /**
      * Returns the last n data items.  If the count is negative or

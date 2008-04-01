@@ -11,7 +11,7 @@ import java.util.TreeSet;
  *
  * @param <T> the type of channel data in the set
  */
-public class ChannelDataSet<T extends ChannelData>
+public final class ChannelDataSet<T extends ChannelData>
         implements ChannelDataStore<T> {
 
     /**
@@ -41,7 +41,7 @@ public class ChannelDataSet<T extends ChannelData>
     }
 
     /** {@inheritDoc} */
-    public final void add(final T data) {
+    public void add(final T data) {
 
         if (data.getId() == null) {
             // data's identifier is null, so assign it one
@@ -57,6 +57,12 @@ public class ChannelDataSet<T extends ChannelData>
 
         dataSet.add(data);
 
+    }
+
+    /** {@inheritDoc} */
+    public void addAndAssignId(final T data) {
+        data.setId(null);
+        add(data);
     }
 
     /** {@inheritDoc} */

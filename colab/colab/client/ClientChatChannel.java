@@ -5,9 +5,9 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChatChannelData;
-import colab.common.channel.ChatDataSet;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.naming.ChannelName;
 
@@ -21,7 +21,7 @@ public final class ClientChatChannel extends ClientChannel<ChatChannelData> {
 
     private int newMessages = 0;
 
-    private ChatDataSet messages;
+    private ChannelDataSet<ChatChannelData> messages;
 
     /**
      * Constructs a new ClientChatChannel.
@@ -31,10 +31,10 @@ public final class ClientChatChannel extends ClientChannel<ChatChannelData> {
      */
     public ClientChatChannel(final ChannelName name) throws RemoteException {
         super(name);
-        messages = new ChatDataSet();
+        messages = new ChannelDataSet<ChatChannelData>();
     }
 
-    public ChatDataSet getChannelData() {
+    public ChannelDataSet<ChatChannelData> getChannelData() {
         return messages;
     }
 

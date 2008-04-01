@@ -4,17 +4,21 @@ import javax.swing.JTextArea;
 
 import colab.client.ClientChannel;
 import colab.common.channel.ChannelDataIdentifier;
+import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChatChannelData;
-import colab.common.channel.ChatDataSet;
 
 public class RevisionChatPanel extends RevisionPanel {
 
-    private final ChatDataSet dataSet;
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
+    private final ChannelDataSet<ChatChannelData> dataSet;
 
     private final JTextArea text;
 
-    public RevisionChatPanel(ClientChannel channel,
-            final ChatDataSet dataSet) {
+    public RevisionChatPanel(final ClientChannel channel,
+            final ChannelDataSet<ChatChannelData> dataSet) {
+
         super(channel);
 
         this.dataSet = dataSet;
@@ -26,17 +30,20 @@ public class RevisionChatPanel extends RevisionPanel {
         addToDisplay(text);
 
         super.repaint();
+
     }
 
-    protected void showRevision(ChannelDataIdentifier dataID) {
+    protected void showRevision(final ChannelDataIdentifier dataID) {
 
         text.setText("");
         for (ChatChannelData data : dataSet.getAll()) {
 
             text.setText(text.getText() + data.getMessageString(true) + "\n");
 
-            if (data.getId().equals(dataID))
+            if (data.getId().equals(dataID)) {
                 break;
+            }
+
         }
     }
 

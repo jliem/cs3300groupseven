@@ -74,6 +74,12 @@ public final class ChannelFile<T extends ChannelData>
     }
 
     /** {@inheritDoc} */
+    public void addAndAssignId(final T data) {
+        data.setId(null);
+        add(data);
+    }
+
+    /** {@inheritDoc} */
     public List<T> getAll() {
 
         return dataCollection.getAll();

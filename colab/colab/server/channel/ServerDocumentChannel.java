@@ -6,14 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.Document;
+import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.DocumentChannelData;
-import colab.common.channel.DocumentDataSet;
+import colab.common.channel.InsertDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
+import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
+import colab.common.util.StringUtils;
+import colab.server.file.ChannelFile;
 
 /**
  * ServerChatChannel is a type of {@link ServerChannel} which
@@ -23,67 +27,70 @@ public final class ServerDocumentChannel
         extends ServerChannel<DocumentChannelData> {
 
     /** The channel data. */
-    private ChannelDataStore<DocumentChannelData> revisions;
+    private final ChannelDataStore<DocumentChannelData> revisions;
 
-    private Document currentDocument;
-    
+    private final Document currentDocument;
+
     /**
-     * Constructs a new server-side chat channel.
+     * Constructs a new server-side document channel.
      *
      * @param name the name of the channel
      */
     public ServerDocumentChannel(final ChannelName name) {
 
         super(name);
-        this.revisions = new DocumentDataSet();
+
+        this.revisions = new ChannelDataSet<DocumentChannelData>();
+
         this.currentDocument = new Document();
+
     }
 
-    //TODO: implement file stuff for document channels
-    //A BIG DEAL
-    /** Constructs a new server-side chat channel.
-    *
-    * @param name the name of the channel
-    * @param file the file to use for data storage
-    * @throws IOException if a file storage error occurs
-    */
-   public ServerDocumentChannel(final ChannelName name, final File file)
-           throws IOException {
+    /**
+     * Constructs a new server-side document channel.
+     *
+     * @param name the name of the channel
+     * @param file the file to use for data storage
+     * @throws IOException if a file storage error occurs
+     */
+    public ServerDocumentChannel(final ChannelName name, final File file)
+            throws IOException {
 
-       super(name);
+        super(name);
 
-       throw new IllegalStateException("ServerDocumentChannel's constructor "
-               + "with file parameter is not implemented");
+        ChannelFile<DocumentChannelData> channelFile =
+            new ChannelFile<DocumentChannelData>(
+                file, DocumentChannelData.getXmlConstructor());
+        this.revisions = channelFile;
 
-//       ChannelFile<DocumentChannelData> channelFile =
-//           new ChannelFile<DocumentChannelData>(
-//               file, DocumentChannelData.getXmlConstructor());
-//       this.revisions = channelFile;
-   }
+        this.currentDocument = new Document();
+
+    }
 
     /** {@inheritDoc} */
     @Override
     public void add(final DocumentChannelData data) {
 
-        Document test = currentDocument.copy();
-        //check for channel data validity
         try {
-            data.apply(test);
-        }
-        catch(NotApplicableException ex){ 
+
+            // Check for channel data validity
+            data.apply(currentDocument.copy());
+
+            data.apply(currentDocument);
+
+        } catch (final NotApplicableException ex) {
             return;
         }
-        
-        try {
-            data.apply(currentDocument);
+
+        // If this is an insert, give the paragraph a random id
+        if (data instanceof InsertDocChannelData) {
+            String rand = StringUtils.randomAlphanumeric(16);
+            ParagraphIdentifier paragraphId = new ParagraphIdentifier(rand);
+            ((InsertDocChannelData) data).getParagraph().setId(paragraphId);
         }
-        catch(NotApplicableException e) { 
-            //guaranteed to never happen =)
-        }
-        
-        // Store the data, and assign it an identifier.
-        data.setId(null);
-        revisions.add(data);
+
+        // Store the data, and assign it an identifier
+        revisions.addAndAssignId(data);
 
         // Forward it to all clients, regardless of the creator
         sendToAllRegardless(data);

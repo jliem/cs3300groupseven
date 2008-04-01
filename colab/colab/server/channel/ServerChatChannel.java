@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.ChatChannelData;
-import colab.common.channel.ChatDataSet;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.naming.ChannelName;
 import colab.server.file.ChannelFile;
@@ -33,7 +33,7 @@ public final class ServerChatChannel extends ServerChannel<ChatChannelData> {
     public ServerChatChannel(final ChannelName name) {
 
         super(name);
-        this.messages = new ChatDataSet();
+        this.messages = new ChannelDataSet<ChatChannelData>();
 
     }
 
@@ -59,8 +59,7 @@ public final class ServerChatChannel extends ServerChannel<ChatChannelData> {
     public void add(final ChatChannelData data) {
 
         // Store the data, and assign it an identifier.
-        data.setId(null);
-        messages.add(data);
+        messages.addAndAssignId(data);
 
         // Forward it to clients
         sendToAll(data);

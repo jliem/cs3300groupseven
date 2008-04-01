@@ -172,6 +172,13 @@ public final class FileUtils {
 
     }
 
+    public static void clear(final File file) throws IOException {
+
+        FileWriter writer = new FileWriter(file, false);
+        writer.flush();
+
+    }
+
     /**
      * Reads all of the content from a file and returns
      * it as a single string.

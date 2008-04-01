@@ -11,6 +11,8 @@ import colab.common.naming.CommunityName;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlReader;
+import colab.server.event.CommunityEvent;
+import colab.server.event.CommunityListener;
 import colab.server.user.Community;
 import colab.server.user.CommunitySet;
 import colab.server.user.CommunityStore;
@@ -19,7 +21,7 @@ import colab.server.user.CommunityStore;
  * A collection of files, backed by a {@link CommunitySet}
  * and maintained persistently by a text file.
  */
-public final class CommunityFile implements CommunityStore {
+public final class CommunityFile implements CommunityStore, CommunityListener {
 
     /** The backing community set. */
     private final CommunitySet communities;
@@ -41,13 +43,14 @@ public final class CommunityFile implements CommunityStore {
         final XmlReader xmlReader = new XmlReader(file);
         final List<XmlNode> xml = xmlReader.getXml();
         for (final XmlNode node : xml) {
-            Community data;
+            Community community;
             try {
-                data = Community.fromXml(node);
+                community = Community.fromXml(node);
             } catch (final ParseException e) {
                 throw new IOException(e.getMessage());
             }
-            communities.add(data);
+            community.addListener(this);
+            communities.add(community);
         }
 
     }
@@ -61,6 +64,7 @@ public final class CommunityFile implements CommunityStore {
     public void add(final Community community) {
 
         communities.add(community);
+        community.addListener(this);
 
         String str = community.toXml().serialize();
         try {
@@ -74,6 +78,28 @@ public final class CommunityFile implements CommunityStore {
     /** {@inheritDoc} */
     public Community get(final CommunityName name) {
         return communities.get(name);
+    }
+
+    private void update() {
+
+        try {
+            FileUtils.clear(file);
+            for (Community community : communities.getAll()) {
+                String str = community.toXml().serialize();
+                FileUtils.appendLine(file, str);
+            }
+        } catch (final IOException ioe) {
+            DebugManager.ioException(ioe);
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    public void handleEvent(final CommunityEvent event) {
+
+        // Just re-write the whole file
+        update();
+
     }
 
 }

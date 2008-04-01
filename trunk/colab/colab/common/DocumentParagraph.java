@@ -28,27 +28,30 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     private ParagraphIdentifier id;
 
     public DocumentParagraph() {
-        this("", 0, null, new Date());
+        this("", 0, null, new ParagraphIdentifier(""), new Date());
     }
 
-    public DocumentParagraph(final String cont, final int head, final UserName creator, final Date date) {
+    public DocumentParagraph(final String cont, final int head, final UserName creator,
+            final ParagraphIdentifier id, final Date date) {
         headerLevel = head;
         contents = new StringBuffer(cont);
         lockHolder = creator;
+        this.id = id;
+
         differences = new DocumentParagraphDiff();
         listeners = new ArrayList<ParagraphListener>();
     }
 
-    public void setId(final ParagraphIdentifier id) {
-        this.id = id;
-    }
+    protected DocumentParagraph(final String cont, final int head, final UserName creator,
+            final ParagraphIdentifier id, final DocumentParagraphDiff diff) {
 
-    protected DocumentParagraph(final String cont, final int head,
-            final UserName creator, final DocumentParagraphDiff diff) {
-
-        this(cont, head, creator, new Date());
+        this(cont, head, creator, id, new Date());
         differences = diff;
 
+    }
+
+    public void setId(final ParagraphIdentifier id) {
+        this.id = id;
     }
 
     public void insert(final int offset, final String hunk) {
@@ -95,11 +98,11 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     public boolean lock(final UserName holder) {
         boolean ret = false;
 
-        if(holder==null) {
+        if (holder == null) {
             unlock();
-            return;
+            return true;
         }
-        
+
         if (lockHolder == null) {
             lockHolder = holder;
             ret = true;
@@ -121,7 +124,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         // TODO: username copy method, otherwise copy could change lock in this
         // instantiation
         return new DocumentParagraph(this.contents.toString(), this.headerLevel, this.lockHolder,
-                this.differences.copy());
+                new ParagraphIdentifier(this.id.toString()), this.differences.copy());
     }
 
     public DocumentParagraphDiff getDifferences() {
@@ -154,10 +157,16 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         listeners.add(listener);
     }
 
+    public void removeParagraphListener(final ParagraphListener listener) {
+        listeners.remove(listener);
+    }
+
     protected void fireOnLock(final UserName newOwner) {
         for (ParagraphListener listener : listeners) {
             listener.onLock(newOwner);
         }
+
+        System.err.println("Lock fired from paragraph.");
     }
 
     protected void fireOnUnlock() {

@@ -108,7 +108,12 @@ public final class DocumentParagraphDiff {
         }
 
         public void apply(final DocumentParagraph para) {
-            para.lock(newOwner);
+            if(newOwner==null) {
+                para.unlock();
+            }
+            else {
+                para.lock(newOwner);
+            }
         }
 
         public UserName getNewOwner() {
@@ -160,6 +165,10 @@ public final class DocumentParagraphDiff {
      */
     public void lock(final UserName newOwner) {
         changes.add(new ChangeLock(newOwner));
+    }
+    
+    public void unlock() {
+        changes.add(new ChangeLock(null));
     }
 
     public void reset() {

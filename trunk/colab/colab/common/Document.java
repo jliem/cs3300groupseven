@@ -74,7 +74,6 @@ public final class Document {
                 break;
             }
         }
-
     }
 
     public DocumentParagraph get(final int index) {

@@ -116,9 +116,10 @@ final class DocumentPanel extends ClientChannelPanel {
         f.pack();
         f.setVisible(true);
         
-        doc.insert(0, new DocumentParagraph("Our first paragraph.", 0, new UserName("Matt"), new Date()));
+        doc.insert(0, new DocumentParagraph("Our first paragraph.", 0, new UserName("Matt"), new ParagraphIdentifier("Test"), new Date()));
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.lock(new UserName("Matt"));
+        
         
         try {
             doc.applyEdit((ParagraphIdentifier)doc.get(0).getId(), diff);
@@ -127,6 +128,10 @@ final class DocumentPanel extends ClientChannelPanel {
             DebugManager.shouldNotHappen(e);
             System.out.println("Woah!");
         }
+        doc.get(0).unlock();
+        doc.get(0).lock(new UserName("Alex"));
+        
+        doc.insert(1, new DocumentParagraph("Our next paragraph.", 0, new UserName("Matt"), new ParagraphIdentifier("Test2"), new Date()));
     }
 }
 
@@ -176,16 +181,18 @@ class ParagraphEditor extends JTextArea {
            }
            public void onLock(UserName newOwner) {
                if(newOwner.equals(ParagraphEditor.this.user)) {
-                   
+                   setBackground(Color.BLUE);
+                   setForeground(Color.WHITE);
                    
                }
                else {
+                   setBackground(Color.GREEN);
+                   setForeground(Color.BLACK);
                    
                    setEditable(false);
                }
                
-               setBackground(Color.RED);
-               setForeground(Color.WHITE);
+               
            }
            public void onUnlock() {
                setForeground(defaultFG);

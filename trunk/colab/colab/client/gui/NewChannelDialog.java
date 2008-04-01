@@ -89,6 +89,7 @@ public class NewChannelDialog extends JDialog {
         this.getContentPane().setLayout(new BorderLayout());
         this.add(inputPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
+        this.setTitle("Create New Channel");
 
         pack();
 

@@ -15,6 +15,8 @@ public final class Document {
     private List<InsertParagraphListener> insertListeners;
 
     private List<DeleteParagraphListener> deleteListeners;
+    
+    private List<EditParagraphListener> editListeners;
 
     /**
      * Constructs an empty Document.
@@ -24,6 +26,7 @@ public final class Document {
         this.paragraphs = Collections.synchronizedList(new ArrayList<DocumentParagraph>());
         this.insertListeners = new ArrayList<InsertParagraphListener>();
         this.deleteListeners = new ArrayList<DeleteParagraphListener>();
+        this.editListeners = new ArrayList<EditParagraphListener>();
 
     }
 
@@ -76,6 +79,8 @@ public final class Document {
                 break;
             }
         }
+        
+        fireOnEdit(id, diff);
     }
 
     public DocumentParagraph get(final int index) {
@@ -107,6 +112,13 @@ public final class Document {
         deleteListeners.add(listener);
 
     }
+    
+    public void addEditParagraphListener(
+            final EditParagraphListener listener) {
+
+        editListeners.add(listener);
+
+    }
 
     protected void fireOnInsert(final int offset,
             final DocumentParagraph paragraph) {
@@ -125,5 +137,12 @@ public final class Document {
 
     }
 
+    protected void fireOnEdit(final ParagraphIdentifier id, final DocumentParagraphDiff difference) {
+
+        for (final EditParagraphListener listener : editListeners) {
+            listener.onEdit(id, difference);
+        }
+
+    }
 }
 

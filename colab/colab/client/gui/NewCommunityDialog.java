@@ -104,6 +104,7 @@ public class NewCommunityDialog extends JDialog {
 
         pack();
 
+        this.setTitle("Create New Community");
         this.setModal(true);
 
     }

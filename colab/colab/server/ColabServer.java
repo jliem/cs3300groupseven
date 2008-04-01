@@ -179,10 +179,8 @@ public class ColabServer extends UnicastRemoteObject
             final Password password, final UserName creator)
             throws CommunityAlreadyExistsException {
 
-        Community community = new Community(communityName,
-                password);
+        Community community = new Community(communityName, password);
 
-        // TODO: The creator should also be a moderator
         // Add the creator as a member
         if (creator != null) {
             community.addMember(creator);

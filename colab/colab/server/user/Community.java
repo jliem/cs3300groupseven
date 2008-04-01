@@ -3,8 +3,9 @@ package colab.server.user;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
@@ -17,6 +18,8 @@ import colab.common.xml.XmlNode;
 import colab.common.xml.XmlSerializable;
 import colab.server.connection.Connection;
 import colab.server.connection.ConnectionIdentifier;
+import colab.server.event.CommunityEvent;
+import colab.server.event.CommunityListener;
 import colab.server.event.DisconnectEvent;
 import colab.server.event.DisconnectListener;
 
@@ -42,7 +45,7 @@ public final class Community implements Identifiable<CommunityName>,
     /**
      * The users which have joined this community and can log in to it.
      */
-    private final Collection<UserName> members;
+    private final Set<UserName> members;
 
     /**
      * The password to join this community.
@@ -53,6 +56,22 @@ public final class Community implements Identifiable<CommunityName>,
      * A list of actively connected clients.
      */
     private final IdentitySet<ConnectionIdentifier, Connection> clients;
+
+    private Set<CommunityListener> listeners = new HashSet<CommunityListener>();
+
+    public void addListener(final CommunityListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(final CommunityListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void fireEvent(final CommunityEvent event) {
+        for (CommunityListener listener : listeners) {
+            listener.handleEvent(event);
+        }
+    }
 
     /**
      * Constructs a new community with the given name and password.
@@ -69,7 +88,7 @@ public final class Community implements Identifiable<CommunityName>,
         this.password = password;
 
         // Create an empty collection of users
-        this.members = new ArrayList<UserName>();
+        this.members = new HashSet<UserName>();
 
         this.clients = new IdentitySet<ConnectionIdentifier, Connection>();
 
@@ -109,19 +128,18 @@ public final class Community implements Identifiable<CommunityName>,
      * @param username the name of the user to add
      */
     public void addMember(final UserName username) {
-        if (!members.contains(username)) {
-            members.add(username);
-        }
+        members.add(username);
+        fireEvent(new CommunityEvent());
     }
 
     /**
      * Removes a member from this community's member list.
      *
      * @param username the name of the user to remove
-     * @return true if removed successfully, false otherwise
      */
-    public boolean removeMember(final UserName username) {
-        return members.remove(username);
+    public void removeMember(final UserName username) {
+        members.remove(username);
+        fireEvent(new CommunityEvent());
     }
 
     /**
@@ -227,7 +245,7 @@ public final class Community implements Identifiable<CommunityName>,
 
         // If a correct password was provided, the user can join.
         if (passAttempt != null && checkPassword(passAttempt)) {
-            members.add(username);
+            addMember(username);
             return true;
         }
 

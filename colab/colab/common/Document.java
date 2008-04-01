@@ -1,6 +1,8 @@
 package colab.common;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import colab.common.exception.NotApplicableException;
@@ -19,7 +21,7 @@ public final class Document {
      */
     public Document() {
 
-        this.paragraphs = new ArrayList<DocumentParagraph>();
+        this.paragraphs = Collections.synchronizedList(new ArrayList<DocumentParagraph>());
         this.insertListeners = new ArrayList<InsertParagraphListener>();
         this.deleteListeners = new ArrayList<DeleteParagraphListener>();
 
@@ -86,6 +88,10 @@ public final class Document {
 
         return paragraphs.size();
 
+    }
+    
+    public Iterator<DocumentParagraph> paragraphIterator() {
+        return paragraphs.iterator();
     }
 
     public void addInsertParagraphListener(

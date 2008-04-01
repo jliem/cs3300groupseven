@@ -5,8 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -38,7 +40,7 @@ final class DocumentPanel extends ClientChannelPanel {
     
     private JScrollPane scroll;
     
-    private ArrayList<ParagraphEditor> editors;
+    private List<ParagraphEditor> editors;
     
     private Document document;
 
@@ -58,22 +60,23 @@ final class DocumentPanel extends ClientChannelPanel {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
        
         this.document = document;
-        editors = new ArrayList<ParagraphEditor>();
+        editors = Collections.synchronizedList(new ArrayList<ParagraphEditor>());
         
-        //TODO: add pagragraph editors already present
+        //TODO: potential sync issues (what if sometihng is added while the window is being built?)
+        Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
+        while(iter.hasNext()) {
+            addParagraph(iter.next());
+        }
+        arrangePanel();
         
-        document.addInsertParagraphListener(new InsertParagraphListener() {
+        this.document.addInsertParagraphListener(new InsertParagraphListener() {
             public void onInsert(int offset, DocumentParagraph paragraph) {
-                ParagraphEditor editor = new ParagraphEditor(paragraph, name);
-                
-                //TODO: listeners
-                
-                editors.add(offset, editor);
+                insertParagraph(offset, paragraph);
                 arrangePanel();
             }
         });
         
-        document.addDeleteParagraphListener(new DeleteParagraphListener() {
+        this.document.addDeleteParagraphListener(new DeleteParagraphListener() {
            public void onDelete(ParagraphIdentifier id) {
                 Iterator<ParagraphEditor> iter = editors.iterator();
                 
@@ -101,6 +104,18 @@ final class DocumentPanel extends ClientChannelPanel {
         for(ParagraphEditor editor : editors) {
             mainPanel.add(editor);
         }
+    }
+    
+    private void addParagraph(DocumentParagraph para) {
+        insertParagraph(editors.size(), para);
+    }
+    
+    private void insertParagraph(int offset, DocumentParagraph paragraph) {
+        ParagraphEditor editor = new ParagraphEditor(paragraph, getUsername());
+        
+        //TODO: listeners (keyboard, et cetera)
+        
+        editors.add(offset, editor);
     }
     
     public static void main(String args[]) {
@@ -156,22 +171,13 @@ class ParagraphEditor extends JTextArea {
         this.defaultFG = getForeground();
         this.defaultBG = getBackground();
         
-        setText(paragraph.getContents());
+        setText(this.paragraph.getContents());
+        setHeader(this.paragraph.getHeaderLevel());
+        setLock(this.paragraph.getLockHolder());
         
         paragraph.addParagraphListener(new ParagraphListener() {
            public void onHeaderChange(int headerLevel) {
-               int newSize = defaultFont.getSize();
-               int style = Font.PLAIN;
-               
-               if(headerLevel>0) {
-                   style = Font.BOLD;
-               }
-               
-               if(headerLevel>1) {
-                   newSize += FONT_STEP * (headerLevel - 1);
-               }
-               
-               setFont(new Font(defaultFont.getFontName(), style, newSize));
+               setHeader(headerLevel);
            }
            public void onDelete(int offset, int length) {
                setText(paragraph.getContents());
@@ -180,19 +186,7 @@ class ParagraphEditor extends JTextArea {
                setText(paragraph.getContents());
            }
            public void onLock(UserName newOwner) {
-               if(newOwner.equals(ParagraphEditor.this.user)) {
-                   setBackground(Color.BLUE);
-                   setForeground(Color.WHITE);
-                   
-               }
-               else {
-                   setBackground(Color.GREEN);
-                   setForeground(Color.BLACK);
-                   
-                   setEditable(false);
-               }
-               
-               
+               setLock(newOwner);
            }
            public void onUnlock() {
                setForeground(defaultFG);
@@ -201,6 +195,35 @@ class ParagraphEditor extends JTextArea {
                setEditable(true);
            }
         });
+    }
+    
+    private void setHeader(int headerLevel) {
+        int newSize = defaultFont.getSize();
+        int style = Font.PLAIN;
+        
+        if(headerLevel>0) {
+            style = Font.BOLD;
+        }
+        
+        if(headerLevel>1) {
+            newSize += FONT_STEP * (headerLevel - 1);
+        }
+        
+        setFont(new Font(defaultFont.getFontName(), style, newSize));
+    }
+    
+    private void setLock(final UserName newOwner) {
+        if(newOwner.equals(ParagraphEditor.this.user)) {
+            setBackground(Color.BLUE);
+            setForeground(Color.WHITE);
+            
+        }
+        else {
+            setBackground(Color.GREEN);
+            setForeground(Color.BLACK);
+            
+            setEditable(false);
+        }
     }
     
     public DocumentParagraph getParagraph() {

@@ -1,7 +1,9 @@
 package colab.client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -10,11 +12,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+import javax.swing.JTextArea;
 
+import colab.common.DebugManager;
 import colab.common.DeleteParagraphListener;
 import colab.common.Document;
 import colab.common.DocumentParagraph;
+import colab.common.DocumentParagraphDiff;
 import colab.common.InsertParagraphListener;
 import colab.common.ParagraphListener;
 import colab.common.channel.DocumentChannelData;
@@ -65,6 +69,7 @@ final class DocumentPanel extends ClientChannelPanel {
                 //TODO: listeners
                 
                 editors.add(offset, editor);
+                arrangePanel();
             }
         });
         
@@ -79,6 +84,8 @@ final class DocumentPanel extends ClientChannelPanel {
                         break;
                     }
                 }
+                
+                arrangePanel();
             } 
         });
         
@@ -87,6 +94,13 @@ final class DocumentPanel extends ClientChannelPanel {
 
     public void apply(DocumentChannelData dcd) throws NotApplicableException {
         dcd.apply(document);
+    }
+    
+    private void arrangePanel() {
+        mainPanel.removeAll();
+        for(ParagraphEditor editor : editors) {
+            mainPanel.add(editor);
+        }
     }
     
     public static void main(String args[]) {
@@ -103,54 +117,79 @@ final class DocumentPanel extends ClientChannelPanel {
         f.setVisible(true);
         
         doc.insert(0, new DocumentParagraph("Our first paragraph.", 0, new UserName("Matt"), new Date()));
+        DocumentParagraphDiff diff = new DocumentParagraphDiff();
+        diff.lock(new UserName("Matt"));
+        
+        try {
+            doc.applyEdit((ParagraphIdentifier)doc.get(0).getId(), diff);
+        }
+        catch(NotApplicableException e) {
+            DebugManager.shouldNotHappen(e);
+            System.out.println("Woah!");
+        }
     }
 }
 
-class ParagraphEditor extends JTextPane {
+class ParagraphEditor extends JTextArea {
+    
+    private static final int FONT_STEP = 4;
     
     private final DocumentParagraph paragraph;
     
     private final UserName user;
+    
+    private final Font defaultFont;
+    
+    private final Color defaultFG, defaultBG;
     
     private static final long serialVersionUID = 1;
     
     public ParagraphEditor(final DocumentParagraph paragraph, final UserName user) {
         this.paragraph = paragraph;
         this.user = user;
+        this.defaultFont = getFont();
+        this.defaultFG = getForeground();
+        this.defaultBG = getBackground();
         
-        
+        setText(paragraph.getContents());
         
         paragraph.addParagraphListener(new ParagraphListener() {
            public void onHeaderChange(int headerLevel) {
-            // TODO Auto-generated method stub
+               int newSize = defaultFont.getSize();
+               int style = Font.PLAIN;
                
+               if(headerLevel>0) {
+                   style = Font.BOLD;
+               }
+               
+               if(headerLevel>1) {
+                   newSize += FONT_STEP * (headerLevel - 1);
+               }
+               
+               setFont(new Font(defaultFont.getFontName(), style, newSize));
            }
            public void onDelete(int offset, int length) {
-               StringBuffer buffer = new StringBuffer(getText());
-               
-               buffer.delete(offset, length);
-               
-               setText(buffer.toString());
+               setText(paragraph.getContents());
            }
            public void onInsert(int offset, String hunk) {
-               StringBuffer buffer = new StringBuffer(getText());
-               
-               buffer.insert(offset, hunk);
-               
-               setText(buffer.toString());
+               setText(paragraph.getContents());
            }
            public void onLock(UserName newOwner) {
-               if(newOwner.equals(user)) {
-                
+               if(newOwner.equals(ParagraphEditor.this.user)) {
+                   
                    
                }
                else {
                    
                    setEditable(false);
                }
+               
+               setBackground(Color.RED);
+               setForeground(Color.WHITE);
            }
            public void onUnlock() {
-            // TODO Auto-generated method stub
+               setForeground(defaultFG);
+               setBackground(defaultBG);
                
                setEditable(true);
            }

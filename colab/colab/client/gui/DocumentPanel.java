@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -42,6 +44,8 @@ final class DocumentPanel extends ClientChannelPanel {
     
     private List<ParagraphEditor> editors;
     
+    private ArrayList<ChannelPanelListener> listeners;
+    
     private Document document;
 
     /**
@@ -55,12 +59,16 @@ final class DocumentPanel extends ClientChannelPanel {
         mainPanel = new JPanel();
         scroll = new JScrollPane(mainPanel);
         
+        listeners = new ArrayList<ChannelPanelListener>();
+        
         setLayout(new BorderLayout());
         
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
        
         this.document = document;
         editors = Collections.synchronizedList(new ArrayList<ParagraphEditor>());
+        
+        
         
         //TODO: potential sync issues (what if sometihng is added while the window is being built?)
         Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
@@ -71,7 +79,7 @@ final class DocumentPanel extends ClientChannelPanel {
         
         this.document.addInsertParagraphListener(new InsertParagraphListener() {
             public void onInsert(int offset, DocumentParagraph paragraph) {
-                insertParagraph(offset, paragraph);
+                insertParagraphEditor(offset, paragraph);
                 arrangePanel();
             }
         });
@@ -99,6 +107,20 @@ final class DocumentPanel extends ClientChannelPanel {
         dcd.apply(document);
     }
     
+    public void addChannelPanelListener(ChannelPanelListener listener) {
+        listeners.add(listener);
+    }
+    
+    public void removeChannelPanelListener(ChannelPanelListener listener) {
+        listeners.remove(listener);
+    }
+    
+    private void fireOnMessageSent(DocumentChannelData dcd) {
+        for(ChannelPanelListener l : listeners) {
+            l.onMessageSent(dcd);
+        }
+    }
+    
     private void arrangePanel() {
         mainPanel.removeAll();
         for(ParagraphEditor editor : editors) {
@@ -107,15 +129,41 @@ final class DocumentPanel extends ClientChannelPanel {
     }
     
     private void addParagraph(DocumentParagraph para) {
-        insertParagraph(editors.size(), para);
+        insertParagraphEditor(editors.size(), para);
     }
     
-    private void insertParagraph(int offset, DocumentParagraph paragraph) {
-        ParagraphEditor editor = new ParagraphEditor(paragraph, getUsername());
-        
-        //TODO: listeners (keyboard, et cetera)
+    private void insertParagraphEditor(int offset, DocumentParagraph paragraph) {
+        final ParagraphEditor editor = new ParagraphEditor(paragraph, getUsername());
+
+        editor.addKeyListener(new KeyAdapter() {
+           @Override
+            public void keyPressed(KeyEvent arg0) {
+                super.keyPressed(arg0);
+                if(arg0.getKeyCode()==KeyEvent.VK_ENTER) {
+                    if(arg0.isShiftDown()) {
+                        editor.append("\n");
+                    }
+                    else {
+                        //TODO- signal new paragraph creation to server, insert in gui, move cursor to it, et cetera
+                    }
+                    arg0.consume();
+                }
+            } 
+        });
         
         editors.add(offset, editor);
+    }
+    
+    private void insertParagraphEditor(ParagraphIdentifier afterID, DocumentParagraph paragraph) {
+        int i;
+        
+        for(i = 0; i<editors.size(); i++) {
+            if(afterID.equals(editors.get(i).getParagraph().getId())) {
+                break;
+            }
+        }
+        
+        insertParagraphEditor(i, paragraph);
     }
     
     public static void main(String args[]) {
@@ -141,7 +189,6 @@ final class DocumentPanel extends ClientChannelPanel {
         }
         catch(NotApplicableException e) {
             DebugManager.shouldNotHappen(e);
-            System.out.println("Woah!");
         }
         doc.get(0).unlock();
         doc.get(0).lock(new UserName("Alex"));
@@ -189,10 +236,7 @@ class ParagraphEditor extends JTextArea {
                setLock(newOwner);
            }
            public void onUnlock() {
-               setForeground(defaultFG);
-               setBackground(defaultBG);
-               
-               setEditable(true);
+               unlock();
            }
         });
     }
@@ -213,17 +257,30 @@ class ParagraphEditor extends JTextArea {
     }
     
     private void setLock(final UserName newOwner) {
-        if(newOwner.equals(ParagraphEditor.this.user)) {
-            setBackground(Color.BLUE);
-            setForeground(Color.WHITE);
-            
+        if(newOwner != null) {
+            if(newOwner.equals(ParagraphEditor.this.user)) {
+                setBackground(Color.BLUE);
+                setForeground(Color.WHITE);
+                
+                requestFocus();
+            }
+            else {
+                setBackground(Color.GREEN);
+                setForeground(Color.BLACK);
+                
+                setEditable(false);
+            }
         }
         else {
-            setBackground(Color.GREEN);
-            setForeground(Color.BLACK);
-            
-            setEditable(false);
+            unlock();
         }
+    }
+    
+    private void unlock() {
+        setForeground(defaultFG);
+        setBackground(defaultBG);
+        
+        setEditable(true);
     }
     
     public DocumentParagraph getParagraph() {

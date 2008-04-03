@@ -5,11 +5,11 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import colab.common.DebugManager;
-import colab.common.Document;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.DocumentChannelData;
+import colab.common.channel.document.Document;
+import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;

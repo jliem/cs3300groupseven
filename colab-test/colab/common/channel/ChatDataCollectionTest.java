@@ -3,6 +3,7 @@ package colab.common.channel;
 import java.util.List;
 
 import junit.framework.TestCase;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 import colab.server.channel.ServerChatChannel;

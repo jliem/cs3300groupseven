@@ -1,10 +1,11 @@
-package colab.common;
+package colab.common.channel.document;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import colab.common.event.document.ParagraphListener;
 import colab.common.identity.Identifiable;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;

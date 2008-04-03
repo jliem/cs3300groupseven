@@ -6,8 +6,8 @@ import java.awt.Font;
 
 import javax.swing.JTextArea;
 
-import colab.common.DocumentParagraph;
-import colab.common.ParagraphListener;
+import colab.common.channel.document.DocumentParagraph;
+import colab.common.event.document.ParagraphListener;
 import colab.common.naming.UserName;
 
 class ParagraphEditor extends JTextArea {

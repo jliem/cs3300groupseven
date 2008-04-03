@@ -8,7 +8,7 @@ import java.util.List;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.naming.ChannelName;
 import colab.server.file.ChannelFile;

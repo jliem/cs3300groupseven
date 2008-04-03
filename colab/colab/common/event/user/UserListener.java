@@ -1,4 +1,4 @@
-package colab.common.event;
+package colab.common.event.user;
 
 /**
  * A UserListener is notified when a user joins or leaves

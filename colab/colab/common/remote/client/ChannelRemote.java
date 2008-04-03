@@ -4,8 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import colab.common.channel.ChannelData;
-import colab.common.event.UserJoinedEvent;
-import colab.common.event.UserLeftEvent;
+import colab.common.event.user.UserJoinedEvent;
+import colab.common.event.user.UserLeftEvent;
 
 /**
  * A remote interface for a client-side object which the

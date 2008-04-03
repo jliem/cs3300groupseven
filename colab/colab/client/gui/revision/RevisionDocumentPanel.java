@@ -4,11 +4,11 @@ import javax.swing.JTextArea;
 
 import colab.client.ClientChannel;
 import colab.common.DebugManager;
-import colab.common.Document;
-import colab.common.DocumentParagraph;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
-import colab.common.channel.DocumentChannelData;
+import colab.common.channel.document.Document;
+import colab.common.channel.document.DocumentChannelData;
+import colab.common.channel.document.DocumentParagraph;
 
 public class RevisionDocumentPanel extends RevisionPanel {
 

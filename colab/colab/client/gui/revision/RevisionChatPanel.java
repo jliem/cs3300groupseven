@@ -5,7 +5,7 @@ import javax.swing.JTextArea;
 import colab.client.ClientChannel;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 
 public class RevisionChatPanel extends RevisionPanel {
 

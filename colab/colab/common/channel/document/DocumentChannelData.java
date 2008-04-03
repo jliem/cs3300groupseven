@@ -1,10 +1,9 @@
-package colab.common.channel;
+package colab.common.channel.document;
 
 import java.text.ParseException;
 import java.util.Date;
 
-import colab.common.Document;
-import colab.common.DocumentParagraph;
+import colab.common.channel.ChannelData;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlConstructor;

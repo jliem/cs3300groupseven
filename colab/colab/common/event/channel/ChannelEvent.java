@@ -1,4 +1,4 @@
-package colab.common.event;
+package colab.common.event.channel;
 
 import colab.common.channel.ChannelDescriptor;
 

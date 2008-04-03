@@ -1,8 +1,10 @@
-package colab.common.channel;
+package colab.common.channel.chat;
 
 import java.text.ParseException;
 import java.util.Date;
 
+import colab.common.channel.ChannelData;
+import colab.common.channel.ChannelDataIdentifier;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;

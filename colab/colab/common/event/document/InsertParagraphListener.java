@@ -1,4 +1,6 @@
-package colab.common;
+package colab.common.event.document;
+
+import colab.common.channel.document.DocumentParagraph;
 
 public interface InsertParagraphListener {
 

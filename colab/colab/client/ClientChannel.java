@@ -22,8 +22,11 @@ import colab.common.remote.client.ChannelRemote;
 
 /**
  * A client-side remote Channel object.
+ *
+ * @param <T> the type of data maintained by this channel
  */
-public abstract class ClientChannel<T extends ChannelData> extends UnicastRemoteObject
+public abstract class ClientChannel<T extends ChannelData>
+        extends UnicastRemoteObject
         implements Channel, ChannelRemote {
 
     /** The name of the channel. */

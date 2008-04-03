@@ -32,8 +32,9 @@ public final class EditDocChannelData extends DocumentChannelData {
         doc.applyEdit(paragraphID, differences);
     }
 
-    public void apply(final DocumentParagraph para) throws NotApplicableException {
-        if(!getCreator().equals(para.getLockHolder())) {
+    public void apply(final DocumentParagraph para)
+            throws NotApplicableException {
+        if (!getCreator().equals(para.getLockHolder())) {
             throw new NotApplicableException("Editor does not hold lock.");
         }
         differences.apply(para);

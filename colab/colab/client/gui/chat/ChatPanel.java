@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.chat;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,6 +12,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import colab.client.gui.ClientChannelPanel;
 import colab.common.channel.ChatChannelData;
 import colab.common.naming.UserName;
 

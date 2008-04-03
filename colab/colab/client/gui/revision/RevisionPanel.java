@@ -1,4 +1,4 @@
-package colab.client.gui.revisions;
+package colab.client.gui.revision;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -49,7 +49,7 @@ public abstract class RevisionPanel extends JPanel {
         add(display);
     }
 
-    protected Component addToDisplay(Component c) {
+    protected Component addToDisplay(final Component c) {
         return display.add(c);
     }
 
@@ -72,7 +72,7 @@ public abstract class RevisionPanel extends JPanel {
     private class Revision {
         private ChannelData data;
 
-        public Revision(ChannelData data) {
+        public Revision(final ChannelData data) {
             this.data = data;
         }
 
@@ -80,8 +80,8 @@ public abstract class RevisionPanel extends JPanel {
             return data.getId();
         }
         public String toString() {
-            return this.data.getId() + " - " + data.getCreator().toString() +
-                ", " + data.getTimestamp();
+            return this.data.getId() + " - " + data.getCreator().toString()
+                    + ", " + data.getTimestamp();
         }
     }
 

@@ -34,6 +34,15 @@ public abstract class Identifier<T extends Comparable<T>>
     }
 
     /**
+     * Constructs an identifier with the value of another identifier.
+     *
+     * @param otherId the identifier to copy
+     */
+    public Identifier(final Identifier<T> otherId) {
+        this.value = otherId.value;
+    }
+
+    /**
      * Returns the value of this identifier.
      *
      * @return the data represented by this object

@@ -1,4 +1,4 @@
-package colab.client.gui.revisions;
+package colab.client.gui.revision;
 
 import javax.swing.JTextArea;
 
@@ -42,8 +42,10 @@ public class RevisionDocumentPanel extends RevisionPanel {
                 DebugManager.shouldNotHappen(e);
             }
 
-            if (data.getId().equals(dataID))
+            if (data.getId().equals(dataID)) {
                 break;
+            }
+
         }
 
         int numParagraphs = doc.getNumberParagraphs();

@@ -30,7 +30,8 @@ public final class InsertDocChannelData extends DocumentChannelData {
     @Override
     public void apply(final Document doc) throws NotApplicableException {
         if(offset > doc.getNumberParagraphs()) {
-            throw new NotApplicableException("Offset outside of document limits.");
+            throw new NotApplicableException(
+                    "Offset outside of document limits.");
         }
         doc.insert(offset, paragraph);
     }

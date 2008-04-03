@@ -6,7 +6,7 @@ public class ChannelEvent {
 
     private ChannelDescriptor descriptor;
 
-    public ChannelEvent(ChannelDescriptor descriptor) {
+    public ChannelEvent(final ChannelDescriptor descriptor) {
         this.descriptor = descriptor;
     }
 

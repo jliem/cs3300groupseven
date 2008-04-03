@@ -11,7 +11,7 @@ import colab.common.naming.UserName;
 /**
  * Parent class for all client-side channel panels.
  */
-abstract class ClientChannelPanel extends JPanel {
+public abstract class ClientChannelPanel extends JPanel {
 
     private final UserName username;
 

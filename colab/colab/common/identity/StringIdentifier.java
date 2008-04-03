@@ -22,6 +22,16 @@ public abstract class StringIdentifier extends Identifier<String> {
     }
 
     /**
+     * Constructs a string identifier with the value of
+     * another string identifier.
+     *
+     * @param otherId the identifier to copy
+     */
+    public StringIdentifier(final StringIdentifier otherId) {
+        super(otherId);
+    }
+
+    /**
      * @return the identifying string.
      */
     @Override
@@ -40,4 +50,5 @@ public abstract class StringIdentifier extends Identifier<String> {
     public final int compareTo(final StringIdentifier stringIdentifier) {
         return this.toString().compareTo(stringIdentifier.toString());
     }
+
 }

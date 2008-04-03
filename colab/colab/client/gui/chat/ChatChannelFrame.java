@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.chat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,8 +18,9 @@ import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
-import colab.client.gui.revisions.RevisionChatPanel;
-import colab.client.gui.revisions.RevisionFrame;
+import colab.client.gui.ClientChannelFrame;
+import colab.client.gui.revision.RevisionChatPanel;
+import colab.client.gui.revision.RevisionFrame;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChatChannelData;
 import colab.common.exception.ConnectionDroppedException;

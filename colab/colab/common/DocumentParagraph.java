@@ -28,22 +28,26 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     private ParagraphIdentifier id;
 
     public DocumentParagraph() {
-        this("", 0, null, new ParagraphIdentifier(""), new Date());
+        this("", 0, null, null, new Date());
     }
 
-    public DocumentParagraph(final String cont, final int head, final UserName creator,
-            final ParagraphIdentifier id, final Date date) {
-        headerLevel = head;
-        contents = new StringBuffer(cont);
-        lockHolder = creator;
+    public DocumentParagraph(final String cont, final int head,
+            final UserName creator, final ParagraphIdentifier id,
+            final Date date) {
+
+        this.headerLevel = head;
+        this.contents = new StringBuffer(cont);
+        this.lockHolder = creator;
         this.id = id;
 
-        differences = new DocumentParagraphDiff();
-        listeners = new ArrayList<ParagraphListener>();
+        this.differences = new DocumentParagraphDiff();
+        this.listeners = new ArrayList<ParagraphListener>();
+
     }
 
-    protected DocumentParagraph(final String cont, final int head, final UserName creator,
-            final ParagraphIdentifier id, final DocumentParagraphDiff diff) {
+    protected DocumentParagraph(final String cont, final int head,
+            final UserName creator, final ParagraphIdentifier id,
+            final DocumentParagraphDiff diff) {
 
         this(cont, head, creator, id, new Date());
         differences = diff;
@@ -121,10 +125,15 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     }
 
     public DocumentParagraph copy() {
-        // TODO: username copy method, otherwise copy could change lock in this
-        // instantiation
-        return new DocumentParagraph(this.contents.toString(), this.headerLevel, this.lockHolder,
-                new ParagraphIdentifier(this.id.toString()), this.differences.copy());
+
+        /* TODO: username copy method, otherwise copy could
+         * change lock in this instantiation */
+
+        return new DocumentParagraph(this.contents.toString(),
+                this.headerLevel, this.lockHolder,
+                new ParagraphIdentifier(this.id),
+                this.differences.copy());
+
     }
 
     public DocumentParagraphDiff getDifferences() {

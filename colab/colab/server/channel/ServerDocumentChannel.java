@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.Document;
+import colab.common.DocumentParagraph;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
@@ -16,7 +17,6 @@ import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
-import colab.common.util.StringUtils;
 import colab.server.file.ChannelFile;
 
 /**
@@ -82,11 +82,13 @@ public final class ServerDocumentChannel
             return;
         }
 
-        // If this is an insert, give the paragraph a random id
+        // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
-            String rand = StringUtils.randomAlphanumeric(16);
-            ParagraphIdentifier paragraphId = new ParagraphIdentifier(rand);
-            ((InsertDocChannelData) data).getParagraph().setId(paragraphId);
+            ParagraphIdentifier paragraphId =
+                new ParagraphIdentifier(data.getId());
+            DocumentParagraph paragraph =
+                ((InsertDocChannelData) data).getParagraph();
+            paragraph.setId(paragraphId);
         }
 
         // Store the data, and assign it an identifier

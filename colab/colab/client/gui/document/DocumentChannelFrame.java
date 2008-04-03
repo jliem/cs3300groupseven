@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.document;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
+import colab.client.gui.ClientChannelFrame;
 import colab.common.channel.ChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;

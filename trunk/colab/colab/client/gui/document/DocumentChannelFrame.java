@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ClientChannelFrame;
@@ -19,9 +17,7 @@ import colab.common.naming.UserName;
  */
 public class DocumentChannelFrame extends ClientChannelFrame {
 
-    /**
-     * Serial version UID.
-     */
+    /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
     /** The channel. */

@@ -91,7 +91,7 @@ public final class ChannelDataSet<T extends ChannelData>
     }
 
     /** {@inheritDoc} */
-    public final List<T> getAll() {
+    public List<T> getAll() {
 
         return getLast(-1);
 

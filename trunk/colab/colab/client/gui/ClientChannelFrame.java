@@ -67,7 +67,6 @@ public abstract class ClientChannelFrame extends JFrame {
                 userListPanel.downloadActiveUsers(client,
                         clientChannel);
             } catch (RemoteException ex) {
-                // TODO: Handle remote exception
                 DebugManager.exception(ex);
             }
         }

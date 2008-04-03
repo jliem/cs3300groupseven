@@ -401,9 +401,6 @@ class ColabClientGUI extends JFrame {
                     channelFrame.exit();
                 }
             } catch (final Exception e) {
-                // TODO: Handle this?
-                // Probably don't need to worry about it
-                // as the window is closing anyway
                 DebugManager.windowClose(e);
             }
         }

@@ -20,8 +20,6 @@ import javax.swing.ListSelectionModel;
 
 import colab.client.ColabClient;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.event.ChannelEvent;
-import colab.common.event.ChannelListener;
 
 final class ChannelManagerPanel extends JPanel {
 

@@ -12,6 +12,9 @@ import colab.common.channel.DocumentChannelData;
 
 public class RevisionDocumentPanel extends RevisionPanel {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     private final ChannelDataSet<DocumentChannelData> dataSet;
 
     private final JTextArea text;

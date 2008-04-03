@@ -1,9 +1,7 @@
 package colab.client.gui.document;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -12,11 +10,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
@@ -26,7 +24,6 @@ import colab.common.Document;
 import colab.common.DocumentParagraph;
 import colab.common.DocumentParagraphDiff;
 import colab.common.InsertParagraphListener;
-import colab.common.ParagraphListener;
 import colab.common.channel.DocumentChannelData;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -73,8 +70,6 @@ final class DocumentPanel extends ClientChannelPanel {
         editors = Collections.synchronizedList(
                 new ArrayList<ParagraphEditor>());
 
-
-
         /* TODO: potential sync issues (what if something
          * is added while the window is being built?) */
         Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
@@ -108,6 +103,7 @@ final class DocumentPanel extends ClientChannelPanel {
         });
 
         add(scroll, BorderLayout.CENTER);
+
     }
 
     public void apply(final DocumentChannelData dcd)
@@ -126,16 +122,21 @@ final class DocumentPanel extends ClientChannelPanel {
     }
 
     private void fireOnMessageSent(final DocumentChannelData dcd) {
-        for(ChannelPanelListener l : listeners) {
+        for (final ChannelPanelListener l : listeners) {
             l.onMessageSent(dcd);
         }
     }
 
     private void arrangePanel() {
+
+
         mainPanel.removeAll();
-        for(ParagraphEditor editor : editors) {
+        for (final ParagraphEditor editor : editors) {
             mainPanel.add(editor);
         }
+
+        mainPanel.add(Box.createVerticalGlue());
+
     }
 
     private void addParagraph(final DocumentParagraph para) {
@@ -154,7 +155,8 @@ final class DocumentPanel extends ClientChannelPanel {
                 super.keyPressed(arg0);
                 if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                     if (arg0.isShiftDown()) {
-                        editor.append("\n");
+                        int position = editor.getCaretPosition();
+                        editor.insert("\n", position);
                     } else {
                         /* TODO- signal new paragraph creation
                          * to server, insert in gui, move
@@ -246,104 +248,6 @@ final class DocumentPanel extends ClientChannelPanel {
                 new Date());
         doc.insert(2, last);
         last.unlock();
-    }
-}
-
-class ParagraphEditor extends JTextArea {
-
-    private static final int FONT_STEP = 4;
-
-    private final DocumentParagraph paragraph;
-
-    private final UserName user;
-
-    private final Font defaultFont;
-
-    private final Color defaultFG, defaultBG;
-
-    private static final long serialVersionUID = 1;
-
-    public ParagraphEditor(final DocumentParagraph paragraph,
-            final UserName user) {
-
-        this.paragraph = paragraph;
-        this.user = user;
-        this.defaultFont = getFont();
-        this.defaultFG = getForeground();
-        this.defaultBG = getBackground();
-
-        setText(this.paragraph.getContents());
-        showHeader(this.paragraph.getHeaderLevel());
-        showLock(this.paragraph.getLockHolder());
-
-        setLineWrap(true);
-        setWrapStyleWord(true);
-
-        paragraph.addParagraphListener(new ParagraphListener() {
-           public void onHeaderChange(final int headerLevel) {
-               showHeader(headerLevel);
-           }
-           public void onDelete(final int offset, final int length) {
-               setText(paragraph.getContents());
-           }
-           public void onInsert(final int offset, final String hunk) {
-               setText(paragraph.getContents());
-           }
-           public void onLock(final UserName newOwner) {
-               showLock(newOwner);
-           }
-           public void onUnlock() {
-               showUnlock();
-           }
-        });
-    }
-
-    public void showHeader(final int headerLevel) {
-        int newSize = defaultFont.getSize();
-        int style = Font.PLAIN;
-
-        if (headerLevel>0) {
-            style = Font.BOLD;
-        }
-
-        if (headerLevel>1) {
-            newSize += FONT_STEP * (headerLevel - 1);
-        }
-
-        setFont(new Font(defaultFont.getFontName(), style, newSize));
-    }
-
-    public void showLock(final UserName newOwner) {
-        if (newOwner != null) {
-            if (newOwner.equals(ParagraphEditor.this.user)) {
-                setBackground(Color.BLUE);
-                setForeground(Color.WHITE);
-
-                setToolTipText("");
-
-                requestFocus();
-            } else {
-                setBackground(Color.GREEN);
-                setForeground(Color.BLACK);
-
-                setToolTipText(newOwner.toString() + " is editing...");
-
-                setEditable(false);
-            }
-        } else {
-            showUnlock();
-        }
-    }
-
-    public void showUnlock() {
-        setForeground(defaultFG);
-        setBackground(defaultBG);
-
-        setEditable(true);
-    }
-
-    public DocumentParagraph getParagraph() {
-        return paragraph;
     }
 
 }

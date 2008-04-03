@@ -18,14 +18,13 @@ import colab.common.channel.ChannelDataSet;
 
 public abstract class RevisionPanel extends JPanel {
 
-    protected ClientChannel channel;
-    protected JPanel display;
-
+    private ClientChannel channel;
+    private JPanel display;
     private JList revisionList;
     private JScrollPane revisionScroll;
     private Vector<Revision> revisions;
 
-    public RevisionPanel(ClientChannel channel) {
+    public RevisionPanel(final ClientChannel channel) {
         this.channel = channel;
 
         display = new JPanel();

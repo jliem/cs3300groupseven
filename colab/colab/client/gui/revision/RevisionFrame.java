@@ -1,15 +1,11 @@
 package colab.client.gui.revision;
 
-import java.rmi.RemoteException;
-
 import javax.swing.JFrame;
 
-import colab.client.ClientChannel;
-import colab.client.ColabClient;
-import colab.common.DebugManager;
-import colab.common.naming.UserName;
-
 public class RevisionFrame extends JFrame {
+
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     public RevisionFrame(final RevisionPanel revisionPanel) {
 

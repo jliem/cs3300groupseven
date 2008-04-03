@@ -15,7 +15,7 @@ public final class Document {
     private List<InsertParagraphListener> insertListeners;
 
     private List<DeleteParagraphListener> deleteListeners;
-    
+
     private List<EditParagraphListener> editListeners;
 
     /**
@@ -23,7 +23,8 @@ public final class Document {
      */
     public Document() {
 
-        this.paragraphs = Collections.synchronizedList(new ArrayList<DocumentParagraph>());
+        this.paragraphs = Collections.synchronizedList(
+                new ArrayList<DocumentParagraph>());
         this.insertListeners = new ArrayList<InsertParagraphListener>();
         this.deleteListeners = new ArrayList<DeleteParagraphListener>();
         this.editListeners = new ArrayList<EditParagraphListener>();
@@ -54,23 +55,23 @@ public final class Document {
             fireOnDelete(id);
         }
     }
-    
+
     /**
      * Returns a deep copy of this Document object.
      * Guarantees that this != this.copy(), and this.get(i)
      * != this.copy().get(i).
      * @return a new Document object
      */
-    public Document copy() { 
+    public Document copy() {
         Document cop = new Document();
         for(DocumentParagraph p : paragraphs) {
             cop.insert(cop.getNumberParagraphs(), p.copy());
         }
-        
+
         return cop;
     }
 
-    public void applyEdit (final ParagraphIdentifier id,
+    public void applyEdit(final ParagraphIdentifier id,
             final DocumentParagraphDiff diff) throws NotApplicableException {
 
         for (DocumentParagraph par : paragraphs) {
@@ -79,7 +80,7 @@ public final class Document {
                 break;
             }
         }
-        
+
         fireOnEdit(id, diff);
     }
 
@@ -94,7 +95,7 @@ public final class Document {
         return paragraphs.size();
 
     }
-    
+
     public Iterator<DocumentParagraph> paragraphIterator() {
         return paragraphs.iterator();
     }
@@ -112,7 +113,7 @@ public final class Document {
         deleteListeners.add(listener);
 
     }
-    
+
     public void addEditParagraphListener(
             final EditParagraphListener listener) {
 
@@ -137,7 +138,8 @@ public final class Document {
 
     }
 
-    protected void fireOnEdit(final ParagraphIdentifier id, final DocumentParagraphDiff difference) {
+    protected void fireOnEdit(final ParagraphIdentifier id,
+            final DocumentParagraphDiff difference) {
 
         for (final EditParagraphListener listener : editListeners) {
             listener.onEdit(id, difference);

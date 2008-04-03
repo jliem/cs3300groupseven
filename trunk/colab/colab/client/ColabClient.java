@@ -305,18 +305,20 @@ public class ColabClient extends UnicastRemoteObject
 
     /**
      * Adds a channel listener.
+     *
      * @param listener the listener
      */
-    public void addChannelListener(ChannelListener listener) {
+    public void addChannelListener(final ChannelListener listener) {
         channelListeners.add(listener);
     }
 
     /**
      * Removes a channel listener.
+     *
      * @param listener the listener
      * @return true if the remove was successful, false otherwise
      */
-    public boolean removeChannelListener(ChannelListener listener) {
+    public boolean removeChannelListener(final ChannelListener listener) {
         return channelListeners.remove(listener);
     }
 
@@ -531,7 +533,7 @@ public class ColabClient extends UnicastRemoteObject
      * Notifies all channel listeners of a new event.
      * @param channelEvent the channel event
      */
-    private void fireChannelEvent(ChannelEvent channelEvent) {
+    private void fireChannelEvent(final ChannelEvent channelEvent) {
         for (ChannelListener cl : channelListeners) {
             cl.handleChannelEvent(channelEvent);
         }

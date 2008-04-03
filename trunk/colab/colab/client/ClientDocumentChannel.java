@@ -25,7 +25,8 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     private Document currentDocument;
 
-    public ClientDocumentChannel(final ChannelName name) throws RemoteException {
+    public ClientDocumentChannel(final ChannelName name)
+            throws RemoteException {
 
         super(name);
         revisions = new ChannelDataSet<DocumentChannelData>();
@@ -44,7 +45,8 @@ public final class ClientDocumentChannel extends ClientChannel {
             DebugManager.shouldNotHappen(e);
         }
 
-        ActionEvent event = new ActionEvent(this, ActionEvent.ACTION_FIRST, "Message Added");
+        ActionEvent event = new ActionEvent(
+                this, ActionEvent.ACTION_FIRST, "Message Added");
         fireActionPerformed(event);
 
     }

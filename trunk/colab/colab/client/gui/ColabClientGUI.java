@@ -20,6 +20,9 @@ import javax.swing.JPanel;
 
 import colab.client.ClientChannel;
 import colab.client.ColabClient;
+import colab.client.gui.login.ChooseCommunityPanel;
+import colab.client.gui.login.LoginPanel;
+import colab.client.gui.login.NewCommunityDialog;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
@@ -126,7 +129,7 @@ class ColabClientGUI extends JFrame {
 
         // Listen for channel changes
         client.addChannelListener(new ChannelListener() {
-            public void handleChannelEvent(ChannelEvent event) {
+            public void handleChannelEvent(final ChannelEvent event) {
                 channelPanel.refreshChannels();
             }
         });

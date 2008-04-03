@@ -1,16 +1,18 @@
 package colab.common.exception;
 
 public class NotApplicableException extends Exception {
-    public final static long serialVersionUID = 1;
-    
+
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     public NotApplicableException() {
         super();
     }
 
-    public NotApplicableException(Throwable cause) {
+    public NotApplicableException(final Throwable cause) {
         super(cause);
     }
-    
+
     public NotApplicableException(final String message) {
         super(message);
     }

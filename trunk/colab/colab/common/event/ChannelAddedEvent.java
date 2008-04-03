@@ -4,7 +4,7 @@ import colab.common.channel.ChannelDescriptor;
 
 public class ChannelAddedEvent extends ChannelEvent {
 
-    public ChannelAddedEvent(ChannelDescriptor descriptor) {
+    public ChannelAddedEvent(final ChannelDescriptor descriptor) {
         super(descriptor);
     }
 

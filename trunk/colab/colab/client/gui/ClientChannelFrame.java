@@ -13,14 +13,13 @@ import colab.client.ColabClient;
 import colab.common.DebugManager;
 
 /**
- * Parent class for all client-side channel frames. This class
- * will set up the list of users and add the main panel.
+ * Parent class for all client-side channel frames.
+ *
+ * This class will set up the list of users and add the main panel.
  */
 public abstract class ClientChannelFrame extends JFrame {
 
-    /**
-     * Serial version UID.
-     */
+    /** Serialization version number. */
     private static final long serialVersionUID = 1L;
 
     /** The client. */

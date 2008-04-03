@@ -66,14 +66,14 @@ public final class ChannelDataSet<T extends ChannelData>
     }
 
     /** {@inheritDoc} */
-    public final int size() {
+    public int size() {
 
         return dataSet.size();
 
     }
 
     /** {@inheritDoc} */
-    public final List<T> getLast(final int requestedItems) {
+    public List<T> getLast(final int requestedItems) {
 
         int count = requestedItems;
 

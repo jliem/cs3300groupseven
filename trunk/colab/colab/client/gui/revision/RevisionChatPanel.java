@@ -1,4 +1,4 @@
-package colab.client.gui.revisions;
+package colab.client.gui.revision;
 
 import javax.swing.JTextArea;
 

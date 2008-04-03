@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.login;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

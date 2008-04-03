@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.login;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,7 +19,6 @@ import colab.common.DebugManager;
 import colab.common.exception.CommunityAlreadyExistsException;
 import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
-import colab.server.user.Password;
 
 public class NewCommunityDialog extends JDialog {
 

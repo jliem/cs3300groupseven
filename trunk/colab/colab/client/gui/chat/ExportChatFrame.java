@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.chat;
 
 import java.awt.Color;
 import java.awt.Dimension;

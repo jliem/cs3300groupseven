@@ -1,4 +1,4 @@
-package colab.client.gui;
+package colab.client.gui.login;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -21,7 +21,7 @@ import colab.common.DebugManager;
 import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
 
-class ChooseCommunityPanel extends JPanel {
+public class ChooseCommunityPanel extends JPanel {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;

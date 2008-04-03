@@ -3,8 +3,8 @@ package colab.client;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import colab.common.event.UserJoinedEvent;
-import colab.common.event.UserLeftEvent;
+import colab.common.event.user.UserJoinedEvent;
+import colab.common.event.user.UserLeftEvent;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 

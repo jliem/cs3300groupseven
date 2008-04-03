@@ -1,4 +1,4 @@
-package colab.common;
+package colab.common.channel.document;
 
 import java.util.ArrayList;
 import java.util.List;

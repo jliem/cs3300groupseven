@@ -1,10 +1,13 @@
-package colab.common;
+package colab.common.channel.document;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import colab.common.event.document.DeleteParagraphListener;
+import colab.common.event.document.EditParagraphListener;
+import colab.common.event.document.InsertParagraphListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 

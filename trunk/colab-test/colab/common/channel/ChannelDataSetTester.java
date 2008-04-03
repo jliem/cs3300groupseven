@@ -1,5 +1,6 @@
 package colab.common.channel;
 
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.naming.UserName;
 import junit.framework.TestCase;
 

@@ -1,10 +1,7 @@
-package colab.common.channel;
+package colab.common.channel.document;
 
 import java.util.Date;
 
-import colab.common.Document;
-import colab.common.DocumentParagraph;
-import colab.common.DocumentParagraphDiff;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;

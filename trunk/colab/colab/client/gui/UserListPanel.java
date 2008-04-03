@@ -14,9 +14,9 @@ import javax.swing.ListSelectionModel;
 
 import colab.client.ClientChannel;
 import colab.client.ColabClient;
-import colab.common.event.UserJoinedEvent;
-import colab.common.event.UserLeftEvent;
-import colab.common.event.UserListener;
+import colab.common.event.user.UserJoinedEvent;
+import colab.common.event.user.UserLeftEvent;
+import colab.common.event.user.UserListener;
 import colab.common.naming.UserName;
 
 /**

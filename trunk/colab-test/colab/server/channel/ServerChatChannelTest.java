@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 
 import junit.framework.TestCase;
 import colab.common.channel.ChannelDataIdentifier;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 

@@ -6,7 +6,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import colab.common.channel.ChannelDataIdentifier;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.naming.UserName;
 
 /**

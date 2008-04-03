@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import colab.client.gui.ClientChannelPanel;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.naming.UserName;
 
 /**

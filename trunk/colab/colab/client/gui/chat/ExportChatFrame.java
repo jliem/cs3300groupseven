@@ -30,7 +30,7 @@ import javax.swing.event.ChangeListener;
 
 import colab.client.ClientChatChannel;
 import colab.common.DebugManager;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.naming.ChannelName;
 
 public class ExportChatFrame extends JFrame {

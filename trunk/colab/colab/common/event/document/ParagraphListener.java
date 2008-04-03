@@ -1,4 +1,4 @@
-package colab.common;
+package colab.common.event.document;
 
 import colab.common.naming.UserName;
 

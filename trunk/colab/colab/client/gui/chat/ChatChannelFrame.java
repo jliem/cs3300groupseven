@@ -22,7 +22,7 @@ import colab.client.gui.ClientChannelFrame;
 import colab.client.gui.revision.RevisionChatPanel;
 import colab.client.gui.revision.RevisionFrame;
 import colab.common.channel.ChannelData;
-import colab.common.channel.ChatChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;

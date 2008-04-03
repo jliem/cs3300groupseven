@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import colab.common.Document;
-import colab.common.DocumentParagraph;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.DocumentChannelData;
-import colab.common.channel.InsertDocChannelData;
+import colab.common.channel.document.Document;
+import colab.common.channel.document.DocumentChannelData;
+import colab.common.channel.document.DocumentParagraph;
+import colab.common.channel.document.InsertDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;

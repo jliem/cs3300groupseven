@@ -19,12 +19,11 @@ import javax.swing.JScrollPane;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.common.DebugManager;
-import colab.common.channel.document.Document;
-import colab.common.channel.document.DocumentChannelData;
-import colab.common.channel.document.DocumentParagraph;
-import colab.common.channel.document.DocumentParagraphDiff;
-import colab.common.event.document.DeleteParagraphListener;
-import colab.common.event.document.InsertParagraphListener;
+import colab.common.Document;
+import colab.common.DocumentListener;
+import colab.common.DocumentParagraph;
+import colab.common.DocumentParagraphDiff;
+import colab.common.channel.DocumentChannelData;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
@@ -78,16 +77,14 @@ final class DocumentPanel extends ClientChannelPanel {
         }
         arrangePanel();
 
-        this.document.addInsertParagraphListener(new InsertParagraphListener() {
+        this.document.addDocumentListener(new DocumentListener() {
             public void onInsert(final int offset,
                     final DocumentParagraph paragraph) {
                 insertParagraphEditor(offset, paragraph);
                 arrangePanel();
             }
-        });
-
-        this.document.addDeleteParagraphListener(new DeleteParagraphListener() {
-           public void onDelete(final ParagraphIdentifier id) {
+            
+            public void onDelete(final ParagraphIdentifier id) {
                 Iterator<ParagraphEditor> iter = editors.iterator();
 
                 while(iter.hasNext()) {

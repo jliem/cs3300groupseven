@@ -13,6 +13,9 @@ import colab.common.naming.UserName;
  */
 public final class DocumentParagraphDiff {
 
+    /**
+     * The interface used to internally represent individual edits
+     */
     private interface Applicable {
         void apply(DocumentParagraph para) throws NotApplicableException;
     }
@@ -192,5 +195,4 @@ public final class DocumentParagraphDiff {
         List<Applicable> list = new ArrayList<Applicable>(changes);
         return new DocumentParagraphDiff(list);
     }
-
 }

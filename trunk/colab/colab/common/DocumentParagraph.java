@@ -6,11 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import colab.common.identity.Identifiable;
-import colab.common.identity.Identifier;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 
-public final class DocumentParagraph implements Serializable, Identifiable {
+public final class DocumentParagraph implements Serializable,
+        Identifiable<ParagraphIdentifier> {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -158,7 +158,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         return differences.hasChanges();
     }
 
-    public Identifier getId() {
+    public ParagraphIdentifier getId() {
         return id;
     }
 

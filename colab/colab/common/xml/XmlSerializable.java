@@ -1,7 +1,5 @@
 package colab.common.xml;
 
-import java.text.ParseException;
-
 /**
  * An XmlSerializable object can convert its data to and from an XmlNode.
  */
@@ -23,9 +21,9 @@ public interface XmlSerializable {
      *     (new T()).fromXml(node);
      *
      * @param node an xml node containing data to populate the object
-     * @throws ParseException if the xml node is not appropriately
-     *                        formatted for this object
+     * @throws XmlParseException if the xml node is not appropriately
+     *                           formatted for this object
      */
-    void fromXml(XmlNode node) throws ParseException;
+    void fromXml(XmlNode node) throws XmlParseException;
 
 }

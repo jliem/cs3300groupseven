@@ -1,6 +1,5 @@
 package colab.common.channel.document;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.channel.ChannelData;
@@ -8,6 +7,7 @@ import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
 import colab.server.channel.ServerDocumentChannel;
 
@@ -30,6 +30,9 @@ public abstract class DocumentChannelData extends ChannelData
     public static final long serialVersionUID = 1L;
 
     private DocumentChannelDataType type;
+
+    protected DocumentChannelData() {
+    }
 
     protected DocumentChannelData(final UserName creator, final Date timestamp,
             final DocumentChannelDataType type) {
@@ -58,8 +61,24 @@ public abstract class DocumentChannelData extends ChannelData
     private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
         new XmlConstructor<DocumentChannelData>() {
             public DocumentChannelData fromXml(final XmlNode node)
-                    throws ParseException {
-                return null; // TODO:
+                    throws XmlParseException {
+
+                DocumentChannelData data;
+                String type = node.getType();
+                if (type.equals("Insert")) {
+                    data = new InsertDocChannelData();
+                } else if (type.equals("Edit")) {
+                    data = new EditDocChannelData();
+                } else if (type.equals("Delete")) {
+                    data = new DeleteDocChannelData();
+                } else {
+                    throw new XmlParseException();
+                }
+
+                data.fromXml(node);
+
+                return data;
+
             }
         };
 

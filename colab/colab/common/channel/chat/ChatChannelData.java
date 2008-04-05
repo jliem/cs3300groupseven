@@ -8,6 +8,7 @@ import colab.common.channel.ChannelDataIdentifier;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 
 /**
  * Represents a message posted to a chat channel.
@@ -91,7 +92,7 @@ public final class ChatChannelData extends ChannelData {
     public static XmlConstructor<ChatChannelData> getXmlConstructor() {
         return (new XmlConstructor<ChatChannelData>() {
             public ChatChannelData fromXml(final XmlNode node)
-                    throws ParseException {
+                    throws XmlParseException {
                 ChatChannelData data = new ChatChannelData();
                 data.fromXml(node);
                 return data;
@@ -101,21 +102,35 @@ public final class ChatChannelData extends ChannelData {
 
     /** {@inheritDoc} */
     public XmlNode toXml() {
+
         XmlNode node = new XmlNode("ChatMessage");
+
         node.setAttribute("id", getId().toString());
         node.setAttribute("time", DATE_FORMAT.format(getTimestamp()));
         node.setAttribute("creator", getCreator().toString());
+
         node.setContent(text);
+
         return node;
+
     }
 
     /** {@inheritDoc} */
-    public void fromXml(final XmlNode node) throws ParseException {
+    public void fromXml(final XmlNode node) throws XmlParseException {
+
         setId(new ChannelDataIdentifier(
                 Integer.parseInt(node.getAttribute("id"))));
-        setTimestamp(DATE_FORMAT.parse(node.getAttribute("time")));
+
+        try {
+            setTimestamp(DATE_FORMAT.parse(node.getAttribute("time")));
+        } catch (final ParseException e) {
+            throw new XmlParseException(e);
+        }
+
         setCreator(new UserName(node.getAttribute("creator")));
+
         this.text = node.getBody();
+
     };
 
     /** {@inheritDoc} */

@@ -1,11 +1,11 @@
 package colab.server.user;
 
 import java.io.Serializable;
-import java.text.ParseException;
 
 import colab.common.identity.Identifiable;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
 
 /**
@@ -98,7 +98,7 @@ public final class User implements Identifiable<UserName>,
     }
 
     /** {@inheritDoc} */
-    public void fromXml(final XmlNode node) throws ParseException {
+    public void fromXml(final XmlNode node) throws XmlParseException {
         this.name = new UserName(node.getAttribute("name"));
         this.pass = new Password(node.getAttribute("password"));
     }

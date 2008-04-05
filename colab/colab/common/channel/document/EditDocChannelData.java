@@ -1,13 +1,12 @@
 package colab.common.channel.document;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
-import colab.common.util.StringUtils;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 
 public final class EditDocChannelData extends DocumentChannelData {
 
@@ -17,6 +16,9 @@ public final class EditDocChannelData extends DocumentChannelData {
     private DocumentParagraphDiff differences;
 
     private ParagraphIdentifier paragraphID;
+
+    public EditDocChannelData() {
+    }
 
     public EditDocChannelData(final ParagraphIdentifier paragraphID,
             final DocumentParagraphDiff differences,
@@ -68,7 +70,7 @@ public final class EditDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
-    public void fromXml(final XmlNode node) throws ParseException {
+    public void fromXml(final XmlNode node) throws XmlParseException {
 
         // TODO:
 

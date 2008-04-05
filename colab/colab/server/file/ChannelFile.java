@@ -2,7 +2,6 @@ package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 import colab.common.DebugManager;
@@ -12,6 +11,7 @@ import colab.common.channel.ChannelDataStore;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlReader;
 
 /**
@@ -45,15 +45,15 @@ public final class ChannelFile<T extends ChannelData>
         this.dataCollection = new ChannelDataSet<T>();
 
         final XmlReader xmlReader = new XmlReader(file);
-        final List<XmlNode> xml = xmlReader.getXml();
-        for (final XmlNode node : xml) {
-            T data;
-            try {
+        try {
+            final List<XmlNode> xml = xmlReader.getXml();
+            for (final XmlNode node : xml) {
+                T data;
                 data = constructor.fromXml(node);
-            } catch (final ParseException e) {
-                throw new IOException(e.getMessage());
+                dataCollection.add(data);
             }
-            dataCollection.add(data);
+        } catch (final XmlParseException e) {
+            throw new IOException(e.getMessage());
         }
 
     }

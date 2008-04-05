@@ -24,6 +24,7 @@ import colab.client.gui.login.ChooseCommunityPanel;
 import colab.client.gui.login.LoginPanel;
 import colab.client.gui.login.NewCommunityDialog;
 import colab.common.DebugManager;
+import colab.common.Logger;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.event.channel.ChannelEvent;
@@ -540,6 +541,10 @@ class ColabClientGUI extends JFrame {
 
     public static void main(final String[] args) throws RemoteException {
 
+        DebugManager.enableExceptions(true); // TODO: remove for demo
+
+        Logger.enable(true);
+
         // Assign a security manager, in the event
         // that dynamic classes are loaded.
         // if (System.getSecurityManager() == null) {
@@ -577,4 +582,5 @@ class ColabClientGUI extends JFrame {
             }
         }
     }
+
 }

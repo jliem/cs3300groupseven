@@ -11,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 
 import colab.common.DebugManager;
+import colab.common.Logger;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.channel.type.ChatChannelType;
@@ -114,17 +115,17 @@ public class ColabServer extends UnicastRemoteObject
 
         // Create the rmi registry, add the server to it
         try {
-            System.out.print("Creating RMI registry on port " + port + ": ");
+            Logger.log("Creating RMI registry on port " + port + ": ");
             LocateRegistry.createRegistry(port);
-            System.out.println("Done");
+            Logger.log("Done");
         } catch (final ExportException e) {
-            System.out.println("Already exists");
+            Logger.log("Already exists");
         }
         Naming.rebind(address, this);
 
         this.rmiAddress = address;
 
-        System.out.println("Server initialized");
+        Logger.log("Server initialized");
 
     }
 
@@ -345,6 +346,10 @@ public class ColabServer extends UnicastRemoteObject
      * @throws Exception if any exception is thrown
      */
     public static void main(final String[] args) throws Exception {
+
+        DebugManager.enableExceptions(true); // TODO: remove for demo
+
+        Logger.enable(true);
 
         // Assign a security manager, in the event
         // that dynamic classes are loaded

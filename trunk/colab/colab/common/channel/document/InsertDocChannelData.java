@@ -1,14 +1,13 @@
 package colab.common.channel.document;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 import colab.common.util.StringUtils;
-import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 
 public final class InsertDocChannelData extends DocumentChannelData {
 
@@ -18,6 +17,12 @@ public final class InsertDocChannelData extends DocumentChannelData {
     private ParagraphIdentifier previous;
 
     private DocumentParagraph paragraph;
+
+    /**
+     * Constructs an empty InsertDocChannelData.
+     */
+    public InsertDocChannelData() {
+    }
 
     /**
      * Constructs a new InsertDocChannelData.
@@ -82,7 +87,7 @@ public final class InsertDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
-    public void fromXml(final XmlNode node) throws ParseException {
+    public void fromXml(final XmlNode node) throws XmlParseException {
 
         // TODO:
 

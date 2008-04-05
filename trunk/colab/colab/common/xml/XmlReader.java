@@ -40,7 +40,7 @@ public final class XmlReader {
      *
      * @return a list of xml nodes represented by the string content
      */
-    public List<XmlNode> getXml() {
+    public List<XmlNode> getXml() throws XmlParseException {
         Stack<XmlNode> stack = new Stack<XmlNode>();
         stack.push(new XmlNode(""));
         while (in.hasNextLine()) {

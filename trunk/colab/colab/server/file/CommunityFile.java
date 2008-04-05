@@ -2,7 +2,6 @@ package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import colab.common.DebugManager;
 import colab.common.naming.CommunityName;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlReader;
 import colab.server.event.CommunityEvent;
 import colab.server.event.CommunityListener;
@@ -41,16 +41,16 @@ public final class CommunityFile implements CommunityStore, CommunityListener {
         this.communities = new CommunitySet();
 
         final XmlReader xmlReader = new XmlReader(file);
-        final List<XmlNode> xml = xmlReader.getXml();
-        for (final XmlNode node : xml) {
-            Community community = new Community();
-            try {
+        try {
+            final List<XmlNode> xml = xmlReader.getXml();
+            for (final XmlNode node : xml) {
+                Community community = new Community();
                 community.fromXml(node);
-            } catch (final ParseException e) {
-                throw new IOException(e.getMessage());
+                community.addListener(this);
+                communities.add(community);
             }
-            community.addListener(this);
-            communities.add(community);
+        } catch (final XmlParseException e) {
+            throw new IOException(e.getMessage());
         }
 
     }

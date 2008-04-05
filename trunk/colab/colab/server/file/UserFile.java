@@ -2,13 +2,13 @@ package colab.server.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 import colab.common.DebugManager;
 import colab.common.naming.UserName;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlReader;
 import colab.server.user.User;
 import colab.server.user.UserSet;
@@ -38,15 +38,15 @@ public final class UserFile implements UserStore {
         this.users = new UserSet();
 
         final XmlReader xmlReader = new XmlReader(file);
-        final List<XmlNode> xml = xmlReader.getXml();
-        for (final XmlNode node : xml) {
-            User user = new User();
-            try {
+        try {
+            final List<XmlNode> xml = xmlReader.getXml();
+            for (final XmlNode node : xml) {
+                User user = new User();
                 user.fromXml(node);
-            } catch (final ParseException e) {
-                throw new IOException(e.getMessage());
+                users.add(user);
             }
-            users.add(user);
+        } catch (final XmlParseException e) {
+            throw new IOException(e.getMessage());
         }
 
     }

@@ -2,7 +2,6 @@ package colab.server.user;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,6 +14,7 @@ import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
 import colab.server.connection.Connection;
 import colab.server.connection.ConnectionIdentifier;
@@ -278,7 +278,7 @@ public final class Community implements Identifiable<CommunityName>,
     }
 
     /** {@inheritDoc} */
-    public void fromXml(final XmlNode node) throws ParseException {
+    public void fromXml(final XmlNode node) throws XmlParseException {
 
         this.password = new Password(node.getAttribute("password"));
         this.name = new CommunityName(node.getAttribute("name"));

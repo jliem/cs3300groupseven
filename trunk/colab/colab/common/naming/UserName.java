@@ -1,9 +1,8 @@
 package colab.common.naming;
 
-import java.text.ParseException;
-
 import colab.common.identity.StringIdentifier;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
 
 /**
@@ -43,9 +42,9 @@ public class UserName extends StringIdentifier implements XmlSerializable {
      * Populates the UserName from data in an XmlNode.
      *
      * @param node the xml node containing data
-     * @throws ParseException if the data is improperly formatted
+     * @throws XmlParseException if the data is improperly formatted
      */
-    public void fromXml(final XmlNode node) throws ParseException {
+    public void fromXml(final XmlNode node) throws XmlParseException {
         setValue(node.getBody());
     }
 

@@ -21,9 +21,9 @@ import colab.client.gui.ClientChannelPanel;
 import colab.common.DebugManager;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
+import colab.common.channel.document.DocumentListener;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.document.DocumentParagraphDiff;
-import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
@@ -83,7 +83,7 @@ final class DocumentPanel extends ClientChannelPanel {
                 insertParagraphEditor(offset, paragraph);
                 arrangePanel();
             }
-            
+
             public void onDelete(final ParagraphIdentifier id) {
                 Iterator<ParagraphEditor> iter = editors.iterator();
 

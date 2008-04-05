@@ -8,6 +8,7 @@ import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlSerializable;
 import colab.server.channel.ServerDocumentChannel;
 
 /**
@@ -16,7 +17,8 @@ import colab.server.channel.ServerDocumentChannel;
  * @see ServerDocumentChannel
  * @see DocumentParagraph
  */
-public abstract class DocumentChannelData extends ChannelData {
+public abstract class DocumentChannelData extends ChannelData
+        implements XmlSerializable {
 
     public enum DocumentChannelDataType {
         INSERT,
@@ -46,12 +48,6 @@ public abstract class DocumentChannelData extends ChannelData {
     public abstract void apply(final Document doc)
             throws NotApplicableException;
 
-    public XmlNode toXml() {
-
-        return null; // TODO:
-
-    }
-
     /**
      * @return an XmlConstructor for DocumentChannelData.
      */
@@ -59,25 +55,12 @@ public abstract class DocumentChannelData extends ChannelData {
         return XML_CONSTRUCTOR;
     }
 
-   private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
-           new XmlConstructor<DocumentChannelData>() {
-
-       public DocumentChannelData fromXml(final XmlNode node)
-               throws ParseException {
-
-           /*
-           ChannelDataIdentifier id = new ChannelDataIdentifier(
-                   Integer.parseInt(node.getAttribute("id")));
-           Date time = DATE_FORMAT.parse(node.getAttribute("time"));
-           UserName creator = new UserName(node.getAttribute("creator"));
-           String message = node.getBody();
-           return new DocumentChannelData(id, message, creator, time);
-           */
-
-           return null; // TODO:
-
-       }
-
-   };
+    private static final XmlConstructor<DocumentChannelData> XML_CONSTRUCTOR =
+        new XmlConstructor<DocumentChannelData>() {
+            public DocumentChannelData fromXml(final XmlNode node)
+                    throws ParseException {
+                return null; // TODO:
+            }
+        };
 
 }

@@ -21,6 +21,12 @@ public final class ChatChannelData extends ChannelData {
     private String text;
 
     /**
+     * Constructs an empty ChatChannelData.
+     */
+    public ChatChannelData() {
+    }
+
+    /**
      * Constructs a new chat data object.
      *
      * @param text the text of the message
@@ -82,6 +88,17 @@ public final class ChatChannelData extends ChannelData {
         return start + end;
     }
 
+    public static XmlConstructor<ChatChannelData> getXmlConstructor() {
+        return (new XmlConstructor<ChatChannelData>() {
+            public ChatChannelData fromXml(final XmlNode node)
+                    throws ParseException {
+                ChatChannelData data = new ChatChannelData();
+                data.fromXml(node);
+                return data;
+            }
+        });
+    }
+
     /** {@inheritDoc} */
     public XmlNode toXml() {
         XmlNode node = new XmlNode("ChatMessage");
@@ -92,28 +109,14 @@ public final class ChatChannelData extends ChannelData {
         return node;
     }
 
-    /**
-     * A closure which constructs a ChatChannelData from an xml node.
-     */
-    private static final XmlConstructor<ChatChannelData> XML_CONSTRUCTOR =
-            new XmlConstructor<ChatChannelData>() {
-        public ChatChannelData fromXml(final XmlNode node)
-                throws ParseException {
-            ChannelDataIdentifier id = new ChannelDataIdentifier(
-                    Integer.parseInt(node.getAttribute("id")));
-            Date time = DATE_FORMAT.parse(node.getAttribute("time"));
-            UserName creator = new UserName(node.getAttribute("creator"));
-            String message = node.getBody();
-            return new ChatChannelData(id, message, creator, time);
-        }
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws ParseException {
+        setId(new ChannelDataIdentifier(
+                Integer.parseInt(node.getAttribute("id"))));
+        setTimestamp(DATE_FORMAT.parse(node.getAttribute("time")));
+        setCreator(new UserName(node.getAttribute("creator")));
+        this.text = node.getBody();
     };
-
-    /**
-     * @return an XmlConstructor for ChatChannelData.
-     */
-    public static XmlConstructor<ChatChannelData> getXmlConstructor() {
-        return XML_CONSTRUCTOR;
-    }
 
     /** {@inheritDoc} */
     @Override

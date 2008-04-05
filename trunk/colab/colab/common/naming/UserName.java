@@ -15,6 +15,12 @@ public class UserName extends StringIdentifier implements XmlSerializable {
     public static final long serialVersionUID = 1L;
 
     /**
+     * Constructs an empty (null-value) UserName.
+     */
+    public UserName() {
+    }
+
+    /**
      * Constructs a new user name.
      *
      * @param name the name of a user
@@ -34,15 +40,13 @@ public class UserName extends StringIdentifier implements XmlSerializable {
     }
 
     /**
-     * Constructs a new Community from the data in an XmlNode.
+     * Populates the UserName from data in an XmlNode.
      *
      * @param node the xml node containing data
-     * @return a Community built from the data in the xml node
      * @throws ParseException if the data is improperly formatted
      */
-    public static UserName fromXml(final XmlNode node) throws ParseException {
-        String name = node.getBody();
-        return new UserName(name);
+    public void fromXml(final XmlNode node) throws ParseException {
+        setValue(node.getBody());
     }
 
 }

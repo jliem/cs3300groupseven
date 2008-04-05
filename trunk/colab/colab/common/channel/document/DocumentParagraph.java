@@ -7,17 +7,18 @@ import java.util.List;
 
 import colab.common.event.document.ParagraphListener;
 import colab.common.identity.Identifiable;
-import colab.common.identity.Identifier;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
-
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlSerializable;
 
 /**
  * A logical paragraph, to be used as the basis for our documents.
- * 
+ *
  * @see Document
  */
-public final class DocumentParagraph implements Serializable, Identifiable {
+public final class DocumentParagraph implements Serializable,
+        Identifiable<ParagraphIdentifier>, XmlSerializable {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -33,8 +34,8 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     private DocumentParagraphDiff differences;
 
     private ParagraphIdentifier id;
-    
-    
+
+
     /**
      * Constructs an empty DocumentParagraph without a lock holder.
      */
@@ -45,7 +46,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     /**
      * Constructs a DocumentParagaph with an identifier, contents, a header level,
      * and a creation date.
-     * 
+     *
      * @param cont          the textual contents of the paragraph
      * @param head          the header level of this paragrap, starting at 0
      * @param creator       the creator of the paragraph, to become the first lock holder
@@ -138,7 +139,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
 
     /**
      * Fetches the textual content of this paragaph.
-     * 
+     *
      * @return the contents
      */
     public String getContents() {
@@ -147,10 +148,10 @@ public final class DocumentParagraph implements Serializable, Identifiable {
 
     /**
      * Copies this DocumentParagaph, allowing safe sharing.
-     * 
+     *
      * Of course, we all know the only "safe" sharing is no sharing
      * at all, but this method should at least make sharing "safer".
-     * 
+     *
      * @return a deep copy of this DocumentParagraph, so that this !=
      *         this.copy(), this.getContents()!=this.copy().getContents(),
      *         et cetera, though though this.copy() is logically and
@@ -168,7 +169,7 @@ public final class DocumentParagraph implements Serializable, Identifiable {
     /**
      * Copies this paragaph's change log, resetting the internal copy
      * for later use.
-     * 
+     *
      * @return a DocumentParagraphDiff holding changes to this paragraph since the last
      *          {@link #getDifferences()} or {@link #resetDifferences()}
      */
@@ -181,10 +182,10 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         return ret;
 
     }
-    
+
     /**
      * Copies this paragaph's change log, without resetting the internal log.
-     * 
+     *
      * @return a DocumentParagraphDiff holding changes to this paragraph since the last
      *          {@link #getDifferences()} or {@link #resetDifferences()}
      */
@@ -201,21 +202,21 @@ public final class DocumentParagraph implements Serializable, Identifiable {
 
     /**
      * Reports whether this paragaph has been changed since its differences were last reset.
-     * 
+     *
      * @return a boolean
      */
     public boolean hasChanged() {
         return differences.hasChanges();
     }
 
-    public Identifier getId() {
+    public ParagraphIdentifier getId() {
         return id;
     }
 
     public void setId(final ParagraphIdentifier id) {
         this.id = id;
     }
-    
+
     public void addParagraphListener(final ParagraphListener listener) {
         listeners.add(listener);
     }
@@ -252,6 +253,20 @@ public final class DocumentParagraph implements Serializable, Identifiable {
         for (ParagraphListener listener : listeners) {
             listener.onDelete(offset, length);
         }
+    }
+
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) {
+
+        // TODO:
+
+    }
+
+    /** {@inheritDoc} */
+    public XmlNode toXml() {
+
+        return null; // TODO:
+
     }
 
 }

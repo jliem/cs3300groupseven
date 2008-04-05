@@ -15,7 +15,7 @@ public abstract class Identifier<T extends Comparable<T>>
     /**
      * The identifying data.
      */
-    private final T value;
+    private T value;
 
     /**
      * Constructs an identifier with a null value.
@@ -49,6 +49,10 @@ public abstract class Identifier<T extends Comparable<T>>
      */
     public final T getValue() {
         return value;
+    }
+
+    public final void setValue(final T value) {
+        this.value = value;
     }
 
     /** {@inheritDoc} */

@@ -40,12 +40,7 @@ public final class Community implements Identifiable<CommunityName>,
     /**
      * A unique string identifying this community.
      */
-    private final CommunityName name;
-
-    /**
-     * The users which have joined this community and can log in to it.
-     */
-    private final Set<UserName> members;
+    private CommunityName name;
 
     /**
      * The password to join this community.
@@ -53,9 +48,15 @@ public final class Community implements Identifiable<CommunityName>,
     private Password password;
 
     /**
+     * The users which have joined this community and can log in to it.
+     */
+    private final Set<UserName> members = new HashSet<UserName>();
+
+    /**
      * A list of actively connected clients.
      */
-    private final IdentitySet<ConnectionIdentifier, Connection> clients;
+    private final IdentitySet<ConnectionIdentifier, Connection> clients =
+        new IdentitySet<ConnectionIdentifier, Connection>();
 
     private Set<CommunityListener> listeners = new HashSet<CommunityListener>();
 
@@ -74,6 +75,12 @@ public final class Community implements Identifiable<CommunityName>,
     }
 
     /**
+     * Constructs a new, empty community.
+     */
+    public Community() {
+    }
+
+    /**
      * Constructs a new community with the given name and password.
      *
      * @param name the name identifying the community
@@ -86,11 +93,6 @@ public final class Community implements Identifiable<CommunityName>,
 
         // Set the community password
         this.password = password;
-
-        // Create an empty collection of users
-        this.members = new HashSet<UserName>();
-
-        this.clients = new IdentitySet<ConnectionIdentifier, Connection>();
 
     }
 
@@ -275,25 +277,17 @@ public final class Community implements Identifiable<CommunityName>,
 
     }
 
-    /**
-     * Constructs a new Community from the data in an XmlNode.
-     *
-     * @param node the xml node containing data
-     * @return a Community built from the data in the xml node
-     * @throws ParseException if the data is improperly formatted
-     */
-    public static Community fromXml(final XmlNode node) throws ParseException {
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws ParseException {
 
-        Password password = new Password(node.getAttribute("password"));
-        CommunityName name = new CommunityName(node.getAttribute("name"));
-        Community community = new Community(name, password);
+        this.password = new Password(node.getAttribute("password"));
+        this.name = new CommunityName(node.getAttribute("name"));
 
         for (final XmlNode child : node.getChildren()) {
-            UserName username = UserName.fromXml(child);
-            community.addMember(username);
+            UserName username = new UserName();
+            username.fromXml(child);
+            addMember(username);
         }
-
-        return community;
 
     }
 

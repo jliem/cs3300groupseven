@@ -1,10 +1,12 @@
 package colab.common.channel.document;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
 
 public final class DeleteDocChannelData extends DocumentChannelData {
 
@@ -34,4 +36,24 @@ public final class DeleteDocChannelData extends DocumentChannelData {
     public void setParagraphID(final ParagraphIdentifier paragraphID) {
         this.paragraphID = paragraphID;
     }
+
+    /** {@inheritDoc} */
+    public XmlNode toXml() {
+
+        XmlNode node = new XmlNode("Delete");
+
+        // TODO:
+
+        return node;
+
+    }
+
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws ParseException {
+
+        // TODO:
+
+    }
+
+
 }

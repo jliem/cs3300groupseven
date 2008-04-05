@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 
@@ -17,7 +16,8 @@ public final class Document {
     private List<DocumentParagraph> paragraphs;
 
     /**
-     * A list of listeners to be called whenever a paragraph is inserted into or deleted from the document.
+     * A list of listeners to be called whenever a paragraph is inserted
+     * into or deleted from the document.
      */
     private List<DocumentListener> documentListeners;
 
@@ -26,18 +26,39 @@ public final class Document {
      */
     public Document() {
 
-        this.paragraphs = Collections.synchronizedList(
-                new ArrayList<DocumentParagraph>());
+        this.paragraphs = Collections
+                .synchronizedList(new ArrayList<DocumentParagraph>());
         this.documentListeners = new ArrayList<DocumentListener>();
 
     }
 
     /**
      * Inserts a {@link DocumentParagraph} into this document.
-     * 
-     * @param offset        the integer value used to compute the position at which the paragraph shall be inserted
-     * @param paragraph     a paragraph to be inserted into the document
+     *
+     * @param paragraph
+     *            a paragraph to be inserted into the document
      */
+    public void insert(final ParagraphIdentifier previous,
+            final DocumentParagraph paragraph) throws NotApplicableException {
+
+        int offset = 0;
+        if (previous != null) {
+            boolean offsetFound = false;
+            for (DocumentParagraph p : paragraphs) {
+                offset++;
+                if (p.getId().equals(previous)) {
+                    offsetFound = true;
+                    break;
+                }
+            }
+            if (!offsetFound) {
+                throw new NotApplicableException();
+            }
+        }
+        insert(offset, paragraph);
+
+    }
+
     public void insert(final int offset, final DocumentParagraph paragraph) {
 
         if (offset <= paragraphs.size() && offset >= 0) {
@@ -47,13 +68,14 @@ public final class Document {
 
     }
 
-    
     /**
-     * Deletes the first {@link DocumentParagraph} with a matching {@link ParagraphIdentifier},
-     * where the order of assessment matches the order of logical paragraphs in the document.
-     * 
-     * @param id    the paragraph id used to determine which paragraph should be deleted.  Id's
-     *              should be unique per channel.
+     * Deletes the first {@link DocumentParagraph} with a matching
+     * {@link ParagraphIdentifier}, where the order of assessment matches the
+     * order of logical paragraphs in the document.
+     *
+     * @param id
+     *            the paragraph id used to determine which paragraph should be
+     *            deleted. IDs should be unique per channel.
      */
     public void delete(final ParagraphIdentifier id) {
         DocumentParagraph rem = null;
@@ -72,14 +94,15 @@ public final class Document {
     }
 
     /**
-     * Returns a deep copy of this Document object.  Guarantees that this != this.copy(),
-     * and this.get(i) != this.copy().get(i), while retaining functional equality.
-     * 
+     * Returns a deep copy of this Document object. Guarantees that this !=
+     * this.copy(), and this.get(i) != this.copy().get(i), while retaining
+     * functional equality.
+     *
      * @return a new Document object
      */
     public Document copy() {
         Document cop = new Document();
-        for(DocumentParagraph p : paragraphs) {
+        for (DocumentParagraph p : paragraphs) {
             cop.insert(cop.getNumberParagraphs(), p.copy());
         }
 
@@ -87,10 +110,13 @@ public final class Document {
     }
 
     /**
-     * Applies a {@link DocumentParagraphDiff} to a paragraph matching <code>id</code>.
-     * 
-     * @param id    the paragraph id of a paragraph in this document
-     * @param diff  a change intended for the paragraph matching <code>id</code>
+     * Applies a {@link DocumentParagraphDiff} to a paragraph matching
+     * <code>id</code>.
+     *
+     * @param id
+     *            the paragraph id of a paragraph in this document
+     * @param diff
+     *            a change intended for the paragraph matching <code>id</code>
      * @throws NotApplicableException
      */
     public void applyEdit(final ParagraphIdentifier id,
@@ -106,8 +132,9 @@ public final class Document {
 
     /**
      * Retrieves the <code>(index+1)</code>th paragaph of this document.
-     * 
-     * @param index the position of the paragraph
+     *
+     * @param index
+     *            the position of the paragraph
      * @return the <code>(index+1)</code>th paragraph
      */
     public DocumentParagraph get(final int index) {
@@ -118,7 +145,7 @@ public final class Document {
 
     /**
      * Returns the size of the internal collection of paragraphs.
-     * 
+     *
      * @return an int representing the number of paragraphs in this document
      */
     public int getNumberParagraphs() {
@@ -129,22 +156,20 @@ public final class Document {
 
     /**
      * Returns an iterator over the internal collection of DocumentParagraphs.
-     * 
+     *
      * @return a paragraph iterator
      */
     public Iterator<DocumentParagraph> paragraphIterator() {
         return paragraphs.iterator();
     }
 
-    public void addDocumentListener(
-            final DocumentListener listener) {
+    public void addDocumentListener(final DocumentListener listener) {
 
         documentListeners.add(listener);
 
     }
-    
-    public void removeDocumentListener(
-            final DocumentListener listener) {
+
+    public void removeDocumentListener(final DocumentListener listener) {
         documentListeners.remove(listener);
     }
 
@@ -164,5 +189,5 @@ public final class Document {
         }
 
     }
-}
 
+}

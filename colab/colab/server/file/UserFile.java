@@ -40,13 +40,13 @@ public final class UserFile implements UserStore {
         final XmlReader xmlReader = new XmlReader(file);
         final List<XmlNode> xml = xmlReader.getXml();
         for (final XmlNode node : xml) {
-            User data;
+            User user = new User();
             try {
-                data = User.fromXml(node);
+                user.fromXml(node);
             } catch (final ParseException e) {
                 throw new IOException(e.getMessage());
             }
-            users.add(data);
+            users.add(user);
         }
 
     }

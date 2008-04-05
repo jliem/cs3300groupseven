@@ -1,10 +1,13 @@
 package colab.common.channel.document;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
+import colab.common.util.StringUtils;
+import colab.common.xml.XmlNode;
 
 public final class EditDocChannelData extends DocumentChannelData {
 
@@ -51,6 +54,24 @@ public final class EditDocChannelData extends DocumentChannelData {
 
     public void setParagraphID(final ParagraphIdentifier paragraphID) {
         this.paragraphID = paragraphID;
+    }
+
+    /** {@inheritDoc} */
+    public XmlNode toXml() {
+
+        XmlNode node = new XmlNode("Edit");
+
+        // TODO:
+
+        return node;
+
+    }
+
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws ParseException {
+
+        // TODO:
+
     }
 
 }

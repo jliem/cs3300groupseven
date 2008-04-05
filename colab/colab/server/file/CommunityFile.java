@@ -43,9 +43,9 @@ public final class CommunityFile implements CommunityStore, CommunityListener {
         final XmlReader xmlReader = new XmlReader(file);
         final List<XmlNode> xml = xmlReader.getXml();
         for (final XmlNode node : xml) {
-            Community community;
+            Community community = new Community();
             try {
-                community = Community.fromXml(node);
+                community.fromXml(node);
             } catch (final ParseException e) {
                 throw new IOException(e.getMessage());
             }

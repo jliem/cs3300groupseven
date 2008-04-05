@@ -20,12 +20,18 @@ public final class User implements Identifiable<UserName>,
     /**
      * A unique string identifying this user.
      */
-    private final UserName name;
+    private UserName name;
 
     /**
      * The password for this user to log in.
      */
     private Password pass;
+
+    /**
+     * Constructs an empty User.
+     */
+    public User() {
+    }
 
     /**
      * Constructs a new User.
@@ -91,17 +97,10 @@ public final class User implements Identifiable<UserName>,
         return node;
     }
 
-    /**
-     * Constructs a new User from the data in an XmlNode.
-     *
-     * @param node the xml node containing data
-     * @return a User built from the data in the xml node
-     * @throws ParseException if the data is improperly formatted
-     */
-    public static User fromXml(final XmlNode node) throws ParseException {
-        UserName name = new UserName(node.getAttribute("name"));
-        Password pass = new Password(node.getAttribute("password"));
-        return new User(name, pass);
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws ParseException {
+        this.name = new UserName(node.getAttribute("name"));
+        this.pass = new Password(node.getAttribute("password"));
     }
 
     /** {@inheritDoc} */

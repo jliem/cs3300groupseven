@@ -14,7 +14,7 @@ public final class DebugManager {
      * normal or high priority. When possible, use the
      * priority flags instead of switching this one off.
      */
-    private static final boolean EXCEPTIONS = true;
+    private static boolean exceptions = false;
 
     /**
      * Flag for printing debug messages.
@@ -83,13 +83,16 @@ public final class DebugManager {
      */
     private static final boolean UNABLE_TO_CONNECT = true;
 
+    public static void enableExceptions(final boolean enable) {
+        exceptions = enable;
+    }
 
     /**
      * Handles general exceptions.
      * @param t the Throwable
      */
     public static void exception(final Throwable t) {
-        if (EXCEPTIONS) {
+        if (exceptions) {
             t.printStackTrace();
         }
     }
@@ -100,7 +103,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void shouldNotHappen(final Throwable t) {
-        if (SHOULD_NOT_HAPPEN && HIGH_PRIORITY && EXCEPTIONS) {
+        if (SHOULD_NOT_HAPPEN && HIGH_PRIORITY && exceptions) {
             t.printStackTrace();
         }
     }
@@ -110,7 +113,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void windowClose(final Throwable t) {
-        if (WINDOW_CLOSE && EXCEPTIONS && LOW_PRIORITY) {
+        if (WINDOW_CLOSE && exceptions && LOW_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -120,7 +123,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void remote(final Throwable t) {
-        if (REMOTE && EXCEPTIONS && NORMAL_PRIORITY) {
+        if (REMOTE && exceptions && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -130,7 +133,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void network(final Throwable t) {
-        if (NETWORK && EXCEPTIONS && NORMAL_PRIORITY) {
+        if (NETWORK && exceptions && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -140,7 +143,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void illegalState(final Throwable t) {
-        if (ILLEGAL_STATE && EXCEPTIONS && NORMAL_PRIORITY) {
+        if (ILLEGAL_STATE && exceptions && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -150,7 +153,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void ioException(final Throwable t) {
-        if (IO && EXCEPTIONS && NORMAL_PRIORITY) {
+        if (IO && exceptions && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -160,7 +163,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void connectionDropped(final Throwable t) {
-        if (CONNECTION_DROPPED && EXCEPTIONS && NORMAL_PRIORITY) {
+        if (CONNECTION_DROPPED && exceptions && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }
@@ -170,7 +173,7 @@ public final class DebugManager {
      * @param t the Throwable
      */
     public static void unableToConnect(final Throwable t) {
-        if (UNABLE_TO_CONNECT && EXCEPTIONS && NORMAL_PRIORITY) {
+        if (UNABLE_TO_CONNECT && exceptions && NORMAL_PRIORITY) {
             t.printStackTrace();
         }
     }

@@ -80,12 +80,12 @@ public final class ColabClientTester extends TestCase {
         ConnectionRemote connection = server.connect(client);
         connection.logIn(new UserName("Chris"), "pass4".toCharArray());
 
-        System.out.println("User logged in.");
+        Logger.log("User logged in.");
 
         CommunityName communityName = new CommunityName("Team Awesome");
         connection.logIn(communityName, "awesomePass".toCharArray());
 
-        System.out.println("Logged into community.");
+        Logger.log("Logged into community.");
 
      */
 

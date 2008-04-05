@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import colab.common.ConnectionState;
 import colab.common.DebugManager;
+import colab.common.Logger;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDescriptor;
@@ -639,7 +640,7 @@ public final class Connection extends UnicastRemoteObject
      * @param message the message to print
      */
     private void log(final String message) {
-        System.out.println("[Connection " + connectionId + "] " + message);
+        Logger.log("[Connection " + connectionId + "] " + message);
     }
 
 }

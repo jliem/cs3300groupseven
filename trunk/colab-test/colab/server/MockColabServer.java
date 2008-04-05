@@ -1,5 +1,7 @@
 package colab.server;
 
+import colab.common.DebugManager;
+import colab.common.Logger;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
@@ -86,6 +88,9 @@ public final class MockColabServer extends ColabServer {
      */
     public static void main(final String[] args) throws Exception {
 
+        DebugManager.enableExceptions(true);
+
+        Logger.enable(true);
 
         // Default port
         Integer port = 9040;

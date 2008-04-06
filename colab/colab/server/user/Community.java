@@ -263,9 +263,14 @@ public final class Community implements Identifiable<CommunityName>,
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "Community";
+    }
+
+    /** {@inheritDoc} */
     public XmlNode toXml() {
 
-        XmlNode node = new XmlNode("Community");
+        XmlNode node = new XmlNode(xmlNodeName());
         node.setAttribute("name", name.getValue());
         node.setAttribute("password", password.getHash());
 

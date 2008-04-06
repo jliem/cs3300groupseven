@@ -69,18 +69,18 @@ public final class InsertDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "Insert";
+    }
+
+    /** {@inheritDoc} */
     public XmlNode toXml() {
 
-        XmlNode node = new XmlNode("Insert");
-
-        node.setAttribute("id", getId().toString());
-        node.setAttribute("time", DATE_FORMAT.format(getTimestamp()));
-        node.setAttribute("creator", getCreator().toString());
+        XmlNode node = super.toXml();
 
         node.setAttribute("previous", StringUtils.emptyIfNull(
-                previous.getValue().toString()));
-
-        node.addChild(paragraph.toXml());
+                this.previous.getValue().toString()));
+        node.addChild(this.paragraph.toXml());
 
         return node;
 
@@ -89,7 +89,17 @@ public final class InsertDocChannelData extends DocumentChannelData {
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
 
-        // TODO:
+        super.fromXml(node);
+
+        try {
+            this.previous = new ParagraphIdentifier(
+                    Integer.parseInt(node.getAttribute("previous")));
+        } catch (final NumberFormatException e) {
+            throw new XmlParseException(e);
+        }
+
+        this.paragraph = new DocumentParagraph();
+        this.paragraph.fromXml(node.getChildren().get(0));
 
     }
 

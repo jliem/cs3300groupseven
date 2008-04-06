@@ -20,7 +20,7 @@ import colab.server.channel.ServerDocumentChannel;
 public abstract class DocumentChannelData extends ChannelData
         implements XmlSerializable {
 
-    public enum DocumentChannelDataType {
+    protected enum DocumentChannelDataType {
         INSERT,
         DELETE,
         EDIT
@@ -62,24 +62,29 @@ public abstract class DocumentChannelData extends ChannelData
         new XmlConstructor<DocumentChannelData>() {
             public DocumentChannelData fromXml(final XmlNode node)
                     throws XmlParseException {
-
-                DocumentChannelData data;
-                String type = node.getType();
-                if (type.equals("Insert")) {
-                    data = new InsertDocChannelData();
-                } else if (type.equals("Edit")) {
-                    data = new EditDocChannelData();
-                } else if (type.equals("Delete")) {
-                    data = new DeleteDocChannelData();
-                } else {
-                    throw new XmlParseException();
-                }
-
-                data.fromXml(node);
-
-                return data;
-
+                return constructFromXml(node);
             }
         };
+
+    private static DocumentChannelData constructFromXml(final XmlNode node)
+            throws XmlParseException {
+
+        DocumentChannelData data;
+        String type = node.getType();
+        if (type.equals("Insert")) {
+            data = new InsertDocChannelData();
+        } else if (type.equals("Edit")) {
+            data = new EditDocChannelData();
+        } else if (type.equals("Delete")) {
+            data = new DeleteDocChannelData();
+        } else {
+            throw new XmlParseException();
+        }
+
+        data.fromXml(node);
+
+        return data;
+
+    }
 
 }

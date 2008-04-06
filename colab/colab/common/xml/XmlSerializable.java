@@ -5,6 +5,8 @@ package colab.common.xml;
  */
 public interface XmlSerializable {
 
+    String xmlNodeName();
+
     /**
      * @return an xml node containing all of the data required
      *         to serialize this object.

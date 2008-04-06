@@ -90,8 +90,13 @@ public final class User implements Identifiable<UserName>,
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "User";
+    }
+
+    /** {@inheritDoc} */
     public XmlNode toXml() {
-        XmlNode node = new XmlNode("User");
+        XmlNode node = new XmlNode(xmlNodeName());
         node.setAttribute("name", name.getValue());
         node.setAttribute("password", pass.getHash());
         return node;

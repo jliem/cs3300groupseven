@@ -22,7 +22,7 @@ import colab.common.DebugManager;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
-import colab.common.channel.document.DocumentParagraphDiff;
+import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;

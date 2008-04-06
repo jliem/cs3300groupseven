@@ -41,11 +41,16 @@ public final class DeleteDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "Delete";
+    }
+
+    /** {@inheritDoc} */
     public XmlNode toXml() {
 
-        XmlNode node = new XmlNode("Delete");
+        XmlNode node = super.toXml();
 
-        // TODO:
+        node.setAttribute("paragraphId", this.paragraphID.toString());
 
         return node;
 
@@ -54,7 +59,14 @@ public final class DeleteDocChannelData extends DocumentChannelData {
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
 
-        // TODO:
+        super.fromXml(node);
+
+        try {
+            this.paragraphID = new ParagraphIdentifier(
+                    Integer.parseInt(node.getAttribute("paragraphId")));
+        } catch (final NumberFormatException e) {
+            throw new XmlParseException(e);
+        }
 
     }
 

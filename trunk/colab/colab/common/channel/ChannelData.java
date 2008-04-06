@@ -2,11 +2,14 @@ package colab.common.channel;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import colab.common.identity.Identifiable;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
 
 /**
@@ -131,6 +134,39 @@ public abstract class ChannelData implements Serializable,
      */
     public final void setTimestamp() {
         this.timestamp = new Date();
+    }
+
+    /** {@inheritDoc} */
+    public XmlNode toXml() {
+
+        XmlNode node = new XmlNode(xmlNodeName());
+
+        node.setAttribute("id", this.id.toString());
+        node.setAttribute("time", DATE_FORMAT.format(this.timestamp));
+        node.setAttribute("creator", this.creator.toString());
+
+        return node;
+
+    }
+
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws XmlParseException {
+
+        try {
+            int intId = Integer.parseInt(node.getAttribute("id"));
+            this.id = new ChannelDataIdentifier(intId);
+        } catch (final NumberFormatException e) {
+            throw new XmlParseException(e);
+        }
+
+        try {
+            this.timestamp = DATE_FORMAT.parse(node.getAttribute("time"));
+        } catch (final ParseException e) {
+            throw new XmlParseException(e);
+        }
+
+        this.creator = new UserName(node.getAttribute("creator"));
+
     }
 
 }

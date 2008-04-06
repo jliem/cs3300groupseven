@@ -32,8 +32,13 @@ public class UserName extends StringIdentifier implements XmlSerializable {
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "UserName";
+    }
+
+    /** {@inheritDoc} */
     public final XmlNode toXml() {
-        XmlNode node = new XmlNode("UserName");
+        XmlNode node = new XmlNode(xmlNodeName());
         node.setContent(getValue());
         return node;
     }

@@ -101,36 +101,21 @@ public final class ChatChannelData extends ChannelData {
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "ChatMessage";
+    }
+
+    /** {@inheritDoc} */
     public XmlNode toXml() {
-
-        XmlNode node = new XmlNode("ChatMessage");
-
-        node.setAttribute("id", getId().toString());
-        node.setAttribute("time", DATE_FORMAT.format(getTimestamp()));
-        node.setAttribute("creator", getCreator().toString());
-
+        XmlNode node = super.toXml();
         node.setContent(text);
-
         return node;
-
     }
 
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
-
-        setId(new ChannelDataIdentifier(
-                Integer.parseInt(node.getAttribute("id"))));
-
-        try {
-            setTimestamp(DATE_FORMAT.parse(node.getAttribute("time")));
-        } catch (final ParseException e) {
-            throw new XmlParseException(e);
-        }
-
-        setCreator(new UserName(node.getAttribute("creator")));
-
+        super.fromXml(node);
         this.text = node.getBody();
-
     };
 
     /** {@inheritDoc} */

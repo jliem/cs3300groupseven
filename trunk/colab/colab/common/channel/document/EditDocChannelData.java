@@ -2,6 +2,7 @@ package colab.common.channel.document;
 
 import java.util.Date;
 
+import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
@@ -59,11 +60,18 @@ public final class EditDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    public String xmlNodeName() {
+        return "Edit";
+    }
+
+    /** {@inheritDoc} */
     public XmlNode toXml() {
 
-        XmlNode node = new XmlNode("Edit");
+        XmlNode node = super.toXml();
 
-        // TODO:
+        node.setAttribute("paragraphId", this.paragraphID.toString());
+
+        node.addChild(this.differences.toXml());
 
         return node;
 
@@ -72,7 +80,17 @@ public final class EditDocChannelData extends DocumentChannelData {
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
 
-        // TODO:
+        super.fromXml(node);
+
+        try {
+            this.paragraphID = new ParagraphIdentifier(
+                    Integer.parseInt(node.getAttribute("paragraphId")));
+        } catch (final NumberFormatException e) {
+            throw new XmlParseException(e);
+        }
+
+        this.differences = new DocumentParagraphDiff();
+        this.differences.fromXml(node);
 
     }
 

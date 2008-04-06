@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.ParagraphListener;
 import colab.common.identity.Identifiable;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
 import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
 
 /**
@@ -44,12 +46,13 @@ public final class DocumentParagraph implements Serializable,
     }
 
     /**
-     * Constructs a DocumentParagaph with an identifier, contents, a header level,
-     * and a creation date.
+     * Constructs a DocumentParagaph with an identifier, contents,
+     * a header level, and a creation date.
      *
      * @param cont          the textual contents of the paragraph
      * @param head          the header level of this paragrap, starting at 0
-     * @param creator       the creator of the paragraph, to become the first lock holder
+     * @param creator       the creator of the paragraph, to become the
+     *                      first lock holder
      * @param id            an object identifying this paragraph with a document
      * @param date          the creation date of the paragraph
      */
@@ -170,8 +173,9 @@ public final class DocumentParagraph implements Serializable,
      * Copies this paragaph's change log, resetting the internal copy
      * for later use.
      *
-     * @return a DocumentParagraphDiff holding changes to this paragraph since the last
-     *          {@link #getDifferences()} or {@link #resetDifferences()}
+     * @return a DocumentParagraphDiff holding changes to this
+     *         paragraph since the last {@link #getDifferences()}
+     *         or {@link #resetDifferences()}
      */
     public DocumentParagraphDiff getDifferences() {
 
@@ -201,7 +205,8 @@ public final class DocumentParagraph implements Serializable,
     }
 
     /**
-     * Reports whether this paragaph has been changed since its differences were last reset.
+     * Reports whether this paragaph has been changed since
+     * its differences were last reset.
      *
      * @return a boolean
      */
@@ -256,16 +261,29 @@ public final class DocumentParagraph implements Serializable,
     }
 
     /** {@inheritDoc} */
-    public void fromXml(final XmlNode node) {
-
-        // TODO:
-
+    public String xmlNodeName() {
+        return "Paragraph";
     }
 
     /** {@inheritDoc} */
     public XmlNode toXml() {
+        XmlNode node = new XmlNode(xmlNodeName());
+        node.setAttribute("id", this.id.getValue().toString());
+        node.setContent(this.contents.toString());
+        return node;
+    }
 
-        return null; // TODO:
+    /** {@inheritDoc} */
+    public void fromXml(final XmlNode node) throws XmlParseException {
+
+        try {
+            this.id = new ParagraphIdentifier(
+                    Integer.parseInt(node.getAttribute("id")));
+        } catch (final NumberFormatException e) {
+            throw new XmlParseException(e);
+        }
+
+        this.contents = new StringBuffer(node.getBody());
 
     }
 

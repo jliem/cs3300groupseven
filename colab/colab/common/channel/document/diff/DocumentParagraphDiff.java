@@ -93,14 +93,53 @@ public final class DocumentParagraphDiff implements XmlSerializable {
     /** {@inheritDoc} */
     public XmlNode toXml() {
 
-        return null; // TODO:
+        XmlNode node = new XmlNode("Differences");
+
+        for (Applicable change : changes) {
+            node.addChild(change.toXml());
+        }
+
+        return node;
 
     }
 
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
 
-        // TODO:
+        for (XmlNode child : node.getChildren()) {
+            Applicable change = instantiateApplicableFromXml(child.getType());
+            change.fromXml(child);
+            changes.add(change);
+        }
+
+    }
+
+    private static Applicable instantiateApplicableFromXml(
+            final String type) throws XmlParseException {
+
+        Applicable applicable;
+
+        applicable = new ChangeLevel();
+        if (applicable.xmlNodeName().equals(type)) {
+            return applicable;
+        }
+
+        applicable = new ChangeLock();
+        if (applicable.xmlNodeName().equals(type)) {
+            return applicable;
+        }
+
+        applicable = new Delete();
+        if (applicable.xmlNodeName().equals(type)) {
+            return applicable;
+        }
+
+        applicable = new Insert();
+        if (applicable.xmlNodeName().equals(type)) {
+            return applicable;
+        }
+
+        throw new XmlParseException();
 
     }
 

@@ -69,21 +69,33 @@ public abstract class DocumentChannelData extends ChannelData
     private static DocumentChannelData constructFromXml(final XmlNode node)
             throws XmlParseException {
 
+        DocumentChannelData data = instantiateFromXmlType(node.getType());
+        data.fromXml(node);
+        return data;
+
+    }
+
+    private static DocumentChannelData instantiateFromXmlType(
+            final String type) throws XmlParseException {
+
         DocumentChannelData data;
-        String type = node.getType();
-        if (type.equals("Insert")) {
-            data = new InsertDocChannelData();
-        } else if (type.equals("Edit")) {
-            data = new EditDocChannelData();
-        } else if (type.equals("Delete")) {
-            data = new DeleteDocChannelData();
-        } else {
-            throw new XmlParseException();
+
+        data = new InsertDocChannelData();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
         }
 
-        data.fromXml(node);
+        data = new EditDocChannelData();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
 
-        return data;
+        data = new DeleteDocChannelData();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        throw new XmlParseException();
 
     }
 

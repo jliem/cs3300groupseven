@@ -81,17 +81,47 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             selectionStart = editor.getSelectionStart();
 
-            // Send any current inserts
-            editor.sendPendingInsert();
+            // Send any current inserts or deletes
+            editor.sendPendingChange();
 
             // Restore the caret
             editor.setCaretPosition(selectionStart);
 
             break;
 
-        case KeyEvent.VK_BACK_SPACE:
+
         case KeyEvent.VK_DELETE:
+        case KeyEvent.VK_BACK_SPACE:
             // Delete event
+
+            if (editor.getText().length() == 0) {
+                // There was no text and delete/backspace was pressed, so
+                // delete this paragraph
+
+                // TODO Finish this
+                DebugManager.debug("Delete paragraph is not implemented yet");
+            } else {
+                // Delete text
+
+                // Check whether we're in the middle of deleting
+                if (editor.getDeleteStart() >= 0) {
+                    // We already have a delete in progress, so increment it one
+                    editor.setDeleteLength(editor.getDeleteLength()+1);
+                } else {
+                    // No delete in progress
+                    // Set starting index
+                    editor.setDeleteStart(editor.getStartIndex());
+
+                    editor.setDeleteLength(1);
+                }
+
+                // If delete was pressed instead of backspace,
+                // increment the delete start index
+                if (arg0.getKeyCode() == KeyEvent.VK_DELETE) {
+                    editor.setDeleteStart(editor.getDeleteStart()+1);
+                }
+
+            }
 
             break;
 

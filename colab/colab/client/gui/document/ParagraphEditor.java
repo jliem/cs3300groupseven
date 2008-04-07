@@ -17,12 +17,6 @@ import colab.common.naming.UserName;
 
 class ParagraphEditor extends JTextArea {
 
-    public enum ParagraphState {
-        INSERTING,
-        DELETE,
-        NOTHING
-    }
-
     private static final int FONT_STEP = 4;
 
     private final DocumentParagraph paragraph;
@@ -39,14 +33,14 @@ class ParagraphEditor extends JTextArea {
 
     private StringBuffer insertText;
 
-    private ParagraphState state;
 
     /** The index at which we first clicked (presumably to being inserting
      * or deleting text)
      */
     private int startIndex;
 
-    private int endIndex;
+    private int deleteLength;
+    private int deleteStart;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
             final DocumentParagraph paragraph,
@@ -59,11 +53,10 @@ class ParagraphEditor extends JTextArea {
         this.defaultFG = getForeground();
         this.defaultBG = getBackground();
 
-        this.state = ParagraphState.NOTHING;
         this.insertText = new StringBuffer();
         this.startIndex = -1;
-        this.endIndex = -1;
-
+        this.deleteLength = -1;
+        this.deleteStart = -1;
 
         setText(this.paragraph.getContents());
         showHeader(this.paragraph.getHeaderLevel());
@@ -112,10 +105,31 @@ class ParagraphEditor extends JTextArea {
         insertText.append(c);
     }
 
+    public void sendPendingChange() {
+        sendPendingDelete();
+        sendPendingInsert();
+    }
+
+    public void sendPendingDelete() {
+
+        if (deleteStart >= 0 && deleteLength >= 0) {
+            // Compute starting offset from start and length
+            int offset = deleteStart - deleteLength;
+
+            DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
+
+            channel.delete(offset, deleteLength, paragraph.getId());
+
+            deleteStart = -1;
+            deleteLength = -1;
+        }
+
+    }
+
     public void sendPendingInsert() {
 
         // Check if there's any text to send
-        if (startIndex >= 0) {
+        if (startIndex >= 0 && insertText.length() > 0) {
             DebugManager.debug("Editor is sending text \"" + insertText.toString() +
                     "\" at index " + startIndex);
 
@@ -220,14 +234,20 @@ class ParagraphEditor extends JTextArea {
         this.startIndex = startIndex;
     }
 
-
-    public int getEndIndex() {
-        return endIndex;
+    public int getDeleteLength() {
+        return deleteLength;
     }
 
+    public void setDeleteLength(int deleteLength) {
+        this.deleteLength = deleteLength;
+    }
 
-    public void setEndIndex(int endIndex) {
-        this.endIndex = endIndex;
+    public int getDeleteStart() {
+        return deleteStart;
+    }
+
+    public void setDeleteStart(int deleteStart) {
+        this.deleteStart = deleteStart;
     }
 
 }

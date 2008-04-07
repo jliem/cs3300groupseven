@@ -165,6 +165,21 @@ public final class Document {
         return paragraphs.iterator();
     }
 
+    public DocumentParagraph get(final ParagraphIdentifier id) {
+        DocumentParagraph para = null;
+        
+        Iterator<DocumentParagraph> iter = paragraphs.iterator();
+        while(iter.hasNext()) {
+            DocumentParagraph next = iter.next();
+            if(next.getId().equals(id)) {
+                para = next;
+                break;
+            }
+        }
+        
+        return para;
+    }
+    
     public void addDocumentListener(final DocumentListener listener) {
 
         documentListeners.add(listener);

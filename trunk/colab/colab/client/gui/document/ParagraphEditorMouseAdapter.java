@@ -3,7 +3,6 @@ package colab.client.gui.document;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import colab.client.gui.document.ParagraphEditor.ParagraphState;
 import colab.common.DebugManager;
 
 public class ParagraphEditorMouseAdapter extends MouseAdapter {
@@ -25,8 +24,8 @@ public class ParagraphEditorMouseAdapter extends MouseAdapter {
         // be wiped out by any inserts
         selectionStart = editor.getSelectionStart();
 
-        // Send any current inserts
-        editor.sendPendingInsert();
+        // Send any current inserts or deletes
+        editor.sendPendingChange();
 
         // Set the click position
         editor.setStartIndex(selectionStart);

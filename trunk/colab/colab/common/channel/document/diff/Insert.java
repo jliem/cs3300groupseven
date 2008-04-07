@@ -3,7 +3,7 @@ package colab.common.channel.document.diff;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 
-class Insert implements Applicable {
+public class Insert implements Applicable {
 
     private String contents;
 

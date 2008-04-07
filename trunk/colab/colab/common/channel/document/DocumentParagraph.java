@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.ParagraphListener;
 import colab.common.identity.Identifiable;
@@ -85,7 +86,7 @@ public final class DocumentParagraph implements Serializable,
     }
 
     public void delete(final int offset, final int length) {
-        contents.delete(offset, length);
+        contents.delete(offset, (length+offset));
         fireOnDelete(offset, length);
     }
 

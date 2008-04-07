@@ -118,7 +118,7 @@ class ParagraphEditor extends JTextArea {
 
             DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
 
-            channel.delete(offset, deleteLength, paragraph.getId());
+            channel.deleteText(offset, deleteLength, paragraph.getId());
 
             deleteStart = -1;
             deleteLength = -1;
@@ -133,7 +133,7 @@ class ParagraphEditor extends JTextArea {
             DebugManager.debug("Editor is sending text \"" + insertText.toString() +
                     "\" at index " + startIndex);
 
-            channel.insert(startIndex, insertText.toString(), paragraph.getId());
+            channel.insertText(startIndex, insertText.toString(), paragraph.getId());
 
             // Clear start index and text
             startIndex = -1;

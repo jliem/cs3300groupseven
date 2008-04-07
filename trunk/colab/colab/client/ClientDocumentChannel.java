@@ -88,12 +88,12 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     
     
-    public void insert(final int offset, final String content, ParagraphIdentifier id) {
+    public void insertText(final int offset, final String content, ParagraphIdentifier id) {
         currentDocument.get(id).insert(offset, content);
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 
-    public void delete(final int offset, final int length, ParagraphIdentifier id) {
+    public void deleteText(final int offset, final int length, ParagraphIdentifier id) {
         currentDocument.get(id).delete(offset, length);
         //TODO: actually queue up changes, send to server after time or reqs are met
     }

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import colab.client.ClientDocumentChannel;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.common.DebugManager;
@@ -26,6 +28,7 @@ import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
+import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
 /**
@@ -46,12 +49,14 @@ final class DocumentPanel extends ClientChannelPanel {
 
     private Document document;
 
+    private ClientDocumentChannel channel;
+
     /**
      * Constructs a new DocumentPanel.
      *
      * @param name the name of the currently logged-in user
      */
-    public DocumentPanel(final UserName name, final Document document) {
+    public DocumentPanel(final UserName name, final ClientDocumentChannel channel) {
         super(name);
 
         mainPanel = new JPanel();
@@ -65,7 +70,9 @@ final class DocumentPanel extends ClientChannelPanel {
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        this.document = document;
+        this.channel = channel;
+        this.document = channel.getCurrentDocument();
+
         editors = Collections.synchronizedList(
                 new ArrayList<ParagraphEditor>());
 
@@ -144,44 +151,24 @@ final class DocumentPanel extends ClientChannelPanel {
             final DocumentParagraph paragraph) {
 
         final ParagraphEditor editor =
-            new ParagraphEditor(paragraph, getUsername());
+            new ParagraphEditor(channel, paragraph, getUsername());
 
+        editor.addKeyListener(new ParagraphEditorKeyAdapter(editor));
+        editor.addMouseListener(new ParagraphEditorMouseAdapter(editor));
+
+        // Add shift event
         editor.addKeyListener(new KeyAdapter() {
            @Override
             public void keyPressed(final KeyEvent arg0) {
                 super.keyPressed(arg0);
-                if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-                    if (arg0.isShiftDown()) {
-                        int position = editor.getCaretPosition();
-                        editor.insert("\n", position);
-                    } else {
-                        /* TODO- signal new paragraph creation
-                         * to server, insert in gui, move
-                         * cursor to it, et cetera */
-                    }
-                    arg0.consume();
-                } else if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
-                    if (arg0.isShiftDown()) {
-                        editor.append("\t");
-                    } else {
+                if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
+                    if (!arg0.isShiftDown()) {
                         shiftFocus();
+                    } else {
                     }
                     arg0.consume();
-                } else if (arg0.getKeyCode() == KeyEvent.VK_UP
-                        && arg0.isControlDown()) {
-                    DocumentParagraph p = editor.getParagraph();
-                    p.setHeaderLevel(p.getHeaderLevel()+1);
-                    /* TODO: - signal insert to server, still
-                     * not sure how this will work- maybe some
-                     * unified object that i can send all this
-                     * too, will use timers to send updates? */
-                } else if (arg0.getKeyCode() == KeyEvent.VK_DOWN
-                        && arg0.isControlDown()) {
-                    DocumentParagraph p = editor.getParagraph();
-                    p.setHeaderLevel(p.getHeaderLevel()-1);
-                    // TODO: signal server
                 }
-            }
+           }
         });
 
         editors.add(offset, editor);
@@ -208,14 +195,16 @@ final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws RemoteException {
         JFrame f = new JFrame("Document Editor");
         f.setPreferredSize(new Dimension(320, 300));
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Document doc = new Document();
+        ClientDocumentChannel channel = new ClientDocumentChannel(new ChannelName("Doc test"));
 
-        DocumentPanel p = new DocumentPanel(new UserName("Matt"), doc);
+        Document doc  = channel.getCurrentDocument();
+
+        DocumentPanel p = new DocumentPanel(new UserName("Matt"), channel);
         f.setContentPane(p);
 
         f.pack();

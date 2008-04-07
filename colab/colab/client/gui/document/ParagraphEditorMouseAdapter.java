@@ -10,6 +10,8 @@ public class ParagraphEditorMouseAdapter extends MouseAdapter {
 
     private final ParagraphEditor editor;
 
+    private int selectionStart;
+
     public ParagraphEditorMouseAdapter(final ParagraphEditor editor) {
         this.editor = editor;
     }
@@ -19,13 +21,20 @@ public class ParagraphEditorMouseAdapter extends MouseAdapter {
         // Whenever the mouse is clicked in a text box, we are
         // beginning an insert
 
-        // Check whether an insert was already in progress
+        // Save the click position first--it will
+        // be wiped out by any inserts
+        selectionStart = editor.getSelectionStart();
 
+        // Send any current inserts
+        editor.sendPendingInsert();
 
-        // For every click, log the click position
-        editor.setStartClickIndex(editor.getSelectionStart());
+        // Set the click position
+        editor.setStartIndex(selectionStart);
 
-        DebugManager.debug("Start index is " + editor.getStartClickIndex());
+        // Restore the caret
+        editor.setCaretPosition(selectionStart);
+
+        DebugManager.debug("Start index is " + editor.getStartIndex());
     }
 
 }

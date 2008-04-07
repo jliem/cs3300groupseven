@@ -14,17 +14,14 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
     private final ParagraphEditor editor;
 
+    private int selectionStart;
+
     public ParagraphEditorKeyAdapter(final ParagraphEditor editor) {
         this.editor = editor;
     }
 
     public void keyPressed(final KeyEvent arg0) {
         super.keyPressed(arg0);
-
-        // Every time a key is pressed, log the index
-        editor.setEndIndex(editor.getSelectionStart());
-
-        DebugManager.debug("End index is " + editor.getEndIndex());
 
         switch (arg0.getKeyCode()) {
 
@@ -77,6 +74,21 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             break;
 
+        case KeyEvent.VK_LEFT:
+        case KeyEvent.VK_RIGHT:
+
+            // Pressing an arrow key means moving the cursor, so send any inserts
+
+            selectionStart = editor.getSelectionStart();
+
+            // Send any current inserts
+            editor.sendPendingInsert();
+
+            // Restore the caret
+            editor.setCaretPosition(selectionStart);
+
+            break;
+
         case KeyEvent.VK_BACK_SPACE:
         case KeyEvent.VK_DELETE:
             // Delete event
@@ -84,8 +96,17 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
             break;
 
         default:
-            // Nothing
 
+            // Any other character gets added as insert text
+
+
+            // If we weren't already tracking the index, record it now
+            if (editor.getStartIndex() < 0) {
+                editor.setStartIndex(editor.getSelectionStart());
+
+                DebugManager.debug("Start index set to " + editor.getStartIndex());
+            }
+            editor.addInsertText(arg0.getKeyChar());
         }
     }
 }

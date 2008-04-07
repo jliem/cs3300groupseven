@@ -3,13 +3,15 @@ package colab.client.gui.document;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.Vector;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JTextArea;
 
 import colab.client.ClientDocumentChannel;
+import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
-import colab.common.channel.document.diff.Insert;
 import colab.common.event.document.ParagraphListener;
 import colab.common.naming.UserName;
 
@@ -35,14 +37,14 @@ class ParagraphEditor extends JTextArea {
 
     private static final long serialVersionUID = 1;
 
-    private final Vector<Insert> inserts;
+    private StringBuffer insertText;
 
     private ParagraphState state;
 
     /** The index at which we first clicked (presumably to being inserting
      * or deleting text)
      */
-    private int startClickIndex;
+    private int startIndex;
 
     private int endIndex;
 
@@ -58,8 +60,8 @@ class ParagraphEditor extends JTextArea {
         this.defaultBG = getBackground();
 
         this.state = ParagraphState.NOTHING;
-        this.inserts = new Vector<Insert>();
-        this.startClickIndex = -1;
+        this.insertText = new StringBuffer();
+        this.startIndex = -1;
         this.endIndex = -1;
 
 
@@ -69,6 +71,21 @@ class ParagraphEditor extends JTextArea {
 
         setLineWrap(true);
         setWrapStyleWord(true);
+
+        this.addFocusListener(new FocusListener() {
+
+            public void focusGained(FocusEvent arg0) {
+                // When this field gains focus, save the start
+                // index
+//                setStartIndex(getSelectionStart());
+//
+//                DebugManager.debug("Focus--Insert text beginning at " + getStartIndex());
+            }
+
+            public void focusLost(FocusEvent e) {
+                sendPendingInsert();
+            }
+        });
 
         paragraph.addParagraphListener(new ParagraphListener() {
 
@@ -91,11 +108,23 @@ class ParagraphEditor extends JTextArea {
         });
     }
 
+    public void addInsertText(char c) {
+        insertText.append(c);
+    }
 
-    public void sendPendingInserts() {
-        // Combine all inserts into a single diff
+    public void sendPendingInsert() {
 
-        // TODO
+        // Check if there's any text to send
+        if (startIndex >= 0) {
+            DebugManager.debug("Editor is sending text \"" + insertText.toString() +
+                    "\" at index " + startIndex);
+
+            channel.insert(startIndex, insertText.toString(), paragraph.getId());
+
+            // Clear start index and text
+            startIndex = -1;
+            insertText = new StringBuffer();
+        }
     }
 
 
@@ -182,13 +211,13 @@ class ParagraphEditor extends JTextArea {
     }
 
 
-    public int getStartClickIndex() {
-        return startClickIndex;
+    public int getStartIndex() {
+        return startIndex;
     }
 
 
-    public void setStartClickIndex(int startClickIndex) {
-        this.startClickIndex = startClickIndex;
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
     }
 
 

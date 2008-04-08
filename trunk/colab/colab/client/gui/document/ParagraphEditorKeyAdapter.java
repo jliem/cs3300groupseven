@@ -51,7 +51,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
         default:
 
-            if ((int)ke.getKeyChar() == KeyEvent.VK_ENTER) {
+            if ((int)ke.getKeyChar() == KeyEvent.VK_ENTER ||
+                    (int)ke.getKeyChar() == KeyEvent.VK_TAB) {
 
                 if (!ke.isShiftDown()) {
                     // Nothing if shift is not held down,
@@ -60,13 +61,13 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 }
             }
 
-            // Any typeable character gets inserted as text
+        // Any typeable character gets inserted as text
 
-            // If we don't have a lock, request it
-            // if appropriate
-            if (editor.isUnlocked()) {
-                editor.requestLock();
-            }
+        // If we don't have a lock, request it
+        // if appropriate
+        if (editor.isUnlocked()) {
+            editor.requestLock();
+        }
 
         // If we weren't already tracking the index, record it now
         if (editor.getStartIndex() < 0) {
@@ -106,7 +107,9 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         case KeyEvent.VK_TAB:
 
              if (ke.isShiftDown()) {
-                 editor.append("\t");
+                 int position = editor.getCaretPosition();
+                 editor.insert("\t", position);
+                 editor.addInsertText('\t');
              } else {
                  // Focus shifting done in DocumentPanel
              }

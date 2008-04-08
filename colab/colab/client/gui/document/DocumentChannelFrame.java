@@ -90,7 +90,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         });
 
-        JMenuItem export = new JMenuItem("Export Chat");
+        JMenuItem export = new JMenuItem("Export Document");
         export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
                 ActionEvent.ALT_MASK));
         export.getAccessibleContext().setAccessibleDescription(
@@ -103,9 +103,9 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         export.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-//                ExportChatFrame frame = new ExportChatFrame(channel);
-//                frame.pack();
-//                frame.setVisible(true);
+                ExportDocumentFrame frame = new ExportDocumentFrame(channel);
+                frame.pack();
+                frame.setVisible(true);
             }
         });
 

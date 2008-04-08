@@ -269,31 +269,31 @@ class ParagraphEditor extends JTextArea {
         paragraphListeners.remove(listener);
     }
 
-    protected void fireOnLock(final UserName newOwner) {
+    private void fireOnLock(final UserName newOwner) {
         for (ParagraphListener listener : paragraphListeners) {
             listener.onLock(newOwner);
         }
     }
 
-    protected void fireOnUnlock() {
+    private void fireOnUnlock() {
         for (ParagraphListener listener : paragraphListeners) {
             listener.onUnlock();
         }
     }
 
-    protected void fireHeaderChange(final int headerLevel) {
+    private void fireHeaderChange(final int headerLevel) {
         for (ParagraphListener listener : paragraphListeners) {
             listener.onHeaderChange(headerLevel);
         }
     }
 
-    protected void fireOnInsert(final int offset, final String hunk) {
+    private void fireOnInsert(final int offset, final String hunk) {
         for (ParagraphListener listener : paragraphListeners) {
             listener.onInsert(offset, hunk);
         }
     }
 
-    protected void fireOnDelete(final int offset, final int length) {
+    private void fireOnDelete(final int offset, final int length) {
         for (ParagraphListener listener : paragraphListeners) {
             listener.onDelete(offset, length);
         }
@@ -332,13 +332,14 @@ class ParagraphEditor extends JTextArea {
 
             DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
 
-            try {
-                channel.deleteText(offset, deleteLength,
-                        paragraph.getId(), user);
-            } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                DebugManager.remote(e);
-            }
+            this.fireOnDelete(offset, deleteLength);
+//            try {
+//                channel.deleteText(offset, deleteLength,
+//                        paragraph.getId(), user);
+//            } catch (RemoteException e) {
+//                // TODO Auto-generated catch block
+//                DebugManager.remote(e);
+//            }
 
             resetDelete();
         }
@@ -362,13 +363,15 @@ class ParagraphEditor extends JTextArea {
             DebugManager.debug("Editor is sending text \"" + insertText.toString() +
                     "\" at index " + startIndex);
 
-            try {
-                channel.insertText(startIndex, insertText.toString(),
-                        paragraph.getId(), user);
-            } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                DebugManager.remote(e);
-            }
+            this.fireOnInsert(startIndex, insertText.toString());
+
+//            try {
+//                channel.insertText(startIndex, insertText.toString(),
+//                        paragraph.getId(), user);
+//            } catch (RemoteException e) {
+//                // TODO Auto-generated catch block
+//                DebugManager.remote(e);
+//            }
 
             // Clear start index and text
             resetInsert();
@@ -456,9 +459,6 @@ class ParagraphEditor extends JTextArea {
 
     private UserName getLockHolder() {
         UserName lockHolder = paragraph.getLockHolder();
-
-        DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
-
         return lockHolder;
     }
 

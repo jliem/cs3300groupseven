@@ -1,9 +1,9 @@
 package colab.common.channel.document.diff;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;
@@ -15,7 +15,7 @@ import colab.common.xml.XmlSerializable;
  *
  * @see DocumentParagraph
  */
-public final class DocumentParagraphDiff implements XmlSerializable {
+public final class DocumentParagraphDiff implements XmlSerializable, Serializable {
 
     private List<Applicable> changes;
 

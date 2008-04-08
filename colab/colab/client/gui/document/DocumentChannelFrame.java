@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -75,6 +76,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         documentPanel.addChannelPanelListener(new ChannelPanelListener() {
 
             public void onMessageSent(ChannelData data) {
+
                 try {
                     client.add(channel.getId(), data);
                 } catch (ConnectionDroppedException cde) {

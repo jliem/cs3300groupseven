@@ -47,6 +47,8 @@ public final class ClientDocumentChannel extends ClientChannel {
     /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
 
+        DebugManager.debug("New channel data added " + data.toString());
+
         revisions.add((DocumentChannelData) data);
         newRevisions++;
 
@@ -104,35 +106,35 @@ public final class ClientDocumentChannel extends ClientChannel {
             final ParagraphIdentifier id, final UserName creator) throws RemoteException {
        // currentDocument.get(id).insert(offset, content);
 
-        DocumentParagraphDiff diff = new DocumentParagraphDiff();
-        diff.insert(offset, content);
-
-        EditDocChannelData edit = new EditDocChannelData(id,
-                diff,
-                creator,
-                new Date());
-
-        add(edit);
+//        DocumentParagraphDiff diff = new DocumentParagraphDiff();
+//        diff.insert(offset, content);
+//
+//        EditDocChannelData edit = new EditDocChannelData(id,
+//                diff,
+//                creator,
+//                new Date());
+//
+//        add(edit);
 
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 
     public void deleteText(final int offset, final int length,
             final ParagraphIdentifier id, final UserName creator) throws RemoteException {
-        DocumentParagraph paragraph = currentDocument.get(id);
-        if (paragraph != null) {
-            //paragraph.delete(offset, length);
-
-            DocumentParagraphDiff diff = new DocumentParagraphDiff();
-            diff.delete(offset, length);
-
-            EditDocChannelData edit = new EditDocChannelData(id,
-                    diff,
-                    creator,
-                    new Date());
-
-            add(edit);
-        }
+//        DocumentParagraph paragraph = currentDocument.get(id);
+//        if (paragraph != null) {
+//            //paragraph.delete(offset, length);
+//
+//            DocumentParagraphDiff diff = new DocumentParagraphDiff();
+//            diff.delete(offset, length);
+//
+//            EditDocChannelData edit = new EditDocChannelData(id,
+//                    diff,
+//                    creator,
+//                    new Date());
+//
+//            add(edit);
+//        }
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 

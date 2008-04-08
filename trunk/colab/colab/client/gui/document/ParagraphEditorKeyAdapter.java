@@ -20,14 +20,35 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         this.editor = editor;
     }
 
-    public void keyPressed(final KeyEvent arg0) {
-        super.keyPressed(arg0);
+    public void keyTyped(final KeyEvent ke) {
 
-        switch (arg0.getKeyCode()) {
+        // Any typeable character gets inserted as text
+
+        // If we don't have a lock, request it
+        // if appropriate
+        if (editor.canRequestLock()) {
+            editor.requestLock();
+        }
+
+        // If we weren't already tracking the index, record it now
+        if (editor.getStartIndex() < 0) {
+            editor.setStartIndex(editor.getSelectionStart());
+
+            DebugManager.debug("Start index set to " + editor.getStartIndex());
+        }
+
+        editor.addInsertText(ke.getKeyChar());
+
+    }
+
+    public void keyPressed(final KeyEvent ke) {
+        super.keyPressed(ke);
+
+        switch (ke.getKeyCode()) {
 
         case KeyEvent.VK_ENTER:
 
-            if (arg0.isShiftDown()) {
+            if (ke.isShiftDown()) {
                 int position = editor.getCaretPosition();
                 editor.insert("\n", position);
             } else {
@@ -35,24 +56,24 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                  * to server, insert in gui, move
                  * cursor to it, et cetera */
             }
-            arg0.consume();
+            ke.consume();
 
             break;
 
         case KeyEvent.VK_TAB:
 
-             if (arg0.isShiftDown()) {
+             if (ke.isShiftDown()) {
                  editor.append("\t");
              } else {
                  // Focus shifting done in DocumentPanel
              }
-             arg0.consume();
+             ke.consume();
 
             break;
 
         case KeyEvent.VK_UP:
 
-            if (arg0.isControlDown()) {
+            if (ke.isControlDown()) {
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()+1);
                 /* TODO: - signal insert to server, still
@@ -64,7 +85,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
             break;
 
         case KeyEvent.VK_DOWN:
-            if (arg0.isControlDown()) {
+            if (ke.isControlDown()) {
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()-1);
                 // TODO: signal server
@@ -113,6 +134,12 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         case KeyEvent.VK_BACK_SPACE:
             // Delete event
 
+            // If we don't have a lock, request it
+            // if appropriate
+            if (editor.canRequestLock()) {
+                editor.requestLock();
+            }
+
             if (editor.getText().length() == 0) {
                 // There was no text and delete/backspace was pressed, so
                 // delete this paragraph
@@ -141,7 +168,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
                 // If delete was pressed instead of backspace,
                 // increment the delete start index
-                if (arg0.getKeyCode() == KeyEvent.VK_DELETE) {
+                if (ke.getKeyCode() == KeyEvent.VK_DELETE) {
                     editor.setDeleteStart(editor.getDeleteStart()+1);
                 }
 
@@ -152,23 +179,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
             break;
 
         default:
-
-            // Any other character gets added as insert text
-
-
-//            if (editor.canDisplay(arg0.getKeyCode())) {
-//                System.out.println("Displayable: " + (char)(arg0.getKeyCode()));
-//            } else  {
-//                System.out.println("Not displayable");
-//            }
-
-            // If we weren't already tracking the index, record it now
-            if (editor.getStartIndex() < 0) {
-                editor.setStartIndex(editor.getSelectionStart());
-
-                DebugManager.debug("Start index set to " + editor.getStartIndex());
-            }
-            editor.addInsertText(arg0.getKeyChar());
+            // Nothing
         }
     }
 }

@@ -78,6 +78,16 @@ class ParagraphEditor extends JTextArea {
 
             public void focusLost(FocusEvent e) {
                 sendPendingChange();
+
+                // If we had a lock, release it
+                if (isLockedByMe()) {
+                    DebugManager.debug("Releasing lock");
+                    try {
+                        channel.requestUnlock(paragraph.getId());
+                    } catch (RemoteException re) {
+                        DebugManager.remote(re);
+                    }
+                }
             }
         });
 
@@ -94,7 +104,22 @@ class ParagraphEditor extends JTextArea {
                 setText(paragraph.getContents());
             }
             public void onLock(final UserName newOwner) {
+
+                DebugManager.debug(newOwner + " has just gained a lock on paragraph " +
+                        paragraph.getId());
+
+                // If this paragraph was just locked and we didn't do it,
+                // undo any changes that we might have made
+                if (!newOwner.equals(user)) {
+                    resetDelete();
+                    resetInsert();
+                    setText(paragraph.getContents());
+                }
+
+                // Update GUI
                 showLock(newOwner);
+
+
             }
             public void onUnlock() {
                 showUnlock();
@@ -117,9 +142,36 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
+    public void requestLock() {
+        try {
+            channel.requestLock(user, paragraph.getId());
+        } catch (RemoteException re) {
+            DebugManager.remote(re);
+        }
+    }
+
+    public boolean canRequestLock() {
+
+        // Check if someone else has locked it
+        if (this.isLockedByOther()) {
+            return false;
+        }
+
+        // Check whether I have locked it
+        UserName lockHolder = paragraph.getLockHolder();
+
+        DebugManager.debug("Checking for lock: currently held by " + paragraph.getLockHolder());
+        if (lockHolder != null && lockHolder.equals(user)) {
+            return false;
+        }
+
+        return true;
+    }
+
     public boolean canDisplay(int codePoint) {
         return defaultFont.canDisplay(codePoint);
     }
+
     public void sendPendingChange() {
 
         if (this.isLockedByOther())
@@ -145,10 +197,19 @@ class ParagraphEditor extends JTextArea {
                 DebugManager.remote(e);
             }
 
-            deleteStart = -1;
-            deleteLength = -1;
+            resetDelete();
         }
 
+    }
+
+    private void resetDelete() {
+        deleteStart = -1;
+        deleteLength = -1;
+    }
+
+    private void resetInsert() {
+        startIndex = -1;
+        insertText = new StringBuffer();
     }
 
     private void sendPendingInsert() {
@@ -166,8 +227,7 @@ class ParagraphEditor extends JTextArea {
             }
 
             // Clear start index and text
-            startIndex = -1;
-            insertText = new StringBuffer();
+            resetInsert();
         }
     }
 
@@ -182,10 +242,22 @@ class ParagraphEditor extends JTextArea {
         UserName lockHolder = paragraph.getLockHolder();
 
         DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
-        if (lockHolder == null || lockHolder.equals(user))
+
+        // If no lock or it's not me, return false
+        if (lockHolder == null || lockHolder.equals(user)) {
             return false;
+        }
 
         return true;
+    }
+
+    public boolean isLockedByMe() {
+        UserName lockHolder = paragraph.getLockHolder();
+
+        DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
+
+        return (lockHolder != null && lockHolder.equals(user));
+
     }
 
     public void showHeader(final int headerLevel) {
@@ -205,14 +277,16 @@ class ParagraphEditor extends JTextArea {
 
     }
 
-    public void showLock(final UserName newOwner) {
+    private void showLock(final UserName newOwner) {
 
         if (newOwner != null) {
 
             if (newOwner.equals(ParagraphEditor.this.user)) {
 
-                setBackground(Color.BLUE.brighter());
-                setForeground(Color.WHITE);
+                //setBackground(Color.BLUE.brighter());
+                //setForeground(Color.WHITE);
+                setBackground(Color.CYAN);
+
                 setToolTipText("");
                 requestFocus();
 
@@ -233,7 +307,7 @@ class ParagraphEditor extends JTextArea {
 
     }
 
-    public void showUnlock() {
+    private void showUnlock() {
 
         setForeground(defaultFG);
         setBackground(defaultBG);

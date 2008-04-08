@@ -14,6 +14,7 @@ import javax.swing.Timer;
 
 import colab.client.ClientDocumentChannel;
 import colab.common.DebugManager;
+import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.event.document.ParagraphListener;
 import colab.common.naming.UserName;
@@ -92,13 +93,20 @@ class ParagraphEditor extends JTextArea {
             public void focusLost(FocusEvent e) {
                 sendPendingChange();
 
-                // If we had a lock, release it
-                if (isLockedByMe()) {
-                    DebugManager.debug("Releasing lock");
-                    try {
-                        channel.requestUnlock(paragraph.getId());
-                    } catch (RemoteException re) {
-                        DebugManager.remote(re);
+                // Check whether this paragraph still exists
+                Document doc = channel.getCurrentDocument();
+
+                DocumentParagraph para = doc.get(paragraph.getId());
+
+                if (para != null) {
+                    // If we had a lock, release it
+                    if (isLockedByMe()) {
+                        DebugManager.debug("Releasing lock");
+                        try {
+                            channel.requestUnlock(paragraph.getId());
+                        } catch (RemoteException re) {
+                            DebugManager.remote(re);
+                        }
                     }
                 }
 

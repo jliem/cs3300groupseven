@@ -73,7 +73,7 @@ public final class ServerDocumentChannel
 
         try {
 
-            // Check for channel data validity
+            // Check for channel data validity - SHOULD take care of bad locks, et cetera
             data.apply(currentDocument.copy());
 
             data.apply(currentDocument);
@@ -82,6 +82,8 @@ public final class ServerDocumentChannel
             return;
         }
 
+        revisions.add(data);
+        
         // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
             ParagraphIdentifier paragraphId =

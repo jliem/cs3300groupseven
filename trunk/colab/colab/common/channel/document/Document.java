@@ -174,7 +174,7 @@ public final class Document {
      */
     public DocumentParagraph get(final ParagraphIdentifier id) {
         DocumentParagraph para = null;
-        
+
         Iterator<DocumentParagraph> iter = paragraphs.iterator();
         while(iter.hasNext()) {
             DocumentParagraph next = iter.next();
@@ -183,10 +183,10 @@ public final class Document {
                 break;
             }
         }
-        
+
         return para;
     }
-    
+
     public void addDocumentListener(final DocumentListener listener) {
 
         documentListeners.add(listener);

@@ -2,6 +2,8 @@ package colab.client.gui.document;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
@@ -18,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import colab.client.ClientDocumentChannel;
+import colab.client.ColabClient;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.common.DebugManager;
@@ -45,7 +48,7 @@ final class DocumentPanel extends ClientChannelPanel {
 
     private List<ParagraphEditor> editors;
 
-    private ArrayList<ChannelPanelListener> listeners;
+    private ArrayList<ChannelPanelListener> channelListeners;
 
     private Document document;
 
@@ -64,7 +67,7 @@ final class DocumentPanel extends ClientChannelPanel {
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        listeners = new ArrayList<ChannelPanelListener>();
+        channelListeners = new ArrayList<ChannelPanelListener>();
 
         setLayout(new BorderLayout());
 
@@ -92,6 +95,7 @@ final class DocumentPanel extends ClientChannelPanel {
             }
 
             public void onDelete(final ParagraphIdentifier id) {
+
                 Iterator<ParagraphEditor> iter = editors.iterator();
 
                 while(iter.hasNext()) {
@@ -117,19 +121,21 @@ final class DocumentPanel extends ClientChannelPanel {
 
     public void addChannelPanelListener(
             final ChannelPanelListener listener) {
-        listeners.add(listener);
+        channelListeners.add(listener);
     }
 
     public void removeChannelPanelListener(
             final ChannelPanelListener listener) {
-        listeners.remove(listener);
+        channelListeners.remove(listener);
     }
 
     private void fireOnMessageSent(final DocumentChannelData dcd) {
-        for (final ChannelPanelListener l : listeners) {
+        for (final ChannelPanelListener l : channelListeners) {
             l.onMessageSent(dcd);
         }
     }
+
+
 
     private void arrangePanel() {
 
@@ -140,6 +146,9 @@ final class DocumentPanel extends ClientChannelPanel {
         }
 
         mainPanel.add(Box.createVerticalGlue());
+
+        fireActionPerformed(new ActionEvent(this,
+                ActionEvent.ACTION_FIRST, "panels arranged"));
 
     }
 
@@ -196,11 +205,18 @@ final class DocumentPanel extends ClientChannelPanel {
     }
 
     public static void main(final String[] args) throws RemoteException {
-        JFrame f = new JFrame("Document Editor");
+
+        ClientDocumentChannel channel = new ClientDocumentChannel(new ChannelName("Doc test"));
+
+        ColabClient client = new ColabClient();
+
+        DocumentChannelFrame f = new DocumentChannelFrame(client,
+                channel, new UserName("Chris"));
+
+        //JFrame f = new JFrame("Document Editor");
         f.setPreferredSize(new Dimension(320, 300));
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ClientDocumentChannel channel = new ClientDocumentChannel(new ChannelName("Doc test"));
 
         Document doc  = channel.getCurrentDocument();
 

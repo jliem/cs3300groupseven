@@ -106,12 +106,28 @@ class ParagraphEditor extends JTextArea {
         insertText.append(c);
     }
 
+    /**
+     * Deletes this paragraph.
+     */
+    public void delete() {
+        try {
+            channel.deleteParagraph(paragraph.getId());
+        } catch (RemoteException re) {
+            DebugManager.remote(re);
+        }
+    }
+
     public void sendPendingChange() {
+
+        if (this.isLockedByOther())
+            return;
+
+
         sendPendingDelete();
         sendPendingInsert();
     }
 
-    public void sendPendingDelete() {
+    private void sendPendingDelete() {
 
         if (deleteStart >= 0 && deleteLength >= 0) {
             // Compute starting offset from start and length
@@ -132,7 +148,7 @@ class ParagraphEditor extends JTextArea {
 
     }
 
-    public void sendPendingInsert() {
+    private void sendPendingInsert() {
 
         // Check if there's any text to send
         if (startIndex >= 0 && insertText.length() > 0) {
@@ -162,6 +178,7 @@ class ParagraphEditor extends JTextArea {
     public boolean isLockedByOther() {
         UserName lockHolder = paragraph.getLockHolder();
 
+        DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
         if (lockHolder == null || lockHolder.equals(user))
             return false;
 

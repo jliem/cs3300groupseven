@@ -56,7 +56,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             // If we don't have a lock, request it
             // if appropriate
-            if (editor.canRequestLock()) {
+            if (editor.isUnlocked()) {
                 editor.requestLock();
             }
 
@@ -155,7 +155,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             // If we don't have a lock, request it
             // if appropriate
-            if (editor.canRequestLock()) {
+            if (editor.isUnlocked()) {
                 editor.requestLock();
             }
 

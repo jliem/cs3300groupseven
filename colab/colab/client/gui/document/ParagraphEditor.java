@@ -45,12 +45,13 @@ class ParagraphEditor extends JTextArea {
     private final int TIMER_DELAY = 2000;
 
 
-    /** The index at which we first clicked (presumably to being inserting
-     * or deleting text)
-     */
+    /** The index at which we first began inserting text. */
     private int startIndex;
 
+    /** Tracks the length of text to be deleted. */
     private int deleteLength;
+
+    /** Tracks the index at which we first began deleting text. */
     private int deleteStart;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
@@ -142,6 +143,12 @@ class ParagraphEditor extends JTextArea {
         });
     }
 
+    /**
+     * Adds text to the local insert buffer to be sent the next time
+     * the channel is notified.
+     *
+     * @param c the character being inserted into the paragraph
+     */
     public void addInsertText(char c) {
         insertText.append(c);
     }
@@ -157,10 +164,38 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
+    /**
+     * Updates GUI to display header.
+     *
+     * @param headerLevel the header level
+     */
+    public void showHeader(final int headerLevel) {
+
+        int newSize = defaultFont.getSize();
+        int style = Font.PLAIN;
+
+        if (headerLevel>0) {
+            style = Font.BOLD;
+        }
+
+        if (headerLevel>1) {
+            newSize += FONT_STEP * (headerLevel - 1);
+        }
+
+        setFont(new Font(defaultFont.getFontName(), style, newSize));
+
+    }
+
+    /**
+     * Restarts the timer which sends changes.
+     */
     public void restartTimer() {
         timer.restart();
     }
 
+    /**
+     * Requests a lock on this paragraph.
+     */
     public void requestLock() {
         try {
             channel.requestLock(user, paragraph.getId());
@@ -169,39 +204,65 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
-    public boolean canRequestLock() {
+    /**
+     * Checks whether the user is allowed to request a lock
+     * right now.
+     *
+     * @return true if the paragraph is unlocked, false otherwise
+     */
+    public boolean isUnlocked() {
+        return (getLockHolder() == null);
+    }
 
-        // Check if someone else has locked it
-        if (this.isLockedByOther()) {
-            return false;
-        }
+    /**
+     * Check whether the paragraph is locked by someone else.
+     *
+     * @return true if the paragraph is locked by someone else,
+     * false if the paragraph is unlocked or is locked by me.
+     */
+    public boolean isLockedByOther() {
+        UserName lockHolder = this.getLockHolder();
 
-        // Check whether I have locked it
-        UserName lockHolder = paragraph.getLockHolder();
-
-        DebugManager.debug("Checking for lock: currently held by " + paragraph.getLockHolder());
-        if (lockHolder != null && lockHolder.equals(user)) {
+        // If no lock or it's not me, return false
+        if (lockHolder == null || lockHolder.equals(user)) {
             return false;
         }
 
         return true;
     }
 
-    public boolean canDisplay(int codePoint) {
-        return defaultFont.canDisplay(codePoint);
+    /**
+     * Checks whether the current user has locked this paragraph.
+     *
+     * @return true if the current user owns the paragraph, false if the
+     * paragraph is unlocked or another user owns it
+     */
+    public boolean isLockedByMe() {
+        UserName lockHolder = this.getLockHolder();
+
+        return (lockHolder != null && lockHolder.equals(user));
+
     }
 
+    /**
+     * Sends all pending changes (inserts or deletes)
+     * to the channel.
+     */
     public void sendPendingChange() {
 
-        if (this.isLockedByOther())
+        // Don't send if we don't have the lock
+        if (!isLockedByMe()) {
+            DebugManager.debug("ParagraphEditor could not send changes because this user " +
+                    "doesn't have the lock!");
             return;
+        }
 
+        // Save the cursor position
         int selectionStart = this.getSelectionStart();
 
         // Send any current inserts or deletes
         sendPendingDelete();
         sendPendingInsert();
-
 
         // Restore the caret
         this.setCaretPosition(selectionStart);
@@ -255,52 +316,6 @@ class ParagraphEditor extends JTextArea {
             // Clear start index and text
             resetInsert();
         }
-    }
-
-
-    /**
-     * Check whether the paragraph is locked by someone else.
-     *
-     * @return true if the paragraph is locked by someone else,
-     * false if the paragraph is unlocked or is locked by me.
-     */
-    public boolean isLockedByOther() {
-        UserName lockHolder = paragraph.getLockHolder();
-
-        DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
-
-        // If no lock or it's not me, return false
-        if (lockHolder == null || lockHolder.equals(user)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public boolean isLockedByMe() {
-        UserName lockHolder = paragraph.getLockHolder();
-
-        DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
-
-        return (lockHolder != null && lockHolder.equals(user));
-
-    }
-
-    public void showHeader(final int headerLevel) {
-
-        int newSize = defaultFont.getSize();
-        int style = Font.PLAIN;
-
-        if (headerLevel>0) {
-            style = Font.BOLD;
-        }
-
-        if (headerLevel>1) {
-            newSize += FONT_STEP * (headerLevel - 1);
-        }
-
-        setFont(new Font(defaultFont.getFontName(), style, newSize));
-
     }
 
     private void showLock(final UserName newOwner) {
@@ -382,11 +397,17 @@ class ParagraphEditor extends JTextArea {
         this.deleteStart = deleteStart;
     }
 
+    private UserName getLockHolder() {
+        UserName lockHolder = paragraph.getLockHolder();
+
+        DebugManager.debug("Lock holder is " + paragraph.getLockHolder());
+
+        return lockHolder;
+    }
+
     private class ParagraphChangeDispatcher implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-
-            DebugManager.debug("Timer is sending changes");
             sendPendingChange();
         }
 

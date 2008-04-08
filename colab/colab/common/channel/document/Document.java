@@ -165,6 +165,13 @@ public final class Document {
         return paragraphs.iterator();
     }
 
+    /**
+     * Retrieves the DocumentParagraph of this document with getId().equals(id),
+     * or null on no match.
+     * 
+     * @param id a ParagraphIdentifier signifying the paragraph to retrieve.
+     * @return a DocumentParagraph or null
+     */
     public DocumentParagraph get(final ParagraphIdentifier id) {
         DocumentParagraph para = null;
         

@@ -5,7 +5,6 @@ import java.util.List;
 
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
-import colab.common.naming.UserName;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
@@ -54,18 +53,6 @@ public final class DocumentParagraphDiff implements XmlSerializable {
 
     public void changeHeaderLevel(final int headerLevel) {
         changes.add(new ChangeLevel(headerLevel));
-    }
-
-    /**
-     * @param newOwner the new owner of the lock,
-     *                 specifed as {@code null} to unlock
-     */
-    public void lock(final UserName newOwner) {
-        changes.add(new ChangeLock(newOwner));
-    }
-
-    public void unlock() {
-        changes.add(new ChangeLock(null));
     }
 
     public void reset() {

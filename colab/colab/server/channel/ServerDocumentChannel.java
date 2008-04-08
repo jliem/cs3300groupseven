@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
@@ -76,6 +77,8 @@ public final class ServerDocumentChannel
             // Check for channel data validity - SHOULD take care of bad locks, et cetera
             data.apply(currentDocument.copy());
 
+            DebugManager.debug("Server is adding data: " + data.toString());
+
             data.apply(currentDocument);
 
         } catch (final NotApplicableException ex) {
@@ -83,7 +86,7 @@ public final class ServerDocumentChannel
         }
 
         revisions.add(data);
-        
+
         // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
             ParagraphIdentifier paragraphId =

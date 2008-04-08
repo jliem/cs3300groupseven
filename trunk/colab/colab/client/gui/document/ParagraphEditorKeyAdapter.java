@@ -69,11 +69,21 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 p.setHeaderLevel(p.getHeaderLevel()-1);
                 // TODO: signal server
             } else {
+                selectionStart = editor.getSelectionStart();
 
+                // Send any current inserts or deletes
+                editor.sendPendingChange();
+
+                // Restore the caret
+                editor.setCaretPosition(selectionStart);
             }
 
             break;
 
+        case KeyEvent.VK_PAGE_UP:
+        case KeyEvent.VK_PAGE_DOWN:
+        case KeyEvent.VK_HOME:
+        case KeyEvent.VK_END:
         case KeyEvent.VK_LEFT:
         case KeyEvent.VK_RIGHT:
 

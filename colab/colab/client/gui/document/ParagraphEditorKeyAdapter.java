@@ -98,9 +98,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 // There was no text and delete/backspace was pressed, so
                 // delete this paragraph
 
-                // TODO Finish this
-                DebugManager.debug("Delete paragraph is not implemented yet");
-            } else {
+                editor.delete();
+            } else if (editor.getSelectionStart() > 0) {
                 // Delete text
 
                 // Check whether we're in the middle of deleting
@@ -121,6 +120,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                     editor.setDeleteStart(editor.getDeleteStart()+1);
                 }
 
+            } else {
+                DebugManager.debug("Not running, Selection start is " + editor.getSelectionStart());
             }
 
             break;

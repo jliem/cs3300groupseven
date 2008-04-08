@@ -32,7 +32,7 @@ public abstract class ClientChannel<T extends ChannelData>
     /** The name of the channel. */
     private final ChannelName name;
 
-    private List<ActionListener> listeners;
+    private List<ActionListener> actionListeners;
 
     /** Active users in the channel. */
     private final Set<UserName> members;
@@ -52,7 +52,7 @@ public abstract class ClientChannel<T extends ChannelData>
         // Create an empty collection of users
         members = new HashSet<UserName>();
 
-        listeners = new ArrayList<ActionListener>();
+        actionListeners = new ArrayList<ActionListener>();
         userListeners = new ArrayList<UserListener>();
 
     }
@@ -130,7 +130,7 @@ public abstract class ClientChannel<T extends ChannelData>
      * @param event the event being fired
      */
     protected final void fireActionPerformed(final ActionEvent event) {
-        for (final ActionListener listener : listeners) {
+        for (final ActionListener listener : actionListeners) {
             listener.actionPerformed(event);
         }
     }
@@ -141,7 +141,7 @@ public abstract class ClientChannel<T extends ChannelData>
      * @param listener the listener to add
      */
     public final void addActionListener(final ActionListener listener) {
-        listeners.add(listener);
+        actionListeners.add(listener);
     }
 
     /**
@@ -150,7 +150,7 @@ public abstract class ClientChannel<T extends ChannelData>
      * @param listener the listener to remove
      */
     public final void removeActionListener(final ActionListener listener) {
-        listeners.remove(listener);
+        actionListeners.remove(listener);
     }
 
 }

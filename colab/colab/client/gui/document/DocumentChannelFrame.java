@@ -1,6 +1,8 @@
 package colab.client.gui.document;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ClientChannelFrame;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
@@ -43,6 +46,20 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         // Cast the parent's generic version to a DocumentPanel for convenience
         documentPanel = (DocumentPanel) getClientChannelPanel();
+
+        documentPanel.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent arg0) {
+                if (arg0.getActionCommand().equals("panels arranged")) {
+
+                    DebugManager.debug("Panels were re-arranged, frame is repainting");
+
+                    pack();
+                    repaint();
+                }
+            }
+
+        });
 
         this.setPreferredSize(new Dimension(800, 600));
 

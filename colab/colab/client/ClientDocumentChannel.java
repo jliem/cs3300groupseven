@@ -89,7 +89,6 @@ public final class ClientDocumentChannel extends ClientChannel {
 
 
     public void deleteParagraph(ParagraphIdentifier id) throws RemoteException {
-
         currentDocument.delete(id);
     }
 

@@ -288,4 +288,23 @@ public final class DocumentParagraph implements Serializable,
 
     }
 
+    public String toHtml() {
+
+        StringBuilder str = new StringBuilder();
+
+        str.append("<p class=\"level" + headerLevel + "\">");
+        str.append(formatForHtml(contents.toString()));
+        str.append("</p>");
+
+        return str.toString();
+
+    }
+
+    private static String formatForHtml(final String str) {
+        return str.replaceAll("&", "&amp;")
+                  .replaceAll("<", "&lt;")
+                  .replaceAll(">", "&gt;")
+                  .replaceAll("\n", "<br/>");
+    }
+
 }

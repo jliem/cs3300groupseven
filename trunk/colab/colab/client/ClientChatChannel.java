@@ -1,6 +1,10 @@
 package colab.client;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -72,6 +76,20 @@ public final class ClientChatChannel extends ClientChannel<ChatChannelData> {
         List <ChatChannelData> list = messages.getLast(newMessages);
         newMessages = 0;
         return list;
+    }
+
+    public void export(final File file) throws IOException {
+
+        PrintWriter writer = new PrintWriter(new FileOutputStream(file));
+
+        try {
+            for (final ChatChannelData message : getLocalMessages()) {
+                writer.println(message.getMessageString(true));
+            }
+        } finally {
+            writer.close();
+        }
+
     }
 
 }

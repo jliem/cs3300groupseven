@@ -211,7 +211,7 @@ public class ExportChatFrame extends JFrame {
             }
 
             if (local.isSelected()) {
-                export(exportFile, channel.getLocalMessages());
+                channel.export(exportFile);
             } else if (lines.isSelected()) {
                 // TODO: export per line, requires some server-side
                 // fixes (retrieving old history)
@@ -228,17 +228,6 @@ public class ExportChatFrame extends JFrame {
 
         setVisible(false);
         dispose();
-
-    }
-
-    private void export(final File file, final List<ChatChannelData> data)
-            throws IOException {
-
-        PrintWriter writer = new PrintWriter(new FileOutputStream(file));
-        for (ChatChannelData ccd : data) {
-            writer.println(ccd.getMessageString(true));
-        }
-        writer.close();
 
     }
 

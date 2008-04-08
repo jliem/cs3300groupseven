@@ -77,7 +77,7 @@ class ParagraphEditor extends JTextArea {
             }
 
             public void focusLost(FocusEvent e) {
-                sendPendingInsert();
+                sendPendingChange();
             }
         });
 

@@ -12,13 +12,15 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import colab.client.ClientChannel;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
 
 public abstract class RevisionPanel extends JPanel {
 
-    private ClientChannel channel;
+    protected ClientChannel channel;
+
     private JPanel display;
     private JList revisionList;
     private JScrollPane revisionScroll;
@@ -54,21 +56,9 @@ public abstract class RevisionPanel extends JPanel {
 
     protected abstract void showRevision(ChannelDataIdentifier dataID);
 
-    private Vector<Revision> buildRevisionList() {
-        Vector<Revision> list = new Vector<Revision>();
+    protected abstract Vector<Revision> buildRevisionList();
 
-        ChannelDataSet dataSet = channel.getChannelData();
-        for (Object o : dataSet.getAll()) {
-            ChannelData data = (ChannelData)o;
-
-            list.add(new Revision(data));
-        }
-
-        return list;
-
-    }
-
-    private class Revision {
+    protected class Revision {
         private ChannelData data;
 
         public Revision(final ChannelData data) {

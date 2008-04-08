@@ -1,5 +1,7 @@
 package colab.client.gui.revision;
 
+import java.util.Vector;
+
 import javax.swing.JTextArea;
 
 import colab.client.ClientChannel;
@@ -9,6 +11,7 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
+import colab.common.channel.document.DocumentChannelData.DocumentChannelDataType;
 
 public class RevisionDocumentPanel extends RevisionPanel {
 
@@ -31,6 +34,26 @@ public class RevisionDocumentPanel extends RevisionPanel {
         text.setEditable(false);
 
         addToDisplay(text);
+    }
+
+    protected Vector<Revision> buildRevisionList() {
+        Vector<Revision> list = new Vector<Revision>();
+
+        ChannelDataSet<DocumentChannelData> dataSet = channel.getChannelData();
+        for (Object o : dataSet.getAll()) {
+            DocumentChannelData data = (DocumentChannelData)o;
+
+            if (data != null && data.getCreator() != null && data.getTimestamp() != null) {
+
+                // Don't add locks
+                if (data.getType() != DocumentChannelDataType.LOCK) {
+                    list.add(new Revision(data));
+                }
+            }
+        }
+
+        return list;
+
     }
 
     protected void showRevision(final ChannelDataIdentifier dataID) {

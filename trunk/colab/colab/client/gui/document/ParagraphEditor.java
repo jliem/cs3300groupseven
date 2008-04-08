@@ -278,7 +278,8 @@ class ParagraphEditor extends JTextArea {
             DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
 
             try {
-                channel.deleteText(offset, deleteLength, paragraph.getId());
+                channel.deleteText(offset, deleteLength,
+                        paragraph.getId(), user);
             } catch (RemoteException e) {
                 // TODO Auto-generated catch block
                 DebugManager.remote(e);
@@ -307,7 +308,8 @@ class ParagraphEditor extends JTextArea {
                     "\" at index " + startIndex);
 
             try {
-                channel.insertText(startIndex, insertText.toString(), paragraph.getId());
+                channel.insertText(startIndex, insertText.toString(),
+                        paragraph.getId(), user);
             } catch (RemoteException e) {
                 // TODO Auto-generated catch block
                 DebugManager.remote(e);

@@ -86,8 +86,11 @@ public final class ClientDocumentChannel extends ClientChannel {
     }
 
 
-    
-    
+    public void deleteParagraph(ParagraphIdentifier id) {
+
+        currentDocument.delete(id);
+    }
+
     public void insertText(final int offset, final String content, ParagraphIdentifier id) {
         currentDocument.get(id).insert(offset, content);
         //TODO: actually queue up changes, send to server after time or reqs are met
@@ -102,5 +105,5 @@ public final class ClientDocumentChannel extends ClientChannel {
         currentDocument.get(id).setHeaderLevel(headerLevel);
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
-    
+
 }

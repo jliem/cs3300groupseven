@@ -69,14 +69,21 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 p.setHeaderLevel(p.getHeaderLevel()-1);
                 // TODO: signal server
             } else {
-                selectionStart = editor.getSelectionStart();
-
-                // Send any current inserts or deletes
-                editor.sendPendingChange();
-
-                // Restore the caret
-                editor.setCaretPosition(selectionStart);
             }
+
+            break;
+
+        case KeyEvent.VK_INSERT:
+
+            selectionStart = editor.getSelectionStart();
+
+            // Send any current inserts or deletes
+            editor.sendPendingChange();
+
+            // Restore the caret
+            editor.setCaretPosition(selectionStart);
+
+            DebugManager.debug("Insert says, selstart is " + selectionStart);
 
             break;
 
@@ -97,6 +104,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
             // Restore the caret
             editor.setCaretPosition(selectionStart);
 
+            DebugManager.debug("Selstart is " + selectionStart);
+
             break;
 
 
@@ -114,12 +123,18 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
                 // Check whether we're in the middle of deleting
                 if (editor.getDeleteStart() >= 0) {
+
+                    DebugManager.debug("Delete already in progress from " + editor.getDeleteStart());
+
                     // We already have a delete in progress, so increment it one
                     editor.setDeleteLength(editor.getDeleteLength()+1);
                 } else {
                     // No delete in progress
+
                     // Set starting index
-                    editor.setDeleteStart(editor.getStartIndex());
+                    editor.setDeleteStart(editor.getSelectionStart());
+
+                    DebugManager.debug("No delete in progress, starting at " + editor.getDeleteStart());
 
                     editor.setDeleteLength(1);
                 }
@@ -140,6 +155,12 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             // Any other character gets added as insert text
 
+
+//            if (editor.canDisplay(arg0.getKeyCode())) {
+//                System.out.println("Displayable: " + (char)(arg0.getKeyCode()));
+//            } else  {
+//                System.out.println("Not displayable");
+//            }
 
             // If we weren't already tracking the index, record it now
             if (editor.getStartIndex() < 0) {

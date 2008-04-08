@@ -27,13 +27,8 @@ public class ParagraphEditorMouseAdapter extends MouseAdapter {
         // Send any current inserts or deletes
         editor.sendPendingChange();
 
-        // Set the click position
-        editor.setStartIndex(selectionStart);
-
         // Restore the caret
         editor.setCaretPosition(selectionStart);
-
-        DebugManager.debug("Start index is " + editor.getStartIndex());
     }
 
 }

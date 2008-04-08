@@ -3,7 +3,6 @@ package colab.client.gui.document;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
@@ -23,11 +22,9 @@ import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
-import colab.common.DebugManager;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
-import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -48,7 +45,7 @@ final class DocumentPanel extends ClientChannelPanel {
 
     private List<ParagraphEditor> editors;
 
-    private ArrayList<ChannelPanelListener> channelListeners;
+    private List<ChannelPanelListener> channelListeners;
 
     private Document document;
 
@@ -57,10 +54,12 @@ final class DocumentPanel extends ClientChannelPanel {
     /**
      * Constructs a new DocumentPanel.
      *
-     * @param name the name of the currently logged-in user
+     * @param username the name of the currently logged-in user
      */
-    public DocumentPanel(final UserName name, final ClientDocumentChannel channel) {
-        super(name);
+    public DocumentPanel(final UserName username,
+            final ClientDocumentChannel channel) {
+
+        super(username);
 
         mainPanel = new JPanel();
         scroll = new JScrollPane(mainPanel,
@@ -100,7 +99,7 @@ final class DocumentPanel extends ClientChannelPanel {
 
                 while(iter.hasNext()) {
                     ParagraphEditor next = iter.next();
-                    if(next.getParagraph().getId().equals(id)) {
+                    if (next.getParagraph().getId().equals(id)) {
                         iter.remove();
                         break;
                     }
@@ -138,17 +137,23 @@ final class DocumentPanel extends ClientChannelPanel {
 
     public void apply(final DocumentChannelData dcd)
             throws NotApplicableException {
+
         dcd.apply(document);
+
     }
 
     public void addChannelPanelListener(
             final ChannelPanelListener listener) {
+
         channelListeners.add(listener);
+
     }
 
     public void removeChannelPanelListener(
             final ChannelPanelListener listener) {
+
         channelListeners.remove(listener);
+
     }
 
     private void fireOnMessageSent(final DocumentChannelData dcd) {
@@ -194,8 +199,7 @@ final class DocumentPanel extends ClientChannelPanel {
                 super.keyPressed(arg0);
                 if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
                     if (!arg0.isShiftDown()) {
-                        shiftFocus();
-                    } else {
+                        shiftFocus(editor);
                     }
                     arg0.consume();
                 }
@@ -220,15 +224,43 @@ final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    private void shiftFocus() {
+    private void shiftFocus(ParagraphEditor fromThisOne) {
 
-        // TODO: add "circularly linked list" focus traversal with editors
+        boolean found = false;
 
+        Iterator<ParagraphEditor> iter = editors.iterator();
+
+        while(iter.hasNext()) {
+            if(iter.next() == fromThisOne) {
+                break;
+            }
+        }
+
+        while(iter.hasNext()) {
+            ParagraphEditor next = iter.next();
+            if(next.isUnlocked()) {
+                next.requestFocus();
+                found = true;
+                break;
+            }
+        }
+
+        if(!found) {
+            iter = editors.iterator();
+            while(iter.hasNext()) {
+                ParagraphEditor next = iter.next();
+                if(next.isUnlocked()) {
+                    next.requestFocus();
+                    break;
+                }
+            }
+        }
     }
 
     public static void main(final String[] args) throws RemoteException {
 
-        ClientDocumentChannel channel = new ClientDocumentChannel(new ChannelName("Doc test"));
+        ClientDocumentChannel channel =
+            new ClientDocumentChannel(new ChannelName("Doc test"));
 
         ColabClient client = new ColabClient();
 

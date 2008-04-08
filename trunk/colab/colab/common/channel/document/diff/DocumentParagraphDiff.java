@@ -111,11 +111,6 @@ public final class DocumentParagraphDiff implements XmlSerializable {
             return applicable;
         }
 
-        applicable = new ChangeLock();
-        if (applicable.xmlNodeName().equals(type)) {
-            return applicable;
-        }
-
         applicable = new Delete();
         if (applicable.xmlNodeName().equals(type)) {
             return applicable;

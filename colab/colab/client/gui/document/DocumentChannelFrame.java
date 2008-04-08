@@ -3,13 +3,21 @@ package colab.client.gui.document;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
+
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ClientChannelFrame;
+import colab.client.gui.revision.RevisionDocumentPanel;
+import colab.client.gui.revision.RevisionFrame;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.naming.ChannelName;
@@ -61,6 +69,59 @@ public class DocumentChannelFrame extends ClientChannelFrame {
                 }
             }
         });
+
+
+        // Menu
+        JMenuBar menu = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        fileMenu.setMnemonic(KeyEvent.VK_F);
+
+        JMenuItem revisionMode = new JMenuItem("Revision mode");
+        revisionMode.addActionListener(new ActionListener() {
+
+            public void actionPerformed(final ActionEvent arg0) {
+                RevisionFrame frame = new RevisionFrame(
+                        new RevisionDocumentPanel(channel,
+                                channel.getChannelData()));
+
+                frame.pack();
+                frame.setVisible(true);
+            }
+
+        });
+
+        JMenuItem export = new JMenuItem("Export Chat");
+        export.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+                ActionEvent.ALT_MASK));
+        export.getAccessibleContext().setAccessibleDescription(
+                "Exports the document to a file.");
+        JMenuItem exit = new JMenuItem("Exit");
+        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
+                ActionEvent.ALT_MASK));
+        exit.getAccessibleContext().setAccessibleDescription(
+                "Leaves the channel.");
+
+        export.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+//                ExportChatFrame frame = new ExportChatFrame(channel);
+//                frame.pack();
+//                frame.setVisible(true);
+            }
+        });
+
+        exit.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                exit();
+            }
+        });
+
+        fileMenu.add(revisionMode);
+        fileMenu.add(export);
+        fileMenu.add(exit);
+
+        menu.add(fileMenu);
+
+        this.setJMenuBar(menu);
 
         this.setPreferredSize(new Dimension(800, 600));
 

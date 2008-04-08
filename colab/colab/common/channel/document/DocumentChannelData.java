@@ -20,10 +20,11 @@ import colab.server.channel.ServerDocumentChannel;
 public abstract class DocumentChannelData extends ChannelData
         implements XmlSerializable {
 
-    protected enum DocumentChannelDataType {
+    public enum DocumentChannelDataType {
         INSERT,
         DELETE,
-        EDIT
+        EDIT,
+        LOCK
     }
 
     /** Serialization version number. */

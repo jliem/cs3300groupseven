@@ -1,5 +1,7 @@
 package colab.common.channel.document;
 
+import java.util.Date;
+
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.InvalidUserNameException;
@@ -18,6 +20,9 @@ public class LockDocChannelData extends DocumentChannelData {
 
     public LockDocChannelData(final UserName lockHolder,
             final ParagraphIdentifier id) {
+
+        super(lockHolder, new Date(), DocumentChannelDataType.LOCK);
+
         this.id = id;
         this.lockHolder = lockHolder;
     }

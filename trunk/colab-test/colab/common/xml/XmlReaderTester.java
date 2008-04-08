@@ -4,8 +4,17 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+/**
+ * Test cases for {@link XmlReader}.
+ */
 public final class XmlReaderTester extends TestCase {
 
+    /**
+     * Gives the reader an empty string to parse.
+     * It should return a list without any nodes.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testEmptyString() throws Exception {
 
         XmlReader reader = new XmlReader("");
@@ -15,6 +24,11 @@ public final class XmlReaderTester extends TestCase {
 
     }
 
+    /**
+     * Gives the reader some xml with a single empty node.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testSingleEmptyNode() throws Exception {
 
         XmlReader reader = new XmlReader("<nodeType></nodeType>");
@@ -29,6 +43,12 @@ public final class XmlReaderTester extends TestCase {
 
     }
 
+    /**
+     * Gives the reader a string with a single xml node,
+     * having two attributes.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testSingleEmptyNodeWithAttributes() throws Exception {
 
         XmlReader reader = new XmlReader(
@@ -46,23 +66,38 @@ public final class XmlReaderTester extends TestCase {
 
     }
 
+    /**
+     * Gives the reader a string with a single node, no attributes,
+     * with text in the body.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testSingleNodeWithBody() throws Exception {
 
+        String type = "food";
+        String body = "Steak <b>Sandwich</b>";
+
         XmlReader reader = new XmlReader(
-                  "<food>"
-                + XmlNode.escapeXmlContent("Steak <b>Sandwich</b>")
-                + "</food>");
+                  "<" + type + ">"
+                + XmlNode.escapeXmlContent(body)
+                + "</" + type + ">");
         List<XmlNode> nodes = reader.getXml();
 
         assertEquals(nodes.size(), 1);
 
         XmlNode node = nodes.get(0);
 
-        assertEquals("food", node.getType());
-        assertEquals("Steak <b>Sandwich</b>", node.getBody());
+        assertEquals(type, node.getType());
+        assertEquals(body, node.getBody());
 
     }
 
+    /**
+     * Gives the reader a string containing two xml nodes,
+     * both empty and without attributes.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testTwoEmptyNodes() throws Exception {
 
         XmlReader reader = new XmlReader(

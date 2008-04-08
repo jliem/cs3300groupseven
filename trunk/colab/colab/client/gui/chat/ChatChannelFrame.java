@@ -59,6 +59,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
                 chatPanel.writeMessage((ChatChannelData) d);
             }
         } catch (final ConnectionDroppedException cde) {
+            DebugManager.connectionDropped(cde);
             System.exit(1);
         }
 

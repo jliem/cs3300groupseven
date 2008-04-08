@@ -47,6 +47,8 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         // Cast the parent's generic version to a DocumentPanel for convenience
         documentPanel = (DocumentPanel) getClientChannelPanel();
 
+        // Add a listener so this frame can repaint itself when the panels
+        // have changed--necessary to fix ugly GUI transitions
         documentPanel.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
@@ -58,7 +60,6 @@ public class DocumentChannelFrame extends ClientChannelFrame {
                     repaint();
                 }
             }
-
         });
 
         this.setPreferredSize(new Dimension(800, 600));

@@ -21,6 +21,7 @@ import colab.client.ColabClient;
 import colab.client.gui.ClientChannelFrame;
 import colab.client.gui.revision.RevisionChatPanel;
 import colab.client.gui.revision.RevisionFrame;
+import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.chat.ChatChannelData;
 import colab.common.exception.ConnectionDroppedException;
@@ -69,6 +70,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
                     try {
                         client.add(channel.getId(), mess);
                     } catch (ConnectionDroppedException cde) {
+                        DebugManager.connectionDropped(cde);
                         System.exit(1);
                     }
                 }

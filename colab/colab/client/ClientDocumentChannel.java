@@ -102,7 +102,7 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     public void insertText(final int offset, final String content,
             final ParagraphIdentifier id, final UserName creator) throws RemoteException {
-        currentDocument.get(id).insert(offset, content);
+       // currentDocument.get(id).insert(offset, content);
 
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.insert(offset, content);
@@ -112,7 +112,7 @@ public final class ClientDocumentChannel extends ClientChannel {
                 creator,
                 new Date());
 
-        //add(edit);
+        add(edit);
 
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
@@ -121,7 +121,7 @@ public final class ClientDocumentChannel extends ClientChannel {
             final ParagraphIdentifier id, final UserName creator) throws RemoteException {
         DocumentParagraph paragraph = currentDocument.get(id);
         if (paragraph != null) {
-            paragraph.delete(offset, length);
+            //paragraph.delete(offset, length);
 
             DocumentParagraphDiff diff = new DocumentParagraphDiff();
             diff.delete(offset, length);
@@ -131,7 +131,7 @@ public final class ClientDocumentChannel extends ClientChannel {
                     creator,
                     new Date());
 
-            //add(edit);
+            add(edit);
         }
         //TODO: actually queue up changes, send to server after time or reqs are met
     }

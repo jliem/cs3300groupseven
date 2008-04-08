@@ -1,8 +1,9 @@
 package colab.common.channel.document.diff;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;
@@ -19,7 +20,7 @@ public final class DocumentParagraphDiff implements XmlSerializable {
     private List<Applicable> changes;
 
     public DocumentParagraphDiff() {
-        changes = new ArrayList<Applicable>();
+        changes = new Vector<Applicable>();
     }
 
     protected DocumentParagraphDiff(final List<Applicable> changes) {
@@ -30,6 +31,8 @@ public final class DocumentParagraphDiff implements XmlSerializable {
             throws NotApplicableException {
 
         DocumentParagraph ret = paragraph.copy();
+
+        DebugManager.debug("DPDiff says paragraph is " + ret.getContents());
 
         for (Applicable change : changes) {
             try {
@@ -68,7 +71,7 @@ public final class DocumentParagraphDiff implements XmlSerializable {
     }
 
     public DocumentParagraphDiff copy() {
-        List<Applicable> list = new ArrayList<Applicable>(changes);
+        List<Applicable> list = new Vector<Applicable>(changes);
         return new DocumentParagraphDiff(list);
     }
 

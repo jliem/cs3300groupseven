@@ -33,7 +33,6 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         // but filter them all for safety
         switch ((int)ke.getKeyChar()) {
 
-        case KeyEvent.VK_ENTER:
         case KeyEvent.VK_TAB:
         case KeyEvent.VK_UP:
         case KeyEvent.VK_DOWN:
@@ -51,6 +50,15 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
             break;
 
         default:
+
+            if ((int)ke.getKeyChar() == KeyEvent.VK_ENTER) {
+
+                if (!ke.isShiftDown()) {
+                    // Nothing if shift is not held down,
+                    // will be taken care of by keyPressed
+                    return;
+                }
+            }
 
             // Any typeable character gets inserted as text
 
@@ -79,11 +87,13 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
         switch (ke.getKeyCode()) {
 
+        // DON'T REMOVE THIS!
         case KeyEvent.VK_ENTER:
 
             if (ke.isShiftDown()) {
                 int position = editor.getCaretPosition();
                 editor.insert("\n", position);
+                editor.addInsertText('\n');
             } else {
                 /* TODO- signal new paragraph creation
                  * to server, insert in gui, move

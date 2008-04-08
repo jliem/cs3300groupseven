@@ -213,15 +213,7 @@ final class DocumentPanel extends ClientChannelPanel {
         doc.insert(0, new DocumentParagraph(
                 "Our first paragraph!", 4, new UserName("Matt"),
                 new ParagraphIdentifier(1), new Date()));
-        DocumentParagraphDiff diff = new DocumentParagraphDiff();
-        diff.lock(new UserName("Matt"));
 
-
-        try {
-            doc.applyEdit((ParagraphIdentifier)doc.get(0).getId(), diff);
-        } catch (final NotApplicableException e) {
-            DebugManager.shouldNotHappen(e);
-        }
         doc.get(0).unlock();
         doc.get(0).lock(new UserName("Alex"));
 

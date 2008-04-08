@@ -1,6 +1,5 @@
-package colab.client.gui.chat;
+package colab.client.gui.document;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,29 +11,24 @@ import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import colab.client.ClientChatChannel;
+import colab.client.ClientDocumentChannel;
 import colab.common.DebugManager;
 import colab.common.naming.ChannelName;
 
-public class ExportChatFrame extends JFrame {
+public class ExportDocumentFrame extends JFrame {
 
     /** Serialization verson number. */
     public static final long serialVersionUID = 1L;
 
-    private final ClientChatChannel channel;
+    private final ClientDocumentChannel channel;
 
     private final JFileChooser fileChooser;
 
@@ -52,15 +46,9 @@ public class ExportChatFrame extends JFrame {
 
     private final JLabel toLabel;
 
-    private final JRadioButton local;
-
-    private final JRadioButton lines;
-
-    private final JRadioButton entire;
-
     private File exportFile;
 
-    public ExportChatFrame(final ClientChatChannel channel) {
+    public ExportDocumentFrame(final ClientDocumentChannel channel) {
 
         this.channel = channel;
 
@@ -80,7 +68,7 @@ public class ExportChatFrame extends JFrame {
 
         browseButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                if (fileChooser.showSaveDialog(ExportChatFrame.this)
+                if (fileChooser.showSaveDialog(ExportDocumentFrame.this)
                         == JFileChooser.APPROVE_OPTION) {
 
                     // Sets the file path in the text box
@@ -95,63 +83,28 @@ public class ExportChatFrame extends JFrame {
             }
         });
 
-        local = new JRadioButton("Local chat");
-        lines = new JRadioButton("Lines");
-        entire = new JRadioButton("Entire chat");
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(local);
-        group.add(lines);
-        group.add(entire);
-
-        //selects local option, links line option enabled the radio button
-        local.setSelected(true);
-        lines.addChangeListener(new ChangeListener(){
-            public void stateChanged(final ChangeEvent e) {
-                boolean isSel = lines.isSelected();
-                fromBox.setEnabled(isSel);
-                fromLabel.setEnabled(isSel);
-                toBox.setEnabled(isSel);
-                toLabel.setEnabled(isSel);
-            }
-        });
-
         //defaults to disabled line options
         fromBox.setEnabled(false);
         fromLabel.setEnabled(false);
         toBox.setEnabled(false);
         toLabel.setEnabled(false);
 
-        JPanel optionsPanel = new JPanel();
-        optionsPanel.setBorder(new LineBorder(Color.GRAY, 1, true));
-        optionsPanel.setLayout(new GridBagLayout());
         JPanel linesPanel = new JPanel();
         linesPanel.setLayout(new BoxLayout(linesPanel, BoxLayout.LINE_AXIS));
 
         /* Construct three constraints, one to be shared by the radio
          * buttons, and another for the lines stuff */
-        GridBagConstraints buttonsC = new GridBagConstraints();
         GridBagConstraints linesC = new GridBagConstraints();
 
-        buttonsC.gridx = 0;
-        buttonsC.gridy = GridBagConstraints.RELATIVE;
-        buttonsC.insets = new Insets(2, 2, 2, 2);
-
-        linesC.gridy = 1;
+        linesC.gridy = 0;
         linesC.gridx = GridBagConstraints.RELATIVE;
         linesC.insets = new Insets(5, 5, 5, 5);
-
-        // Add radio options
-        optionsPanel.add(local, buttonsC);
-        optionsPanel.add(lines, buttonsC);
-        optionsPanel.add(entire, buttonsC);
 
         // Add line stuff
         linesPanel.add(fromLabel);
         linesPanel.add(fromBox);
         linesPanel.add(toLabel);
         linesPanel.add(toBox);
-        optionsPanel.add(linesPanel, linesC);
 
         JPanel filePanel = new JPanel();
         filePanel.setLayout(new BoxLayout(filePanel, BoxLayout.LINE_AXIS));
@@ -174,7 +127,6 @@ public class ExportChatFrame extends JFrame {
         exportC.gridx = 0;
         exportC.gridy = 2;
 
-        add(optionsPanel, optionsC);
         add(filePanel, filesC);
         add(exportButton, exportC);
 
@@ -190,7 +142,6 @@ public class ExportChatFrame extends JFrame {
 
     private void exportAction() {
 
-        // TODO: add actual export action
         try {
 
             // Try to create/open a file from the path in the text box
@@ -206,15 +157,8 @@ public class ExportChatFrame extends JFrame {
 
             }
 
-            if (local.isSelected()) {
-                channel.export(exportFile);
-            } else if (lines.isSelected()) {
-                // TODO: export per line, requires some server-side
-                // fixes (retrieving old history)
-            } else {
-                // TODO: total export, requires some server-side
-                // fixes (retrieving old history)
-            }
+            channel.export(exportFile);
+
         } catch (final IOException ex) {
             showErrorBox("Error writing to file.", "File Error");
             DebugManager.ioException(ex);
@@ -237,8 +181,9 @@ public class ExportChatFrame extends JFrame {
     public static void main(final String[] args) throws Exception {
 
         ChannelName channelName = new ChannelName("Test");
-        ClientChatChannel chatChannel = new ClientChatChannel(channelName);
-        ExportChatFrame frame = new ExportChatFrame(chatChannel);
+        ClientDocumentChannel docChannel =
+            new ClientDocumentChannel(channelName);
+        ExportDocumentFrame frame = new ExportDocumentFrame(docChannel);
         frame.setVisible(true);
 
     }

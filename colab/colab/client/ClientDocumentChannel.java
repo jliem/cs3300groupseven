@@ -10,10 +10,12 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
+import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.ChannelName;
+import colab.common.naming.UserName;
 
 public final class ClientDocumentChannel extends ClientChannel {
 
@@ -86,24 +88,31 @@ public final class ClientDocumentChannel extends ClientChannel {
     }
 
 
-    public void deleteParagraph(ParagraphIdentifier id) {
+    public void deleteParagraph(ParagraphIdentifier id) throws RemoteException {
 
         currentDocument.delete(id);
     }
 
-    public void insertText(final int offset, final String content, ParagraphIdentifier id) {
+    public void insertText(final int offset, final String content, ParagraphIdentifier id) throws RemoteException {
         currentDocument.get(id).insert(offset, content);
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 
-    public void deleteText(final int offset, final int length, ParagraphIdentifier id) {
+    public void deleteText(final int offset, final int length, ParagraphIdentifier id) throws RemoteException {
         currentDocument.get(id).delete(offset, length);
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 
-    public void changeHeaderLevel(final int headerLevel, ParagraphIdentifier id) {
+    public void changeHeaderLevel(final int headerLevel, ParagraphIdentifier id) throws RemoteException {
         currentDocument.get(id).setHeaderLevel(headerLevel);
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 
+    public void requestLock(UserName lockHolder, ParagraphIdentifier id) throws RemoteException {
+        add(new LockDocChannelData(lockHolder, id));
+    }
+    
+    public void requestUnlock(ParagraphIdentifier id) throws RemoteException {
+        add(new LockDocChannelData(null, id));
+    }
 }

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.rmi.RemoteException;
 
 import javax.swing.JTextArea;
 
@@ -118,7 +119,12 @@ class ParagraphEditor extends JTextArea {
 
             DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
 
-            channel.deleteText(offset, deleteLength, paragraph.getId());
+            try {
+                channel.deleteText(offset, deleteLength, paragraph.getId());
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                DebugManager.remote(e);
+            }
 
             deleteStart = -1;
             deleteLength = -1;
@@ -133,7 +139,12 @@ class ParagraphEditor extends JTextArea {
             DebugManager.debug("Editor is sending text \"" + insertText.toString() +
                     "\" at index " + startIndex);
 
-            channel.insertText(startIndex, insertText.toString(), paragraph.getId());
+            try {
+                channel.insertText(startIndex, insertText.toString(), paragraph.getId());
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                DebugManager.remote(e);
+            }
 
             // Clear start index and text
             startIndex = -1;

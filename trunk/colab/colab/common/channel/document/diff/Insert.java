@@ -25,7 +25,7 @@ public class Insert implements Applicable {
 
     public void apply(final DocumentParagraph para)
             throws NotApplicableException {
-        if (offset >= para.getLength()) {
+        if (offset > para.getLength()) {
             throw new NotApplicableException(
                     "Insert outside of range of paragraph.");
         } else {

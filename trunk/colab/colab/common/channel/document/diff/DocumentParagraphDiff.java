@@ -32,8 +32,6 @@ public final class DocumentParagraphDiff implements XmlSerializable {
 
         DocumentParagraph ret = paragraph.copy();
 
-        DebugManager.debug("DPDiff says paragraph is " + ret.getContents());
-
         for (Applicable change : changes) {
             try {
                 change.apply(ret);

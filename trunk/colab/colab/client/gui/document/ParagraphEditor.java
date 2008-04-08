@@ -287,7 +287,7 @@ class ParagraphEditor extends JTextArea {
                 //setForeground(Color.WHITE);
                 setBackground(Color.CYAN);
 
-                setToolTipText("");
+                setToolTipText(null);
                 requestFocus();
 
             } else {
@@ -312,6 +312,7 @@ class ParagraphEditor extends JTextArea {
         setForeground(defaultFG);
         setBackground(defaultBG);
 
+        setToolTipText(null);
         setEditable(true);
 
     }

@@ -15,11 +15,13 @@ import javax.swing.KeyStroke;
 
 import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
+import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelFrame;
 import colab.client.gui.revision.RevisionDocumentPanel;
 import colab.client.gui.revision.RevisionFrame;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
+import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
@@ -69,6 +71,20 @@ public class DocumentChannelFrame extends ClientChannelFrame {
                 }
             }
         });
+
+        documentPanel.addChannelPanelListener(new ChannelPanelListener() {
+
+            public void onMessageSent(ChannelData data) {
+                try {
+                    client.add(channel.getId(), data);
+                } catch (ConnectionDroppedException cde) {
+                    DebugManager.connectionDropped(cde);
+                    System.exit(1);
+                }
+            }
+
+        });
+
 
 
         // Menu

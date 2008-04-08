@@ -23,7 +23,7 @@ public abstract class ClientChannelFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     /** The client. */
-    private final ColabClient client;
+    protected final ColabClient client;
 
     /** The main panel associated with this frame. */
     private final ClientChannelPanel clientChannelPanel;

@@ -8,13 +8,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.rmi.RemoteException;
+import java.util.Vector;
 
 import javax.swing.JTextArea;
 import javax.swing.Timer;
 
 import colab.client.ClientDocumentChannel;
+import colab.client.gui.ChannelPanelListener;
 import colab.common.DebugManager;
 import colab.common.channel.document.Document;
+import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.event.document.ParagraphListener;
 import colab.common.naming.UserName;
@@ -36,6 +39,8 @@ class ParagraphEditor extends JTextArea {
     private static final long serialVersionUID = 1;
 
     private StringBuffer insertText;
+
+    private Vector<ParagraphListener> paragraphListeners;
 
     /** A timer that will fire periodically to send changes
      * when no keys are pressed for a specified time.
@@ -70,6 +75,8 @@ class ParagraphEditor extends JTextArea {
         this.startIndex = -1;
         this.deleteLength = -1;
         this.deleteStart = -1;
+
+        this.paragraphListeners = new Vector<ParagraphListener>();
 
         this.timer = new Timer(TIMER_DELAY, new ParagraphChangeDispatcher());
 
@@ -250,6 +257,46 @@ class ParagraphEditor extends JTextArea {
 
         return (lockHolder != null && lockHolder.equals(user));
 
+    }
+
+    public void addParagraphListener(
+            final ParagraphListener listener) {
+        paragraphListeners.add(listener);
+    }
+
+    public void removeParagraphListener(
+            final ParagraphListener listener) {
+        paragraphListeners.remove(listener);
+    }
+
+    protected void fireOnLock(final UserName newOwner) {
+        for (ParagraphListener listener : paragraphListeners) {
+            listener.onLock(newOwner);
+        }
+    }
+
+    protected void fireOnUnlock() {
+        for (ParagraphListener listener : paragraphListeners) {
+            listener.onUnlock();
+        }
+    }
+
+    protected void fireHeaderChange(final int headerLevel) {
+        for (ParagraphListener listener : paragraphListeners) {
+            listener.onHeaderChange(headerLevel);
+        }
+    }
+
+    protected void fireOnInsert(final int offset, final String hunk) {
+        for (ParagraphListener listener : paragraphListeners) {
+            listener.onInsert(offset, hunk);
+        }
+    }
+
+    protected void fireOnDelete(final int offset, final int length) {
+        for (ParagraphListener listener : paragraphListeners) {
+            listener.onDelete(offset, length);
+        }
     }
 
     /**

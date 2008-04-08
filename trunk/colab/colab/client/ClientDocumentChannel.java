@@ -10,6 +10,7 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
+import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
@@ -98,7 +99,11 @@ public final class ClientDocumentChannel extends ClientChannel {
     }
 
     public void deleteText(final int offset, final int length, ParagraphIdentifier id) throws RemoteException {
-        currentDocument.get(id).delete(offset, length);
+        DocumentParagraph paragraph = currentDocument.get(id);
+        if (paragraph != null) {
+            paragraph.delete(offset, length);
+
+        }
         //TODO: actually queue up changes, send to server after time or reqs are met
     }
 
@@ -110,7 +115,7 @@ public final class ClientDocumentChannel extends ClientChannel {
     public void requestLock(UserName lockHolder, ParagraphIdentifier id) throws RemoteException {
         add(new LockDocChannelData(lockHolder, id));
     }
-    
+
     public void requestUnlock(ParagraphIdentifier id) throws RemoteException {
         add(new LockDocChannelData(null, id));
     }

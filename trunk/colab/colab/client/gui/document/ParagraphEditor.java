@@ -117,6 +117,9 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
+    public boolean canDisplay(int codePoint) {
+        return defaultFont.canDisplay(codePoint);
+    }
     public void sendPendingChange() {
 
         if (this.isLockedByOther())

@@ -15,7 +15,7 @@ public abstract class ClientChannelPanel extends JPanel {
 
     private final UserName username;
 
-    protected UserName getUsername() {
+    public UserName getUsername() {
         return username;
     }
 

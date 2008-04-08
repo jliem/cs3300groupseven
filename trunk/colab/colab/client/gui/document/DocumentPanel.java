@@ -22,6 +22,7 @@ import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
+import colab.common.DebugManager;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
@@ -156,7 +157,7 @@ final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    private void fireOnMessageSent(final DocumentChannelData dcd) {
+    public void fireOnMessageSent(final DocumentChannelData dcd) {
         for (final ChannelPanelListener l : channelListeners) {
             l.onMessageSent(dcd);
         }
@@ -165,8 +166,6 @@ final class DocumentPanel extends ClientChannelPanel {
 
 
     private void arrangePanel() {
-
-
         mainPanel.removeAll();
         for (final ParagraphEditor editor : editors) {
             mainPanel.add(editor);
@@ -191,6 +190,9 @@ final class DocumentPanel extends ClientChannelPanel {
 
         editor.addKeyListener(new ParagraphEditorKeyAdapter(editor));
         editor.addMouseListener(new ParagraphEditorMouseAdapter(editor));
+
+        editor.addParagraphListener(new ParagraphChangeMerger(this,
+                paragraph.getId()));
 
         // Add shift event
         editor.addKeyListener(new KeyAdapter() {
@@ -273,5 +275,6 @@ final class DocumentPanel extends ClientChannelPanel {
         f.pack();
         f.setVisible(true);
     }
+
 
 }

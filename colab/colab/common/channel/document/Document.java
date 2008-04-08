@@ -1,5 +1,9 @@
 package colab.common.channel.document;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -168,7 +172,7 @@ public final class Document {
     /**
      * Retrieves the DocumentParagraph of this document with getId().equals(id),
      * or null on no match.
-     * 
+     *
      * @param id a ParagraphIdentifier signifying the paragraph to retrieve.
      * @return a DocumentParagraph or null
      */
@@ -210,6 +214,14 @@ public final class Document {
 
         for (final DocumentListener listener : documentListeners) {
             listener.onDelete(id);
+        }
+
+    }
+
+    public void export(final PrintWriter writer) throws IOException {
+
+        for (final DocumentParagraph paragraph: this.paragraphs) {
+            writer.println(paragraph.toHtml());
         }
 
     }

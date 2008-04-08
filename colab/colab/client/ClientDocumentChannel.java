@@ -1,6 +1,10 @@
 package colab.client;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -119,4 +123,38 @@ public final class ClientDocumentChannel extends ClientChannel {
     public void requestUnlock(ParagraphIdentifier id) throws RemoteException {
         add(new LockDocChannelData(null, id));
     }
+
+    public void export(final File file) throws IOException {
+
+        PrintWriter writer = new PrintWriter(new FileOutputStream(file));
+
+        try {
+            writer.println("<html>");
+            writer.println("<head>");
+            writer.println("<title>"
+                    + this.getChannelDescriptor().getName().getValue()
+                    + "</title>");
+            writer.println("<style type=\"text/css\">");
+            writer.println("p { font-family: Serif; }");
+            writer.println(".level0 { font-size: 1.00em; }");
+            writer.println(".level1 { font-size: 1.25em; }");
+            writer.println(".level2 { font-size: 1.50em; }");
+            writer.println(".level3 { font-size: 1.75em; }");
+            writer.println(".level4 { font-size: 2.00em; }");
+            writer.println(".level5 { font-size: 2.25em; }");
+            writer.println(".level6 { font-size: 2.50em; }");
+            writer.println("</style>");
+            writer.println("</head>");
+            writer.println("<body>");
+
+            this.currentDocument.export(writer);
+
+            writer.println("</body>");
+            writer.println("</html>");
+        } finally {
+            writer.close();
+        }
+
+    }
+
 }

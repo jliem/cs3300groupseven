@@ -112,6 +112,28 @@ final class DocumentPanel extends ClientChannelPanel {
 
         add(scroll, BorderLayout.CENTER);
 
+        //***** TEST METHODS //
+        addTestParagraphs();
+
+    }
+
+    private void addTestParagraphs() {
+        document.insert(0, new DocumentParagraph(
+                "Our first paragraph!", 4, super.getUsername(),
+                new ParagraphIdentifier(1), new Date()));
+
+        document.get(0).unlock();
+        document.get(0).lock(new UserName("Alex"));
+
+        document.insert(1, new DocumentParagraph(
+                "Our next paragraph.", 0, new UserName("Chris"),
+                new ParagraphIdentifier(2), new Date()));
+        DocumentParagraph last = new DocumentParagraph(
+                "This paragraph currently has no lock.", 1,
+                new UserName("Chris"), new ParagraphIdentifier(5),
+                new Date());
+        document.insert(2, last);
+        last.unlock();
     }
 
     public void apply(final DocumentChannelData dcd)
@@ -213,35 +235,11 @@ final class DocumentPanel extends ClientChannelPanel {
         DocumentChannelFrame f = new DocumentChannelFrame(client,
                 channel, new UserName("Chris"));
 
-        //JFrame f = new JFrame("Document Editor");
         f.setPreferredSize(new Dimension(320, 300));
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
-        Document doc  = channel.getCurrentDocument();
-
-        DocumentPanel p = new DocumentPanel(new UserName("Matt"), channel);
-        f.setContentPane(p);
-
         f.pack();
         f.setVisible(true);
-
-        doc.insert(0, new DocumentParagraph(
-                "Our first paragraph!", 4, new UserName("Matt"),
-                new ParagraphIdentifier(1), new Date()));
-
-        doc.get(0).unlock();
-        doc.get(0).lock(new UserName("Alex"));
-
-        doc.insert(1, new DocumentParagraph(
-                "Our next paragraph.", 0, new UserName("Matt"),
-                new ParagraphIdentifier(2), new Date()));
-        DocumentParagraph last = new DocumentParagraph(
-                "This paragraph currently has no lock.", 1,
-                new UserName("Chris"), new ParagraphIdentifier(5),
-                new Date());
-        doc.insert(2, last);
-        last.unlock();
     }
 
 }

@@ -3,12 +3,14 @@ package colab.client.gui.document;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.FocusAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.rmi.RemoteException;
 
 import javax.swing.JTextArea;
+import javax.swing.Timer;
 
 import colab.client.ClientDocumentChannel;
 import colab.common.DebugManager;
@@ -34,6 +36,14 @@ class ParagraphEditor extends JTextArea {
 
     private StringBuffer insertText;
 
+    /** A timer that will fire periodically to send changes
+     * when no keys are pressed for a specified time.
+     */
+    private Timer timer;
+
+    /** Timer delay in ms */
+    private final int TIMER_DELAY = 2000;
+
 
     /** The index at which we first clicked (presumably to being inserting
      * or deleting text)
@@ -58,6 +68,8 @@ class ParagraphEditor extends JTextArea {
         this.startIndex = -1;
         this.deleteLength = -1;
         this.deleteStart = -1;
+
+        this.timer = new Timer(TIMER_DELAY, new ParagraphChangeDispatcher());
 
         setText(this.paragraph.getContents());
         showHeader(this.paragraph.getHeaderLevel());
@@ -88,6 +100,9 @@ class ParagraphEditor extends JTextArea {
                         DebugManager.remote(re);
                     }
                 }
+
+                // Stop the timer
+                timer.stop();
             }
         });
 
@@ -142,6 +157,10 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
+    public void restartTimer() {
+        timer.restart();
+    }
+
     public void requestLock() {
         try {
             channel.requestLock(user, paragraph.getId());
@@ -177,9 +196,16 @@ class ParagraphEditor extends JTextArea {
         if (this.isLockedByOther())
             return;
 
+        int selectionStart = this.getSelectionStart();
 
+        // Send any current inserts or deletes
         sendPendingDelete();
         sendPendingInsert();
+
+
+        // Restore the caret
+        this.setCaretPosition(selectionStart);
+
     }
 
     private void sendPendingDelete() {
@@ -354,6 +380,16 @@ class ParagraphEditor extends JTextArea {
 
     public void setDeleteStart(int deleteStart) {
         this.deleteStart = deleteStart;
+    }
+
+    private class ParagraphChangeDispatcher implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+
+            DebugManager.debug("Timer is sending changes");
+            sendPendingChange();
+        }
+
     }
 
 }

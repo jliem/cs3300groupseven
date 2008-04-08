@@ -14,35 +14,68 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
     private final ParagraphEditor editor;
 
-    private int selectionStart;
-
     public ParagraphEditorKeyAdapter(final ParagraphEditor editor) {
         this.editor = editor;
     }
 
     public void keyTyped(final KeyEvent ke) {
 
-        // Any typeable character gets inserted as text
+        super.keyTyped(ke);
 
-        // If we don't have a lock, request it
-        // if appropriate
-        if (editor.canRequestLock()) {
-            editor.requestLock();
-        }
+        // For any key typed, restart timer
+        editor.restartTimer();
+
+        // Filter out invalid chars
+        // getKeyCode() seems to return 0 in keyTyped,
+        // so cast getKeyChar() instead
+
+        // So far the only ones I've found are delete and backspace,
+        // but filter them all for safety
+        switch ((int)ke.getKeyChar()) {
+
+        case KeyEvent.VK_ENTER:
+        case KeyEvent.VK_TAB:
+        case KeyEvent.VK_UP:
+        case KeyEvent.VK_DOWN:
+        case KeyEvent.VK_LEFT:
+        case KeyEvent.VK_RIGHT:
+        case KeyEvent.VK_INSERT:
+        case KeyEvent.VK_PAGE_UP:
+        case KeyEvent.VK_PAGE_DOWN:
+        case KeyEvent.VK_HOME:
+        case KeyEvent.VK_END:
+        case KeyEvent.VK_DELETE:
+        case KeyEvent.VK_BACK_SPACE:
+
+            // Nothing
+            break;
+
+        default:
+
+            // Any typeable character gets inserted as text
+
+            // If we don't have a lock, request it
+            // if appropriate
+            if (editor.canRequestLock()) {
+                editor.requestLock();
+            }
 
         // If we weren't already tracking the index, record it now
         if (editor.getStartIndex() < 0) {
             editor.setStartIndex(editor.getSelectionStart());
-
-            DebugManager.debug("Start index set to " + editor.getStartIndex());
         }
 
         editor.addInsertText(ke.getKeyChar());
+
+        }
 
     }
 
     public void keyPressed(final KeyEvent ke) {
         super.keyPressed(ke);
+
+        // For any key typed, restart timer
+        editor.restartTimer();
 
         switch (ke.getKeyCode()) {
 
@@ -96,15 +129,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
         case KeyEvent.VK_INSERT:
 
-            selectionStart = editor.getSelectionStart();
-
             // Send any current inserts or deletes
             editor.sendPendingChange();
-
-            // Restore the caret
-            editor.setCaretPosition(selectionStart);
-
-            DebugManager.debug("Insert says, selstart is " + selectionStart);
 
             break;
 
@@ -117,15 +143,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             // Pressing an arrow key means moving the cursor, so send any inserts
 
-            selectionStart = editor.getSelectionStart();
-
             // Send any current inserts or deletes
             editor.sendPendingChange();
-
-            // Restore the caret
-            editor.setCaretPosition(selectionStart);
-
-            DebugManager.debug("Selstart is " + selectionStart);
 
             break;
 

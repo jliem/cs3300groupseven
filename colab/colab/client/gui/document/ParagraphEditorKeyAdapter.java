@@ -171,6 +171,9 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 // There was no text and delete/backspace was pressed, so
                 // delete this paragraph
 
+            	// Send pending changes first
+            	editor.sendPendingChange();
+
                 editor.delete();
             } else if (editor.getSelectionStart() > 0) {
                 // Delete text

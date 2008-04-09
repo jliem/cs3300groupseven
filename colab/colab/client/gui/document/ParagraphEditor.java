@@ -50,6 +50,7 @@ class ParagraphEditor extends JTextArea {
     /** Timer delay in ms. */
     private final int TIMER_DELAY = 2000;
 
+    private final DocumentPanel documentPanel;
 
     /** The index at which we first began inserting text. */
     private int startIndex;
@@ -61,6 +62,7 @@ class ParagraphEditor extends JTextArea {
     private int deleteStart;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
+    		final DocumentPanel documentPanel,
             final DocumentParagraph paragraph,
             final UserName user) {
 
@@ -94,6 +96,7 @@ class ParagraphEditor extends JTextArea {
 
         this.channel = channel;
         this.paragraph = paragraph;
+        this.documentPanel = documentPanel;
         this.user = user;
         this.defaultFont = getFont();
         this.defaultFG = getForeground();
@@ -200,11 +203,7 @@ class ParagraphEditor extends JTextArea {
      * Deletes this paragraph.
      */
     public void delete() {
-        try {
-            channel.deleteParagraph(paragraph.getId());
-        } catch (RemoteException re) {
-            DebugManager.remote(re);
-        }
+        documentPanel.deleteParagraph(paragraph.getId(), user);
     }
 
     /**

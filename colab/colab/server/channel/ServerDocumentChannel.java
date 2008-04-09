@@ -90,7 +90,8 @@ public final class ServerDocumentChannel
             revisions.addAndAssignId(data);
 
             // If we don't have a paragraph already, create it
-            if (insertData.getParagraph() == null) {
+            if (insertData.getParagraph() == null ||
+            		insertData.getParagraph().getId() == null) {
                 ParagraphIdentifier paragraphId =
                     new ParagraphIdentifier(data.getId());
 

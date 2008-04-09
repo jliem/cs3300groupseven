@@ -156,7 +156,9 @@ final class DocumentPanel extends ClientChannelPanel {
     }
 
     public void createNewParagraph(ParagraphIdentifier previous) {
-        this.fireOnMessageSent(new InsertDocChannelData(previous, super.getUsername()));
+        InsertDocChannelData data = new InsertDocChannelData(
+                previous, super.getUsername());
+        this.fireOnMessageSent(data);
     }
 
     public void apply(final DocumentChannelData dcd)

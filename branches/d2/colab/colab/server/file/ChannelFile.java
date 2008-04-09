@@ -8,6 +8,8 @@ import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
+import colab.common.channel.document.InsertDocChannelData;
+import colab.common.identity.ParagraphIdentifier;
 import colab.common.util.FileUtils;
 import colab.common.xml.XmlConstructor;
 import colab.common.xml.XmlNode;
@@ -53,6 +55,7 @@ public final class ChannelFile<T extends ChannelData>
                 dataCollection.add(data);
             }
         } catch (final XmlParseException e) {
+            DebugManager.exception(e);
             throw new IOException(e.getMessage());
         }
 
@@ -62,6 +65,11 @@ public final class ChannelFile<T extends ChannelData>
     public void add(final T data) {
 
         dataCollection.add(data);
+
+        if (data instanceof InsertDocChannelData) {
+            ((InsertDocChannelData) data).getParagraph().setId(
+                    new ParagraphIdentifier(data.getId()));
+        }
 
         XmlNode xml = data.toXml();
         String xmlString = xml.serialize();

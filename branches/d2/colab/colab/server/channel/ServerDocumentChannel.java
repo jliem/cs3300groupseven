@@ -14,6 +14,7 @@ import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.document.InsertDocChannelData;
+import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -77,7 +78,7 @@ public final class ServerDocumentChannel
         // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
 
-            InsertDocChannelData insertData = ((InsertDocChannelData)data);
+            InsertDocChannelData insertData = ((InsertDocChannelData) data);
 
             revisions.addAndAssignId(data);
 
@@ -98,7 +99,8 @@ public final class ServerDocumentChannel
 
         try {
 
-            // Check for channel data validity - SHOULD take care of bad locks, et cetera
+            // Check for channel data validity
+            // SHOULD take care of bad locks, et cetera
             data.apply(currentDocument.copy());
 
             DebugManager.debug("Server is adding data: " + data.toString());
@@ -124,7 +126,9 @@ public final class ServerDocumentChannel
         // Store the data, and assign it an identifier
         // Might have already added this if it's an InsertDocChannelData
         // but that's ok
-        revisions.addAndAssignId(data);
+        if (!(data instanceof LockDocChannelData)) {
+            revisions.addAndAssignId(data);
+        }
 
         // Forward it to all clients, regardless of the creator
         sendToAllRegardless(data);

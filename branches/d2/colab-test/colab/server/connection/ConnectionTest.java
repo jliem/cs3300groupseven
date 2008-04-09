@@ -5,9 +5,20 @@ import colab.client.ColabClient;
 import colab.common.ConnectionState;
 import colab.server.MockColabServer;
 
+/**
+ * 
+ * Test case for ConnectionTest
+ *
+ */
 public final class ConnectionTest extends TestCase {
 
-    public void testConnectionCreationandCheckState() throws Exception {
+    /**
+     * Tests that a Connection is made from the client to a server and 
+     * that the connection returns the right state
+     * @throws Exception
+     */
+	
+	public void testConnectionCreationandCheckState() throws Exception {
 
         ColabClient client = new ColabClient();
         MockColabServer server = new MockColabServer();

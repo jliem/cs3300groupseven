@@ -45,7 +45,15 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
 
     public void onHeaderChange(int headerLevel) {
-        // TODO Auto-generated method stub
+        DocumentParagraphDiff diff = new DocumentParagraphDiff();
+        diff.changeHeaderLevel(headerLevel);
+
+        EditDocChannelData edit = new EditDocChannelData(id,
+                diff,
+                user,
+                new Date());
+
+        panel.fireOnMessageSent(edit);
 
     }
 

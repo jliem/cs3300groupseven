@@ -1,7 +1,5 @@
 package colab.common.channel.document;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -9,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
@@ -67,6 +66,10 @@ public final class Document {
 
     public void insert(final int offset, final DocumentParagraph paragraph) {
 
+        if (paragraph == null) {
+            throw new IllegalArgumentException("Can't insert a null paragraph");
+        }
+
         if (offset <= paragraphs.size() && offset >= 0) {
             paragraphs.add(offset, paragraph);
             fireOnInsert(offset, paragraph);
@@ -109,7 +112,9 @@ public final class Document {
     public Document copy() {
         Document cop = new Document();
         for (DocumentParagraph p : paragraphs) {
-            cop.insert(cop.getNumberParagraphs(), p.copy());
+            if (p != null) {
+                cop.insert(cop.getNumberParagraphs(), p.copy());
+            }
         }
 
         return cop;

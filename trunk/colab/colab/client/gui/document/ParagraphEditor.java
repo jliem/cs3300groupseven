@@ -137,11 +137,7 @@ class ParagraphEditor extends JTextArea {
                     // If we had a lock, release it
                     if (isLockedByMe()) {
                         DebugManager.debug("Releasing lock");
-                        try {
-                            channel.requestUnlock(paragraph.getId());
-                        } catch (RemoteException re) {
-                            DebugManager.remote(re);
-                        }
+                        requestUnlock();
                     }
                 }
 
@@ -244,11 +240,14 @@ class ParagraphEditor extends JTextArea {
      * Requests a lock on this paragraph.
      */
     public void requestLock() {
-        try {
-            channel.requestLock(user, paragraph.getId());
-        } catch (RemoteException re) {
-            DebugManager.remote(re);
-        }
+        this.fireOnLock(user);
+    }
+
+    /**
+     * Requests that this paragraph's lock be released
+     */
+    public void requestUnlock() {
+        this.fireOnUnlock();
     }
 
     /**

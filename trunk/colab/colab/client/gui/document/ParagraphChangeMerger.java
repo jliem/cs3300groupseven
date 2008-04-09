@@ -3,6 +3,7 @@ package colab.client.gui.document;
 import java.util.Date;
 
 import colab.common.channel.document.EditDocChannelData;
+import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.ParagraphListener;
 import colab.common.identity.ParagraphIdentifier;
@@ -27,10 +28,8 @@ public class ParagraphChangeMerger implements ParagraphListener {
         this.id = id;
         user = panel.getUsername();
     }
+
     public void onDelete(int offset, int length) {
-//        DocumentParagraph paragraph = currentDocument.get(id);
-//        if (paragraph != null) {
-//            //paragraph.delete(offset, length);
 
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.delete(offset, length);
@@ -42,8 +41,6 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
         panel.fireOnMessageSent(edit);
 
-//            add(edit);
-//        }
     }
 
 
@@ -68,14 +65,21 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
 
     public void onLock(UserName newOwner) {
-        // TODO Auto-generated method stub
+
+        LockDocChannelData lock = new LockDocChannelData(newOwner,
+                id);
+
+        panel.fireOnMessageSent(lock);
 
     }
 
 
     public void onUnlock() {
-        // TODO Auto-generated method stub
 
+        LockDocChannelData lock = new LockDocChannelData(null,
+                id);
+
+        panel.fireOnMessageSent(lock);
     }
 
 }

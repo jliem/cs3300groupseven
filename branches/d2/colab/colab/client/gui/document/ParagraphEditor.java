@@ -359,17 +359,7 @@ class ParagraphEditor extends JTextArea {
         this.fireHeaderChange(headerLevel);
     }
 
-    void sendPendingDelete() {
-
-        // Don't send if we don't have the lock
-        if (!isLockedByMe()) {
-            DebugManager.debug("ParagraphEditor could not send delete because "
-                    + this.getLockHolder() + " has the lock!");
-            return;
-        }
-
-        // Save the cursor position
-        int selectionStart = this.getSelectionStart();
+    private void sendPendingDelete() {
 
         if (deleteStart >= 0 && deleteLength >= 0) {
             // Compute starting offset from start and length
@@ -381,9 +371,6 @@ class ParagraphEditor extends JTextArea {
 
             resetDelete();
         }
-
-        // Restore the caret
-        this.setCaretPosition(selectionStart);
 
     }
 
@@ -397,17 +384,7 @@ class ParagraphEditor extends JTextArea {
         insertText = new StringBuffer();
     }
 
-    void sendPendingInsert() {
-
-        // Don't send if we don't have the lock
-        if (!isLockedByMe()) {
-            DebugManager.debug("ParagraphEditor could not send insert because "
-                    + this.getLockHolder() + " has the lock!");
-            return;
-        }
-
-        // Save the cursor position
-        int selectionStart = this.getSelectionStart();
+    private void sendPendingInsert() {
 
         // Check if there's any text to send
         if (startIndex >= 0 && insertText.length() > 0) {
@@ -419,9 +396,6 @@ class ParagraphEditor extends JTextArea {
             // Clear start index and text
             resetInsert();
         }
-
-        // Restore the caret
-        this.setCaretPosition(selectionStart);
 
     }
 

@@ -281,28 +281,42 @@ public final class DocumentPanel extends ClientChannelPanel {
 
         Iterator<ParagraphEditor> iter = editors.iterator();
 
-        while(iter.hasNext()) {
-            if(iter.next() == fromThisOne) {
+        while (iter.hasNext()) {
+            ParagraphEditor next = iter.next();
+            DebugManager.debug("Loop 1: " + next.getParagraph().getId());
+            if (next.getParagraph().getId().equals(fromThisOne.getParagraph().getId())) {
                 break;
             }
         }
 
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             ParagraphEditor next = iter.next();
-            if(next.isUnlocked()) {
+            DebugManager.debug("Checking " + next.getParagraph().getId());
+
+            if (next.isUnlocked()) {
+                DebugManager.debug("Requesting focus on " + next.getParagraph().getId());
                 next.requestFocus();
                 found = true;
                 break;
+            } else {
+                DebugManager.debug("Locked: " + next.getParagraph().getId());
             }
         }
 
-        if(!found) {
+
+        if (!found) {
+
+            DebugManager.debug("No paragraphs found, trying again");
+
             iter = editors.iterator();
-            while(iter.hasNext()) {
+            while (iter.hasNext()) {
                 ParagraphEditor next = iter.next();
-                if(next.isUnlocked()) {
+                DebugManager.debug("Checking " + next.getParagraph().getId());
+                if (next.isUnlocked()) {
                     next.requestFocus();
                     break;
+                } else {
+                    DebugManager.debug("Locked: " + next.getParagraph().getId());
                 }
             }
         }
@@ -325,22 +339,6 @@ public final class DocumentPanel extends ClientChannelPanel {
         f.setVisible(true);
     }
 
-      /*  doc.insert(0, new DocumentParagraph(
-                "Our first paragraph!", 4, new UserName("Matt"),
-                new ParagraphIdentifier(1), new Date()));
-
-        doc.get(0).unlock();
-        doc.get(0).lock(new UserName("Alex"));
-
-        doc.insert(1, new DocumentParagraph(
-                "Our next paragraph.", 0, new UserName("Matt"),
-                new ParagraphIdentifier(2), new Date()));
-        DocumentParagraph last = new DocumentParagraph(
-                "This paragraph currently has no lock.", 1,
-                new UserName("Chris"), new ParagraphIdentifier(5),
-                new Date());
-        doc.insert(2, last);
-        last.unlock(); */
-    }
+}
 
 

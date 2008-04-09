@@ -67,6 +67,13 @@ public final class ServerDocumentChannel
         this.revisions = channelFile;
 
         this.currentDocument = new Document();
+        for (DocumentChannelData data : revisions.getAll()) {
+            try {
+                data.apply(currentDocument);
+            } catch (final NotApplicableException e) {
+                DebugManager.exception(e);
+            }
+        }
 
     }
 

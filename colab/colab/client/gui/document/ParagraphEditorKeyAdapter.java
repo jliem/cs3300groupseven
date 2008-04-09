@@ -69,11 +69,13 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
         // If we weren't already tracking the index, record it now
         if (editor.getStartIndex() < 0) {
-            editor.setStartIndex(editor.getSelectionStart());
 
             // We are just beginning an insert, so send any
             // pending deletes
-            editor.sendPendingDelete();
+            editor.sendPendingChange();
+
+            editor.setStartIndex(editor.getSelectionStart());
+
         }
 
         editor.addInsertText(ke.getKeyChar());
@@ -202,8 +204,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 } else {
                     // No delete in progress
 
-                    // Send any pending inserts
-                    editor.sendPendingInsert();
+                    // State change, send pending changes
+                    editor.sendPendingChange();
 
                     // Set starting index
                     editor.setDeleteStart(editor.getSelectionStart());

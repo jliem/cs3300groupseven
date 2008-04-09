@@ -26,6 +26,7 @@ import colab.common.DebugManager;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
+import colab.common.channel.document.InsertDocChannelData;
 import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -85,6 +86,11 @@ final class DocumentPanel extends ClientChannelPanel {
         while(iter.hasNext()) {
             addParagraph(iter.next());
         }
+        
+        //ParagraphEditor newParagraph = addParagraph(new DocumentParagraph("", 0, username, new ParagraphIdentifier(new Integer(0)), new Date()));
+        
+        fireOnMessageSent(new InsertDocChannelData());
+        
         arrangePanel();
 
         this.document.addDocumentListener(new DocumentListener() {
@@ -109,7 +115,8 @@ final class DocumentPanel extends ClientChannelPanel {
                 arrangePanel();
             }
         });
-
+        
+        
         add(scroll, BorderLayout.CENTER);
 
         //***** TEST METHODS //
@@ -178,11 +185,12 @@ final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    private void addParagraph(final DocumentParagraph para) {
-        insertParagraphEditor(editors.size(), para);
+    private ParagraphEditor addParagraph(final DocumentParagraph para) {
+    	document.insert(editors.size(), para);
+        return insertParagraphEditor(editors.size(), para);
     }
 
-    private void insertParagraphEditor(final int offset,
+    private ParagraphEditor insertParagraphEditor(final int offset,
             final DocumentParagraph paragraph) {
 
         final ParagraphEditor editor =
@@ -205,13 +213,27 @@ final class DocumentPanel extends ClientChannelPanel {
                     }
                     arg0.consume();
                 }
+                
+                if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
+                	if (!arg0.isShiftDown()) {
+//                		editor.requestUnlock();
+//                		arrangePanel();
+//                		ParagraphEditor newParagraphEd = addParagraph(new DocumentParagraph("", 0, editor.getLockHolder(), 
+//                			new ParagraphIdentifier(new Integer((int)editor.getParagraph().getId().getValue() + 1)), new Date()));
+//                		//addParagraph(new DocumentParagraph());
+//                		newParagraphEd.requestFocus();
+//                		arrangePanel();
+                	}                	
+                }
+                	
            }
         });
 
         editors.add(offset, editor);
+        return editor;
     }
 
-    private void insertParagraphEditor(final ParagraphIdentifier afterID,
+    private ParagraphEditor insertParagraphEditor(final ParagraphIdentifier afterID,
             final DocumentParagraph paragraph) {
 
         int i;
@@ -222,7 +244,7 @@ final class DocumentPanel extends ClientChannelPanel {
             }
         }
 
-        insertParagraphEditor(i, paragraph);
+        return insertParagraphEditor(i, paragraph);
 
     }
 
@@ -276,5 +298,22 @@ final class DocumentPanel extends ClientChannelPanel {
         f.setVisible(true);
     }
 
+      /*  doc.insert(0, new DocumentParagraph(
+                "Our first paragraph!", 4, new UserName("Matt"),
+                new ParagraphIdentifier(1), new Date()));
 
-}
+        doc.get(0).unlock();
+        doc.get(0).lock(new UserName("Alex"));
+
+        doc.insert(1, new DocumentParagraph(
+                "Our next paragraph.", 0, new UserName("Matt"),
+                new ParagraphIdentifier(2), new Date()));
+        DocumentParagraph last = new DocumentParagraph(
+                "This paragraph currently has no lock.", 1,
+                new UserName("Chris"), new ParagraphIdentifier(5),
+                new Date());
+        doc.insert(2, last);
+        last.unlock(); */
+    }
+
+

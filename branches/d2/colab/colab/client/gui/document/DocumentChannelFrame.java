@@ -123,7 +123,6 @@ public class DocumentChannelFrame extends ClientChannelFrame {
                 RevisionFrame frame = new RevisionFrame(
                         new RevisionDocumentPanel(channel,
                                 channel.getChannelData()));
-
                 frame.pack();
                 frame.setVisible(true);
             }
@@ -155,8 +154,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
             }
         });
 
-        // TODO Revision mode disabled
-        ///fileMenu.add(revisionMode);
+        fileMenu.add(revisionMode);
         fileMenu.add(export);
         fileMenu.add(exit);
 

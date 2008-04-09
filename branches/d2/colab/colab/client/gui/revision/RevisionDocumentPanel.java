@@ -40,6 +40,7 @@ public class RevisionDocumentPanel extends RevisionPanel {
         Vector<Revision> list = new Vector<Revision>();
 
         ChannelDataSet<DocumentChannelData> dataSet = channel.getChannelData();
+
         for (Object o : dataSet.getAll()) {
             DocumentChannelData data = (DocumentChannelData)o;
 

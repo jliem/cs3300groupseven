@@ -53,6 +53,7 @@ final class DocumentPanel extends ClientChannelPanel {
 
     private ClientDocumentChannel channel;
 
+
     /**
      * Constructs a new DocumentPanel.
      *
@@ -86,11 +87,9 @@ final class DocumentPanel extends ClientChannelPanel {
         while(iter.hasNext()) {
             addParagraph(iter.next());
         }
-        
+
         //ParagraphEditor newParagraph = addParagraph(new DocumentParagraph("", 0, username, new ParagraphIdentifier(new Integer(0)), new Date()));
-        
-        fireOnMessageSent(new InsertDocChannelData());
-        
+
         arrangePanel();
 
         this.document.addDocumentListener(new DocumentListener() {
@@ -115,8 +114,8 @@ final class DocumentPanel extends ClientChannelPanel {
                 arrangePanel();
             }
         });
-        
-        
+
+
         add(scroll, BorderLayout.CENTER);
 
         //***** TEST METHODS //
@@ -141,6 +140,10 @@ final class DocumentPanel extends ClientChannelPanel {
                 new Date());
         document.insert(2, last);
         last.unlock();
+    }
+
+    public void createNewParagraph() {
+        this.fireOnMessageSent(new InsertDocChannelData(super.getUsername()));
     }
 
     public void apply(final DocumentChannelData dcd)
@@ -186,7 +189,7 @@ final class DocumentPanel extends ClientChannelPanel {
     }
 
     private ParagraphEditor addParagraph(final DocumentParagraph para) {
-    	document.insert(editors.size(), para);
+        document.insert(editors.size(), para);
         return insertParagraphEditor(editors.size(), para);
     }
 
@@ -213,19 +216,21 @@ final class DocumentPanel extends ClientChannelPanel {
                     }
                     arg0.consume();
                 }
-                
+
                 if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
-                	if (!arg0.isShiftDown()) {
+                    if (!arg0.isShiftDown()) {
+
+                        createNewParagraph();
 //                		editor.requestUnlock();
 //                		arrangePanel();
-//                		ParagraphEditor newParagraphEd = addParagraph(new DocumentParagraph("", 0, editor.getLockHolder(), 
+//                		ParagraphEditor newParagraphEd = addParagraph(new DocumentParagraph("", 0, editor.getLockHolder(),
 //                			new ParagraphIdentifier(new Integer((int)editor.getParagraph().getId().getValue() + 1)), new Date()));
 //                		//addParagraph(new DocumentParagraph());
 //                		newParagraphEd.requestFocus();
 //                		arrangePanel();
-                	}                	
+                    }
                 }
-                	
+
            }
         });
 

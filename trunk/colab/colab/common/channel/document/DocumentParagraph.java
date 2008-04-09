@@ -162,8 +162,13 @@ public final class DocumentParagraph implements Serializable,
      */
     public DocumentParagraph copy() {
 
+        UserName lockHolderCopy = null;
+        if (this.lockHolder != null) {
+            lockHolderCopy = new UserName(this.lockHolder.toString());
+        }
+
         return new DocumentParagraph(this.contents.toString(),
-                this.headerLevel, new UserName(this.lockHolder.toString()),
+                this.headerLevel, lockHolderCopy,
                 new ParagraphIdentifier(this.id),
                 this.differences.copy());
 

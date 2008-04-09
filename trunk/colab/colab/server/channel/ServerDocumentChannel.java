@@ -73,6 +73,29 @@ public final class ServerDocumentChannel
     @Override
     public void add(final DocumentChannelData data) {
 
+
+        // If this is an insert, set the paragraph id
+        if (data instanceof InsertDocChannelData) {
+
+            InsertDocChannelData insertData = ((InsertDocChannelData)data);
+
+            revisions.addAndAssignId(data);
+
+            // If we don't have a paragraph already, create it
+            if (insertData.getParagraph() == null) {
+                ParagraphIdentifier paragraphId =
+                    new ParagraphIdentifier(data.getId());
+
+                // Create a blank paragraph with no lock holder
+                DocumentParagraph paragraph =
+                    new DocumentParagraph("", 0, null, paragraphId,
+                            new Date());
+                paragraph.setId(paragraphId);
+
+                insertData.setParagraph(paragraph);
+            }
+        }
+
         try {
 
             // Check for channel data validity - SHOULD take care of bad locks, et cetera
@@ -83,27 +106,24 @@ public final class ServerDocumentChannel
             data.apply(currentDocument);
 
         } catch (final NotApplicableException ex) {
+
+            // If the apply didn't work, remove the revision
+            // if we added it
+
+            // TODO The code below doesn't work because it uses the
+            // compareTo method in Identifier, which crashes when
+            // the value is null
+
+//            if (revisions.contains(data)) {
+//                revisions.remove(data);
+//            }
+
             return;
         }
 
-        revisions.add(data);
-
-        // If this is an insert, set the paragraph id
-        if (data instanceof InsertDocChannelData) {
-
-            ParagraphIdentifier paragraphId =
-                new ParagraphIdentifier(data.getId());
-
-            // Create a blank paragraph
-            DocumentParagraph paragraph =
-                new DocumentParagraph("", 0, data.getCreator(), paragraphId,
-                        new Date());
-            paragraph.setId(paragraphId);
-
-            ((InsertDocChannelData)data).setParagraph(paragraph);
-        }
-
         // Store the data, and assign it an identifier
+        // Might have already added this if it's an InsertDocChannelData
+        // but that's ok
         revisions.addAndAssignId(data);
 
         // Forward it to all clients, regardless of the creator

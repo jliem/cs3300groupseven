@@ -95,8 +95,10 @@ final class DocumentPanel extends ClientChannelPanel {
         this.document.addDocumentListener(new DocumentListener() {
             public void onInsert(final int offset,
                     final DocumentParagraph paragraph) {
-                insertParagraphEditor(offset, paragraph);
+                ParagraphEditor pe = insertParagraphEditor(offset, paragraph);
                 arrangePanel();
+
+                pe.requestFocus();
             }
 
             public void onDelete(final ParagraphIdentifier id) {

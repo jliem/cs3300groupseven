@@ -82,8 +82,11 @@ public final class InsertDocChannelData extends DocumentChannelData {
 
         XmlNode node = super.toXml();
 
-        node.setAttribute("previous", StringUtils.emptyIfNull(
-                this.previous.getValue().toString()));
+        String prevStr = "";
+        if (this.previous != null) {
+            prevStr = this.previous.getValue().toString();
+        }
+        node.setAttribute("previous", prevStr);
         node.addChild(this.paragraph.toXml());
 
         return node;

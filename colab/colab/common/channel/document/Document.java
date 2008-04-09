@@ -135,8 +135,6 @@ public final class Document {
 
         for (DocumentParagraph par : paragraphs) {
             if (id.equals(par.getId())) {
-
-
                 diff.apply(par);
                 break;
             }

@@ -8,6 +8,7 @@ import java.util.List;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.document.DocumentChannelData;
 import colab.common.event.user.UserJoinedEvent;
 import colab.common.event.user.UserLeftEvent;
 import colab.common.identity.IdentitySet;
@@ -222,6 +223,36 @@ public abstract class ServerChannel<T extends ChannelData>
                 }
 
             }
+
+        }
+
+    }
+
+    /**
+     * Send data to all clients, including the creator.
+     *
+     * @param data the data to send
+     */
+    protected void sendToAllRegardless(final DocumentChannelData data) {
+
+        for (final ChannelConnection client
+                : this.clients.toArray(new ChannelConnection[]{})) {
+
+            Connection connection = client.getConnection();
+            //UserName userName = connection.getUserName();
+
+            //if (!userName.equals(data.getCreator())) {
+
+                ChannelRemote channelInterface =
+                    client.getChannelInterface();
+
+                try {
+                    channelInterface.add(data);
+                } catch (final RemoteException re) {
+                    connection.disconnect(re);
+                }
+
+            //}
 
         }
 

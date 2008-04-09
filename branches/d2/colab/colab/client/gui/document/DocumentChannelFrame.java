@@ -155,7 +155,8 @@ public class DocumentChannelFrame extends ClientChannelFrame {
             }
         });
 
-        fileMenu.add(revisionMode);
+        // TODO Revision mode disabled
+        ///fileMenu.add(revisionMode);
         fileMenu.add(export);
         fileMenu.add(exit);
 

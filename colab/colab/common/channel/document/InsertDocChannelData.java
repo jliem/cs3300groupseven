@@ -24,8 +24,9 @@ public final class InsertDocChannelData extends DocumentChannelData {
     public InsertDocChannelData() {
     }
 
-    public InsertDocChannelData(final UserName creator) {
-        this(null, null, creator, new Date());
+    public InsertDocChannelData(final ParagraphIdentifier previous,
+            final UserName creator) {
+        this(previous, null, creator, new Date());
     }
     /**
      * Constructs a new InsertDocChannelData.

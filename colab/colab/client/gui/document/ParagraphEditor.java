@@ -48,7 +48,7 @@ class ParagraphEditor extends JTextArea {
     private Timer timer;
 
     /** Timer delay in ms. */
-    private final int TIMER_DELAY = 2000;
+    private final int TIMER_DELAY = 10000000;
 
 
     /** The index at which we first began inserting text. */
@@ -64,30 +64,33 @@ class ParagraphEditor extends JTextArea {
             final DocumentParagraph paragraph,
             final UserName user) {
 
-
-        this.getDocument().addDocumentListener(new DocumentListener() {
-           public void changedUpdate(DocumentEvent e) {
-                System.err.println("Changed: " + e.getLength() + ", "
-                        + e.getOffset() + ", "
-                        + e.getChange(e.getDocument().getDefaultRootElement()));
-            }
-           public void removeUpdate(DocumentEvent e) {
-
-           }
-           public void insertUpdate(DocumentEvent e) {
-               restartTimer();
-
-               if (isUnlocked()) {
-                   requestLock();
-               }
-
-               // If we weren't already tracking the index, record it now
-               if (getStartIndex() < 0) {
-                   setStartIndex(e.getOffset());
-               }
-               addInsertText(getText().substring(e.getOffset(), e.getLength()));
-           }
-        });
+//
+//        this.getDocument().addDocumentListener(new DocumentListener() {
+//           public void changedUpdate(DocumentEvent e) {
+//                System.err.println("Changed: " + e.getLength() + ", "
+//                        + e.getOffset() + ", "
+//                        + e.getChange(e.getDocument().getDefaultRootElement()));
+//            }
+//
+//           public void removeUpdate(DocumentEvent e) {
+//
+//           }
+//
+//           public void insertUpdate(DocumentEvent e) {
+//               restartTimer();
+//
+//               if (isUnlocked()) {
+//                   requestLock();
+//               }
+//
+//               // If we weren't already tracking the index, record it now
+//               if (getStartIndex() < 0) {
+//                   setStartIndex(e.getOffset());
+//               }
+//
+//               addInsertText(getText().substring(e.getOffset(), e.getLength()));
+//           }
+//        });
 
         this.channel = channel;
         this.paragraph = paragraph;
@@ -336,8 +339,8 @@ class ParagraphEditor extends JTextArea {
 
         // Don't send if we don't have the lock
         if (!isLockedByMe()) {
-            DebugManager.debug("ParagraphEditor could not send changes because this user " +
-                    "doesn't have the lock!");
+            DebugManager.debug("ParagraphEditor could not send changes because "
+                    + this.getLockHolder() + " has the lock!");
             return;
         }
 

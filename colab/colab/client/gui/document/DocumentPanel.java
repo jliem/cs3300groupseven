@@ -121,7 +121,7 @@ final class DocumentPanel extends ClientChannelPanel {
         add(scroll, BorderLayout.CENTER);
 
         //***** TEST METHODS //
-        addTestParagraphs();
+        //addTestParagraphs();
 
     }
 
@@ -144,8 +144,8 @@ final class DocumentPanel extends ClientChannelPanel {
         last.unlock();
     }
 
-    public void createNewParagraph() {
-        this.fireOnMessageSent(new InsertDocChannelData(super.getUsername()));
+    public void createNewParagraph(ParagraphIdentifier previous) {
+        this.fireOnMessageSent(new InsertDocChannelData(previous, super.getUsername()));
     }
 
     public void apply(final DocumentChannelData dcd)
@@ -222,7 +222,7 @@ final class DocumentPanel extends ClientChannelPanel {
                 if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
                     if (!arg0.isShiftDown()) {
 
-                        createNewParagraph();
+                        createNewParagraph(editor.getParagraph().getId());
 //                		editor.requestUnlock();
 //                		arrangePanel();
 //                		ParagraphEditor newParagraphEd = addParagraph(new DocumentParagraph("", 0, editor.getLockHolder(),

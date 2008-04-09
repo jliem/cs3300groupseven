@@ -36,9 +36,6 @@ public final class EditDocChannelData extends DocumentChannelData {
         doc.applyEdit(paragraphID, differences);
 
         DocumentParagraph para = doc.get(paragraphID);
-        DebugManager.debug("EditDocChanData says paragraph contents: "
-                + para.getContents() + ", id is " + paragraphID
-                + ", hashcode is " + para.hashCode());
     }
 
     public void apply(final DocumentParagraph para)

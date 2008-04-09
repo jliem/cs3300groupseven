@@ -65,9 +65,6 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
             public void actionPerformed(ActionEvent arg0) {
                 if (arg0.getActionCommand().equals("panels arranged")) {
-
-                    DebugManager.debug("Panels were re-arranged, frame is repainting");
-
                     pack();
                     repaint();
                 }

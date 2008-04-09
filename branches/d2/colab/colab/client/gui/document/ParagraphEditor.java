@@ -152,6 +152,7 @@ class ParagraphEditor extends JTextArea {
         paragraph.addParagraphListener(new ParagraphListener() {
 
             public void onHeaderChange(final int headerLevel) {
+            	DebugManager.debug("Header has changed to " + headerLevel);
                 showHeader(headerLevel);
             }
 
@@ -352,6 +353,10 @@ class ParagraphEditor extends JTextArea {
         // Restore the caret
         this.setCaretPosition(selectionStart);
 
+    }
+
+    public void sendHeaderChange(final int headerLevel) {
+    	this.fireHeaderChange(headerLevel);
     }
 
     private void sendPendingDelete() {

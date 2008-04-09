@@ -94,9 +94,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 editor.insert("\n", position);
                 editor.addInsertText('\n');
             } else {
-                /* TODO- signal new paragraph creation
-                 * to server, insert in gui, move
-                 * cursor to it, et cetera */
+                // New paragraph creation done in DocumentPanel
             }
             ke.consume();
 
@@ -118,19 +116,31 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         case KeyEvent.VK_UP:
 
             if (ke.isControlDown()) {
+
+            	if (editor.isUnlocked()) {
+            		editor.requestLock();
+            	}
+
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()+1);
 
+                editor.sendHeaderChange(p.getHeaderLevel());
             }
 
             break;
 
         case KeyEvent.VK_DOWN:
             if (ke.isControlDown()) {
+
+            	if (editor.isUnlocked()) {
+            		editor.requestLock();
+            	}
+
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()-1);
-                // TODO: signal server
-            } else {
+
+                editor.sendHeaderChange(p.getHeaderLevel());
+
             }
 
             break;

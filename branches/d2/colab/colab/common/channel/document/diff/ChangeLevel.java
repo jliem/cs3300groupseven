@@ -1,5 +1,6 @@
 package colab.common.channel.document.diff;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;
@@ -22,7 +23,8 @@ class ChangeLevel implements Applicable {
 
     public void apply(final DocumentParagraph para)
             throws NotApplicableException {
-        if (headerLevel<0) {
+
+        if (headerLevel >= 0) {
             para.setHeaderLevel(headerLevel);
         }
     }

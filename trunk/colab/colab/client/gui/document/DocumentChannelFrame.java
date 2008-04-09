@@ -22,8 +22,7 @@ import colab.client.gui.revision.RevisionDocumentPanel;
 import colab.client.gui.revision.RevisionFrame;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
-import colab.common.channel.chat.ChatChannelData;
-import colab.common.channel.document.InsertDocChannelData;
+import colab.common.channel.document.EditDocChannelData;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
@@ -92,7 +91,12 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         try {
             List<ChannelData> data = client.getLastData(channel.getId(), -1);
             for (final ChannelData d : data) {
-                channel.add(d);
+
+                if (d instanceof EditDocChannelData) {
+                    // Don't apply
+                } else {
+                    channel.add(d);
+                }
             }
         } catch (final ConnectionDroppedException cde) {
             DebugManager.connectionDropped(cde);
@@ -103,7 +107,11 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         }
 
         documentPanel.refreshDocument();
-        documentPanel.createNewParagraph(null);
+
+        // Only create new paragraph if document is blank otherwise
+        if (documentPanel.getNumberOfEditors() <= 0) {
+            documentPanel.createNewParagraph(null);
+        }
 
 
         // Menu

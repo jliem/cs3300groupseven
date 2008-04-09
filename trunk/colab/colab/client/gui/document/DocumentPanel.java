@@ -186,6 +186,9 @@ final class DocumentPanel extends ClientChannelPanel {
         }
     }
 
+    public int getNumberOfEditors() {
+        return editors.size();
+    }
 
 
     private void arrangePanel() {
@@ -234,13 +237,6 @@ final class DocumentPanel extends ClientChannelPanel {
                     if (!arg0.isShiftDown()) {
 
                         createNewParagraph(editor.getParagraph().getId());
-//                		editor.requestUnlock();
-//                		arrangePanel();
-//                		ParagraphEditor newParagraphEd = addParagraph(new DocumentParagraph("", 0, editor.getLockHolder(),
-//                			new ParagraphIdentifier(new Integer((int)editor.getParagraph().getId().getValue() + 1)), new Date()));
-//                		//addParagraph(new DocumentParagraph());
-//                		newParagraphEd.requestFocus();
-//                		arrangePanel();
                     }
                 }
 

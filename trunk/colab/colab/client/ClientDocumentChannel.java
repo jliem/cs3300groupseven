@@ -53,6 +53,10 @@ public final class ClientDocumentChannel extends ClientChannel {
         newRevisions++;
 
         try {
+            if (data instanceof EditDocChannelData) {
+                EditDocChannelData edit = (EditDocChannelData)data;
+                DebugManager.debug("Applying " + edit.toString());
+            }
             ((DocumentChannelData) data).apply(currentDocument);
         } catch (NotApplicableException e) {
             DebugManager.shouldNotHappen(e);

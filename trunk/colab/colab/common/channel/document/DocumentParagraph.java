@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.ParagraphListener;
 import colab.common.identity.Identifiable;
@@ -80,12 +81,15 @@ public final class DocumentParagraph implements Serializable,
     }
 
     public void insert(final int offset, final String hunk) {
-        contents.insert(offset, hunk);
+        contents = contents.insert(offset, hunk);
+
+        DebugManager.debug("ID is " + id + ", contents: " + contents
+                + ", hashcode is " + hashCode());
         fireOnInsert(offset, hunk);
     }
 
     public void delete(final int offset, final int length) {
-        contents.delete(offset, (length+offset));
+        contents = contents.delete(offset, (length+offset));
         fireOnDelete(offset, length);
     }
 

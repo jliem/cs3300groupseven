@@ -1,5 +1,6 @@
 package colab.common.channel.document.diff;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;
@@ -29,6 +30,9 @@ public class Insert implements Applicable {
             throw new NotApplicableException(
                     "Insert outside of range of paragraph.");
         } else {
+
+            DebugManager.debug("Inserting: " + contents);
+
             para.insert(offset, contents);
         }
     }

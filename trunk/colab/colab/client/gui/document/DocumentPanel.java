@@ -81,13 +81,6 @@ final class DocumentPanel extends ClientChannelPanel {
         editors = Collections.synchronizedList(
                 new ArrayList<ParagraphEditor>());
 
-        /* TODO: potential sync issues (what if something
-         * is added while the window is being built?) */
-        Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
-        while(iter.hasNext()) {
-            addParagraph(iter.next());
-        }
-
         //ParagraphEditor newParagraph = addParagraph(new DocumentParagraph("", 0, username, new ParagraphIdentifier(new Integer(0)), new Date()));
 
         arrangePanel();
@@ -125,6 +118,24 @@ final class DocumentPanel extends ClientChannelPanel {
 
     }
 
+    /**
+     * Redownloads document from client channel.
+     */
+    public void refreshDocument() {
+        editors = Collections.synchronizedList(
+                new ArrayList<ParagraphEditor>());
+
+        /* TODO: potential sync issues (what if something
+         * is added while the window is being built?) */
+        Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
+        int paragraphCount = 0;
+        while (iter.hasNext()) {
+            DocumentParagraph para = iter.next();
+            insertParagraphEditor(paragraphCount, para);
+            DebugManager.debug("Paragraph contents: " + para.getContents() + ", id is " + para.getId());
+            paragraphCount++;
+        }
+    }
     private void addTestParagraphs() {
         document.insert(0, new DocumentParagraph(
                 "Our first paragraph!", 4, super.getUsername(),

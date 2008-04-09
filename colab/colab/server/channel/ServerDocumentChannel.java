@@ -3,6 +3,7 @@ package colab.server.channel;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import colab.common.DebugManager;
@@ -89,11 +90,17 @@ public final class ServerDocumentChannel
 
         // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
+
             ParagraphIdentifier paragraphId =
                 new ParagraphIdentifier(data.getId());
+
+            // Create a blank paragraph
             DocumentParagraph paragraph =
-                ((InsertDocChannelData) data).getParagraph();
+                new DocumentParagraph("", 0, data.getCreator(), paragraphId,
+                        new Date());
             paragraph.setId(paragraphId);
+
+            ((InsertDocChannelData)data).setParagraph(paragraph);
         }
 
         // Store the data, and assign it an identifier

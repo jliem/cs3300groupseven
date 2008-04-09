@@ -19,7 +19,7 @@ public final class DebugManager {
     /**
      * Flag for printing debug messages.
      */
-    private static final boolean PRINT_DEBUG_MESSAGES = true;
+    private static final boolean PRINT_DEBUG_MESSAGES = false;
 
     /**
      * Flag for printing any exception stack trace (it will probably

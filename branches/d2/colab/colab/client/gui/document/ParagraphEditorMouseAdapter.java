@@ -29,6 +29,8 @@ public class ParagraphEditorMouseAdapter extends MouseAdapter {
 
         // Restore the caret
         editor.setCaretPosition(selectionStart);
+
+        DebugManager.debug("Editor's id is " + editor.getParagraph().getId());
     }
 
 }

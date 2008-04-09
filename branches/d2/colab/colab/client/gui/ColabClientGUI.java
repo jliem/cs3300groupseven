@@ -272,6 +272,13 @@ class ColabClientGUI extends JFrame {
             communityName = communityPanel
                     .getCurrentCommunityName();
 
+            if (communityName == null) {
+                // No commumity chosen yet
+                this.showErrorBox("Please choose a community from the dropdown",
+                        "Choose a Community");
+                return;
+            }
+
             char[] password = null;
 
             if (!client.isMember(communityName)) {

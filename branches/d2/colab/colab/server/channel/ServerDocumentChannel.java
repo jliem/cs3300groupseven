@@ -87,11 +87,12 @@ public final class ServerDocumentChannel
 
             InsertDocChannelData insertData = ((InsertDocChannelData) data);
 
+            // Add it to the revisions list in order to give it an id
             revisions.addAndAssignId(data);
 
             // If we don't have a paragraph already, create it
             if (insertData.getParagraph() == null ||
-            		insertData.getParagraph().getId() == null) {
+                    insertData.getParagraph().getId() == null) {
                 ParagraphIdentifier paragraphId =
                     new ParagraphIdentifier(data.getId());
 
@@ -110,8 +111,6 @@ public final class ServerDocumentChannel
             // Check for channel data validity
             // SHOULD take care of bad locks, et cetera
             data.apply(currentDocument.copy());
-
-            DebugManager.debug("Server is adding data: " + data.toString());
 
             data.apply(currentDocument);
 
@@ -132,9 +131,10 @@ public final class ServerDocumentChannel
         }
 
         // Store the data, and assign it an identifier
-        // Might have already added this if it's an InsertDocChannelData
-        // but that's ok
-        if (!(data instanceof LockDocChannelData)) {
+        // If it's an InsertDocChannelData we added it earlier, so
+        // don't add it twice
+        if (!(data instanceof LockDocChannelData) &&
+                !(data instanceof InsertDocChannelData)) {
             revisions.addAndAssignId(data);
         }
 

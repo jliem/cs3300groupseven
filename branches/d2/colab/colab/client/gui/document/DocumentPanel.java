@@ -275,6 +275,8 @@ public final class DocumentPanel extends ClientChannelPanel {
 
     private void shiftFocus(ParagraphEditor fromThisOne) {
 
+        DebugManager.debug("Trying to shift focus from " + fromThisOne.getParagraph().getId());
+
         boolean found = false;
 
         Iterator<ParagraphEditor> iter = editors.iterator();

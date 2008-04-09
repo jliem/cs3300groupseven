@@ -150,6 +150,8 @@ public class ChooseCommunityPanel extends JPanel {
     }
 
     public CommunityName getCurrentCommunityName() {
+    	if (selectBox.getSelectedItem() == null) return null;
+
         String name = selectBox.getSelectedItem().toString();
         return new CommunityName(name);
     }

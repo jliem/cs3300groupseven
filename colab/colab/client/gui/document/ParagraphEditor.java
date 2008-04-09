@@ -48,7 +48,7 @@ class ParagraphEditor extends JTextArea {
     private Timer timer;
 
     /** Timer delay in ms. */
-    private final int TIMER_DELAY = 10000000;
+    private final int TIMER_DELAY = 2000;
 
 
     /** The index at which we first began inserting text. */

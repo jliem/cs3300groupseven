@@ -120,10 +120,7 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
             if (ke.isControlDown()) {
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()+1);
-                /* TODO: - signal insert to server, still
-                 * not sure how this will work- maybe some
-                 * unified object that i can send all this
-                 * too, will use timers to send updates? */
+
             }
 
             break;

@@ -23,6 +23,7 @@ import colab.client.ColabClient;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.common.DebugManager;
+import colab.common.channel.document.DeleteDocChannelData;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
@@ -36,7 +37,7 @@ import colab.common.naming.UserName;
 /**
  * Panel which displays the UI for a document channel.
  */
-final class DocumentPanel extends ClientChannelPanel {
+public final class DocumentPanel extends ClientChannelPanel {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -159,6 +160,14 @@ final class DocumentPanel extends ClientChannelPanel {
         this.fireOnMessageSent(new InsertDocChannelData(previous, super.getUsername()));
     }
 
+    public void deleteParagraph(ParagraphIdentifier id,
+            UserName user) {
+
+        DeleteDocChannelData data = new DeleteDocChannelData(id,
+                user, new Date());
+        this.fireOnMessageSent(data);
+    }
+
     public void apply(final DocumentChannelData dcd)
             throws NotApplicableException {
 
@@ -212,7 +221,7 @@ final class DocumentPanel extends ClientChannelPanel {
             final DocumentParagraph paragraph) {
 
         final ParagraphEditor editor =
-            new ParagraphEditor(channel, paragraph, getUsername());
+            new ParagraphEditor(channel, this, paragraph, getUsername());
 
         editor.addParagraphListener(
                 new ParagraphChangeMerger(this, paragraph.getId()));
@@ -242,6 +251,13 @@ final class DocumentPanel extends ClientChannelPanel {
                         //editor.insert("\n", position);
                         // TODO: editor.addInsertText("\n");
                     }
+                    arg0.consume();
+                    break;
+
+                case KeyEvent.VK_INSERT:
+
+                    editor.sendPendingChange();
+                    break;
                 default:
                     break;
                 }

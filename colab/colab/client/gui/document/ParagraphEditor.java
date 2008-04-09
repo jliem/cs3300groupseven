@@ -45,6 +45,7 @@ class ParagraphEditor extends JTextArea {
 
     private Vector<ParagraphListener> paragraphListeners;
 
+    private final DocumentPanel documentPanel;
     /**
      * A timer that will fire periodically to send changes
      * when no keys are pressed for a specified time.
@@ -52,13 +53,15 @@ class ParagraphEditor extends JTextArea {
     private Timer timer;
 
     /** Timer delay in ms. */
-    private final int TIMER_DELAY = 2000;
+    private final int TIMER_DELAY = 4000000;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
+            final DocumentPanel documentPanel,
             final DocumentParagraph paragraph,
             final UserName user) {
 
         this.channel = channel;
+        this.documentPanel = documentPanel;
         this.paragraph = paragraph;
         this.user = user;
         this.defaultFont = getFont();
@@ -196,6 +199,8 @@ class ParagraphEditor extends JTextArea {
                     requestLock();
                 }
 
+                DebugManager.debug("#######~~~~~~######: " + "deleting from "
+                        + e.getOffset() + ", length=" + e.getLength());
                 changeBuffer.delete(e.getOffset(), e.getLength());
 
             }
@@ -208,11 +213,7 @@ class ParagraphEditor extends JTextArea {
      * Deletes this paragraph.
      */
     public void delete() {
-        try {
-            channel.deleteParagraph(paragraph.getId());
-        } catch (RemoteException re) {
-            DebugManager.remote(re);
-        }
+        documentPanel.deleteParagraph(paragraph.getId(), user);
     }
 
     /**

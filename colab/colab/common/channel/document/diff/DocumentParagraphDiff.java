@@ -103,7 +103,7 @@ public final class DocumentParagraphDiff implements XmlSerializable, Serializabl
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
 
-        for (XmlNode child : node.getChildren()) {
+        for (XmlNode child : node.getChildren().get(0).getChildren()) {
             Applicable change = instantiateApplicableFromXml(child.getType());
             change.fromXml(child);
             changes.add(change);
@@ -131,6 +131,7 @@ public final class DocumentParagraphDiff implements XmlSerializable, Serializabl
             return applicable;
         }
 
+        DebugManager.debug("Type " + type + " not recognized");
         throw new XmlParseException();
 
     }

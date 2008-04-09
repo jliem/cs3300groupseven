@@ -292,7 +292,8 @@ public final class DocumentParagraph implements Serializable,
             throw new XmlParseException(e);
         }
 
-        this.contents = new StringBuffer(node.getBody());
+        this.contents = new StringBuffer();
+        this.contents.append(node.getBody());
 
     }
 

@@ -5,7 +5,6 @@ import java.util.Date;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
-import colab.common.util.StringUtils;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
 
@@ -27,7 +26,9 @@ public final class InsertDocChannelData extends DocumentChannelData {
     public InsertDocChannelData(final ParagraphIdentifier previous,
             final UserName creator) {
         this(previous, null, creator, new Date());
+        this.paragraph = new DocumentParagraph();
     }
+
     /**
      * Constructs a new InsertDocChannelData.
      *
@@ -98,11 +99,14 @@ public final class InsertDocChannelData extends DocumentChannelData {
 
         super.fromXml(node);
 
-        try {
-            this.previous = new ParagraphIdentifier(
-                    Integer.parseInt(node.getAttribute("previous")));
-        } catch (final NumberFormatException e) {
-            throw new XmlParseException(e);
+        String prevStr = node.getAttribute("previous");
+        if (!prevStr.equals("")) {
+            try {
+                this.previous = new ParagraphIdentifier(
+                        Integer.parseInt(prevStr));
+            } catch (final NumberFormatException e) {
+                throw new XmlParseException(e);
+            }
         }
 
         this.paragraph = new DocumentParagraph();

@@ -1,0 +1,48 @@
+General
+---
+o  Server will require linked list of paragraph IDs and alive/dead status so if an insert is called after a paragraph which was deleted, Server can find the preceding parargraph
+o  Document panel should start with one blank paragraph
+o  If a client goes idle, the lock should be released after some time
+
+Inserting new paragraphs.
+---
+o  What happens if two clients try to insert a new paragraph after the same existing one?
+o  Insert takes place when a client hits enter
+
+Algorithm:
+o  Client presses Enter at end of an existing paragraph or clicks on the only paragraph when there's just one.
+o  If client presses Enter in the middle of a paragraph, all text after the cursor to the end of this paragraph is copied to the newly created paragraph. A delete signal is sent from the old paragraph.
+o  New paragraph editor GUI is created. If text was removed from the preceding paragraph, it is copied to this one.
+o  Client sends insertParagraph to server. While client is waiting for response, user can type, background will be white.
+o  When client receives response, check if paragraph ID matches newly created one and if so and send text that was typed, change background color.
+o  If the client has inserted a paragraph, the server sets that paragraph to "locked" and sets the owner to that creator.
+
+----------
+
+Deleting a paragraph
+---
+o  Must have a lock first.
+o  Deletion takes place when textbox is empty and backspace is pressed.
+o  Client sends server the deleteParagraph command with paragraph ID. Client removes from panel.
+o  Everytime a client receives delete signal, check whether the client has that paragraph and if so, remove it. If not, do nothing.
+
+----------
+
+Editing a paragraph
+---
+o  If no lock, client clicks paragraph. Paragraph stays white but lets user edit text.
+o  If client receives response from server with his name and paragraph id, paragraph turns blue. If response has same id but different user, paragraph turns green and the text the client just added is removed.
+
+----------
+
+Editing text in a paragraph
+---
+o  Must have lock
+o  Panel will send all edit signals to channel class. Channel will fire every five seconds or every five edits or some other buffering algorithm.
+
+
+Tabbing
+o  Release the lock when a paragraph loses focus
+o  Tab order should skip paragraphs which are locked, request lock when tabbing to an unlocked paragraph
+
+TEST CASES AND COMMENTS

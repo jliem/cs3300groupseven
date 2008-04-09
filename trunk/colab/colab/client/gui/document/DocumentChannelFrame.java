@@ -91,7 +91,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         });
 
 
-        documentPanel.createNewParagraph();
+        documentPanel.createNewParagraph(null);
 
 
         // Menu

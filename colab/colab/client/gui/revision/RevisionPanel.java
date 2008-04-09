@@ -1,5 +1,6 @@
 package colab.client.gui.revision;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -12,10 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import colab.client.ClientChannel;
-import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
-import colab.common.channel.ChannelDataSet;
 
 public abstract class RevisionPanel extends JPanel {
 
@@ -30,6 +29,7 @@ public abstract class RevisionPanel extends JPanel {
         this.channel = channel;
 
         display = new JPanel();
+        display.setLayout(new BorderLayout());
         revisions = this.buildRevisionList();
 
         revisionList = new JList(revisions);
@@ -50,8 +50,8 @@ public abstract class RevisionPanel extends JPanel {
         add(display);
     }
 
-    protected Component addToDisplay(final Component c) {
-        return display.add(c);
+    protected void addToDisplay(final Component c) {
+        display.add(c, BorderLayout.CENTER);
     }
 
     protected abstract void showRevision(ChannelDataIdentifier dataID);

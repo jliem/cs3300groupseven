@@ -20,8 +20,6 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
     public void keyTyped(final KeyEvent ke) {
 
-        super.keyTyped(ke);
-
         // For any key typed, restart timer
         editor.restartTimer();
 

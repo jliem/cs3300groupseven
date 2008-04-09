@@ -12,12 +12,12 @@ import java.util.Vector;
 
 import javax.swing.JTextArea;
 import javax.swing.Timer;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import colab.client.ClientDocumentChannel;
-import colab.client.gui.ChannelPanelListener;
 import colab.common.DebugManager;
 import colab.common.channel.document.Document;
-import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.event.document.ParagraphListener;
 import colab.common.naming.UserName;
@@ -47,7 +47,7 @@ class ParagraphEditor extends JTextArea {
      */
     private Timer timer;
 
-    /** Timer delay in ms */
+    /** Timer delay in ms. */
     private final int TIMER_DELAY = 2000;
 
 
@@ -63,6 +63,31 @@ class ParagraphEditor extends JTextArea {
     public ParagraphEditor(final ClientDocumentChannel channel,
             final DocumentParagraph paragraph,
             final UserName user) {
+
+
+        this.getDocument().addDocumentListener(new DocumentListener() {
+           public void changedUpdate(DocumentEvent e) {
+                System.err.println("Changed: " + e.getLength() + ", "
+                        + e.getOffset() + ", "
+                        + e.getChange(e.getDocument().getDefaultRootElement()));
+            }
+           public void removeUpdate(DocumentEvent e) {
+
+           }
+           public void insertUpdate(DocumentEvent e) {
+               restartTimer();
+
+               if (isUnlocked()) {
+                   requestLock();
+               }
+
+               // If we weren't already tracking the index, record it now
+               if (getStartIndex() < 0) {
+                   setStartIndex(e.getOffset());
+               }
+               addInsertText(getText().substring(e.getOffset(), e.getLength()));
+           }
+        });
 
         this.channel = channel;
         this.paragraph = paragraph;
@@ -166,6 +191,10 @@ class ParagraphEditor extends JTextArea {
      */
     public void addInsertText(char c) {
         insertText.append(c);
+    }
+
+    public void addInsertText(String s) {
+        insertText.append(s);
     }
 
     /**

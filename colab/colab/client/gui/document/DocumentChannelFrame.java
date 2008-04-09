@@ -22,6 +22,7 @@ import colab.client.gui.revision.RevisionDocumentPanel;
 import colab.client.gui.revision.RevisionFrame;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
+import colab.common.channel.chat.ChatChannelData;
 import colab.common.channel.document.InsertDocChannelData;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
@@ -78,8 +79,6 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
             public void onMessageSent(ChannelData data) {
 
-                DebugManager.debug("Frame got message " + data);
-
                 try {
                     client.add(channel.getId(), data);
                 } catch (ConnectionDroppedException cde) {
@@ -90,7 +89,20 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         });
 
+        try {
+            List<ChannelData> data = client.getLastData(channel.getId(), -1);
+            for (final ChannelData d : data) {
+                channel.add(d);
+            }
+        } catch (final ConnectionDroppedException cde) {
+            DebugManager.connectionDropped(cde);
+            System.exit(1);
+        } catch (RemoteException e) {
+            DebugManager.remote(e);
+            System.exit(1);
+        }
 
+        documentPanel.refreshDocument();
         documentPanel.createNewParagraph(null);
 
 

@@ -2,6 +2,7 @@ package colab.common.channel.document;
 
 import java.util.Date;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -33,6 +34,11 @@ public final class EditDocChannelData extends DocumentChannelData {
     @Override
     public void apply(final Document doc) throws NotApplicableException {
         doc.applyEdit(paragraphID, differences);
+
+        DocumentParagraph para = doc.get(paragraphID);
+        DebugManager.debug("EditDocChanData says paragraph contents: "
+                + para.getContents() + ", id is " + paragraphID
+                + ", hashcode is " + para.hashCode());
     }
 
     public void apply(final DocumentParagraph para)

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;
@@ -27,7 +28,7 @@ public final class DocumentParagraphDiff implements XmlSerializable, Serializabl
         this.changes = changes;
     }
 
-    public DocumentParagraph apply(final DocumentParagraph paragraph)
+    public void apply(final DocumentParagraph paragraph)
             throws NotApplicableException {
 
         DocumentParagraph ret = paragraph.copy();
@@ -40,7 +41,15 @@ public final class DocumentParagraphDiff implements XmlSerializable, Serializabl
             }
         }
 
-       return ret;
+        // All changes were successful, apply to real paragraph
+        for (Applicable change : changes) {
+            try {
+                change.apply(paragraph);
+            } catch (Exception e) {
+                throw new NotApplicableException(e);
+            }
+        }
+
 
     }
 

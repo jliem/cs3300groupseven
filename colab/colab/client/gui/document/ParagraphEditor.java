@@ -21,8 +21,13 @@ import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.event.document.ParagraphListener;
 import colab.common.naming.UserName;
+import colab.common.util.StringChangeBuffer;
+import colab.common.util.StringChangeBufferListener;
 
 class ParagraphEditor extends JTextArea {
+
+    /** Serialization verion number. */
+    public static final long serialVersionUID = 1L;
 
     private static final int FONT_STEP = 4;
 
@@ -36,13 +41,12 @@ class ParagraphEditor extends JTextArea {
 
     private final Color defaultFG, defaultBG;
 
-    private static final long serialVersionUID = 1;
-
-    private StringBuffer insertText;
+    private final StringChangeBuffer changeBuffer;
 
     private Vector<ParagraphListener> paragraphListeners;
 
-    /** A timer that will fire periodically to send changes
+    /**
+     * A timer that will fire periodically to send changes
      * when no keys are pressed for a specified time.
      */
     private Timer timer;
@@ -50,47 +54,9 @@ class ParagraphEditor extends JTextArea {
     /** Timer delay in ms. */
     private final int TIMER_DELAY = 2000;
 
-
-    /** The index at which we first began inserting text. */
-    private int startIndex;
-
-    /** Tracks the length of text to be deleted. */
-    private int deleteLength;
-
-    /** Tracks the index at which we first began deleting text. */
-    private int deleteStart;
-
     public ParagraphEditor(final ClientDocumentChannel channel,
             final DocumentParagraph paragraph,
             final UserName user) {
-
-//
-//        this.getDocument().addDocumentListener(new DocumentListener() {
-//           public void changedUpdate(DocumentEvent e) {
-//                System.err.println("Changed: " + e.getLength() + ", "
-//                        + e.getOffset() + ", "
-//                        + e.getChange(e.getDocument().getDefaultRootElement()));
-//            }
-//
-//           public void removeUpdate(DocumentEvent e) {
-//
-//           }
-//
-//           public void insertUpdate(DocumentEvent e) {
-//               restartTimer();
-//
-//               if (isUnlocked()) {
-//                   requestLock();
-//               }
-//
-//               // If we weren't already tracking the index, record it now
-//               if (getStartIndex() < 0) {
-//                   setStartIndex(e.getOffset());
-//               }
-//
-//               addInsertText(getText().substring(e.getOffset(), e.getLength()));
-//           }
-//        });
 
         this.channel = channel;
         this.paragraph = paragraph;
@@ -99,10 +65,19 @@ class ParagraphEditor extends JTextArea {
         this.defaultFG = getForeground();
         this.defaultBG = getBackground();
 
-        this.insertText = new StringBuffer();
-        this.startIndex = -1;
-        this.deleteLength = -1;
-        this.deleteStart = -1;
+        this.changeBuffer = new StringChangeBuffer(
+                new StringChangeBufferListener() {
+            public void insert(final int offset, final String str) {
+                for (ParagraphListener listener : paragraphListeners) {
+                    listener.onInsert(offset, str);
+                }
+            }
+            public void delete(final int offset, final int length) {
+                for (ParagraphListener listener : paragraphListeners) {
+                    listener.onDelete(offset, length);
+                }
+            }
+        });
 
         this.paragraphListeners = new Vector<ParagraphListener>();
 
@@ -117,15 +92,10 @@ class ParagraphEditor extends JTextArea {
 
         this.addFocusListener(new FocusListener() {
 
-            public void focusGained(FocusEvent arg0) {
-                // When this field gains focus, save the start
-                // index
-//                setStartIndex(getSelectionStart());
-//
-//                DebugManager.debug("Focus--Insert text beginning at " + getStartIndex());
+            public void focusGained(final FocusEvent arg0) {
             }
 
-            public void focusLost(FocusEvent e) {
+            public void focusLost(final FocusEvent e) {
                 sendPendingChange();
 
                 // Check whether this paragraph still exists
@@ -153,21 +123,31 @@ class ParagraphEditor extends JTextArea {
             }
 
             public void onDelete(final int offset, final int length) {
-                setText(paragraph.getContents());
+                final String contents = paragraph.getContents();
+                if (!getText().equals(contents)) {
+                    int caret = getCaretPosition();
+                    setText(contents);
+                    setCaretPosition(caret);
+                }
             }
             public void onInsert(final int offset, final String hunk) {
-                setText(paragraph.getContents());
+                final String contents = paragraph.getContents();
+                if (!getText().equals(contents)) {
+                    int caret = getCaretPosition();
+                    setText(contents);
+                    setCaretPosition(caret);
+                }
             }
             public void onLock(final UserName newOwner) {
 
-                DebugManager.debug(newOwner + " has just gained a lock on paragraph " +
-                        paragraph.getId());
+                DebugManager.debug(newOwner
+                        + " has just gained a lock on paragraph "
+                        + paragraph.getId());
 
                 // If this paragraph was just locked and we didn't do it,
                 // undo any changes that we might have made
                 if (!newOwner.equals(user)) {
-                    resetDelete();
-                    resetInsert();
+                    changeBuffer.update();
                     setText(paragraph.getContents());
                 }
 
@@ -180,20 +160,48 @@ class ParagraphEditor extends JTextArea {
                 showUnlock();
             }
         });
-    }
 
-    /**
-     * Adds text to the local insert buffer to be sent the next time
-     * the channel is notified.
-     *
-     * @param c the character being inserted into the paragraph
-     */
-    public void addInsertText(char c) {
-        insertText.append(c);
-    }
+        this.addMouseListener(new ParagraphEditorMouseListener(this));
 
-    public void addInsertText(String s) {
-        insertText.append(s);
+        this.getDocument().addDocumentListener(new DocumentListener() {
+
+            public void changedUpdate(final DocumentEvent e) {
+                DebugManager.debug(e.toString()); // probably never happens
+            }
+
+            public void insertUpdate(final DocumentEvent e) {
+
+                restartTimer();
+
+                if (isUnlocked()) {
+                    requestLock();
+                }
+
+                String str = ParagraphEditor.this.getText().substring(
+                            e.getOffset(), e.getOffset() + e.getLength());
+                if (e.getLength() == 1) {
+                    changeBuffer.insert(e.getOffset(), str);
+                } else {
+                    // TODO: temporary safety measure, kill this
+                    DebugManager.debug("#######~~~~~~######: " + str);
+                }
+
+            }
+
+            public void removeUpdate(final DocumentEvent e) {
+
+                restartTimer();
+
+                if (isUnlocked()) {
+                    requestLock();
+                }
+
+                changeBuffer.delete(e.getOffset(), e.getLength());
+
+            }
+
+        });
+
     }
 
     /**
@@ -244,7 +252,7 @@ class ParagraphEditor extends JTextArea {
     }
 
     /**
-     * Requests that this paragraph's lock be released
+     * Requests that this paragraph's lock be released.
      */
     public void requestUnlock() {
         this.fireOnUnlock();
@@ -318,18 +326,6 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
-    private void fireOnInsert(final int offset, final String hunk) {
-        for (ParagraphListener listener : paragraphListeners) {
-            listener.onInsert(offset, hunk);
-        }
-    }
-
-    private void fireOnDelete(final int offset, final int length) {
-        for (ParagraphListener listener : paragraphListeners) {
-            listener.onDelete(offset, length);
-        }
-    }
-
     /**
      * Sends all pending changes (inserts or deletes)
      * to the channel.
@@ -347,66 +343,11 @@ class ParagraphEditor extends JTextArea {
         int selectionStart = this.getSelectionStart();
 
         // Send any current inserts or deletes
-        sendPendingDelete();
-        sendPendingInsert();
+        changeBuffer.update();
 
         // Restore the caret
         this.setCaretPosition(selectionStart);
 
-    }
-
-    private void sendPendingDelete() {
-
-        if (deleteStart >= 0 && deleteLength >= 0) {
-            // Compute starting offset from start and length
-            int offset = deleteStart - deleteLength;
-
-            DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
-
-            this.fireOnDelete(offset, deleteLength);
-//            try {
-//                channel.deleteText(offset, deleteLength,
-//                        paragraph.getId(), user);
-//            } catch (RemoteException e) {
-//                // TODO Auto-generated catch block
-//                DebugManager.remote(e);
-//            }
-
-            resetDelete();
-        }
-
-    }
-
-    private void resetDelete() {
-        deleteStart = -1;
-        deleteLength = -1;
-    }
-
-    private void resetInsert() {
-        startIndex = -1;
-        insertText = new StringBuffer();
-    }
-
-    private void sendPendingInsert() {
-
-        // Check if there's any text to send
-        if (startIndex >= 0 && insertText.length() > 0) {
-            DebugManager.debug("Editor is sending text \"" + insertText.toString() +
-                    "\" at index " + startIndex);
-
-            this.fireOnInsert(startIndex, insertText.toString());
-
-//            try {
-//                channel.insertText(startIndex, insertText.toString(),
-//                        paragraph.getId(), user);
-//            } catch (RemoteException e) {
-//                // TODO Auto-generated catch block
-//                DebugManager.remote(e);
-//            }
-
-            // Clear start index and text
-            resetInsert();
-        }
     }
 
     private void showLock(final UserName newOwner) {
@@ -462,32 +403,6 @@ class ParagraphEditor extends JTextArea {
                 getMinimumSize().height);
     }
 
-
-    public int getStartIndex() {
-        return startIndex;
-    }
-
-
-    public void setStartIndex(int startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public int getDeleteLength() {
-        return deleteLength;
-    }
-
-    public void setDeleteLength(int deleteLength) {
-        this.deleteLength = deleteLength;
-    }
-
-    public int getDeleteStart() {
-        return deleteStart;
-    }
-
-    public void setDeleteStart(int deleteStart) {
-        this.deleteStart = deleteStart;
-    }
-
     private UserName getLockHolder() {
         UserName lockHolder = paragraph.getLockHolder();
         return lockHolder;
@@ -495,7 +410,7 @@ class ParagraphEditor extends JTextArea {
 
     private class ParagraphChangeDispatcher implements ActionListener {
 
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(final ActionEvent e) {
             sendPendingChange();
         }
 

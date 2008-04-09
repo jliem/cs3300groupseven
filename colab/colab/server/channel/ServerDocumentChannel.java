@@ -73,6 +73,7 @@ public final class ServerDocumentChannel
     @Override
     public void add(final DocumentChannelData data) {
 
+        DebugManager.debug(" # Adding");
 
         // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
@@ -96,9 +97,12 @@ public final class ServerDocumentChannel
             }
         }
 
+        DebugManager.debug(" # Still adding");
+
         try {
 
-            // Check for channel data validity - SHOULD take care of bad locks, et cetera
+            // Check for channel data validity
+            // SHOULD take care of bad locks, et cetera
             data.apply(currentDocument.copy());
 
             DebugManager.debug("Server is adding data: " + data.toString());
@@ -121,13 +125,23 @@ public final class ServerDocumentChannel
             return;
         }
 
+        DebugManager.debug(" # Applied");
+
         // Store the data, and assign it an identifier
-        // Might have already added this if it's an InsertDocChannelData
-        // but that's ok
+        // Might have already added this if it's an
+        // InsertDocChannelData but that's ok
         revisions.addAndAssignId(data);
 
+        DebugManager.debug(" # Stored");
+
         // Forward it to all clients, regardless of the creator
-        sendToAllRegardless(data);
+        (new Thread() {
+            public void run() {
+                sendToAllRegardless(data);
+            }
+        }).start();
+
+        DebugManager.debug(" # Sent");
 
     }
 

@@ -31,20 +31,30 @@ public final class DocumentParagraphDiff implements XmlSerializable, Serializabl
     public void apply(final DocumentParagraph paragraph)
             throws NotApplicableException {
 
+        DebugManager.debug(" @ copying");
+
         DocumentParagraph ret = paragraph.copy();
 
+        DebugManager.debug(" @ trying " + changes.size());
+
         for (Applicable change : changes) {
+            DebugManager.debug(" @ -");
             try {
                 change.apply(ret);
+                DebugManager.debug(" @ #");
             } catch (Exception e) {
                 throw new NotApplicableException(e);
             }
         }
 
+        DebugManager.debug(" @ now for real");
+
         // All changes were successful, apply to real paragraph
         for (Applicable change : changes) {
             try {
+                DebugManager.debug(" @ -");
                 change.apply(paragraph);
+                DebugManager.debug(" @ #");
             } catch (Exception e) {
                 throw new NotApplicableException(e);
             }

@@ -185,7 +185,7 @@ public final class DebugManager {
      */
     public static void debug(final String message) {
         if (PRINT_DEBUG_MESSAGES) {
-            System.out.println("*** DEBUG *** " + message);
+            System.err.println("*** DEBUG *** " + message);
         }
     }
 

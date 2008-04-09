@@ -2,6 +2,7 @@ package colab.client.gui.document;
 
 import java.util.Date;
 
+import colab.common.DebugManager;
 import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
@@ -50,7 +51,10 @@ public class ParagraphChangeMerger implements ParagraphListener {
     }
 
 
-    public void onInsert(int offset, String hunk) {
+    public void onInsert(final int offset, final String hunk) {
+
+        DebugManager.debug(" * nabbed it!");
+
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.insert(offset, hunk);
 
@@ -59,12 +63,16 @@ public class ParagraphChangeMerger implements ParagraphListener {
                 user,
                 new Date());
 
+        DebugManager.debug("^^^^^^^^^^^^^^^^^^^^^^^^");
+
         panel.fireOnMessageSent(edit);
+
+        DebugManager.debug("vvvvvvvvvvvvvvvvvvvvvvvv");
 
     }
 
 
-    public void onLock(UserName newOwner) {
+    public void onLock(final UserName newOwner) {
 
         LockDocChannelData lock = new LockDocChannelData(newOwner,
                 id);

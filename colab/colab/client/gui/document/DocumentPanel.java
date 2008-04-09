@@ -190,7 +190,6 @@ final class DocumentPanel extends ClientChannelPanel {
         return editors.size();
     }
 
-
     private void arrangePanel() {
         mainPanel.removeAll();
         for (final ParagraphEditor editor : editors) {
@@ -215,31 +214,37 @@ final class DocumentPanel extends ClientChannelPanel {
         final ParagraphEditor editor =
             new ParagraphEditor(channel, paragraph, getUsername());
 
-        editor.addKeyListener(new ParagraphEditorKeyAdapter(editor));
-        editor.addMouseListener(new ParagraphEditorMouseAdapter(editor));
-
-        editor.addParagraphListener(new ParagraphChangeMerger(this,
-                paragraph.getId()));
+        editor.addParagraphListener(
+                new ParagraphChangeMerger(this, paragraph.getId()));
 
         // Add shift event
         editor.addKeyListener(new KeyAdapter() {
            @Override
             public void keyPressed(final KeyEvent arg0) {
                 super.keyPressed(arg0);
-                if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
+
+                switch (arg0.getKeyCode()) {
+                case KeyEvent.VK_TAB:
                     if (!arg0.isShiftDown()) {
                         shiftFocus(editor);
+                    } else {
+                        //int position = editor.getCaretPosition();
+                        //editor.insert("\t", position);
+                        // TODO: editor.addInsertText('\t');
                     }
                     arg0.consume();
-                }
-
-                if(arg0.getKeyCode() == KeyEvent.VK_ENTER){
+                    break;
+                case KeyEvent.VK_ENTER:
                     if (!arg0.isShiftDown()) {
-
                         createNewParagraph(editor.getParagraph().getId());
+                    } else {
+                        //int position = editor.getCaretPosition();
+                        //editor.insert("\n", position);
+                        // TODO: editor.addInsertText("\n");
                     }
+                default:
+                    break;
                 }
-
            }
         });
 
@@ -247,12 +252,13 @@ final class DocumentPanel extends ClientChannelPanel {
         return editor;
     }
 
-    private ParagraphEditor insertParagraphEditor(final ParagraphIdentifier afterID,
+    private ParagraphEditor insertParagraphEditor(
+            final ParagraphIdentifier afterID,
             final DocumentParagraph paragraph) {
 
         int i;
 
-        for(i = 0; i<editors.size(); i++) {
+        for (i = 0; i<editors.size(); i++) {
             if(afterID.equals(editors.get(i).getParagraph().getId())) {
                 break;
             }
@@ -262,7 +268,7 @@ final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    private void shiftFocus(ParagraphEditor fromThisOne) {
+    private void shiftFocus(final ParagraphEditor fromThisOne) {
 
         boolean found = false;
 

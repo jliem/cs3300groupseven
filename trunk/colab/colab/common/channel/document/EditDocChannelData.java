@@ -33,9 +33,11 @@ public final class EditDocChannelData extends DocumentChannelData {
 
     @Override
     public void apply(final Document doc) throws NotApplicableException {
+        DebugManager.debug("ONE");
         doc.applyEdit(paragraphID, differences);
-
+        DebugManager.debug("TWO");
         DocumentParagraph para = doc.get(paragraphID);
+        DebugManager.debug("THREE");
         DebugManager.debug("EditDocChanData says paragraph contents: "
                 + para.getContents() + ", id is " + paragraphID
                 + ", hashcode is " + para.hashCode());

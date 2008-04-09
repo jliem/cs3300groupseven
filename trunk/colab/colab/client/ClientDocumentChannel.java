@@ -57,14 +57,19 @@ public final class ClientDocumentChannel extends ClientChannel {
                 EditDocChannelData edit = (EditDocChannelData)data;
                 DebugManager.debug("Applying " + edit.toString());
             }
+            DebugManager.debug("APPLYING...");
             ((DocumentChannelData) data).apply(currentDocument);
         } catch (NotApplicableException e) {
             DebugManager.shouldNotHappen(e);
         }
 
+        DebugManager.debug("APPLIED.");
+
         ActionEvent event = new ActionEvent(
                 this, ActionEvent.ACTION_FIRST, "Message Added");
         fireActionPerformed(event);
+
+        DebugManager.debug("EVENT FIRED.");
 
     }
 

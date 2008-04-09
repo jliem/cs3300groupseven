@@ -81,11 +81,15 @@ public final class DocumentParagraph implements Serializable,
     }
 
     public void insert(final int offset, final String hunk) {
+        DebugManager.debug(" * inserting...");
         contents = contents.insert(offset, hunk);
 
+        DebugManager.debug(" * inserted.");
         DebugManager.debug("ID is " + id + ", contents: " + contents
                 + ", hashcode is " + hashCode());
+        DebugManager.debug(" * firing event...");
         fireOnInsert(offset, hunk);
+        DebugManager.debug(" * fired.");
     }
 
     public void delete(final int offset, final int length) {
@@ -258,6 +262,7 @@ public final class DocumentParagraph implements Serializable,
     }
 
     protected void fireOnInsert(final int offset, final String hunk) {
+        DebugManager.debug(" * sending event to listeners " + listeners.size());
         for (ParagraphListener listener : listeners) {
             listener.onInsert(offset, hunk);
         }

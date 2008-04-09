@@ -134,11 +134,14 @@ public final class Document {
             final DocumentParagraphDiff diff) throws NotApplicableException {
 
         for (DocumentParagraph par : paragraphs) {
+            DebugManager.debug(" -- check");
             if (id.equals(par.getId())) {
+                DebugManager.debug(" -- apply");
                 diff.apply(par);
                 break;
             }
         }
+        DebugManager.debug(" -- done");
     }
 
     /**

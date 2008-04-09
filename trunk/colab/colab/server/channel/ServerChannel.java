@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.Channel;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDescriptor;
@@ -216,7 +217,9 @@ public abstract class ServerChannel<T extends ChannelData>
                     client.getChannelInterface();
 
                 try {
+                    DebugManager.debug("I'M WAITING FOR YOU");
                     channelInterface.add(data);
+                    DebugManager.debug("OKAY, RESPONDED.");
                 } catch (final RemoteException re) {
                     connection.disconnect(re);
                 }

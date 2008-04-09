@@ -62,7 +62,7 @@ class ParagraphEditor extends JTextArea {
     private int deleteStart;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
-    		final DocumentPanel documentPanel,
+            final DocumentPanel documentPanel,
             final DocumentParagraph paragraph,
             final UserName user) {
 
@@ -152,7 +152,7 @@ class ParagraphEditor extends JTextArea {
         paragraph.addParagraphListener(new ParagraphListener() {
 
             public void onHeaderChange(final int headerLevel) {
-            	DebugManager.debug("Header has changed to " + headerLevel);
+                DebugManager.debug("Header has changed to " + headerLevel);
                 showHeader(headerLevel);
             }
 
@@ -356,10 +356,20 @@ class ParagraphEditor extends JTextArea {
     }
 
     public void sendHeaderChange(final int headerLevel) {
-    	this.fireHeaderChange(headerLevel);
+        this.fireHeaderChange(headerLevel);
     }
 
-    private void sendPendingDelete() {
+    void sendPendingDelete() {
+
+        // Don't send if we don't have the lock
+        if (!isLockedByMe()) {
+            DebugManager.debug("ParagraphEditor could not send delete because "
+                    + this.getLockHolder() + " has the lock!");
+            return;
+        }
+
+        // Save the cursor position
+        int selectionStart = this.getSelectionStart();
 
         if (deleteStart >= 0 && deleteLength >= 0) {
             // Compute starting offset from start and length
@@ -368,16 +378,12 @@ class ParagraphEditor extends JTextArea {
             DebugManager.debug("Deleting text from " + offset + ", length is " + deleteLength);
 
             this.fireOnDelete(offset, deleteLength);
-//            try {
-//                channel.deleteText(offset, deleteLength,
-//                        paragraph.getId(), user);
-//            } catch (RemoteException e) {
-//                // TODO Auto-generated catch block
-//                DebugManager.remote(e);
-//            }
 
             resetDelete();
         }
+
+        // Restore the caret
+        this.setCaretPosition(selectionStart);
 
     }
 
@@ -391,7 +397,17 @@ class ParagraphEditor extends JTextArea {
         insertText = new StringBuffer();
     }
 
-    private void sendPendingInsert() {
+    void sendPendingInsert() {
+
+        // Don't send if we don't have the lock
+        if (!isLockedByMe()) {
+            DebugManager.debug("ParagraphEditor could not send insert because "
+                    + this.getLockHolder() + " has the lock!");
+            return;
+        }
+
+        // Save the cursor position
+        int selectionStart = this.getSelectionStart();
 
         // Check if there's any text to send
         if (startIndex >= 0 && insertText.length() > 0) {
@@ -400,17 +416,13 @@ class ParagraphEditor extends JTextArea {
 
             this.fireOnInsert(startIndex, insertText.toString());
 
-//            try {
-//                channel.insertText(startIndex, insertText.toString(),
-//                        paragraph.getId(), user);
-//            } catch (RemoteException e) {
-//                // TODO Auto-generated catch block
-//                DebugManager.remote(e);
-//            }
-
             // Clear start index and text
             resetInsert();
         }
+
+        // Restore the caret
+        this.setCaretPosition(selectionStart);
+
     }
 
     private void showLock(final UserName newOwner) {

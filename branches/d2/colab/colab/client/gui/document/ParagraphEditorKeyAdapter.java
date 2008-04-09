@@ -70,6 +70,10 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         // If we weren't already tracking the index, record it now
         if (editor.getStartIndex() < 0) {
             editor.setStartIndex(editor.getSelectionStart());
+
+            // We are just beginning an insert, so send any
+            // pending deletes
+            editor.sendPendingDelete();
         }
 
         editor.addInsertText(ke.getKeyChar());
@@ -117,9 +121,9 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
 
             if (ke.isControlDown()) {
 
-            	if (editor.isUnlocked()) {
-            		editor.requestLock();
-            	}
+                if (editor.isUnlocked()) {
+                    editor.requestLock();
+                }
 
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()+1);
@@ -132,9 +136,9 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
         case KeyEvent.VK_DOWN:
             if (ke.isControlDown()) {
 
-            	if (editor.isUnlocked()) {
-            		editor.requestLock();
-            	}
+                if (editor.isUnlocked()) {
+                    editor.requestLock();
+                }
 
                 DocumentParagraph p = editor.getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()-1);
@@ -181,8 +185,8 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                 // There was no text and delete/backspace was pressed, so
                 // delete this paragraph
 
-            	// Send pending changes first
-            	editor.sendPendingChange();
+                // Send pending changes first
+                editor.sendPendingChange();
 
                 editor.delete();
             } else if (editor.getSelectionStart() > 0) {
@@ -197,6 +201,9 @@ public class ParagraphEditorKeyAdapter extends KeyAdapter {
                     editor.setDeleteLength(editor.getDeleteLength()+1);
                 } else {
                     // No delete in progress
+
+                    // Send any pending inserts
+                    editor.sendPendingInsert();
 
                     // Set starting index
                     editor.setDeleteStart(editor.getSelectionStart());

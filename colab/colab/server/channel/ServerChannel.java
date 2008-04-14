@@ -230,6 +230,34 @@ public abstract class ServerChannel<T extends ChannelData>
 
     }
 
+    /**
+     * Sends a data element to every connected client,
+     * including the data's creator.
+     *
+     * @param data the data to send out
+     */
+    protected final void sendToAllRegardless(final T data) {
+
+        for (final ChannelConnection client
+                : this.clients.toArray(new ChannelConnection[]{})) {
+
+            Connection connection = client.getConnection();
+
+            ChannelRemote channelInterface =
+                client.getChannelInterface();
+
+            try {
+                DebugManager.debug("I'M WAITING FOR YOU");
+                channelInterface.add(data);
+                DebugManager.debug("OKAY, RESPONDED.");
+            } catch (final RemoteException re) {
+                connection.disconnect(re);
+            }
+
+        }
+
+    }
+
     /** {@inheritDoc} */
     public final void handleDisconnect(final DisconnectEvent event) {
         ConnectionIdentifier connectionId = event.getConnectionId();

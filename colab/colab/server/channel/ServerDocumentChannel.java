@@ -155,18 +155,6 @@ public final class ServerDocumentChannel
 
     }
 
-    /**
-     * Send data to all clients, including the creator.
-     *
-     * @param data the data to send
-     */
-    private void sendToAllRegardless(final DocumentChannelData data) {
-        UserName temp = data.getCreator();
-        data.setCreator(null);
-        super.sendToAll(data);
-        data.setCreator(temp);
-    }
-
     /** {@inheritDoc} */
     @Override
     public ChannelDescriptor getChannelDescriptor() {

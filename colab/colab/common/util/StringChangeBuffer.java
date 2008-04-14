@@ -1,6 +1,5 @@
 package colab.common.util;
 
-import colab.common.DebugManager;
 
 public class StringChangeBuffer {
 
@@ -14,15 +13,17 @@ public class StringChangeBuffer {
 
     private int deleteLength = 0;
 
-    private final StringChangeBufferListener listener;
+    private StringChangeBufferListener listener;
 
     public StringChangeBuffer(final StringChangeBufferListener listener) {
+        setListener(listener);
+    }
+
+    void setListener(final StringChangeBufferListener listener) {
         this.listener = listener;
     }
 
     public void insert(final int offset, final String str) {
-
-        DebugManager.debug(" ~~~ insert()");
 
         switch (state) {
         case INSERT:
@@ -47,8 +48,6 @@ public class StringChangeBuffer {
     }
 
     public void delete(final int offset, final int length) {
-
-        DebugManager.debug(" ~~~ delete()");
 
         switch (state) {
         case INSERT:
@@ -75,8 +74,6 @@ public class StringChangeBuffer {
     }
 
     public void update() {
-
-        DebugManager.debug(" ~~~ update()");
 
         switch (state) {
         case INSERT:

@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.rmi.RemoteException;
 import java.util.Vector;
 
 import javax.swing.JTextArea;
@@ -44,6 +43,8 @@ class ParagraphEditor extends JTextArea {
     private final StringChangeBuffer changeBuffer;
 
     private Vector<ParagraphListener> paragraphListeners;
+
+    private final DocumentListener documentListener;
 
     private final DocumentPanel documentPanel;
     /**
@@ -129,7 +130,7 @@ class ParagraphEditor extends JTextArea {
                 final String contents = paragraph.getContents();
                 if (!getText().equals(contents)) {
                     int caret = getCaretPosition();
-                    setText(contents);
+                    setTextWithoutEvent(contents);
                     setCaretPosition(caret);
                 }
             }
@@ -137,7 +138,7 @@ class ParagraphEditor extends JTextArea {
                 final String contents = paragraph.getContents();
                 if (!getText().equals(contents)) {
                     int caret = getCaretPosition();
-                    setText(contents);
+                    setTextWithoutEvent(contents);
                     setCaretPosition(caret);
                 }
             }
@@ -151,7 +152,7 @@ class ParagraphEditor extends JTextArea {
                 // undo any changes that we might have made
                 if (!newOwner.equals(user)) {
                     changeBuffer.update();
-                    setText(paragraph.getContents());
+                    setTextWithoutEvent(paragraph.getContents());
                 }
 
                 // Update GUI
@@ -166,7 +167,7 @@ class ParagraphEditor extends JTextArea {
 
         this.addMouseListener(new ParagraphEditorMouseListener(this));
 
-        this.getDocument().addDocumentListener(new DocumentListener() {
+        documentListener = new DocumentListener() {
 
             public void changedUpdate(final DocumentEvent e) {
                 DebugManager.debug(e.toString()); // probably never happens
@@ -182,12 +183,7 @@ class ParagraphEditor extends JTextArea {
 
                 String str = ParagraphEditor.this.getText().substring(
                             e.getOffset(), e.getOffset() + e.getLength());
-                if (e.getLength() == 1) {
-                    changeBuffer.insert(e.getOffset(), str);
-                } else {
-                    // TODO: temporary safety measure, kill this
-                    DebugManager.debug("#######~~~~~~######: " + str);
-                }
+                changeBuffer.insert(e.getOffset(), str);
 
             }
 
@@ -199,13 +195,13 @@ class ParagraphEditor extends JTextArea {
                     requestLock();
                 }
 
-                DebugManager.debug("#######~~~~~~######: " + "deleting from "
-                        + e.getOffset() + ", length=" + e.getLength());
                 changeBuffer.delete(e.getOffset(), e.getLength());
 
             }
 
-        });
+        };
+
+        this.getDocument().addDocumentListener(documentListener);
 
     }
 
@@ -415,6 +411,16 @@ class ParagraphEditor extends JTextArea {
             sendPendingChange();
         }
 
+    }
+
+    public void setTextWithoutEvent(final String text) {
+        if (!isLockedByMe()) {
+            synchronized(documentListener) {
+                getDocument().removeDocumentListener(documentListener);
+                setText(text);
+                getDocument().addDocumentListener(documentListener);
+            }
+        }
     }
 
 }

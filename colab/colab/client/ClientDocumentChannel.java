@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.util.Date;
 import java.util.List;
 
 import colab.common.DebugManager;
@@ -15,10 +14,8 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
-import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.document.LockDocChannelData;
-import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -28,7 +25,7 @@ import colab.common.naming.UserName;
 public final class ClientDocumentChannel extends ClientChannel {
 
     /** Serialization version number. */
-    private static final long serialVersionUID = 1;
+    private static final long serialVersionUID = 1L;
 
     private int newRevisions = 0;
 
@@ -57,19 +54,14 @@ public final class ClientDocumentChannel extends ClientChannel {
                 EditDocChannelData edit = (EditDocChannelData)data;
                 DebugManager.debug("Applying " + edit.toString());
             }
-            DebugManager.debug("APPLYING...");
             ((DocumentChannelData) data).apply(currentDocument);
         } catch (NotApplicableException e) {
             DebugManager.shouldNotHappen(e);
         }
 
-        DebugManager.debug("APPLIED.");
-
         ActionEvent event = new ActionEvent(
                 this, ActionEvent.ACTION_FIRST, "Message Added");
         fireActionPerformed(event);
-
-        DebugManager.debug("EVENT FIRED.");
 
     }
 
@@ -111,9 +103,11 @@ public final class ClientDocumentChannel extends ClientChannel {
         currentDocument.delete(id);
     }
 
-    public void changeHeaderLevel(final int headerLevel, ParagraphIdentifier id) throws RemoteException {
+    public void changeHeaderLevel(final int headerLevel,
+            final ParagraphIdentifier id) throws RemoteException {
         currentDocument.get(id).setHeaderLevel(headerLevel);
-        //TODO: actually queue up changes, send to server after time or reqs are met
+        //TODO: actually queue up changes, send to server after
+        // time or reqs are met
     }
 
     public void requestLock(UserName lockHolder, ParagraphIdentifier id) throws RemoteException {

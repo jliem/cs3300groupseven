@@ -52,8 +52,16 @@ public final class InsertDocChannelData extends DocumentChannelData {
     }
 
     public void setId(final ChannelDataIdentifier id) {
+
         super.setId(id);
-        this.paragraph.setId(new ParagraphIdentifier(id));
+        ParagraphIdentifier paragraphId;
+        if (id != null) {
+            paragraphId = new ParagraphIdentifier(id);
+        } else {
+            paragraphId = null;
+        }
+        this.paragraph.setId(paragraphId);
+
     }
 
     @Override

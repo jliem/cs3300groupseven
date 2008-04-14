@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.util.Date;
 import java.util.List;
 
 import colab.common.DebugManager;
@@ -15,10 +14,8 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
-import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.document.LockDocChannelData;
-import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;

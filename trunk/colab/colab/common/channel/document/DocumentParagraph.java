@@ -30,7 +30,7 @@ public final class DocumentParagraph implements Serializable,
 
     private int headerLevel;
 
-    private StringBuffer contents;
+    private final StringBuffer contents;
 
     private UserName lockHolder;
 
@@ -82,7 +82,7 @@ public final class DocumentParagraph implements Serializable,
 
     public void insert(final int offset, final String hunk) {
         DebugManager.debug(" * inserting...");
-        contents = contents.insert(offset, hunk);
+        contents.insert(offset, hunk);
 
         DebugManager.debug(" * inserted.");
         DebugManager.debug("ID is " + id + ", contents: " + contents
@@ -93,7 +93,11 @@ public final class DocumentParagraph implements Serializable,
     }
 
     public void delete(final int offset, final int length) {
-        contents = contents.delete(offset, (length+offset));
+        DebugManager.debug("Contents: " + contents);
+        DebugManager.debug("Offset: " + offset);
+        DebugManager.debug("Length: " + length);
+        contents.delete(offset, (length + offset));
+        DebugManager.debug("Done.");
         fireOnDelete(offset, length);
     }
 
@@ -297,7 +301,7 @@ public final class DocumentParagraph implements Serializable,
             throw new XmlParseException(e);
         }
 
-        this.contents = new StringBuffer();
+        this.contents.setLength(0);
         this.contents.append(node.getBody());
 
     }

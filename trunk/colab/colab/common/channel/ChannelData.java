@@ -87,7 +87,7 @@ public abstract class ChannelData implements Serializable,
      *
      * @param id the identifier for this channel data.
      */
-    public final void setId(final ChannelDataIdentifier id) {
+    public void setId(final ChannelDataIdentifier id) {
         this.id = id;
     }
 

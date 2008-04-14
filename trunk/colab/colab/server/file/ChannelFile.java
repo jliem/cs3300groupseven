@@ -53,6 +53,7 @@ public final class ChannelFile<T extends ChannelData>
                 dataCollection.add(data);
             }
         } catch (final XmlParseException e) {
+            DebugManager.exception(e);
             throw new IOException(e.getMessage());
         }
 

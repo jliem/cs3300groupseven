@@ -14,6 +14,7 @@ import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.document.InsertDocChannelData;
+import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
@@ -66,6 +67,13 @@ public final class ServerDocumentChannel
         this.revisions = channelFile;
 
         this.currentDocument = new Document();
+        for (DocumentChannelData data : revisions.getAll()) {
+            try {
+                data.apply(currentDocument);
+            } catch (final NotApplicableException e) {
+                DebugManager.exception(e);
+            }
+        }
 
     }
 
@@ -130,7 +138,9 @@ public final class ServerDocumentChannel
         // Store the data, and assign it an identifier
         // Might have already added this if it's an
         // InsertDocChannelData but that's ok
-        revisions.addAndAssignId(data);
+        if (!(data instanceof LockDocChannelData)) {
+            revisions.addAndAssignId(data);
+        }
 
         DebugManager.debug(" # Stored");
 

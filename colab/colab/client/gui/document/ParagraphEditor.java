@@ -54,7 +54,7 @@ class ParagraphEditor extends JTextArea {
     private Timer timer;
 
     /** Timer delay in ms. */
-    private final int TIMER_DELAY = 4000000;
+    private final int TIMER_DELAY = 2000000;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
             final DocumentPanel documentPanel,
@@ -85,7 +85,11 @@ class ParagraphEditor extends JTextArea {
 
         this.paragraphListeners = new Vector<ParagraphListener>();
 
-        this.timer = new Timer(TIMER_DELAY, new ParagraphChangeDispatcher());
+        this.timer = new Timer(TIMER_DELAY, new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                sendPendingChange();
+            }
+        });
 
         setText(this.paragraph.getContents());
         showHeader(this.paragraph.getHeaderLevel());
@@ -324,26 +328,26 @@ class ParagraphEditor extends JTextArea {
     }
 
     /**
-     * Sends all pending changes (inserts or deletes)
-     * to the channel.
+     * Sends all pending changes (inserts or deletes) to the channel.
      */
     public void sendPendingChange() {
 
-        // Don't send if we don't have the lock
-        if (!isLockedByMe()) {
-            DebugManager.debug("ParagraphEditor could not send changes because "
-                    + this.getLockHolder() + " has the lock!");
-            return;
+        // Only send it we have the lock
+        if (isLockedByMe()) {
+
+            // Save the cursor position
+            int selectionStart = this.getSelectionStart();
+
+            // Send any current inserts or deletes
+            changeBuffer.update();
+
+            // Restore the caret
+            setCaretPosition(selectionStart);
+
+            // Unlock the paragraph
+            requestUnlock();
+
         }
-
-        // Save the cursor position
-        int selectionStart = this.getSelectionStart();
-
-        // Send any current inserts or deletes
-        changeBuffer.update();
-
-        // Restore the caret
-        this.setCaretPosition(selectionStart);
 
     }
 
@@ -403,14 +407,6 @@ class ParagraphEditor extends JTextArea {
     private UserName getLockHolder() {
         UserName lockHolder = paragraph.getLockHolder();
         return lockHolder;
-    }
-
-    private class ParagraphChangeDispatcher implements ActionListener {
-
-        public void actionPerformed(final ActionEvent e) {
-            sendPendingChange();
-        }
-
     }
 
     public void setTextWithoutEvent(final String text) {

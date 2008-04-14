@@ -228,44 +228,6 @@ public final class DocumentPanel extends ClientChannelPanel {
         editor.addParagraphListener(
                 new ParagraphChangeMerger(this, paragraph.getId()));
 
-        // Add shift event
-        editor.addKeyListener(new KeyAdapter() {
-           @Override
-            public void keyPressed(final KeyEvent arg0) {
-                super.keyPressed(arg0);
-
-                switch (arg0.getKeyCode()) {
-                case KeyEvent.VK_TAB:
-                    if (!arg0.isShiftDown()) {
-                        shiftFocus(editor);
-                    } else {
-                        //int position = editor.getCaretPosition();
-                        //editor.insert("\t", position);
-                        // TODO: editor.addInsertText('\t');
-                    }
-                    arg0.consume();
-                    break;
-                case KeyEvent.VK_ENTER:
-                    if (!arg0.isShiftDown()) {
-                        createNewParagraph(editor.getParagraph().getId());
-                    } else {
-                        //int position = editor.getCaretPosition();
-                        //editor.insert("\n", position);
-                        // TODO: editor.addInsertText("\n");
-                    }
-                    arg0.consume();
-                    break;
-
-                case KeyEvent.VK_INSERT:
-
-                    editor.sendPendingChange();
-                    break;
-                default:
-                    break;
-                }
-           }
-        });
-
         editors.add(offset, editor);
         return editor;
     }
@@ -286,37 +248,38 @@ public final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    private void shiftFocus(final ParagraphEditor fromThisOne) {
+    public void shiftFocus(final ParagraphEditor fromThisOne) {
 
         boolean found = false;
 
         Iterator<ParagraphEditor> iter = editors.iterator();
 
-        while(iter.hasNext()) {
-            if(iter.next() == fromThisOne) {
+        while (iter.hasNext()) {
+            if (iter.next() == fromThisOne) {
                 break;
             }
         }
 
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             ParagraphEditor next = iter.next();
-            if(next.isUnlocked()) {
+            if (next.isUnlocked()) {
                 next.requestFocus();
                 found = true;
                 break;
             }
         }
 
-        if(!found) {
+        if (!found) {
             iter = editors.iterator();
             while(iter.hasNext()) {
                 ParagraphEditor next = iter.next();
-                if(next.isUnlocked()) {
+                if (next.isUnlocked()) {
                     next.requestFocus();
                     break;
                 }
             }
         }
+
     }
 
     public static void main(final String[] args) throws RemoteException {
@@ -334,24 +297,7 @@ public final class DocumentPanel extends ClientChannelPanel {
 
         f.pack();
         f.setVisible(true);
+
     }
 
-      /*  doc.insert(0, new DocumentParagraph(
-                "Our first paragraph!", 4, new UserName("Matt"),
-                new ParagraphIdentifier(1), new Date()));
-
-        doc.get(0).unlock();
-        doc.get(0).lock(new UserName("Alex"));
-
-        doc.insert(1, new DocumentParagraph(
-                "Our next paragraph.", 0, new UserName("Matt"),
-                new ParagraphIdentifier(2), new Date()));
-        DocumentParagraph last = new DocumentParagraph(
-                "This paragraph currently has no lock.", 1,
-                new UserName("Chris"), new ParagraphIdentifier(5),
-                new Date());
-        doc.insert(2, last);
-        last.unlock(); */
-    }
-
-
+}

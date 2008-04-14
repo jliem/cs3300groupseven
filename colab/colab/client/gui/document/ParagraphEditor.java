@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Vector;
 
 import javax.swing.JTextArea;
@@ -107,7 +109,8 @@ class ParagraphEditor extends JTextArea {
                 sendPendingChange();
 
                 // Check whether this paragraph still exists
-                Document doc = channel.getCurrentDocument();
+                Document doc = ParagraphEditor.this.channel
+                                   .getCurrentDocument();
 
                 DocumentParagraph para = doc.get(paragraph.getId());
 
@@ -169,8 +172,6 @@ class ParagraphEditor extends JTextArea {
             }
         });
 
-        this.addMouseListener(new ParagraphEditorMouseListener(this));
-
         documentListener = new DocumentListener() {
 
             public void changedUpdate(final DocumentEvent e) {
@@ -206,6 +207,12 @@ class ParagraphEditor extends JTextArea {
         };
 
         this.getDocument().addDocumentListener(documentListener);
+
+        this.addKeyListener(new KeyAdapter() {
+            public void keyPressed(final KeyEvent event) {
+                ParagraphEditor.this.keyPressed(event);
+            }
+        });
 
     }
 
@@ -351,6 +358,10 @@ class ParagraphEditor extends JTextArea {
 
     }
 
+    public void sendHeaderChange(final int headerLevel) {
+        this.fireHeaderChange(headerLevel);
+    }
+
     private void showLock(final UserName newOwner) {
 
         if (newOwner != null) {
@@ -417,6 +428,77 @@ class ParagraphEditor extends JTextArea {
                 getDocument().addDocumentListener(documentListener);
             }
         }
+    }
+
+    public void insertAtCaret(final String str) {
+        int position = getCaretPosition();
+        insert(str, position);
+        setCaretPosition(position + str.length());
+    }
+
+    private void keyPressed(final KeyEvent ke) {
+
+        switch (ke.getKeyCode()) {
+
+        case KeyEvent.VK_ENTER:
+
+            if (ke.isShiftDown()) {
+                insertAtCaret("\n");
+            } else {
+                documentPanel.createNewParagraph(getParagraph().getId());
+            }
+            ke.consume();
+
+            break;
+
+        case KeyEvent.VK_TAB:
+
+            if (!ke.isShiftDown()) {
+                documentPanel.shiftFocus(this);
+            } else {
+                insertAtCaret("\t");
+            }
+            ke.consume();
+
+            break;
+
+        case KeyEvent.VK_UP:
+
+            if (ke.isControlDown()) {
+
+                if (isUnlocked()) {
+                    requestLock();
+                }
+
+                DocumentParagraph p = getParagraph();
+                p.setHeaderLevel(p.getHeaderLevel()+1);
+
+                sendHeaderChange(p.getHeaderLevel());
+            }
+
+            break;
+
+        case KeyEvent.VK_DOWN:
+
+            if (ke.isControlDown()) {
+
+                if (isUnlocked()) {
+                    requestLock();
+                }
+
+                DocumentParagraph p = getParagraph();
+                p.setHeaderLevel(p.getHeaderLevel()-1);
+
+                sendHeaderChange(p.getHeaderLevel());
+
+            }
+
+            break;
+
+        default:
+
+        }
+
     }
 
 }

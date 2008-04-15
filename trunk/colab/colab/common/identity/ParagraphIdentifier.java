@@ -1,15 +1,12 @@
 package colab.common.identity;
 
-import colab.common.channel.ChannelDataIdentifier;
-
-
 /**
  * An Identifier used to identify paragraphs.
  *
  * Within a document, a paragraph's identifier must be unique for all time;
  * that is, a paragraph editor cannot be re-used after a paragraph is deleted.
  */
-public final class ParagraphIdentifier extends ChannelDataIdentifier {
+public final class ParagraphIdentifier extends IntegerIdentifier {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -25,11 +22,11 @@ public final class ParagraphIdentifier extends ChannelDataIdentifier {
 
     /**
      * Constructs a paragraph identifier with the
-     * value of a ChannelDataIdentifier.
+     * value of an IntegerIdentifier.
      *
      * @param otherId the identifier to copy
      */
-    public ParagraphIdentifier(final ChannelDataIdentifier otherId) {
+    public ParagraphIdentifier(final IntegerIdentifier otherId) {
         super(otherId.getValue());
     }
 

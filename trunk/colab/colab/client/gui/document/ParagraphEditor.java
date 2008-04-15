@@ -71,6 +71,8 @@ class ParagraphEditor extends JTextArea {
         this.defaultFG = getForeground();
         this.defaultBG = getBackground();
 
+        //this.setBorder();
+
         this.changeBuffer = new StringChangeBuffer(
                 new StringChangeBufferListener() {
             public void insert(final int offset, final String str) {

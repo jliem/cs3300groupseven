@@ -1,6 +1,5 @@
 package colab.common.channel.chat;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import colab.common.channel.ChannelData;
@@ -106,6 +105,7 @@ public final class ChatChannelData extends ChannelData {
     }
 
     /** {@inheritDoc} */
+    @Override
     public XmlNode toXml() {
         XmlNode node = super.toXml();
         node.setContent(text);
@@ -113,6 +113,7 @@ public final class ChatChannelData extends ChannelData {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void fromXml(final XmlNode node) throws XmlParseException {
         super.fromXml(node);
         this.text = node.getBody();

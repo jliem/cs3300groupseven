@@ -46,6 +46,7 @@ public final class DeleteDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    @Override
     public XmlNode toXml() {
 
         XmlNode node = super.toXml();
@@ -57,6 +58,7 @@ public final class DeleteDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void fromXml(final XmlNode node) throws XmlParseException {
 
         super.fromXml(node);

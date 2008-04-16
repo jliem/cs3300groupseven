@@ -55,6 +55,7 @@ public class LockDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    @Override
     public XmlNode toXml() {
 
         XmlNode node = new XmlNode(xmlNodeName());
@@ -64,6 +65,7 @@ public class LockDocChannelData extends DocumentChannelData {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void fromXml(final XmlNode node) throws XmlParseException {
 
         try {

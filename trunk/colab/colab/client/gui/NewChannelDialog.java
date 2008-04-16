@@ -20,6 +20,7 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.channel.type.DocumentChannelType;
+import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
@@ -107,8 +108,7 @@ public class NewChannelDialog extends JDialog {
 
         channelTypes.add(new ChatChannelType());
         channelTypes.add(new DocumentChannelType());
-        // TODO
-        // channelTypes.add(new WhiteboardChannelType());
+        channelTypes.add(new WhiteboardChannelType());
 
         return channelTypes;
     }

@@ -23,7 +23,7 @@ import colab.common.naming.UserName;
 import colab.server.file.ChannelFile;
 
 /**
- * ServerChatChannel is a type of {@link ServerChannel} which
+ * ServerDocumentChannel is a type of {@link ServerChannel} which
  * deals with document channels.
  */
 public final class ServerDocumentChannel

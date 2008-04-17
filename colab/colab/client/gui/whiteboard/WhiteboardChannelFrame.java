@@ -5,19 +5,18 @@ import java.awt.Dimension;
 import colab.client.ClientWhiteboardChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ClientChannelFrame;
-import colab.client.gui.document.DocumentPanel;
 import colab.common.naming.UserName;
+import colab.client.gui.document.DocumentPanel;
 
 public class WhiteboardChannelFrame extends ClientChannelFrame {
-
-    private ClientWhiteboardChannel channel;
-
-    private WhiteboardChannelPanel whiteboardPanel;
-
-    public  WhiteboardChannelFrame(final ColabClient client,
-            final ClientWhiteboardChannel clientChannel, final UserName name) {
-
-        super(client,
+	
+		private ClientWhiteboardChannel channel;
+		
+		WhiteboardChannelPanel whiteboardPanel;
+	
+        public  WhiteboardChannelFrame(final ColabClient client,
+                final ClientWhiteboardChannel clientChannel, final UserName name) {
+   		super(client,
                 clientChannel,
                 new WhiteboardChannelPanel(name, clientChannel));
 
@@ -29,3 +28,5 @@ public class WhiteboardChannelFrame extends ClientChannelFrame {
         this.setPreferredSize(new Dimension(800, 600));
     }
 }
+        
+

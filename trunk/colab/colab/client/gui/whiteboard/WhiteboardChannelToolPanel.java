@@ -1,9 +1,11 @@
 package colab.client.gui.whiteboard;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 public class WhiteboardChannelToolPanel extends JPanel{
@@ -14,20 +16,20 @@ public class WhiteboardChannelToolPanel extends JPanel{
 	private JButton solidRectangleButton;
 	private JButton clearRectangleButton;
 	private JButton eraserButton;
-	private WhiteboardChannelColorPanel colorPanel;
+	//private JColorChooser colorChooser;
 	
 	public WhiteboardChannelToolPanel(){
-		colorPanel = new WhiteboardChannelColorPanel();
-		
+			
 		pencilButton = new JButton(new ImageIcon("pencil.gif"));
-		//pencilButton.setSize(new Dimension( (new ImageIcon("sa.jpeg")).getIconWidth(), (new ImageIcon("sa.jpeg")).getIconHeight()) );
 		solidEllipseButton = new JButton(new ImageIcon("solidellipse.gif"));
 		eraserButton = new JButton(new ImageIcon("eraser.gif"));
 		clearEllipseButton = new JButton(new ImageIcon("clearellipse.gif"));
 		solidRectangleButton = new JButton(new ImageIcon("solidrect.gif"));
 		clearRectangleButton = new JButton (new ImageIcon("clearrectangle.gif"));
+		//colorChooser = new JColorChooser();
 		
-		this.setLayout(new GridLayout(5,1));
+		//colorChooser.setPreferredSize(new Dimension(10,10));
+		this.setLayout(new GridLayout(3,1));
 		
 		add(pencilButton);
 		add(eraserButton);
@@ -35,7 +37,7 @@ public class WhiteboardChannelToolPanel extends JPanel{
 		add(clearEllipseButton);
 		add(solidRectangleButton);
 		add(clearRectangleButton);
-		add(colorPanel);
+		//add(colorChooser);
 		
 		this.setVisible(true);
 		

@@ -1,7 +1,9 @@
 package colab.client.gui.whiteboard;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JButton;
 import colab.client.ClientWhiteboardChannel;
@@ -15,6 +17,8 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     private final ClientWhiteboardChannel channel;
     
     private WhiteboardChannelToolPanel toolPanel;
+    private DrawingPanel drawingPanel;
+    private JColorChooser colorChooser;
     
     protected enum ToolType {
         PATH,
@@ -26,11 +30,18 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         super(name);
 
         this.channel = channel;
+        drawingPanel = new DrawingPanel();
+        drawingPanel.setPreferredSize(new Dimension(500, 500));
         toolPanel = new WhiteboardChannelToolPanel();
-        add(toolPanel);
+        colorChooser = new JColorChooser();
+        colorChooser.setPreferredSize(new Dimension(150, 275));
         
-        
+        this.setLayout(new BorderLayout());
+        add(toolPanel, BorderLayout.WEST);
+        add(drawingPanel, BorderLayout.EAST);
+        add(colorChooser, BorderLayout.SOUTH);
         this.setVisible(true);
+       
     }
     
     public static void main(String[] args){

@@ -1,5 +1,7 @@
 package colab.common.channel.whiteboard.draw;
 
+import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.List;
 
 import colab.common.xml.XmlNode;
@@ -14,6 +16,21 @@ public class Path extends Drawable {
     public static final long serialVersionUID = 1L;
 
     private List<Point> points;
+
+    /**
+     * Constructs a new Path.
+     */
+    public Path() {
+        points = new ArrayList<Point>();
+    }
+
+    /**
+     * Adds a point to this path.
+     * @param point the point to add
+     */
+    public void addPoint(final Point point) {
+        points.add(point);
+    }
 
     /**
      * @return the list of points, in order
@@ -61,6 +78,19 @@ public class Path extends Drawable {
             point.fromXml(child);
             this.points.add(point);
         }
+
+    }
+
+    /** {@inheritDoc} */
+    protected void drawDrawable(Graphics g) {
+
+        for (int i=0; i<points.size()-1; i++) {
+            Point one = points.get(i);
+            Point two = points.get(i+1);
+
+            g.drawLine(one.x, one.y, two.x, two.y);
+        }
+
 
     }
 

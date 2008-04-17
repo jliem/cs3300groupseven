@@ -1,5 +1,6 @@
 package colab.common.channel.whiteboard.draw;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import colab.common.xml.XmlNode;
@@ -11,9 +12,8 @@ import colab.common.xml.XmlParseException;
  */
 public abstract class Shape extends Drawable {
 
-    private Dimension size;
-
-    private boolean filled;
+    protected Dimension size;
+    protected boolean filled;
 
     /**
      * Constructs an empty Shape.
@@ -24,10 +24,20 @@ public abstract class Shape extends Drawable {
     /**
      * Constructs a new Shape.
      *
-     * @param size the size of the object
-     * @param filled whether the rectangle is filled with color
+     * @param position
+     * @param size
+     * @param color
+     * @param penThickness
+     * @param filled
      */
-    public Shape(final Dimension size, final boolean filled) {
+    public Shape(final Point position,
+            final Dimension size,
+            final Color color,
+            final int penThickness,
+            final boolean filled) {
+
+        super(position, color, penThickness);
+
         this.size = size;
         this.filled = filled;
     }

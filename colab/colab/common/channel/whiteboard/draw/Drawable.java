@@ -1,5 +1,9 @@
 package colab.common.channel.whiteboard.draw;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
 
@@ -12,7 +16,10 @@ import colab.common.xml.XmlSerializable;
  */
 public abstract class Drawable implements Serializable, XmlSerializable {
 
-    private Point position;
+    protected Point position;
+
+    protected Color color;
+    protected int penThickness;
 
     /**
      * Constructs an empty Shape.
@@ -25,9 +32,32 @@ public abstract class Drawable implements Serializable, XmlSerializable {
      *
      * @param position the position of this shape on its layer
      */
-    public Drawable(final Point position) {
+    public Drawable(final Point position, final Color color,
+            final int penThickness) {
+
         this.position = position;
+        this.color = color;
+        this.penThickness = penThickness;
     }
+
+    /**
+     * Draw this Drawable object.
+     * @param g the Graphics object
+     */
+    public final void draw(Graphics g) {
+
+        ((Graphics2D) g).setPaint(color);
+        ((Graphics2D) g).setStroke(new BasicStroke(penThickness));
+
+        drawDrawable(g);
+    }
+
+    /**
+     * Draws a specific Drawable without setting
+     * the pen color or thickness.
+     * @param g the Graphics object
+     */
+    protected abstract void drawDrawable(Graphics g);
 
     /**
      * @return the position of this shape on its layer

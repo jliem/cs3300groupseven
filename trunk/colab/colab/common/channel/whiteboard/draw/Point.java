@@ -35,8 +35,7 @@ public class Point extends java.awt.Point implements XmlSerializable {
      * @param point an AWT point
      */
     public Point(final java.awt.Point point) {
-        this.x = point.x;
-        this.y = point.y;
+        this(point.x, point.y);
     }
 
     /** {@inheritDoc} */

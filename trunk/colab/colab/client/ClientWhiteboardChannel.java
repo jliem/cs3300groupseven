@@ -5,17 +5,18 @@ import java.rmi.RemoteException;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.naming.ChannelName;
 
 public class ClientWhiteboardChannel extends ClientChannel {
 
     public static final long serialVersionUID = 1;
-    
+
     public ClientWhiteboardChannel(final ChannelName name) throws RemoteException {
         super(name);
-        
+
     }
-    
+
     @Override
     public ChannelDataSet getChannelData() {
         // TODO Auto-generated method stub
@@ -24,8 +25,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
 
     @Override
     public ChannelDescriptor getChannelDescriptor() {
-        // TODO Auto-generated method stub
-        return null;
+        return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
 
     public void add(ChannelData data) throws RemoteException {

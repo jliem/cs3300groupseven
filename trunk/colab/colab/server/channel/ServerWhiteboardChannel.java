@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import colab.common.channel.ChannelDescriptor;
+import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
 import colab.common.naming.ChannelName;
 
@@ -32,8 +33,7 @@ public final class ServerWhiteboardChannel
     }
 
     public ChannelDescriptor getChannelDescriptor() {
-        // TODO Auto-generated method stub
-        return null;
+        return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
 
     public List<WhiteboardChannelData> getLastData(int count) {

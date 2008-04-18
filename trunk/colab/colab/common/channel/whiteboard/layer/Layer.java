@@ -1,12 +1,15 @@
 package colab.common.channel.whiteboard.layer;
 
+import java.awt.Graphics;
+
+import colab.common.channel.whiteboard.Drawable;
 import colab.common.identity.Identifiable;
 
 /**
  * A layer is a 2-dimensional image.  Multiple layers can be
  * overlayed upon each other within a whiteboard channel.
  */
-public class Layer implements Identifiable<LayerIdentifier> {
+public class Layer implements Identifiable<LayerIdentifier>, Drawable {
 
     private LayerIdentifier id;
 
@@ -49,4 +52,8 @@ public class Layer implements Identifiable<LayerIdentifier> {
         this.label = label;
     }
 
+    public void draw(Graphics graphIn) {
+        // TODO Auto-generated method stub
+        
+    }
 }

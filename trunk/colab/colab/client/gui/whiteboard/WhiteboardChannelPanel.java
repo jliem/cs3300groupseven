@@ -34,7 +34,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
         this.channel = channel;
         drawingPanel = new DrawingPanel();
-        drawingPanel.setPreferredSize(new Dimension(500, 500));
+        drawingPanel.setPreferredSize(new Dimension(500, 400));
         toolPanel = new WhiteboardChannelToolPanel();
         colorChooser = new JColorChooser();
         colorChooser.setPreferredSize(new Dimension(150, 275));
@@ -49,6 +49,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
     public static void main(final String[] args){
         JFrame frame = new JFrame("test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new WhiteboardChannelPanel(null, null));
         frame.pack();
         frame.setVisible(true);

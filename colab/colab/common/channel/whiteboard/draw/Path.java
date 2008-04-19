@@ -10,7 +10,7 @@ import colab.common.xml.XmlParseException;
 /**
  * A path consists of a series of connected points.
  */
-public class Path extends Drawable {
+public class Path extends Figure {
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -82,7 +82,10 @@ public class Path extends Drawable {
     }
 
     /** {@inheritDoc} */
-    protected void drawDrawable(final Graphics g) {
+    @Override
+    public void draw(final Graphics g) {
+
+        super.draw(g);
 
         for (int i=0; i<points.size()-1; i++) {
             Point one = points.get(i);

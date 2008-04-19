@@ -10,7 +10,7 @@ import colab.common.xml.XmlParseException;
  * A Shape is a drawable object which has a
  * width, a height, and optional fill.
  */
-public abstract class Shape extends Drawable {
+public abstract class Shape extends Figure {
 
     private Dimension size;
     private boolean filled;

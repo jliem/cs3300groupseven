@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
 import colab.client.gui.whiteboard.WhiteboardChannelPanel.ToolType;
-import colab.common.channel.whiteboard.draw.Drawable;
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.draw.Point;
 
 /**
@@ -50,7 +50,7 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
     private Point oldPoint = null;
     private boolean drawingNewSegment, dirtyBounds, isActive;
 
-    private Vector<Drawable> drawables;
+    private Vector<Figure> drawables;
 
     private ArrayList<Point> list;
     private int left, right, top, bottom;
@@ -68,7 +68,7 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
 
         isActive = false;
         list = new ArrayList<Point>(ARRAYLIST_INITIAL_CAPACITY);
-        drawables = new Vector<Drawable>(DRAWABLELIST_INITIAL_CAPACITY);
+        drawables = new Vector<Figure>(DRAWABLELIST_INITIAL_CAPACITY);
         dirtyBounds = true;
         drawingNewSegment = true;
 

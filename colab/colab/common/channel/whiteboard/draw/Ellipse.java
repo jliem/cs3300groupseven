@@ -33,8 +33,21 @@ public class Ellipse extends Shape {
     }
 
     @Override
-    protected void drawDrawable(final Graphics g) {
-        // TODO Auto-generated method stub
+    /** {@inheritDoc} */
+    public void draw(final Graphics g) {
+
+        super.draw(g);
+
+        int positionX = getPosition().x;
+        int positionY = getPosition().y;
+        int width = (int) getSize().getWidth();
+        int height = (int) getSize().getHeight();
+
+        if (getFilled()) {
+            g.fillOval(positionX, positionY, width, height);
+        } else {
+            g.drawOval(positionX, positionY, width, height);
+        }
 
     }
 

@@ -12,8 +12,8 @@ import colab.common.xml.XmlParseException;
  */
 public abstract class Shape extends Drawable {
 
-    protected Dimension size;
-    protected boolean filled;
+    private Dimension size;
+    private boolean filled;
 
     /**
      * Constructs an empty Shape.

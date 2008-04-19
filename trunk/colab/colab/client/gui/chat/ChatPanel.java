@@ -62,7 +62,7 @@ final class ChatPanel extends ClientChannelPanel {
                     } else {
                         if (!textbox.getText().matches("\\A\\s*\\z")) {
                             // additional "write message" functionality
-                            // TODO: should probably be refactored to own method
+                            // TODO should probably be refactored to own method
                             pendingMessages.addLast(
                                     new ChatChannelData(textbox.getText(),
                                             getUsername()));

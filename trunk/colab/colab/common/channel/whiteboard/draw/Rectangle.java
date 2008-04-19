@@ -39,17 +39,17 @@ public class Rectangle extends Shape {
     }
 
     /** {@inheritDoc} */
-    protected void drawDrawable(Graphics g) {
-        if (this.filled) {
-            g.fillRect(position.x,
-                    position.y,
-                    (int)size.getWidth(),
-                    (int)size.getHeight());
+    protected void drawDrawable(final Graphics g) {
+        if (getFilled()) {
+            g.fillRect(getPosition().x,
+                       getPosition().y,
+                       (int) getSize().getWidth(),
+                       (int) getSize().getHeight());
         } else {
-            g.drawRect(position.x,
-                    position.y,
-                    (int)size.getWidth(),
-                    (int)size.getHeight());
+            g.drawRect(getPosition().x,
+                       getPosition().y,
+                       (int) getSize().getWidth(),
+                       (int) getSize().getHeight());
         }
     }
 

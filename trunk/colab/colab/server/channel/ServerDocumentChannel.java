@@ -19,7 +19,6 @@ import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.ChannelName;
-import colab.common.naming.UserName;
 import colab.server.file.ChannelFile;
 
 /**

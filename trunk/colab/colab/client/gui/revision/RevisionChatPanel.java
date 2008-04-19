@@ -39,11 +39,12 @@ public class RevisionChatPanel extends RevisionPanel {
     protected Vector<Revision> buildRevisionList() {
         Vector<Revision> list = new Vector<Revision>();
 
-        ChannelDataSet dataSet = channel.getChannelData();
+        ChannelDataSet dataSet = getChannel().getChannelData();
         for (Object o : dataSet.getAll()) {
             ChannelData data = (ChannelData)o;
 
-            if (data != null && data.getCreator() != null && data.getTimestamp() != null) {
+            if (data != null && data.getCreator() != null
+                    && data.getTimestamp() != null) {
                 list.add(new Revision(data));
             }
         }

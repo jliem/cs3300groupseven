@@ -56,7 +56,7 @@ class ParagraphEditor extends JTextArea {
     private Timer timer;
 
     /** Timer delay in ms. */
-    private final int TIMER_DELAY = 2000000;
+    private static final int TIMER_DELAY = 2000000;
 
     public ParagraphEditor(final ClientDocumentChannel channel,
             final DocumentPanel documentPanel,

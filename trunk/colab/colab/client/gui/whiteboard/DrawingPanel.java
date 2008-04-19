@@ -30,21 +30,21 @@ import colab.common.channel.whiteboard.draw.Drawable;
 import colab.common.channel.whiteboard.draw.Point;
 
 /**
- *
- * Drawing panel class for whiteboard.
- *
+ * Drawing panel for whiteboard.
  */
 public class DrawingPanel extends JPanel implements MouseInputListener {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     private static final int BOUNDS_MARGIN = 5;
-    private static int PEN_THICKNESS = 3;
     private static final Paint PEN_PAINT = Color.BLACK;
     private static final Color BACKGROUND_COLOR = Color.WHITE;
 
     private static final int ARRAYLIST_INITIAL_CAPACITY = 800;
     private static final int DRAWABLELIST_INITIAL_CAPACITY = 50;
 
-    private static final long serialVersionUID = 1L;
+    private int penThickness = 3;
 
     private BufferedImage imgBuffer = null;
     private Point oldPoint = null;
@@ -61,10 +61,10 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         this(null);
     }
 
-    public DrawingPanel(BufferedImage image) {
-        addMouseListener (this);
-        addMouseMotionListener (this);
-        setBackground (BACKGROUND_COLOR);
+    public DrawingPanel(final BufferedImage image) {
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        setBackground(BACKGROUND_COLOR);
 
         isActive = false;
         list = new ArrayList<Point>(ARRAYLIST_INITIAL_CAPACITY);
@@ -77,12 +77,13 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         imgBuffer = image;
 
         if (imgBuffer != null) {
-            setPreferredSize(new Dimension(imgBuffer.getWidth(),imgBuffer.getHeight()));
+            setPreferredSize(new Dimension(
+                    imgBuffer.getWidth(), imgBuffer.getHeight()));
         }
 
     }
 
-    public void setToolType(ToolType type) {
+    public void setToolType(final ToolType type) {
         this.tool = type;
     }
 
@@ -90,15 +91,15 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
      * <P>Set the pen thickness.</P>
      * @param thickness the pen thickness value
      */
-    public void setThickness(int thickness) {
-        PEN_THICKNESS = thickness;
+    public void setThickness(final int thickness) {
+        penThickness = thickness;
     }
 
     /**
      * Clear the drawing field and all saved points.
      *
      */
-    public void clear () {
+    public void clear() {
         imgBuffer = null;
         oldPoint = null;
         dirtyBounds = true;
@@ -108,10 +109,11 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
     }
 
     /**
-     * Load a new image to be displayed in this Drawing Field
+     * Load a new image to be displayed in this Drawing Field.
+     *
      * @param image the image to load
      */
-    public void loadImage(BufferedImage image) {
+    public void loadImage(final BufferedImage image) {
         imgBuffer = image;
     }
 
@@ -124,46 +126,50 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
      * @param height the new height
      * @return a new BufferedImage which is the original source image scaled
      */
-    private BufferedImage scale(BufferedImage source, int width, int height) {
+    private BufferedImage scale(final BufferedImage source, final int width,
+            final int height) {
+
         return toBufferedImage(source.getScaledInstance(width, height,
                 Image.SCALE_SMOOTH));
+
     }
 
     /**
-     * <P>Scales a BufferedImage with an option to
-     * preserve the original aspect ratio.</P>
-     * <P>This method guarantees that if aspect ratio preservation is selected,
-     * the returned image will have a smaller or equal
-     * width and a smaller or equal height than the parameters. If preservation is not selected,
-     * the returned image will have width and height equal to the parameters specified.</P>
+     * Scales a BufferedImage with an option to preserve the original aspect
+     * ratio.
+     *
+     * This method guarantees that if aspect ratio preservation is selected, the
+     * returned image will have a smaller or equal width and a smaller or equal
+     * height than the parameters. If preservation is not selected, the returned
+     * image will have width and height equal to the parameters specified.
      *
      * @param source the original image to scale
      * @param width the new maximum width
      * @param height the new maximum height
-     * @param preserveAspectRatio - whether the aspect ratio should be preserved when scaling
+     * @param preserveAspectRatio whether the aspect ratio should be preserved
+     *                            when scaling
      * @return a BufferedImage which is the original source image scaled to the
-     * specified width and height or smaller, and whose aspect ratio is preserved. If the
-     * image did not need to be scaled because it was smaller than the given width and height
-     * already, a reference to the same image is returned. In all other cases a new BufferedImage
-     * object will be created.
+     *         specified width and height or smaller, and whose aspect ratio is
+     *         preserved. If the image did not need to be scaled because it was
+     *         smaller than the given width and height already, a reference to
+     *         the same image is returned. In all other cases a new
+     *         BufferedImage object will be created.
      */
-    public BufferedImage scale(BufferedImage source, int width, int height,
-            boolean preserveAspectRatio) {
+    public BufferedImage scale(final BufferedImage source, final int width,
+            final int height, final boolean preserveAspectRatio) {
 
         if (preserveAspectRatio) {
-            /*
-             * Resizing algorithm as follows:
+            /* Resizing algorithm as follows:
              *
              * 1) Check whether the image is within the bounds. If so, return.
              * 2) Find the larger of width and height.
-             * 	2a) If the larger dimension is outside the bounds, scale using that.
-             * 	2b) Else, scale using the smaller dimension (one of these must be true,
-             * 		or case 1 would have applied.)
-             * 3) It is now possible the dimension not scaled is outside the bounds
-             * (demonstrate by drawing a square), so check both and repeat the process
-             * if needed.
-             *
-             */
+             *  2a) If the larger dimension is outside the bounds, scale using
+             *      that.
+             *  2b) Else, scale using the smaller dimension (one of these must
+             *      be true, or case 1 would have applied.)
+             * 3) It is now possible the dimension not scaled is outside the
+             *    bounds (demonstrate by drawing a square), so check both and
+             *    repeat the process if needed. */
 
             // First figure out whether we'll need to scale at all
             if (source.getWidth() <= width && source.getHeight() <= height) {
@@ -173,8 +179,9 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
             BufferedImage result;
 
 
-            if ((source.getWidth() > source.getHeight() &&
-                    source.getWidth() > width) || (source.getHeight() <= height)) {
+            if ((source.getWidth() > source.getHeight()
+                    && source.getWidth() > width)
+                    || (source.getHeight() <= height)) {
                 result = scale(source, width, -1);
             } else {
                 result = scale(source, -1, height);
@@ -192,23 +199,26 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
     }
 
     /**
-     * <P>Converts an Image to a BufferedImage</P>
-     * <P>From http://javaalmanac.com/egs/java.awt.image/Image2Buf.html</P>
+     * Converts an Image to a BufferedImage.
+     *
+     * From http://javaalmanac.com/egs/java.awt.image/Image2Buf.html
      *
      * @param image the Image to convert to a BufferedImage
      * @return a buffered image with the contents of an image
      */
-    private BufferedImage toBufferedImage(Image image) {
-        if (image instanceof BufferedImage) {
-            return (BufferedImage)image;
+    private BufferedImage toBufferedImage(final Image inputImage) {
+        if (inputImage instanceof BufferedImage) {
+            return (BufferedImage) inputImage;
         }
 
         // This code ensures that all the pixels in the image are loaded
-        image = new ImageIcon(image).getImage();
+        Image image = new ImageIcon(inputImage).getImage();
 
-        // Create a buffered image with a format that's compatible with the screen
+        // Create a buffered image with a format that's compatible with
+        // the screen
         BufferedImage bimage = null;
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsEnvironment ge =
+            GraphicsEnvironment.getLocalGraphicsEnvironment();
         try {
             // Determine the type of transparency of the new buffered image
             int transparency = Transparency.OPAQUE;
@@ -218,14 +228,15 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
             GraphicsConfiguration gc = gs.getDefaultConfiguration();
             bimage = gc.createCompatibleImage(
                 image.getWidth(null), image.getHeight(null), transparency);
-        } catch (HeadlessException e) {
+        } catch (final HeadlessException e) {
             // The system does not have a screen
         }
 
         if (bimage == null) {
             // Create a buffered image using the default color model
             int type = BufferedImage.TYPE_INT_RGB;
-            bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
+            bimage = new BufferedImage(
+                    image.getWidth(null), image.getHeight(null), type);
         }
 
         // Copy image to buffered image
@@ -257,8 +268,9 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         }
 
         // If the bounds do not need to be re-calculated, exit at once
-        if (!dirtyBounds)
+        if (!dirtyBounds) {
             return true;
+        }
 
         left = getWidth();
         right = 0;
@@ -292,40 +304,50 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         bottom += BOUNDS_MARGIN;
 
         // Adjust for pen thickness, probably unnecessary
-        left -= PEN_THICKNESS/2;
-        right += PEN_THICKNESS/2;
-        top -= PEN_THICKNESS/2;
-        bottom += PEN_THICKNESS/2;
+        left -= penThickness/2;
+        right += penThickness/2;
+        top -= penThickness/2;
+        bottom += penThickness/2;
 
         // Check that bounds are not outside entire picture
-        if (left < 0) left = 0;
-        if (right > getWidth()) right = getWidth();
-        if (top < 0) top = 0;
-        if (bottom > getHeight()) bottom = getHeight();
-
+        if (left < 0) {
+            left = 0;
+        }
+        if (right > getWidth()) {
+            right = getWidth();
+        }
+        if (top < 0) {
+            top = 0;
+        }
+        if (bottom > getHeight()) {
+            bottom = getHeight();
+        }
 
         dirtyBounds = false;
         return true;
     }
 
     /**
-     * <P>Crops the image based on the global bounds.</P>
-     * <P>IMPORTANT--assumes calcBounds() has already been <em>successfully</em> called.</P>
+     * Crops the image based on the global bounds.
+     *
+     * assumes calcBounds() has already been successfully called.
      *
      * @return the cropped image
      */
     public BufferedImage cropImage() {
 
-        BufferedImage result = new BufferedImage(right-left, bottom-top, BufferedImage.TYPE_INT_RGB);
+        BufferedImage result = new BufferedImage(
+                right-left, bottom-top, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = result.createGraphics();
 
         try {
-            g2.drawImage((getImage()).getSubimage(left, top, right-left, bottom-top),
+            g2.drawImage((getImage()).getSubimage(
+                    left, top, right-left, bottom-top),
                     null, 0, 0);
         } catch (RasterFormatException re) {
             JOptionPane.showMessageDialog(this,
-                    "Bad raster\n" +
-                    re.getStackTrace(),
+                    "Bad raster\n"
+                    + re.getStackTrace(),
                     "Invalid Arguments", JOptionPane.WARNING_MESSAGE);
             re.printStackTrace();
         }
@@ -337,17 +359,19 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
 
     public BufferedImage getImage() {
 
-        if ((imgBuffer == null) ||
-                ((imgBuffer.getWidth() != getWidth()
+        if ((imgBuffer == null)
+                || ((imgBuffer.getWidth() != getWidth()
                         || imgBuffer.getHeight() != getHeight()))) {
 
             BufferedImage old = imgBuffer;
-            //imgBuffer = new BufferedImage (getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
-            imgBuffer = new BufferedImage (getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+            //imgBuffer = new BufferedImage(
+            //      getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+            imgBuffer = new BufferedImage(
+                    getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
 
             Graphics g = imgBuffer.getGraphics();
-            g.setColor (BACKGROUND_COLOR);
-            g.fillRect (0, 0, getWidth(), getHeight());
+            g.setColor(BACKGROUND_COLOR);
+            g.fillRect(0, 0, getWidth(), getHeight());
 
             if (old != null) {
                 ((Graphics2D) imgBuffer.getGraphics()).drawRenderedImage(old,
@@ -358,12 +382,13 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         return imgBuffer;
     }
 
-    protected void paintComponent (Graphics g) {
+    protected void paintComponent(final Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.drawRenderedImage(getImage(), AffineTransform.getTranslateInstance(0,0));
+        g2d.drawRenderedImage(getImage(),
+                AffineTransform.getTranslateInstance(0, 0));
     }
 
-    public void mouseClicked(MouseEvent me) {
+    public void mouseClicked(final MouseEvent me) {
         if (me.getButton() == MouseEvent.BUTTON1) {
             isActive = true;
             mouseDragged(me);
@@ -371,7 +396,7 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         }
     }
 
-    public void mousePressed(MouseEvent me) {
+    public void mousePressed(final MouseEvent me) {
         if (me.getButton() == MouseEvent.BUTTON1) {
             // Whenever the user clicks, save the point
             oldPoint = new Point(me.getPoint());
@@ -381,7 +406,7 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         }
     }
 
-    public void mouseReleased(MouseEvent me) {
+    public void mouseReleased(final MouseEvent me) {
         // When the user lifts the mouse button, release the old saved data
         if (me.getButton() == MouseEvent.BUTTON1) {
             oldPoint = null;
@@ -392,16 +417,16 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
         repaint();
     }
 
-    public void mouseMoved(MouseEvent me) {}
+    public void mouseMoved(final MouseEvent me) {}
 
-    public void mouseEntered(MouseEvent me) {}
+    public void mouseEntered(final MouseEvent me) {}
 
-    public void mouseExited(MouseEvent me) {
+    public void mouseExited(final MouseEvent me) {
         // Refresh if the mouse leaves the field
         repaint();
     }
 
-    public void mouseDragged(MouseEvent me) {
+    public void mouseDragged(final MouseEvent me) {
         if (isActive) {
             Point p = new Point(me.getPoint());
             //System.out.println(p);
@@ -413,7 +438,7 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
             Graphics g = getImage().getGraphics();
 
             ((Graphics2D) g).setPaint(PEN_PAINT);
-            ((Graphics2D) g).setStroke(new BasicStroke(PEN_THICKNESS));
+            ((Graphics2D) g).setStroke(new BasicStroke(penThickness));
 
             g.drawLine(oldPoint.x, oldPoint.y, p.x, p.y);
 
@@ -431,10 +456,10 @@ public class DrawingPanel extends JPanel implements MouseInputListener {
              */
 
             // Component#repaint(x, y, width, height)
-             repaint(Math.min(p.x, oldPoint.x)-PEN_THICKNESS,
-                    Math.min(p.y, oldPoint.y)-PEN_THICKNESS,
-                    Math.max(p.x, oldPoint.x)+PEN_THICKNESS,
-                    Math.max(p.y, oldPoint.y)+PEN_THICKNESS);
+             repaint(Math.min(p.x, oldPoint.x)-penThickness,
+                    Math.min(p.y, oldPoint.y)-penThickness,
+                    Math.max(p.x, oldPoint.x)+penThickness,
+                    Math.max(p.y, oldPoint.y)+penThickness);
 
 
             // Save this point

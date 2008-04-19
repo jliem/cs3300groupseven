@@ -207,8 +207,8 @@ public final class DocumentParagraph implements Serializable,
     /**
      * Copies this paragaph's change log, without resetting the internal log.
      *
-     * @return a DocumentParagraphDiff holding changes to this paragraph since the last
-     *          {@link #getDifferences()} or {@link #resetDifferences()}
+     * @return a DocumentParagraphDiff holding changes to this paragraph since
+     *         the last {@link #getDifferences()} or {@link #resetDifferences()}
      */
     public DocumentParagraphDiff peekDifferences() {
         return differences.copy();

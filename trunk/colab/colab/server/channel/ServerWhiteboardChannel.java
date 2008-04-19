@@ -16,7 +16,7 @@ import colab.common.naming.ChannelName;
 public final class ServerWhiteboardChannel
         extends ServerChannel<WhiteboardChannelData> {
 
-    public ServerWhiteboardChannel(ChannelName name) {
+    public ServerWhiteboardChannel(final ChannelName name) {
         super(name);
         // TODO Auto-generated constructor stub
     }
@@ -27,7 +27,7 @@ public final class ServerWhiteboardChannel
         // TODO finish this
     }
 
-    public void add(WhiteboardChannelData data) {
+    public void add(final WhiteboardChannelData data) {
         // TODO Auto-generated method stub
 
     }
@@ -36,7 +36,7 @@ public final class ServerWhiteboardChannel
         return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
 
-    public List<WhiteboardChannelData> getLastData(int count) {
+    public List<WhiteboardChannelData> getLastData(final int count) {
         // TODO Auto-generated method stub
         return null;
     }

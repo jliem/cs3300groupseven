@@ -63,10 +63,11 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         // have changed--necessary to fix ugly GUI transitions
         documentPanel.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 if (arg0.getActionCommand().equals("panels arranged")) {
 
-                    DebugManager.debug("Panels were re-arranged, frame is repainting");
+                    DebugManager.debug(
+                            "Panels were re-arranged, frame is repainting");
 
                     pack();
                     repaint();
@@ -99,10 +100,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
         try {
             List<ChannelData> data = client.getLastData(channel.getId(), -1);
             for (final ChannelData d : data) {
-
-                if (d instanceof EditDocChannelData) {
-                    // Don't apply
-                } else {
+                if (!(d instanceof EditDocChannelData)) {
                     channel.add(d);
                 }
             }

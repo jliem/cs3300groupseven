@@ -16,10 +16,11 @@ import colab.common.xml.XmlSerializable;
  */
 public abstract class Drawable implements Serializable, XmlSerializable {
 
-    protected Point position;
+    private Point position;
 
-    protected Color color;
-    protected int penThickness;
+    private Color color;
+
+    private int penThickness;
 
     /**
      * Constructs an empty Shape.
@@ -44,7 +45,7 @@ public abstract class Drawable implements Serializable, XmlSerializable {
      * Draw this Drawable object.
      * @param g the Graphics object
      */
-    public final void draw(Graphics g) {
+    public final void draw(final Graphics g) {
 
         ((Graphics2D) g).setPaint(color);
         ((Graphics2D) g).setStroke(new BasicStroke(penThickness));
@@ -71,6 +72,34 @@ public abstract class Drawable implements Serializable, XmlSerializable {
      */
     public void setPosition(final Point position) {
         this.position = position;
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * @param color the color
+     */
+    public void setColor(final Color color) {
+        this.color = color;
+    }
+
+    /**
+     * @return the pen thickness
+     */
+    public int getPenThickness() {
+        return penThickness;
+    }
+
+    /**
+     * @param penThickness the pen thickness
+     */
+    public void setPenThickness(final int penThickness) {
+        this.penThickness = penThickness;
     }
 
     /** {@inheritDoc} */

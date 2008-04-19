@@ -1,10 +1,8 @@
 package colab.common.channel.whiteboard.draw;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 /**
  * A simple elliptical shape.
@@ -35,7 +33,7 @@ public class Ellipse extends Shape {
     }
 
     @Override
-    protected void drawDrawable(Graphics g) {
+    protected void drawDrawable(final Graphics g) {
         // TODO Auto-generated method stub
 
     }

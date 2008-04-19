@@ -10,9 +10,12 @@ import colab.common.naming.ChannelName;
 
 public class ClientWhiteboardChannel extends ClientChannel {
 
-    public static final long serialVersionUID = 1;
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
-    public ClientWhiteboardChannel(final ChannelName name) throws RemoteException {
+    public ClientWhiteboardChannel(final ChannelName name)
+            throws RemoteException {
+
         super(name);
 
     }
@@ -28,7 +31,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
         return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
 
-    public void add(ChannelData data) throws RemoteException {
+    public void add(final ChannelData data) throws RemoteException {
         // TODO Auto-generated method stub
 
     }

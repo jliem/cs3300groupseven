@@ -4,7 +4,11 @@ import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 
 public interface WhiteboardListener {
-    public void onDelete(LayerIdentifier id);
-    public void onInsert(int offset, Layer layer);
-    public void onShift(LayerIdentifier id, int offset);
+
+    void onDelete(LayerIdentifier id);
+
+    void onInsert(int offset, Layer layer);
+
+    void onShift(LayerIdentifier id, int offset);
+
 }

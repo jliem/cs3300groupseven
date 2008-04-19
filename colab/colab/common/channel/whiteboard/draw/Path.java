@@ -82,7 +82,7 @@ public class Path extends Drawable {
     }
 
     /** {@inheritDoc} */
-    protected void drawDrawable(Graphics g) {
+    protected void drawDrawable(final Graphics g) {
 
         for (int i=0; i<points.size()-1; i++) {
             Point one = points.get(i);

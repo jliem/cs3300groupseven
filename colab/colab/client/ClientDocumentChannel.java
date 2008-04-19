@@ -99,22 +99,25 @@ public final class ClientDocumentChannel extends ClientChannel {
     }
 
 
-    public void deleteParagraph(ParagraphIdentifier id) throws RemoteException {
+    public void deleteParagraph(final ParagraphIdentifier id)
+            throws RemoteException {
         currentDocument.delete(id);
     }
 
     public void changeHeaderLevel(final int headerLevel,
             final ParagraphIdentifier id) throws RemoteException {
         currentDocument.get(id).setHeaderLevel(headerLevel);
-        //TODO: actually queue up changes, send to server after
-        // time or reqs are met
+        /* TODO actually queue up changes, send to server after
+         * time or reqs are met */
     }
 
-    public void requestLock(UserName lockHolder, ParagraphIdentifier id) throws RemoteException {
+    public void requestLock(final UserName lockHolder,
+            final ParagraphIdentifier id) throws RemoteException {
         add(new LockDocChannelData(lockHolder, id));
     }
 
-    public void requestUnlock(ParagraphIdentifier id) throws RemoteException {
+    public void requestUnlock(final ParagraphIdentifier id)
+            throws RemoteException {
         add(new LockDocChannelData(null, id));
     }
 

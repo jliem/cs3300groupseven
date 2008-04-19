@@ -348,7 +348,7 @@ public class ColabServer extends UnicastRemoteObject
      */
     public static void main(final String[] args) throws Exception {
 
-        DebugManager.enableExceptions(true); // TODO: remove for demo
+        DebugManager.enableExceptions(true);
 
         Logger.enable(true);
 

@@ -18,8 +18,8 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
     private ParagraphIdentifier id;
 
-    public ParagraphChangeMerger(DocumentPanel panel,
-            ParagraphIdentifier id) {
+    public ParagraphChangeMerger(final DocumentPanel panel,
+            final ParagraphIdentifier id) {
 
         if (panel == null) {
             throw new IllegalArgumentException("DocumentPanel cannot be null");
@@ -30,7 +30,7 @@ public class ParagraphChangeMerger implements ParagraphListener {
         user = panel.getUsername();
     }
 
-    public void onDelete(int offset, int length) {
+    public void onDelete(final int offset, final int length) {
 
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.delete(offset, length);
@@ -45,7 +45,7 @@ public class ParagraphChangeMerger implements ParagraphListener {
     }
 
 
-    public void onHeaderChange(int headerLevel) {
+    public void onHeaderChange(final int headerLevel) {
         // TODO Auto-generated method stub
 
     }

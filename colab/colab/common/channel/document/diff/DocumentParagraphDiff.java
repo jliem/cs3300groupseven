@@ -16,7 +16,11 @@ import colab.common.xml.XmlSerializable;
  *
  * @see DocumentParagraph
  */
-public final class DocumentParagraphDiff implements XmlSerializable, Serializable {
+public final class DocumentParagraphDiff
+        implements XmlSerializable, Serializable {
+
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private List<Applicable> changes;
 

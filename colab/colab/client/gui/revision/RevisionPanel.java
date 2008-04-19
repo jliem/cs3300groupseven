@@ -12,14 +12,12 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import colab.client.ClientChannel;
-import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataIdentifier;
-import colab.common.channel.ChannelDataSet;
 
 public abstract class RevisionPanel extends JPanel {
 
-    protected ClientChannel channel;
+    private ClientChannel channel;
 
     private JPanel display;
     private JList revisionList;
@@ -48,6 +46,10 @@ public abstract class RevisionPanel extends JPanel {
         this.setLayout(new GridLayout(2, 1));
         add(revisionScroll);
         add(display);
+    }
+
+    protected ClientChannel getChannel() {
+        return channel;
     }
 
     protected Component addToDisplay(final Component c) {

@@ -498,8 +498,9 @@ public class ColabClient extends UnicastRemoteObject
     public Collection<UserName> getActiveUsers(final ChannelName channelName)
             throws RemoteException {
 
-        if (connection != null)
+        if (connection != null) {
             return connection.getActiveUsers(channelName);
+        }
 
         return null;
 

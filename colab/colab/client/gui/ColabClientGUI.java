@@ -430,7 +430,7 @@ class ColabClientGUI extends JFrame {
             // to log out (ex. a window was closed, and then we try to close
             // the parent which triggers another logoff)
 
-            // TODO: Think of a better way of handling such situations
+            // TODO Think of a better way of handling such situations
         } catch (final Exception e) {
             DebugManager.windowClose(e);
         }
@@ -541,15 +541,9 @@ class ColabClientGUI extends JFrame {
 
     public static void main(final String[] args) throws RemoteException {
 
-        DebugManager.enableExceptions(true); // TODO: remove for demo
+        DebugManager.enableExceptions(true);
 
         Logger.enable(true);
-
-        // Assign a security manager, in the event
-        // that dynamic classes are loaded.
-        // if (System.getSecurityManager() == null) {
-        // System.setSecurityManager(new RMISecurityManager());
-        // }
 
         new ColabClientGUI();
 

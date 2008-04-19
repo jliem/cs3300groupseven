@@ -3,8 +3,6 @@ package colab.client.gui.document;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,7 +80,9 @@ public final class DocumentPanel extends ClientChannelPanel {
         editors = Collections.synchronizedList(
                 new ArrayList<ParagraphEditor>());
 
-        //ParagraphEditor newParagraph = addParagraph(new DocumentParagraph("", 0, username, new ParagraphIdentifier(new Integer(0)), new Date()));
+        //ParagraphEditor newParagraph = addParagraph(new DocumentParagraph(
+        //        "", 0, username, new ParagraphIdentifier(new Integer(0)),
+        //        new Date()));
 
         arrangePanel();
 
@@ -126,18 +126,20 @@ public final class DocumentPanel extends ClientChannelPanel {
         editors = Collections.synchronizedList(
                 new ArrayList<ParagraphEditor>());
 
-        /* TODO: potential sync issues (what if something
+        /* TODO potential sync issues (what if something
          * is added while the window is being built?) */
         Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
         int paragraphCount = 0;
         while (iter.hasNext()) {
             DocumentParagraph para = iter.next();
             insertParagraphEditor(paragraphCount, para);
-            DebugManager.debug("Paragraph contents: " + para.getContents() + ", id is " + para.getId());
+            DebugManager.debug("Paragraph contents: "
+                    + para.getContents() + ", id is " + para.getId());
             paragraphCount++;
         }
     }
-    private void addTestParagraphs() {
+
+    /*private void addTestParagraphs() {
         document.insert(0, new DocumentParagraph(
                 "Our first paragraph!", 4, super.getUsername(),
                 new ParagraphIdentifier(1), new Date()));
@@ -154,16 +156,16 @@ public final class DocumentPanel extends ClientChannelPanel {
                 new Date());
         document.insert(2, last);
         last.unlock();
-    }
+    }*/
 
-    public void createNewParagraph(ParagraphIdentifier previous) {
+    public void createNewParagraph(final ParagraphIdentifier previous) {
         InsertDocChannelData data =
             new InsertDocChannelData(previous, super.getUsername());
         this.fireOnMessageSent(data);
     }
 
-    public void deleteParagraph(ParagraphIdentifier id,
-            UserName user) {
+    public void deleteParagraph(final ParagraphIdentifier id,
+            final UserName user) {
 
         DeleteDocChannelData data = new DeleteDocChannelData(id,
                 user, new Date());
@@ -214,10 +216,10 @@ public final class DocumentPanel extends ClientChannelPanel {
 
     }
 
-    private ParagraphEditor addParagraph(final DocumentParagraph para) {
+    /*private ParagraphEditor addParagraph(final DocumentParagraph para) {
         document.insert(editors.size(), para);
         return insertParagraphEditor(editors.size(), para);
-    }
+    }*/
 
     private ParagraphEditor insertParagraphEditor(final int offset,
             final DocumentParagraph paragraph) {
@@ -232,7 +234,7 @@ public final class DocumentPanel extends ClientChannelPanel {
         return editor;
     }
 
-    private ParagraphEditor insertParagraphEditor(
+    /*private ParagraphEditor insertParagraphEditor(
             final ParagraphIdentifier afterID,
             final DocumentParagraph paragraph) {
 
@@ -246,7 +248,7 @@ public final class DocumentPanel extends ClientChannelPanel {
 
         return insertParagraphEditor(i, paragraph);
 
-    }
+    }*/
 
     public void shiftFocus(final ParagraphEditor fromThisOne) {
 

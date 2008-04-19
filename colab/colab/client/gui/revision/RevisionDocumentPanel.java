@@ -11,7 +11,8 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
-import colab.common.channel.document.DocumentChannelData.DocumentChannelDataType;
+import colab.common.channel.document.DocumentChannelData
+                                    .DocumentChannelDataType;
 
 public class RevisionDocumentPanel extends RevisionPanel {
 
@@ -36,15 +37,17 @@ public class RevisionDocumentPanel extends RevisionPanel {
         addToDisplay(text);
     }
 
+    @SuppressWarnings("unchecked")
     protected Vector<Revision> buildRevisionList() {
         Vector<Revision> list = new Vector<Revision>();
 
-        ChannelDataSet<DocumentChannelData> dataSet = channel.getChannelData();
+        ChannelDataSet<DocumentChannelData> dataSet =
+            getChannel().getChannelData();
         for (Object o : dataSet.getAll()) {
             DocumentChannelData data = (DocumentChannelData)o;
 
-            if (data != null && data.getCreator() != null && data.getTimestamp() != null) {
-
+            if (data != null && data.getCreator() != null
+                    && data.getTimestamp() != null) {
                 // Don't add locks
                 if (data.getType() != DocumentChannelDataType.LOCK) {
                     list.add(new Revision(data));

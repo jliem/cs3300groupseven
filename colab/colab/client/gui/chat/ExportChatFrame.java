@@ -190,7 +190,6 @@ public class ExportChatFrame extends JFrame {
 
     private void exportAction() {
 
-        // TODO: add actual export action
         try {
 
             // Try to create/open a file from the path in the text box
@@ -209,10 +208,10 @@ public class ExportChatFrame extends JFrame {
             if (local.isSelected()) {
                 channel.export(exportFile);
             } else if (lines.isSelected()) {
-                // TODO: export per line, requires some server-side
+                // TODO export per line, requires some server-side
                 // fixes (retrieving old history)
             } else {
-                // TODO: total export, requires some server-side
+                // TODO total export, requires some server-side
                 // fixes (retrieving old history)
             }
         } catch (final IOException ex) {

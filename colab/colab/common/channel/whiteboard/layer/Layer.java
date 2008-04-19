@@ -52,8 +52,7 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
         this.label = label;
     }
 
-    public void draw(Graphics graphIn) {
+    public void draw(final Graphics graphIn) {
         // TODO Auto-generated method stub
-        
     }
 }

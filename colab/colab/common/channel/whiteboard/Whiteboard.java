@@ -11,23 +11,23 @@ import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 
 public class Whiteboard implements Drawable {
-    
+
     private List<Layer> layers;
-    
+
     private List<WhiteboardListener> whiteboardListeners;
-    
+
     public Whiteboard() {
-        
+
         this.layers = Collections
             .synchronizedList(new ArrayList<Layer>());
         this.whiteboardListeners = new ArrayList<WhiteboardListener>();
-        
+
     }
-    
+
     public void insert(final LayerIdentifier previous,
             final Layer layer) throws NotApplicableException {
         synchronized(layers) {
-            
+
             int offset = 0;
             if (previous != null) {
                 boolean offsetFound = false;
@@ -45,82 +45,82 @@ public class Whiteboard implements Drawable {
             insert(offset, layer);
         }
     }
-    
+
     public void insert(final int offset, final Layer layer) {
-        
+
         if (layer == null) {
             throw new IllegalArgumentException("Can't insert a null layer");
         }
-        
+
         synchronized(layers) {
-            
+
             if (offset <= layers.size() && offset >= 0) {
                 layers.add(offset, layer);
                 fireOnInsert(offset, layer);
             }
         }
     }
-    
+
     public void shift(final LayerIdentifier id, final int offset) {
-        
+
         if(offset != 0) {
             synchronized(layers) {
                 int index;
                 Layer layer = null;
-                
+
                 for(index = 0; index<layers.size(); index++) {
                     if(layers.get(index).getId().equals(id)) {
                         layer = layers.get(index);
                         break;
                     }
                 }
-                
-                if(layer != null) {
+
+                if (layer != null) {
                     int newIndex = index + offset;
-                    
-                    if(newIndex >= 0 && newIndex < layers.size() && offset != 0) {
-                        if(offset<0) {
+
+                    if (newIndex >= 0 && newIndex < layers.size()
+                            && offset != 0) {
+                        if (offset<0) {
                             layers.add(newIndex, layers.remove(index));
-                        }
-                        else {
+                        } else {
                             layers.add(newIndex-1, layers.remove(index));
                         }
-                        
+
                         fireOnShift(id, offset);
                     }
                 }
             }
         }
     }
-    
+
     public void delete(final LayerIdentifier id) {
         Layer toDelete = null;
-        
+
         synchronized(layers){
-            
+
             for(Layer l : layers) {
                 if(l.getId().equals(id)) {
                     toDelete = l;
                     break;
                 }
             }
-            
+
             if(toDelete!=null) {
                 layers.remove(toDelete);
                 fireOnDelete(id);
             }
         }
     }
-    
+
     public Whiteboard copy() {
-        //TODO: deep copy
+        // TODO deep copy
         return null;
     }
 
-    public Layer get(LayerIdentifier id) {
+    public Layer get(final LayerIdentifier id) {
         Layer layer = null;
         synchronized(layers) {
-    
+
             Iterator<Layer> iter = layers.iterator();
             while(iter.hasNext()) {
                 Layer next = iter.next();
@@ -132,7 +132,7 @@ public class Whiteboard implements Drawable {
         }
         return layer;
     }
-    
+
     public void addDocumentListener(final WhiteboardListener listener) {
 
         whiteboardListeners.add(listener);
@@ -159,7 +159,7 @@ public class Whiteboard implements Drawable {
         }
 
     }
-    
+
     protected void fireOnShift(final LayerIdentifier id, final int offset) {
 
         for (final WhiteboardListener listener : whiteboardListeners) {
@@ -167,7 +167,7 @@ public class Whiteboard implements Drawable {
         }
 
     }
-    
+
     public void draw(final Graphics graphIn) {
         synchronized(layers) {
             for(int i = 0; i<layers.size(); i++) {
@@ -175,7 +175,7 @@ public class Whiteboard implements Drawable {
             }
         }
     }
-    
+
     public void drawLayer(final Graphics graphIn, final LayerIdentifier id) {
         get(id).draw(graphIn);
     }

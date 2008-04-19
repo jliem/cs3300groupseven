@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
 
+import colab.common.channel.whiteboard.Drawable;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
 import colab.common.xml.XmlSerializable;
@@ -14,7 +15,8 @@ import colab.common.xml.XmlSerializable;
 /**
  * A Drawable represents any kind of object drawn onto a layer.
  */
-public abstract class Drawable implements Serializable, XmlSerializable {
+public abstract class Figure implements Drawable,
+        Serializable, XmlSerializable {
 
     private Point position;
 
@@ -25,7 +27,7 @@ public abstract class Drawable implements Serializable, XmlSerializable {
     /**
      * Constructs an empty Shape.
      */
-    public Drawable() {
+    public Figure() {
     }
 
     /**
@@ -33,7 +35,7 @@ public abstract class Drawable implements Serializable, XmlSerializable {
      *
      * @param position the position of this shape on its layer
      */
-    public Drawable(final Point position, final Color color,
+    public Figure(final Point position, final Color color,
             final int penThickness) {
 
         this.position = position;
@@ -41,24 +43,13 @@ public abstract class Drawable implements Serializable, XmlSerializable {
         this.penThickness = penThickness;
     }
 
-    /**
-     * Draw this Drawable object.
-     * @param g the Graphics object
-     */
-    public final void draw(final Graphics g) {
+    /** {@inheritDoc} */
+    public void draw(final Graphics g) {
 
         ((Graphics2D) g).setPaint(color);
         ((Graphics2D) g).setStroke(new BasicStroke(penThickness));
 
-        drawDrawable(g);
     }
-
-    /**
-     * Draws a specific Drawable without setting
-     * the pen color or thickness.
-     * @param g the Graphics object
-     */
-    protected abstract void drawDrawable(Graphics g);
 
     /**
      * @return the position of this shape on its layer

@@ -53,6 +53,12 @@ public final class Community implements Identifiable<CommunityName>,
     private final Set<UserName> members = new HashSet<UserName>();
 
     /**
+     * List of moderators (each moderator should also be in the
+     * members Set).
+     */
+    private final Set<UserName> moderators = new HashSet<UserName>();
+
+    /**
      * A list of actively connected clients.
      */
     private final IdentitySet<ConnectionIdentifier, Connection> clients =
@@ -135,13 +141,38 @@ public final class Community implements Identifiable<CommunityName>,
     }
 
     /**
+     * Adds a user as a moderator. The user must already
+     * be a member of the community.
+     *
+     * @param username the name of the user to add
+     * @throws IllegalStateException if the user is not a member
+     */
+    public void addAsModerator(final UserName username) {
+        // Check whether this user is a member
+        if (!members.contains(username)) {
+            throw new IllegalStateException("Could not add " + username
+                    + " as a moderator because they are not listed as "
+                    + "a member!");
+        }
+
+        moderators.add(username);
+    }
+
+    /**
      * Removes a member from this community's member list.
      *
      * @param username the name of the user to remove
      */
-    public void removeMember(final UserName username) {
-        members.remove(username);
+    public boolean removeMember(final UserName username) {
+
+        boolean result = members.remove(username);
+
+        // If they were a moderator, remove them from that list
+        moderators.remove(username);
+
         fireEvent(new CommunityEvent());
+
+        return result;
     }
 
     /**
@@ -210,6 +241,16 @@ public final class Community implements Identifiable<CommunityName>,
      */
     public boolean isMember(final UserName username) {
         return members.contains(username);
+    }
+
+    /**
+     * Determines whether a user is a moderator of the community.
+     *
+     * @param username the username to check
+     * @return true if the user is a community moderator, false otherwise
+     */
+    public boolean isModerator(final UserName username) {
+        return moderators.contains(username);
     }
 
     /**

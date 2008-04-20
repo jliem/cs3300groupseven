@@ -30,6 +30,7 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
+import colab.server.user.User;
 
 /**
  * The CoLab client application which is used to make requests to the server.
@@ -431,6 +432,22 @@ public class ColabClient extends UnicastRemoteObject
     }
 
     /**
+     * Checks whether the logged in user is a moderator of a given community.
+     *
+     * @param communityName the community name
+     * @return true if the user is a moderator of the community, false otherwise
+     * @throws CommunityDoesNotExistException
+     * @throws RemoteException if an rmi error occurs
+     * @throws CommunityDoesNotExistException if the community did not exist
+     */
+    public boolean isModerator(final CommunityName communityName)
+            throws RemoteException, CommunityDoesNotExistException {
+
+        return connection.isModerator(communityName);
+
+    }
+
+    /**
      * Create a new community on the server.
      *
      * @param name the community name
@@ -486,6 +503,44 @@ public class ColabClient extends UnicastRemoteObject
             this.connectionState = ConnectionState.LOGGED_IN;
         }
 
+    }
+
+    /**
+     * Returns the users which are members of this community.
+     *
+     * @param communityName the name of the community
+     * @return a collection containing every user of this community
+     * @throws CommunityDoesNotExistException if the community did not exist
+     * @throws RemoteException if a remote exception occurs
+     */
+    public Collection<UserName> getMembers(final CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException {
+
+        if (connection != null) {
+            return connection.getMembers(communityName);
+        }
+
+        return null;
+    }
+
+    /**
+     * Removes a user as a member from the community.
+     *
+     * @param userName the username to remove
+     * @param communityName the name of the community
+     * @return true if the remove was successful, false otherwise.
+     * @throws CommunityDoesNotExistException if the community does not exist
+     * @throws RemoteException if a remote exception occurs
+     */
+    public boolean removeMember(final UserName userName,
+            final CommunityName communityName)
+            throws CommunityDoesNotExistException, RemoteException {
+
+        if (connection != null) {
+            return connection.removeMember(userName, communityName);
+        }
+
+        return false;
     }
 
     /**

@@ -32,11 +32,9 @@ public class Ellipse extends Shape {
         return "Ellipse";
     }
 
-    @Override
     /** {@inheritDoc} */
-    public void draw(final Graphics g) {
-
-        super.draw(g);
+    @Override
+    public void doDrawing(final Graphics g) {
 
         int positionX = getPosition().x;
         int positionY = getPosition().y;

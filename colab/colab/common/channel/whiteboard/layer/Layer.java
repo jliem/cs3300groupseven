@@ -1,6 +1,8 @@
 package colab.common.channel.whiteboard.layer;
 
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +29,9 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
 
     private final List<Figure> figures;
 
+    /** Derived from the figures list. */
+    private final java.awt.Rectangle contentBounds;
+
     /**
      * Constructs a new Layer.
      *
@@ -36,6 +41,7 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
         this.id = id;
         this.listeners = new ArrayList<LayerListener>();
         this.figures = new LinkedList<Figure>();
+        this.contentBounds = new java.awt.Rectangle(0, 0, 0, 0);
     }
 
     public void addLayerListener(final LayerListener listener) {
@@ -84,14 +90,40 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
     }
 
     public void addFigure(final Figure figure) {
+
+        // Add the figure to the list
         this.figures.add(figure);
+
+        // Expands the bounds if necessary to contain the new figure
+        this.contentBounds.add(figure.getBounds());
+
+        // Notify listeners
         this.fireOnFigureAdded(figure);
+
     }
 
     public void draw(final Graphics graphIn) {
         for (Figure figure : figures) {
             figure.draw(graphIn);
         }
+    }
+
+    public BufferedImage croppedImage() {
+
+        BufferedImage image = new BufferedImage(
+                contentBounds.width, contentBounds.height,
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics g = image.getGraphics();
+
+        g.translate(contentBounds.x, contentBounds.y);
+
+        draw(g);
+
+        g.translate(-contentBounds.x, -contentBounds.y);
+
+        return image;
+
     }
 
 }

@@ -40,9 +40,7 @@ public class Rectangle extends Shape {
 
     /** {@inheritDoc} */
     @Override
-    public void draw(final Graphics g) {
-
-        super.draw(g);
+    public void doDrawing(final Graphics g) {
 
         int positionX = getPosition().x;
         int positionY = getPosition().y;

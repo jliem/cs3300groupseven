@@ -2,6 +2,7 @@ package colab.common.channel.whiteboard.draw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -44,11 +45,27 @@ public abstract class Figure implements Drawable,
     }
 
     /** {@inheritDoc} */
-    public void draw(final Graphics g) {
+    public final void draw(final Graphics g) {
 
         ((Graphics2D) g).setPaint(color);
         ((Graphics2D) g).setStroke(new BasicStroke(penThickness));
 
+        if (inClippedRegion(g)) {
+            doDrawing(g);
+        }
+
+    }
+
+    protected abstract void doDrawing(final Graphics g);
+
+    abstract Dimension getSize();
+
+    public java.awt.Rectangle getBounds() {
+        return new java.awt.Rectangle(getPosition(), getSize());
+    }
+
+    protected boolean inClippedRegion(final Graphics graphics) {
+        return graphics.getClipBounds().intersects(getBounds());
     }
 
     /**

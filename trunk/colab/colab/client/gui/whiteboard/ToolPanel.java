@@ -10,9 +10,10 @@ import javax.swing.JPanel;
 
 import colab.client.gui.whiteboard.draw.EllipseDrawingTool;
 import colab.client.gui.whiteboard.draw.LineDrawingTool;
+import colab.client.gui.whiteboard.draw.PathDrawingTool;
 import colab.client.gui.whiteboard.draw.RectangleDrawingTool;
 
-public class WhiteboardChannelToolPanel extends JPanel{
+public class ToolPanel extends JPanel{
 
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
@@ -25,7 +26,7 @@ public class WhiteboardChannelToolPanel extends JPanel{
     private JButton lineButton;
     //private JColorChooser colorChooser;
 
-    public WhiteboardChannelToolPanel(
+    public ToolPanel(
             final WhiteboardChannelPanel parentPanel) {
 
         pencilButton = new JButton(new ImageIcon("pencil.gif"));
@@ -34,6 +35,12 @@ public class WhiteboardChannelToolPanel extends JPanel{
         clearEllipseButton = new JButton(new ImageIcon("clearellipse.gif"));
         solidRectangleButton = new JButton(new ImageIcon("solidrect.gif"));
         clearRectangleButton = new JButton(new ImageIcon("clearrectangle.gif"));
+
+        pencilButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                parentPanel.setTool(new PathDrawingTool(parentPanel));
+            }
+        });
 
         lineButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {

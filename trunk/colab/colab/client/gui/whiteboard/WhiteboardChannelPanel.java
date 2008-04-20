@@ -28,7 +28,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
     private final ClientWhiteboardChannel channel;
 
-    private WhiteboardChannelToolPanel toolPanel;
+    private ToolPanel toolPanel;
     private DrawingPanel drawingPanel;
     private JColorChooser colorChooser;
     private LayerSelectionPanel layerPanel;
@@ -43,7 +43,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         drawingPanel = new DrawingPanel(this);
         drawingPanel.setPreferredSize(new Dimension(500, 400));
 
-        toolPanel = new WhiteboardChannelToolPanel(this);
+        toolPanel = new ToolPanel(this);
         toolPanel.setPreferredSize(new Dimension(100, 300));
         JPanel toolPanelWrapper = new FixedSizePanel(
                 toolPanel, new Dimension(100, 200));

@@ -107,8 +107,6 @@ public final class ClientDocumentChannel extends ClientChannel {
     public void changeHeaderLevel(final int headerLevel,
             final ParagraphIdentifier id) throws RemoteException {
         currentDocument.get(id).setHeaderLevel(headerLevel);
-        /* TODO actually queue up changes, send to server after
-         * time or reqs are met */
     }
 
     public void requestLock(final UserName lockHolder,

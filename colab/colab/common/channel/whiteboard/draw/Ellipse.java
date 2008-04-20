@@ -26,7 +26,18 @@ public class Ellipse extends Shape {
 
         super(position, size, color, penThickness, filled);
     }
-
+    
+    /* {@inheritDoc}*/
+    @Override
+    public Ellipse copy() {
+        java.awt.Point position = getPosition();
+        Dimension size = getSize();
+        
+        return new Ellipse(new Point(position.x, position.y), 
+                new Dimension(size.width, size.height), 
+                this.getColor(), this.getPenThickness(), 
+                this.getFilled());
+    }
     /** {@inheritDoc} */
     public String xmlNodeName() {
         return "Ellipse";

@@ -108,6 +108,11 @@ public abstract class Figure implements Drawable,
     }
 
     /**
+     * @return a deep copy of this figure
+     */
+    public abstract Figure copy();
+    
+    /**
      * @param penThickness the pen thickness
      */
     public void setPenThickness(final int penThickness) {

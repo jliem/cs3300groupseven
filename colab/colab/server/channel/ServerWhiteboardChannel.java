@@ -2,10 +2,14 @@ package colab.server.channel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import colab.common.channel.ChannelDataSet;
+import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.WhiteboardChannelType;
+import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
 import colab.common.naming.ChannelName;
 
@@ -16,9 +20,16 @@ import colab.common.naming.ChannelName;
 public final class ServerWhiteboardChannel
         extends ServerChannel<WhiteboardChannelData> {
 
+    private ChannelDataStore<WhiteboardChannelData> revisions;
+    
+    private Whiteboard currentBoard;
+    
     public ServerWhiteboardChannel(final ChannelName name) {
         super(name);
-        // TODO Auto-generated constructor stub
+
+        this.revisions = new ChannelDataSet<WhiteboardChannelData>();
+        
+        this.currentBoard = new Whiteboard();
     }
 
     public ServerWhiteboardChannel(final ChannelName name, final File file)
@@ -36,9 +47,13 @@ public final class ServerWhiteboardChannel
         return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
 
+    /** {@inheritDoc} */
+    @Override
     public List<WhiteboardChannelData> getLastData(final int count) {
-        // TODO Auto-generated method stub
-        return null;
+        List<WhiteboardChannelData> list = new ArrayList<WhiteboardChannelData>();
+        for(WhiteboardChannelData wcd : revisions.getLast(count)) {
+            list.add(wcd);
+        }
+        return list;
     }
-
 }

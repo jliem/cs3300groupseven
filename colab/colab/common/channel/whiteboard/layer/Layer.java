@@ -1,7 +1,6 @@
 package colab.common.channel.whiteboard.layer;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -87,6 +86,19 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
     public void setLabel(final String label) {
         this.label = label;
         this.fireOnLabelChange(label);
+    }
+    
+    /**
+     * @return a deep copy of this layer
+     */
+    public Layer copy() {
+        Layer layer = new Layer(new LayerIdentifier(new Integer(getId().getValue().intValue())));
+        
+        for(Figure figure : figures) {
+            layer.addFigure(figure.copy());
+        }
+        
+        return layer;
     }
 
     public void addFigure(final Figure figure) {

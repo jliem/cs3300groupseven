@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import colab.client.gui.whiteboard.draw.EllipseDrawingTool;
 import colab.client.gui.whiteboard.draw.LineDrawingTool;
 import colab.client.gui.whiteboard.draw.RectangleDrawingTool;
 
@@ -51,6 +52,20 @@ public class WhiteboardChannelToolPanel extends JPanel{
             public void actionPerformed(final ActionEvent event) {
                 parentPanel.setTool(
                         new RectangleDrawingTool(parentPanel, false));
+            }
+        });
+
+        solidEllipseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                parentPanel.setTool(
+                        new EllipseDrawingTool(parentPanel, true));
+            }
+        });
+
+        clearEllipseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                parentPanel.setTool(
+                        new EllipseDrawingTool(parentPanel, false));
             }
         });
 

@@ -47,8 +47,6 @@ public class ImageUtils {
         ImageProducer producer =
             new FilteredImageSource(image.getSource(), filter);
 
-
-
         return component.createImage(producer);
 
     }

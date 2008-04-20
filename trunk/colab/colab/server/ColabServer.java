@@ -186,7 +186,7 @@ public class ColabServer extends UnicastRemoteObject
         // Add the creator as a member and moderator
         if (creator != null) {
             community.addMember(creator);
-            community.addAsModerator(creator);
+            community.setAsModerator(creator);
         }
 
         // Add the community

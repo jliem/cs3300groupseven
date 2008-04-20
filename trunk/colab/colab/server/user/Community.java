@@ -53,10 +53,9 @@ public final class Community implements Identifiable<CommunityName>,
     private final Set<UserName> members = new HashSet<UserName>();
 
     /**
-     * List of moderators (each moderator should also be in the
-     * members Set).
+     * Moderator of this community.
      */
-    private final Set<UserName> moderators = new HashSet<UserName>();
+    private UserName moderator = null;
 
     /**
      * A list of actively connected clients.
@@ -147,7 +146,7 @@ public final class Community implements Identifiable<CommunityName>,
      * @param username the name of the user to add
      * @throws IllegalStateException if the user is not a member
      */
-    public void addAsModerator(final UserName username) {
+    public void setAsModerator(final UserName username) {
         // Check whether this user is a member
         if (!members.contains(username)) {
             throw new IllegalStateException("Could not add " + username
@@ -155,7 +154,13 @@ public final class Community implements Identifiable<CommunityName>,
                     + "a member!");
         }
 
-        moderators.add(username);
+        if (this.moderator == null) {
+            moderator = username;
+        } else {
+            throw new IllegalStateException("Could not add " + username
+                    + " as a moderator because this community"
+                    + "already has a moderator");
+        }
     }
 
     /**
@@ -168,7 +173,9 @@ public final class Community implements Identifiable<CommunityName>,
         boolean result = members.remove(username);
 
         // If they were a moderator, remove them from that list
-        moderators.remove(username);
+        if (moderator != null && moderator.equals(username)) {
+            moderator = null;
+        }
 
         fireEvent(new CommunityEvent());
 
@@ -250,7 +257,7 @@ public final class Community implements Identifiable<CommunityName>,
      * @return true if the user is a community moderator, false otherwise
      */
     public boolean isModerator(final UserName username) {
-        return moderators.contains(username);
+        return (moderator != null && moderator.equals(username));
     }
 
     /**
@@ -315,6 +322,12 @@ public final class Community implements Identifiable<CommunityName>,
         node.setAttribute("name", name.getValue());
         node.setAttribute("password", password.getHash());
 
+        String moderatorString = "";
+        if (moderator != null) {
+            moderatorString = moderator.getValue();
+        }
+        node.setAttribute("moderator", moderatorString);
+
         for (final UserName username : members) {
             node.addChild(username.toXml());
         }
@@ -329,10 +342,17 @@ public final class Community implements Identifiable<CommunityName>,
         this.password = new Password(node.getAttribute("password"));
         this.name = new CommunityName(node.getAttribute("name"));
 
+        String moderatorString = node.getAttribute("moderator");
+
         for (final XmlNode child : node.getChildren()) {
             UserName username = new UserName();
             username.fromXml(child);
             addMember(username);
+        }
+
+
+        if (moderatorString.length() > 0) {
+            setAsModerator(new UserName(moderatorString));
         }
 
     }

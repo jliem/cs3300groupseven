@@ -130,6 +130,15 @@ public final class Community implements Identifiable<CommunityName>,
     }
 
     /**
+     * Sets the password.
+     *
+     * @param password the password
+     */
+    public void setPassword(Password password) {
+        this.password = password;
+    }
+
+    /**
      * Adds a user to this community's member list.
      *
      * @param username the name of the user to add

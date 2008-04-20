@@ -14,6 +14,7 @@ import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
 import colab.server.user.Community;
+import colab.server.user.Password;
 import colab.server.user.User;
 
 /**
@@ -146,6 +147,16 @@ public interface ConnectionRemote extends Remote {
      */
     boolean isModerator(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException;
+
+    /**
+     * Changes the password of a community.
+     * @param communityName the community name
+     * @param password the new password
+     * @throws CommunityDoesNotExistException if the community does not exist
+     */
+    public void changePassword(final CommunityName communityName,
+            final Password password)
+        throws CommunityDoesNotExistException, RemoteException;
 
     /**
      * Gets the last *count* pieces of data from the specified Channel.

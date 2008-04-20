@@ -74,7 +74,8 @@ class ColabClientGUI extends JFrame {
 
     private JMenu adminMenu;
 
-    private JMenuItem commSettingsItem;
+    private JMenuItem commPasswordItem;
+    private JMenuItem commMembersItem;
 
     private CommunityName communityName;
 
@@ -158,8 +159,12 @@ class ColabClientGUI extends JFrame {
         quitItem = new JMenuItem("Quit");
 
         adminMenu = new JMenu("Admin");
-        commSettingsItem = new JMenuItem("Community Settings");
-        adminMenu.add(commSettingsItem);
+
+        commMembersItem = new JMenuItem("Community Members");
+        adminMenu.add(commMembersItem);
+
+        commPasswordItem = new JMenuItem("Change Community Password");
+        adminMenu.add(commPasswordItem);
 
         ActionListener menuListener = new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -184,11 +189,19 @@ class ColabClientGUI extends JFrame {
                     gotoCommunityLoginView();
                 } else if (e.getSource() == quitItem) {
                     client.exitProgram();
-                } else if (e.getSource() == commSettingsItem) {
+                } else if (e.getSource() == commMembersItem) {
                     if (communityName != null) {
-                        CommunitySettingsDialog dialog =
-                            new CommunitySettingsDialog(client,
+                        CommunityMembersDialog dialog =
+                            new CommunityMembersDialog(client,
                                     communityName, currentUser);
+                        dialog.pack();
+                        dialog.setVisible(true);
+                    }
+                } else if (e.getSource() == commPasswordItem) {
+                    if (communityName != null) {
+                        CommunityPasswordDialog dialog =
+                            new CommunityPasswordDialog(client,
+                                    communityName);
                         dialog.pack();
                         dialog.setVisible(true);
                     }
@@ -200,7 +213,8 @@ class ColabClientGUI extends JFrame {
         logoutItem.addActionListener(menuListener);
         changeCommItem.addActionListener(menuListener);
         quitItem.addActionListener(menuListener);
-        commSettingsItem.addActionListener(menuListener);
+        commMembersItem.addActionListener(menuListener);
+        commPasswordItem.addActionListener(menuListener);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();

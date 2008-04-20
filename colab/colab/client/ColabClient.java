@@ -30,6 +30,7 @@ import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
+import colab.server.user.Password;
 import colab.server.user.User;
 
 /**
@@ -542,6 +543,24 @@ public class ColabClient extends UnicastRemoteObject
 
         return false;
     }
+
+    /**
+     * Changes the password of a community.
+     * @param communityName the community name
+     * @param password the new password
+     * @throws CommunityDoesNotExistException if the community does not exist
+     * @throws RemoteException if a remote exception occurs
+     */
+    public void changePassword(final CommunityName communityName,
+            final Password password)
+        throws CommunityDoesNotExistException, RemoteException {
+
+
+        if (connection != null) {
+            connection.changePassword(communityName, password);
+        }
+    }
+
 
     /**
      * Gets active users in a channel.

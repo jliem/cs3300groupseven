@@ -320,8 +320,18 @@ public class ColabServer extends UnicastRemoteObject
             final char[] password) throws AuthenticationException {
 
         return userManager.checkPassword(username, password);
+    }
 
+    /**
+     * Changes the password of a community.
+     * @param communityName the community name
+     * @param password the new password
+     * @throws CommunityDoesNotExistException if the community does not exist
+     */
+    public void changePassword(final CommunityName communityName,
+            final Password password) throws CommunityDoesNotExistException {
 
+        userManager.getCommunity(communityName).setPassword(password);
     }
 
     /**

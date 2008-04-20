@@ -11,6 +11,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -20,9 +21,8 @@ import colab.common.DebugManager;
 import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
-import colab.server.user.User;
 
-public class CommunitySettingsDialog extends JDialog {
+public class CommunityMembersDialog extends JDialog {
 
     /** Scroll pane for the user list. */
     private final JScrollPane scroll;
@@ -42,7 +42,7 @@ public class CommunitySettingsDialog extends JDialog {
 
     private final UserName currentUser;
 
-    public CommunitySettingsDialog(ColabClient client,
+    public CommunityMembersDialog(ColabClient client,
             CommunityName communityName,
             UserName currentUser) {
 
@@ -63,6 +63,15 @@ public class CommunitySettingsDialog extends JDialog {
         scroll = new JScrollPane(userList);
 
         downloadMembers();
+
+        JButton doneButton = new JButton("Done");
+        doneButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent arg0) {
+                dispose();
+            }
+
+        });
 
         JButton selectAllButton = new JButton("Select All");
         selectAllButton.addActionListener(new ActionListener() {
@@ -86,30 +95,38 @@ public class CommunitySettingsDialog extends JDialog {
         removeButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                Object[] array = userList.getSelectedValues();
-                for (Object o : array) {
-                    UserName user = (UserName)o;
 
-                    try {
-                        CommunitySettingsDialog.this.client.removeMember(user,
-                                CommunitySettingsDialog.this.communityName);
+                if (JOptionPane.showConfirmDialog(CommunityMembersDialog.this,
+                        "Remove selected users?",
+                        "Confirm Removal",
+                        JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
 
-                    } catch (CommunityDoesNotExistException e) {
-                        DebugManager.exception(e);
-                    } catch (RemoteException e) {
-                        DebugManager.remote(e);
+                    Object[] array = userList.getSelectedValues();
+                    for (Object o : array) {
+                        UserName user = (UserName)o;
+
+                        try {
+                            CommunityMembersDialog.this.client.removeMember(user,
+                                    CommunityMembersDialog.this.communityName);
+
+                        } catch (CommunityDoesNotExistException e) {
+                            DebugManager.exception(e);
+                        } catch (RemoteException e) {
+                            DebugManager.remote(e);
+                        }
                     }
+
+                    // Re-download the list
+                    downloadMembers();
+
                 }
 
-                // Re-download the list
-                downloadMembers();
-
             }
-
         });
 
         JPanel buttonPanel = new JPanel();
 
+        buttonPanel.add(doneButton);
         buttonPanel.add(selectAllButton);
         buttonPanel.add(deselectAllButton);
         buttonPanel.add(removeButton);
@@ -117,6 +134,8 @@ public class CommunitySettingsDialog extends JDialog {
         this.setLayout(new BorderLayout());
         this.add(scroll, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
+
+        this.setTitle("Manage Community Members");
 
         this.setModal(true);
     }

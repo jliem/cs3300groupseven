@@ -87,21 +87,23 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
         this.label = label;
         this.fireOnLabelChange(label);
     }
-    
+
     /**
      * @return a deep copy of this layer
      */
     public Layer copy() {
         Layer layer = new Layer(new LayerIdentifier(new Integer(getId().getValue().intValue())));
-        
+
         for(Figure figure : figures) {
             layer.addFigure(figure.copy());
         }
-        
+
         return layer;
     }
 
     public void addFigure(final Figure figure) {
+
+        System.out.println("Layer got the figure");
 
         // Add the figure to the list
         this.figures.add(figure);
@@ -121,6 +123,10 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
     }
 
     public BufferedImage croppedImage() {
+
+        if (contentBounds.width == 0 || contentBounds.height == 0) {
+            return null;
+        }
 
         BufferedImage image = new BufferedImage(
                 contentBounds.width, contentBounds.height,

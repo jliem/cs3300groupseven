@@ -7,7 +7,6 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import colab.client.gui.whiteboard.draw.DrawingTool;
-import colab.common.channel.whiteboard.draw.Figure;
 
 /**
  * Drawing panel for whiteboard.
@@ -17,10 +16,16 @@ public class DrawingPanel extends JPanel {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    private WhiteboardChannelPanel parentPanel;
+
     private DrawingTool tool;
 
-    public DrawingPanel() {
+    public DrawingPanel(final WhiteboardChannelPanel parentPanel) {
+
+        this.parentPanel = parentPanel;
+
         setBackground(Color.WHITE);
+
     }
 
     public void setTool(final DrawingTool newTool) {
@@ -40,22 +45,12 @@ public class DrawingPanel extends JPanel {
 
         super.paintComponent(g);
 
+        parentPanel.drawLayers(g);
+
         if (tool != null) {
             tool.draw(g);
         }
 
-    }
-
-    public Color getColor() {
-        return Color.BLUE; // TODO get from the color picker
-    }
-
-    public int getPenThickness() {
-        return 2; // TODO make a ui component for this
-    }
-
-    public void drawFigure(final Figure figure) {
-        // TODO add the figure to the active layer
     }
 
 }

@@ -23,7 +23,8 @@ public class WhiteboardChannelToolPanel extends JPanel{
     private JButton lineButton;
     //private JColorChooser colorChooser;
 
-    public WhiteboardChannelToolPanel(final DrawingPanel drawingPanel) {
+    public WhiteboardChannelToolPanel(
+            final WhiteboardChannelPanel parentPanel) {
 
         pencilButton = new JButton(new ImageIcon("pencil.gif"));
         solidEllipseButton = new JButton(new ImageIcon("solidellipse.gif"));
@@ -35,7 +36,7 @@ public class WhiteboardChannelToolPanel extends JPanel{
         lineButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
                 System.out.println("ewfgwe");
-                drawingPanel.setTool(new LineDrawingTool(drawingPanel));
+                parentPanel.setTool(new LineDrawingTool(parentPanel));
             }
         });
 

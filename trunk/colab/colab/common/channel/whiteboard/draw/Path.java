@@ -146,7 +146,8 @@ public class Path extends Figure {
         for (int i = 0; i < points.size() - 1; i++) {
             Point one = points.get(i);
             Point two = points.get(i+1);
-            if (containsLine(g.getClipBounds(), one, two)) {
+            java.awt.Rectangle clipBounds = g.getClipBounds();
+            if (clipBounds == null || containsLine(clipBounds, one, two)) {
                 g.drawLine(one.x, one.y, two.x, two.y);
             }
         }

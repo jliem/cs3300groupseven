@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
@@ -45,23 +46,18 @@ public class LayerSelectionPanel extends JPanel {
                     final Object value, final int index,
                     final boolean isSelected, final boolean cellHasFocus) {
                 LayerPanel layerPanel = (LayerPanel) value;
-                Color background;
-                if (isSelected) {
-                    background = Color.RED;
-                } else {
-                    background = Color.white;
-                }
-                layerPanel.setBackground(background);
+                layerPanel.setSelected(isSelected);
                 return layerPanel;
             }
         });
-        panelList.setPreferredSize(new Dimension(400, 600));
+        panelList.setBackground(Color.LIGHT_GRAY);
 
-        add(panelList, BorderLayout.CENTER);
+        add(new JScrollPane(panelList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
         for (Layer layer : whiteboard) {
             LayerPanel layerPanel = new LayerPanel(layer);
-            panelList.add(layerPanel);
+            layerPanels.add(layerPanel);
         }
 
         this.whiteboard = whiteboard;
@@ -72,8 +68,7 @@ public class LayerSelectionPanel extends JPanel {
 
             }
            public void onInsert(final int offset, final Layer layer) {
-            // TODO Auto-generated method stub
-
+                layerPanels.insertElementAt(new LayerPanel(layer), offset);
            }
            public void onShift(final LayerIdentifier id, final int offset) {
             // TODO Auto-generated method stub
@@ -95,7 +90,7 @@ public class LayerSelectionPanel extends JPanel {
 
         Layer layer2 = new Layer(new LayerIdentifier(4245));
         layer2.addFigure(new Ellipse(
-                new Point(0, 0),
+                new Point(-50, -50),
                 new Dimension(100, 100),
                 Color.GREEN,
                 5,
@@ -109,12 +104,10 @@ public class LayerSelectionPanel extends JPanel {
         layer2.setLabel("ewgerge");
 
         Whiteboard whiteboard = new Whiteboard();
-        //whiteboard.insert(0, layer);
 
         LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
-        panel.setPreferredSize(new Dimension(400, 600));
-        panel.layerPanels.add(new LayerPanel(layer));
-        panel.layerPanels.add(new LayerPanel(layer2));
+
+        whiteboard.insert(0, layer2);
 
         JFrame frame = new JFrame();
         frame.setPreferredSize(new Dimension(400, 600));

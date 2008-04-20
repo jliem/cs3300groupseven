@@ -116,11 +116,13 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
 
         Graphics g = image.getGraphics();
 
-        g.translate(contentBounds.x, contentBounds.y);
+        g.fillRect(0, 0, contentBounds.width, contentBounds.height);
+
+        g.translate(-contentBounds.x, -contentBounds.y);
 
         draw(g);
 
-        g.translate(-contentBounds.x, -contentBounds.y);
+        g.translate(contentBounds.x, contentBounds.y);
 
         return image;
 

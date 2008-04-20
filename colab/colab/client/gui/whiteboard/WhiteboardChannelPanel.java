@@ -48,7 +48,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         JPanel toolPanelWrapper = new FixedSizePanel(
                 toolPanel, new Dimension(100, 200));
 
-        colorChooser = new JColorChooser();
+        colorChooser = new JColorChooser(Color.black);
         colorChooser.setPreferredSize(new Dimension(150, 150));
         colorChooser.setPreviewPanel(new JPanel());
         AbstractColorChooserPanel[] crap = colorChooser.getChooserPanels();

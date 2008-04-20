@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.Vector;
 
 import javax.swing.JFrame;
@@ -78,6 +79,20 @@ public class LayerSelectionPanel extends JPanel {
 
         setPreferredSize(new Dimension(175, 123));
 
+    }
+
+    public Layer getActiveLayer() {
+
+        LayerPanel layerPanel = (LayerPanel) panelList.getSelectedValue();
+
+        return layerPanel.getLayer();
+
+    }
+
+    public void drawLayers(final Graphics g) {
+        for (LayerPanel layerPanel : layerPanels) {
+            layerPanel.getLayer().draw(g);
+        }
     }
 
     public static void main(final String[] args) {

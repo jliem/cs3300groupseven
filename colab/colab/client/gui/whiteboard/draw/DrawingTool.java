@@ -6,36 +6,34 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import colab.client.gui.whiteboard.DrawingPanel;
+import colab.client.gui.whiteboard.WhiteboardChannelPanel;
 import colab.common.channel.whiteboard.draw.Figure;
 
 public abstract class DrawingTool
         implements MouseListener, MouseMotionListener {
 
-    private DrawingPanel canvas;
+    private final WhiteboardChannelPanel parentPanel;
 
     private Point start;
 
-    public DrawingTool(final DrawingPanel canvas) {
-
-        this.canvas = canvas;
-
+    public DrawingTool(final WhiteboardChannelPanel parentPanel) {
+        this.parentPanel = parentPanel;
     }
 
     protected final void drawFigure(final Figure figure) {
-        //canvas.drawFigure(figure);
+        parentPanel.addToActiveLayer(figure);
     }
 
     protected final void repaint() {
-        canvas.repaint();
+        parentPanel.repaintCanvas();
     }
 
     protected final Point getStart() {
         return new Point(this.start);
     }
 
-    protected final DrawingPanel getCanvas() {
-        return this.canvas;
+    protected final WhiteboardChannelPanel getParentPanel() {
+        return this.parentPanel;
     }
 
     public void draw(final Graphics g) {

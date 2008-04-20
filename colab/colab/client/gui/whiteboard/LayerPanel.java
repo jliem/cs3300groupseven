@@ -54,8 +54,6 @@ public class LayerPanel extends JPanel {
         previewButton.setMaximumSize(PREVIEW_SIZE);
         previewButton.setOpaque(false);
         JPanel previewPanel = new JPanel();
-//        previewPanel.setLayout(new BorderLayout());
-//        previewPanel.add(previewButton, BorderLayout.CENTER);
         previewPanel.add(previewButton);
         previewPanel.setPreferredSize(
                 new Dimension(PREVIEW_SIZE.width + 20,
@@ -85,11 +83,18 @@ public class LayerPanel extends JPanel {
     }
 
     private void refreshThumb() {
+        System.out.println("Refreshing thumb");
         BufferedImage image = layer.croppedImage();
-        Image scaledImage = ImageUtils.scaleToFit(
-                image, PREVIEW_SIZE, this);
+        if (image != null) {
+            System.out.println("Image is displaying");
+            Image scaledImage = ImageUtils.scaleToFit(
+                    image, PREVIEW_SIZE, this);
+            preview.setImage(scaledImage);
+        }
+    }
 
-        preview.setImage(scaledImage);
+    public Layer getLayer() {
+        return layer;
     }
 
     public static void main(final String[] args) {

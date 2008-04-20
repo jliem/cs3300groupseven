@@ -3,15 +3,15 @@ package colab.client.gui.whiteboard.draw;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
-import colab.client.gui.whiteboard.DrawingPanel;
+import colab.client.gui.whiteboard.WhiteboardChannelPanel;
 import colab.common.channel.whiteboard.draw.Path;
 
 public class LineDrawingTool extends DrawingTool {
 
     private Path line;
 
-    public LineDrawingTool(final DrawingPanel canvas) {
-        super(canvas);
+    public LineDrawingTool(final WhiteboardChannelPanel parentPanel) {
+        super(parentPanel);
     }
 
     /** {@inheritDoc} */
@@ -25,15 +25,17 @@ public class LineDrawingTool extends DrawingTool {
     public void mouseDragged(final MouseEvent e) {
         super.mouseDragged(e);
         line = new Path(getStart(), e.getPoint(),
-                getCanvas().getColor(), getCanvas().getPenThickness());
-        getCanvas().repaint();
+                getParentPanel().getDrawingColor(),
+                getParentPanel().getPenThickness());
+        getParentPanel().repaintCanvas();
     }
 
     /** {@inheritDoc} */
     @Override
     public void mouseReleased(final MouseEvent e) {
         super.mouseReleased(e);
-        //drawFigure();
+        System.out.println("Mouse up");
+        drawFigure(line);
     }
 
     /** {@inheritDoc} */

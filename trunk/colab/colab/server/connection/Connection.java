@@ -303,7 +303,7 @@ public final class Connection extends UnicastRemoteObject
         // Check state
         if (!this.state.hasCommunityLogin()) {
             throw new IllegalStateException(
-                    "Attempt to log out of community in '"
+                    "Attempt to remove member while in '"
                     + this.state + "' state");
         }
 
@@ -313,6 +313,26 @@ public final class Connection extends UnicastRemoteObject
         } else {
             return false;
         }
+    }
+
+    /** {@inheritDoc} */
+    public void changePassword(final CommunityName communityName,
+            final Password password) throws CommunityDoesNotExistException, RemoteException {
+
+        // Check state
+        if (!this.state.hasCommunityLogin()) {
+            throw new IllegalStateException(
+                    "Attempt to change password while in '"
+                    + this.state + "' state");
+        }
+
+        // Only allow moderators to change
+        if (server.isModerator(this.username, communityName)) {
+            server.changePassword(communityName, password);
+        } else {
+            throw new IllegalStateException("Could not change password--not a moderator");
+        }
+
     }
 
     /** {@inheritDoc} */

@@ -75,6 +75,9 @@ public class LayerSelectionPanel extends JPanel {
 
            }
         });
+
+        setPreferredSize(new Dimension(175, 123));
+
     }
 
     public static void main(final String[] args) {
@@ -107,6 +110,13 @@ public class LayerSelectionPanel extends JPanel {
 
         LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
 
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
         whiteboard.insert(0, layer2);
 
         JFrame frame = new JFrame();

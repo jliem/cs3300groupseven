@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class WhiteboardChannelToolPanel extends JPanel{
@@ -43,5 +44,4 @@ public class WhiteboardChannelToolPanel extends JPanel{
         this.setVisible(true);
 
     }
-
 }

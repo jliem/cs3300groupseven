@@ -1,11 +1,14 @@
 package colab.client.gui.whiteboard;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import colab.client.gui.whiteboard.draw.LineDrawingTool;
 
 public class WhiteboardChannelToolPanel extends JPanel{
 
@@ -17,31 +20,36 @@ public class WhiteboardChannelToolPanel extends JPanel{
     private JButton clearEllipseButton;
     private JButton solidRectangleButton;
     private JButton clearRectangleButton;
-    private JButton eraserButton;
+    private JButton lineButton;
     //private JColorChooser colorChooser;
 
-    public WhiteboardChannelToolPanel(){
+    public WhiteboardChannelToolPanel(final DrawingPanel drawingPanel) {
 
         pencilButton = new JButton(new ImageIcon("pencil.gif"));
         solidEllipseButton = new JButton(new ImageIcon("solidellipse.gif"));
-        eraserButton = new JButton(new ImageIcon("eraser.gif"));
+        lineButton = new JButton(new ImageIcon("line.gif"));
         clearEllipseButton = new JButton(new ImageIcon("clearellipse.gif"));
         solidRectangleButton = new JButton(new ImageIcon("solidrect.gif"));
         clearRectangleButton = new JButton(new ImageIcon("clearrectangle.gif"));
-        //colorChooser = new JColorChooser();
 
-        //colorChooser.setPreferredSize(new Dimension(10,10));
-        this.setLayout(new GridLayout(3, 1));
+        lineButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                System.out.println("ewfgwe");
+                drawingPanel.setTool(new LineDrawingTool(drawingPanel));
+            }
+        });
+
+        setLayout(new GridLayout(3, 1));
 
         add(pencilButton);
-        add(eraserButton);
+        add(lineButton);
         add(solidEllipseButton);
         add(clearEllipseButton);
         add(solidRectangleButton);
         add(clearRectangleButton);
-        //add(colorChooser);
 
-        this.setVisible(true);
+        setVisible(true);
 
     }
+
 }

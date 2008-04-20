@@ -27,30 +27,28 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     private JColorChooser colorChooser;
     private LayerSelectionPanel layerPanel;
 
-    protected enum ToolType {
-        PATH,
-        ELLIPSE,
-        RECTANGLE
-    }
-
     public WhiteboardChannelPanel(final UserName name,
             final ClientWhiteboardChannel channel) {
 
         super(name);
 
         this.channel = channel;
+
         drawingPanel = new DrawingPanel();
         drawingPanel.setPreferredSize(new Dimension(500, 400));
-        toolPanel = new WhiteboardChannelToolPanel();
+
+        toolPanel = new WhiteboardChannelToolPanel(drawingPanel);
         toolPanel.setPreferredSize(new Dimension(100, 300));
         JPanel toolPanelWrapper = new FixedSizePanel(
                 toolPanel, new Dimension(100, 200));
+
         colorChooser = new JColorChooser();
         colorChooser.setPreferredSize(new Dimension(150, 150));
         colorChooser.setPreviewPanel(new JPanel());
         AbstractColorChooserPanel[] crap = colorChooser.getChooserPanels();
         colorChooser.removeChooserPanel(crap[1]);
         colorChooser.removeChooserPanel(crap[2]);
+
         layerPanel = new LayerSelectionPanel(channel.getWhiteboard());
 
         this.setLayout(new BorderLayout());
@@ -58,6 +56,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         add(drawingPanel, BorderLayout.CENTER);
         add(colorChooser, BorderLayout.SOUTH);
         add(layerPanel, BorderLayout.EAST);
+
         this.setVisible(true);
 
     }
@@ -73,6 +72,6 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         }));
         frame.pack();
         frame.setVisible(true);
-
     }
+
 }

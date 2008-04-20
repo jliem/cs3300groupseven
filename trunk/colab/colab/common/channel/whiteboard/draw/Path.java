@@ -41,11 +41,21 @@ public class Path extends Figure {
         clearPoints();
     }
 
+    public Path(final java.awt.Point a, final java.awt.Point b,
+            final Color color, final int penThickness) {
+        clearPoints();
+        setPosition(new Point(0, 0));
+        addPoint(a);
+        addPoint(b);
+        setColor(color);
+        setPenThickness(penThickness);
+    }
+
     /**
      * Adds a point to this path.
      * @param point the point to add
      */
-    public void addPoint(final Point point) {
+    public void addPoint(final java.awt.Point point) {
 
         if (point.x > size.width + getPosition().x) {
             size.width = point.x;
@@ -55,7 +65,7 @@ public class Path extends Figure {
             size.height = point.y;
         }
 
-        points.add(point);
+        points.add(new Point(point));
 
     }
 
@@ -71,14 +81,14 @@ public class Path extends Figure {
     public Figure copy() {
         Path path = new Path(new Point(getPosition().x, getPosition().y),
                 getColor(), getPenThickness());
-        
+
         for(Point p : points) {
             path.addPoint(p);
         }
-        
+
         return path;
     }
-    
+
     private void clearPoints() {
         this.points = new ArrayList<Point>();
         this.size = new Dimension(0, 0);

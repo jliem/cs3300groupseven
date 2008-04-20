@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import colab.client.gui.whiteboard.draw.LineDrawingTool;
+import colab.client.gui.whiteboard.draw.RectangleDrawingTool;
 
 public class WhiteboardChannelToolPanel extends JPanel{
 
@@ -35,8 +36,21 @@ public class WhiteboardChannelToolPanel extends JPanel{
 
         lineButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent event) {
-                System.out.println("ewfgwe");
                 parentPanel.setTool(new LineDrawingTool(parentPanel));
+            }
+        });
+
+        solidRectangleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                parentPanel.setTool(
+                        new RectangleDrawingTool(parentPanel, true));
+            }
+        });
+
+        clearRectangleButton.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent event) {
+                parentPanel.setTool(
+                        new RectangleDrawingTool(parentPanel, false));
             }
         });
 

@@ -3,7 +3,6 @@ package colab.common.channel.whiteboard.draw;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.io.ObjectInputStream.GetField;
 
 /**
  * A simple rectangular shape.
@@ -43,12 +42,12 @@ public class Rectangle extends Shape {
     @Override
     public Rectangle copy() {
         return new Rectangle(new Point(getPosition().x, getPosition().y),
-                new Dimension(getSize().width, getSize().height), 
+                new Dimension(getSize().width, getSize().height),
                 getColor(),
                 getPenThickness(),
                 getFilled());
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void doDrawing(final Graphics g) {

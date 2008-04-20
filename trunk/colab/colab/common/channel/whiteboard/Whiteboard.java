@@ -113,7 +113,11 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
     }
 
     public Whiteboard copy() {
-        // TODO deep copy
+        Whiteboard board = new Whiteboard();
+        
+        for(Layer layer : layers) {
+            board.layers.add(layer.copy());
+        }
         return null;
     }
 

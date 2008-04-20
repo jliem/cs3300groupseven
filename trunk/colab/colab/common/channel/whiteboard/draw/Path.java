@@ -66,6 +66,19 @@ public class Path extends Figure {
         return points;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Figure copy() {
+        Path path = new Path(new Point(getPosition().x, getPosition().y),
+                getColor(), getPenThickness());
+        
+        for(Point p : points) {
+            path.addPoint(p);
+        }
+        
+        return path;
+    }
+    
     private void clearPoints() {
         this.points = new ArrayList<Point>();
         this.size = new Dimension(0, 0);

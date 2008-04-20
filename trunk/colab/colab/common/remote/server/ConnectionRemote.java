@@ -13,6 +13,8 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
+import colab.server.user.Community;
+import colab.server.user.User;
 
 /**
  * A remote object on the server which represents a client's session.
@@ -81,6 +83,28 @@ public interface ConnectionRemote extends Remote {
     Collection<CommunityName> getMyCommunityNames() throws RemoteException;
 
     /**
+     * Returns the users which are members of this community.
+     *
+     * @param communityName the name of the community
+     * @return a collection containing every user of this community
+     * @throws CommunityDoesNotExistException if the community did not exist
+     */
+    public Collection<UserName> getMembers(final CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException;
+
+    /**
+     * Removes a user as a member from the community.
+     *
+     * @param userName the username to remove
+     * @param communityName the name of the community
+     * @return true if the remove was successful, false otherwise.
+     * @throws CommunityDoesNotExistException if the community does not exist
+     */
+    public boolean removeMember(final UserName userName,
+            final CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException;
+
+    /**
      * Retrieves a channel.
      * The channel will be created if it does not exist.
      *
@@ -110,6 +134,17 @@ public interface ConnectionRemote extends Remote {
      * @throws RemoteException if an rmi error occurs
      */
     boolean isMember(CommunityName communityName)
+        throws RemoteException, CommunityDoesNotExistException;
+
+    /**
+     * Checks whether the logged in user is a moderator of a given community.
+     *
+     * @param communityName the community name
+     * @return true if the user is a moderator of the community, false otherwise
+     * @throws CommunityDoesNotExistException if the community did not exist
+     * @throws RemoteException if an rmi error occurs
+     */
+    boolean isModerator(CommunityName communityName)
         throws RemoteException, CommunityDoesNotExistException;
 
     /**

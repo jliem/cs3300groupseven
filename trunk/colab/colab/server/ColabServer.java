@@ -183,9 +183,10 @@ public class ColabServer extends UnicastRemoteObject
 
         Community community = new Community(communityName, password);
 
-        // Add the creator as a member
+        // Add the creator as a member and moderator
         if (creator != null) {
             community.addMember(creator);
+            community.addAsModerator(creator);
         }
 
         // Add the community
@@ -242,6 +243,26 @@ public class ColabServer extends UnicastRemoteObject
     }
 
     /**
+     * Removes a user as a member from the community.
+     *
+     * @param userName the username to remove
+     * @param communityName the name of the community
+     * @return true if the remove was successful, false otherwise.
+     * @throws CommunityDoesNotExistException if the community does not exist
+     */
+    public final boolean removeMember(final UserName userName,
+            final CommunityName communityName)
+        throws CommunityDoesNotExistException {
+
+        Community comm = userManager.getCommunity(communityName);
+        if (comm != null) {
+            return comm.removeMember(userName);
+        }
+
+        return false;
+    }
+
+    /**
      * Checks whether a user is a member of a given community.
      *
      * @param userName the user name
@@ -254,6 +275,35 @@ public class ColabServer extends UnicastRemoteObject
             throws CommunityDoesNotExistException {
 
         return userManager.getCommunity(communityName).isMember(userName);
+
+    }
+
+    /**
+     * Returns the users which are members of this community.
+     *
+     * @param communityName the name of the community
+     * @return a collection containing every user of this community
+     * @throws CommunityDoesNotExistException if the community did not exist
+     */
+    public Collection<UserName> getMembers(final CommunityName communityName)
+        throws CommunityDoesNotExistException {
+
+        return userManager.getCommunity(communityName).getMembers();
+    }
+
+    /**
+     * Checks whether a user is a moderator of a given community.
+     *
+     * @param userName the user name
+     * @param communityName the community name
+     * @return true if the user is a moderator of the community, false otherwise
+     * @throws CommunityDoesNotExistException if the community did not exist
+     */
+    public final boolean isModerator(final UserName userName,
+            final CommunityName communityName)
+            throws CommunityDoesNotExistException {
+
+        return userManager.getCommunity(communityName).isModerator(userName);
 
     }
 

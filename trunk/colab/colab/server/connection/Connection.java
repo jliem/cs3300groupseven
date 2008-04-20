@@ -289,6 +289,33 @@ public final class Connection extends UnicastRemoteObject
     }
 
     /** {@inheritDoc} */
+    public Collection<UserName> getMembers(final CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException {
+
+        return server.getMembers(communityName);
+    }
+
+    /** {@inheritDoc} */
+    public boolean removeMember(final UserName userName,
+            final CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException {
+
+        // Check state
+        if (!this.state.hasCommunityLogin()) {
+            throw new IllegalStateException(
+                    "Attempt to log out of community in '"
+                    + this.state + "' state");
+        }
+
+        // Only allow admins to remove
+        if (server.isModerator(this.username, communityName)) {
+            return server.removeMember(userName, communityName);
+        } else {
+            return false;
+        }
+    }
+
+    /** {@inheritDoc} */
     public Collection<CommunityName> getAllCommunityNames()
             throws RemoteException {
 
@@ -418,6 +445,19 @@ public final class Connection extends UnicastRemoteObject
         }
 
         return server.isMember(this.username, communityName);
+    }
+
+    /** {@inheritDoc} */
+    public boolean isModerator(final CommunityName communityName)
+        throws CommunityDoesNotExistException, RemoteException {
+
+        if (!this.state.hasUserLogin()) {
+            throw new IllegalStateException("Attempt to check"
+                    + " community membership, but user " + this.username
+                    + " was not logged in");
+        }
+
+        return server.isModerator(this.username, communityName);
     }
 
     /** {@inheritDoc} */

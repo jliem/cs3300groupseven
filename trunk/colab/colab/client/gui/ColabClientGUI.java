@@ -30,6 +30,7 @@ import colab.common.channel.type.ChannelType;
 import colab.common.event.channel.ChannelEvent;
 import colab.common.event.channel.ChannelListener;
 import colab.common.exception.AuthenticationException;
+import colab.common.exception.CommunityDoesNotExistException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.exception.NetworkException;
 import colab.common.exception.UserAlreadyLoggedInException;
@@ -63,13 +64,17 @@ class ColabClientGUI extends JFrame {
 
     private JMenuBar menuBar;
 
-    private JMenu menu;
+    private JMenu fileMenu;
 
     private JMenuItem logoutItem;
 
     private JMenuItem changeCommItem;
 
     private JMenuItem quitItem;
+
+    private JMenu adminMenu;
+
+    private JMenuItem commSettingsItem;
 
     private CommunityName communityName;
 
@@ -146,11 +151,15 @@ class ColabClientGUI extends JFrame {
         channelWindows = new ArrayList<ClientChannelFrame>();
 
         menuBar = new JMenuBar();
-        menu = new JMenu("File");
-        menuBar.add(menu);
+        fileMenu = new JMenu("File");
+        menuBar.add(fileMenu);
         logoutItem = new JMenuItem("Logout");
         changeCommItem = new JMenuItem("Change Communities");
         quitItem = new JMenuItem("Quit");
+
+        adminMenu = new JMenu("Admin");
+        commSettingsItem = new JMenuItem("Community Settings");
+        adminMenu.add(commSettingsItem);
 
         ActionListener menuListener = new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
@@ -164,9 +173,7 @@ class ColabClientGUI extends JFrame {
                         handleConnectionDropped();
                         DebugManager.connectionDropped(e1);
                     }
-                }
-
-                if (e.getSource() == changeCommItem) {
+                } else if (e.getSource() == changeCommItem) {
                     try {
                         closeOpenedChannelWindows();
                         client.logOutCommunity();
@@ -175,10 +182,16 @@ class ColabClientGUI extends JFrame {
                         DebugManager.connectionDropped(e1);
                     }
                     gotoCommunityLoginView();
-                }
-
-                if (e.getSource() == quitItem) {
+                } else if (e.getSource() == quitItem) {
                     client.exitProgram();
+                } else if (e.getSource() == commSettingsItem) {
+                    if (communityName != null) {
+                        CommunitySettingsDialog dialog =
+                            new CommunitySettingsDialog(client,
+                                    communityName, currentUser);
+                        dialog.pack();
+                        dialog.setVisible(true);
+                    }
                 }
 
             }
@@ -187,6 +200,7 @@ class ColabClientGUI extends JFrame {
         logoutItem.addActionListener(menuListener);
         changeCommItem.addActionListener(menuListener);
         quitItem.addActionListener(menuListener);
+        commSettingsItem.addActionListener(menuListener);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -430,7 +444,6 @@ class ColabClientGUI extends JFrame {
             // to log out (ex. a window was closed, and then we try to close
             // the parent which triggers another logoff)
 
-            // TODO Think of a better way of handling such situations
         } catch (final Exception e) {
             DebugManager.windowClose(e);
         }
@@ -438,11 +451,15 @@ class ColabClientGUI extends JFrame {
 
     private void gotoUserLoginView(final boolean logout) {
 
-        menu.removeAll();
-        menu.add(quitItem);
+        menuBar.removeAll();
+
+        fileMenu.removeAll();
+        fileMenu.add(quitItem);
         if (logout) {
             loginPanel.clearFields();
         }
+
+        menuBar.add(fileMenu);
 
         setActivePanel(loginPanelWrapper);
         setTitle("CoLab Login");
@@ -454,9 +471,12 @@ class ColabClientGUI extends JFrame {
 
     private void gotoCommunityLoginView() {
 
-        menu.removeAll();
-        menu.add(logoutItem);
-        menu.add(quitItem);
+        menuBar.removeAll();
+        fileMenu.removeAll();
+        fileMenu.add(logoutItem);
+        fileMenu.add(quitItem);
+
+        menuBar.add(fileMenu);
 
         communityPanel.refreshCommunityNames();
 
@@ -472,9 +492,26 @@ class ColabClientGUI extends JFrame {
 
     private void gotoChannelView() {
 
-        menu.add(changeCommItem);
-        menu.add(logoutItem);
-        menu.add(quitItem);
+        menuBar.removeAll();
+
+        fileMenu.removeAll();
+        fileMenu.add(changeCommItem);
+        fileMenu.add(logoutItem);
+        fileMenu.add(quitItem);
+
+        menuBar.add(fileMenu);
+
+            if (communityName != null) {
+                try {
+                    if (client.isModerator(communityName)) {
+                        menuBar.add(adminMenu);
+                    }
+                } catch (RemoteException e) {
+                    DebugManager.remote(e);
+                } catch (CommunityDoesNotExistException e) {
+                    DebugManager.exception(e);
+                }
+            }
 
         channelPanel.refreshChannels();
 

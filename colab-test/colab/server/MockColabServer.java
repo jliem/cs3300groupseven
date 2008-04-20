@@ -49,6 +49,7 @@ public final class MockColabServer extends ColabServer {
         addAsMember(pamela.getId(), groupSeven.getId());
         addAsMember(matthew.getId(), groupSeven.getId());
         addAsMember(chris.getId(), groupSeven.getId());
+        addAsModerator(chris.getId(), groupSeven.getId());
 
         Community teamAwesome = new Community("Team Awesome", "awesomePass");
         createCommunity(teamAwesome.getId(), teamAwesome.getPassword());
@@ -75,6 +76,26 @@ public final class MockColabServer extends ColabServer {
         Community comm = userManager.getCommunity(communityName);
         if (comm != null) {
             comm.addMember(userName);
+        }
+
+    }
+
+    /**
+     * Adds a user as a member of a community.
+     *
+     * @param userName the user
+     * @param communityName the name of the community
+     * @throws CommunityDoesNotExistException if no such community exists
+     */
+    public void addAsModerator(final UserName userName,
+            final CommunityName communityName)
+            throws CommunityDoesNotExistException {
+
+        // Look up the community
+        UserManager userManager = super.getUserManager();
+        Community comm = userManager.getCommunity(communityName);
+        if (comm != null) {
+            comm.setAsModerator(userName);
         }
 
     }

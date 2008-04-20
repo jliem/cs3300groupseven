@@ -1,5 +1,7 @@
 package colab.common.channel.whiteboard.draw;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +19,26 @@ public class Path extends Figure {
 
     private List<Point> points;
 
+    /** Derived from points list. */
+    private Dimension size;
+
     /**
-     * Constructs a new Path.
+     * Constructs an empty Path.
      */
     public Path() {
-        points = new ArrayList<Point>();
+    }
+
+    /**
+     * Constructs a new path.
+     *
+     * @param position the position of this shape on its layer
+     * @param color
+     * @param penThickness
+     */
+    public Path(final Point position, final Color color,
+            final int penThickness) {
+        super(position, color, penThickness);
+        clearPoints();
     }
 
     /**
@@ -29,7 +46,17 @@ public class Path extends Figure {
      * @param point the point to add
      */
     public void addPoint(final Point point) {
+
+        if (point.x > size.width + getPosition().x) {
+            size.width = point.x;
+        }
+
+        if (point.y > size.height + getPosition().y) {
+            size.height = point.y;
+        }
+
         points.add(point);
+
     }
 
     /**
@@ -39,11 +66,19 @@ public class Path extends Figure {
         return points;
     }
 
+    private void clearPoints() {
+        this.points = new ArrayList<Point>();
+        this.size = new Dimension(0, 0);
+    }
+
     /**
      * @param points the list of points, in order
      */
     public void setPoints(final List<Point> points) {
-        this.points = points;
+        clearPoints();
+        for (Point point : points) {
+            addPoint(point);
+        }
     }
 
     /** {@inheritDoc} */
@@ -83,18 +118,29 @@ public class Path extends Figure {
 
     /** {@inheritDoc} */
     @Override
-    public void draw(final Graphics g) {
+    public void doDrawing(final Graphics g) {
 
-        super.draw(g);
-
-        for (int i=0; i<points.size()-1; i++) {
+        for (int i = 0; i < points.size() - 1; i++) {
             Point one = points.get(i);
             Point two = points.get(i+1);
-
-            g.drawLine(one.x, one.y, two.x, two.y);
+            if (containsLine(g.getClipBounds(), one, two)) {
+                g.drawLine(one.x, one.y, two.x, two.y);
+            }
         }
 
+    }
 
+    private boolean containsLine(final java.awt.Rectangle rectangle,
+            final Point one, final Point two) {
+
+        return rectangle.contains(one) || rectangle.contains(two);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Dimension getSize() {
+        return size;
     }
 
 }

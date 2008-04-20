@@ -65,7 +65,11 @@ public abstract class Figure implements Drawable,
     }
 
     protected boolean inClippedRegion(final Graphics graphics) {
-        return graphics.getClipBounds().intersects(getBounds());
+        java.awt.Rectangle clipBounds = graphics.getClipBounds();
+        if (clipBounds == null) {
+            return true;
+        }
+        return clipBounds.intersects(getBounds());
     }
 
     /**

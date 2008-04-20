@@ -10,7 +10,7 @@ import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 
-public class Whiteboard implements Drawable {
+public class Whiteboard implements Drawable, Iterable<Layer> {
 
     private List<Layer> layers;
 
@@ -133,13 +133,13 @@ public class Whiteboard implements Drawable {
         return layer;
     }
 
-    public void addDocumentListener(final WhiteboardListener listener) {
+    public void addWhiteboardListener(final WhiteboardListener listener) {
 
         whiteboardListeners.add(listener);
 
     }
 
-    public void removeDocumentListener(final WhiteboardListener listener) {
+    public void removeWhiteboardListener(final WhiteboardListener listener) {
         whiteboardListeners.remove(listener);
     }
 
@@ -179,4 +179,10 @@ public class Whiteboard implements Drawable {
     public void drawLayer(final Graphics graphIn, final LayerIdentifier id) {
         get(id).draw(graphIn);
     }
+
+    /** {@inheritDoc} */
+    public Iterator<Layer> iterator() {
+        return layers.iterator();
+    }
+
 }

@@ -1,17 +1,23 @@
 package colab.client.gui.whiteboard;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import colab.common.channel.whiteboard.draw.Ellipse;
 import colab.common.channel.whiteboard.draw.Figure;
+import colab.common.channel.whiteboard.draw.Point;
 import colab.common.channel.whiteboard.layer.Layer;
+import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.channel.whiteboard.layer.LayerListener;
 import colab.common.util.ImageUtils;
 
@@ -21,14 +27,14 @@ public class LayerPanel extends JPanel {
 
     private ImageIcon preview;
 
-    private final JTextField label;
+    private final JLabel label;
 
     private static final Dimension PREVIEW_SIZE = new Dimension(50, 50);
 
     public LayerPanel(final Layer layer) {
 
         this.layer = layer;
-        this.label = new JTextField();
+        this.label = new JLabel();
 
         layer.addLayerListener(new LayerListener() {
             public void onLabelChange(final String newLabel) {
@@ -65,6 +71,28 @@ public class LayerPanel extends JPanel {
                 image, PREVIEW_SIZE, this);
 
         preview.setImage(scaledImage);
+    }
+
+    public static void main(final String[] args) {
+
+        Layer layer = new Layer(new LayerIdentifier(45));
+        layer.addFigure(new Ellipse(
+                new Point(0, 0),
+                new Dimension(100, 100),
+                Color.BLACK,
+                5,
+                false));
+
+        LayerPanel panel = new LayerPanel(layer);
+
+        JFrame frame = new JFrame();
+        frame.setPreferredSize(new Dimension(400, 100));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.pack();
+        frame.setVisible(true);
+
+
     }
 
 }

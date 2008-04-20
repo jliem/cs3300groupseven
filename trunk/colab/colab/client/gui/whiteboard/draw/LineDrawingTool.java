@@ -34,7 +34,6 @@ public class LineDrawingTool extends DrawingTool {
     @Override
     public void mouseReleased(final MouseEvent e) {
         super.mouseReleased(e);
-        System.out.println("Mouse up");
         drawFigure(line);
     }
 

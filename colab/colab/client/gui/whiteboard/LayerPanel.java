@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
 import colab.common.channel.whiteboard.draw.Ellipse;
@@ -28,10 +29,14 @@ public class LayerPanel extends JPanel {
 
     private final JLabel label;
 
+    private final JList list;
+
     private static final Dimension PREVIEW_SIZE = new Dimension(50, 50);
 
-    public LayerPanel(final Layer layer) {
+    public LayerPanel(final JList list,
+            final Layer layer) {
 
+        this.list = list;
         this.layer = layer;
         this.label = new JLabel();
 
@@ -91,32 +96,12 @@ public class LayerPanel extends JPanel {
                     image, PREVIEW_SIZE, this);
             preview.setImage(scaledImage);
         }
+
+        list.repaint();
     }
 
     public Layer getLayer() {
         return layer;
-    }
-
-    public static void main(final String[] args) {
-
-        Layer layer = new Layer(new LayerIdentifier(45));
-        layer.addFigure(new Ellipse(
-                new Point(0, 0),
-                new Dimension(100, 100),
-                Color.BLACK,
-                5,
-                false));
-
-        LayerPanel panel = new LayerPanel(layer);
-
-        JFrame frame = new JFrame();
-        frame.setPreferredSize(new Dimension(400, 100));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(panel);
-        frame.pack();
-        frame.setVisible(true);
-
-
     }
 
 }

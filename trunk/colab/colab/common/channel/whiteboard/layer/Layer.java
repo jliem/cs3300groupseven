@@ -10,6 +10,7 @@ import java.util.List;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.identity.Identifiable;
+import colab.common.naming.UserName;
 
 /**
  * A layer is a 2-dimensional image.  Multiple layers can be
@@ -17,6 +18,8 @@ import colab.common.identity.Identifiable;
  */
 public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializable {
 
+    public static final long serialVersionUID = 1L;
+    
     private LayerIdentifier id;
 
     /**
@@ -28,6 +31,8 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
     private final List<LayerListener> listeners;
 
     private final List<Figure> figures;
+    
+    private UserName lockHolder = null;
 
     /** Derived from the figures list. */
     private final java.awt.Rectangle contentBounds;
@@ -70,6 +75,24 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
         }
     }
 
+    public void lock(UserName user) {
+       if(isUnlocked()) {
+           lockHolder = user;
+       }
+    }
+    
+    public void unlock() {
+        lockHolder = null;
+    }
+    
+    public boolean isUnlocked() {
+        return lockHolder == null;
+    }
+    
+    public UserName getLockHolder() {
+        return lockHolder;
+    }
+    
     /** {@inheritDoc} */
     public LayerIdentifier getId() {
         return id;

@@ -2,7 +2,6 @@ package colab.common.channel.whiteboard;
 
 import java.util.Date;
 
-import colab.common.channel.document.DocumentChannelData.DocumentChannelDataType;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;

@@ -137,7 +137,7 @@ public final class ServerDocumentChannel
         // Store the data, and assign it an identifier
         // Might have already added this if it's an
         // InsertDocChannelData but that's ok
-        if (!(data instanceof LockDocChannelData)) {
+        if (!(data instanceof LockDocChannelData) && !(data instanceof InsertDocChannelData)) {
             revisions.addAndAssignId(data);
         }
 

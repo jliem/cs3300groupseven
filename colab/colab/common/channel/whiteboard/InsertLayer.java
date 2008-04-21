@@ -15,12 +15,12 @@ public class InsertLayer extends WhiteboardChannelData {
     private Layer layer;
 
     public InsertLayer(final UserName creator, final Date timestamp,
-            final LayerIdentifier previous, final Layer layer) {
+            final LayerIdentifier previous) {
 
         super(creator, timestamp, previous);
 
         this.layerId = previous;
-        this.layer = layer;
+        this.layer = null;
     }
 
     /** {@inheritDoc} */
@@ -32,5 +32,15 @@ public class InsertLayer extends WhiteboardChannelData {
     public void apply(Whiteboard whiteboard) throws NotApplicableException {
         whiteboard.insert(layerId, layer);
     }
+
+    public Layer getLayer() {
+        return layer;
+    }
+
+    public void setLayer(Layer layer) {
+        this.layer = layer;
+    }
+
+
 
 }

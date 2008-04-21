@@ -2,6 +2,7 @@ package colab.common.channel.whiteboard.layer;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,7 @@ import colab.common.identity.Identifiable;
  * A layer is a 2-dimensional image.  Multiple layers can be
  * overlayed upon each other within a whiteboard channel.
  */
-public class Layer implements Identifiable<LayerIdentifier>, Drawable {
+public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializable {
 
     private LayerIdentifier id;
 

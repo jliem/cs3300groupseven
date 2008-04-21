@@ -4,19 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 import colab.client.ClientWhiteboardChannel;
+import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
-import colab.common.DebugManager;
 import colab.common.channel.whiteboard.InsertLayer;
+import colab.common.channel.whiteboard.WhiteboardChannelData;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
@@ -34,6 +36,8 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     private JColorChooser colorChooser;
     private LayerSelectionPanel layerPanel;
 
+    private List<ChannelPanelListener> channelListeners;
+
     public WhiteboardChannelPanel(final UserName name,
             final ClientWhiteboardChannel channel) {
 
@@ -43,6 +47,8 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
         drawingPanel = new DrawingPanel(this);
         drawingPanel.setPreferredSize(new Dimension(500, 400));
+
+        channelListeners = new ArrayList<ChannelPanelListener>();
 
         toolPanel = new ToolPanel(this);
         toolPanel.setPreferredSize(new Dimension(100, 300));
@@ -66,30 +72,25 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
         // TODO Download existing data
 
-        if (layerPanel.getNumberOfLayers() <= 0) {
-            this.createNewLayer(null);
-        }
-
         this.setVisible(true);
 
+    }
+
+    /**
+     * Gets the number of layers in this layer selection panel.
+     * @return the number of layers
+     */
+    public int getNumberOfLayers() {
+        return layerPanel.getNumberOfLayers();
     }
 
     public void createNewLayer(final LayerIdentifier previous) {
         InsertLayer insert =
             new InsertLayer(super.getUsername(), new Date(),
-                    null, new Layer(null));
+                    null);
 
 
-        // TODO Fix me
-        try {
-            channel.add(insert);
-        } catch (RemoteException re) {
-            DebugManager.remote(re);
-        }
-
-
-        //this.fireOnMessageSent(data);
-
+        this.fireOnMessageSent(insert);
 
         layerPanel.repaint();
     }
@@ -116,6 +117,26 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
     public void drawLayers(final Graphics g) {
         layerPanel.drawLayers(g);
+    }
+
+    public void addChannelPanelListener(
+            final ChannelPanelListener listener) {
+
+        channelListeners.add(listener);
+
+    }
+
+    public void removeChannelPanelListener(
+            final ChannelPanelListener listener) {
+
+        channelListeners.remove(listener);
+
+    }
+
+    public void fireOnMessageSent(final WhiteboardChannelData wcd) {
+        for (final ChannelPanelListener l : channelListeners) {
+            l.onMessageSent(wcd);
+        }
     }
 
 //    public static void main(final String[] args) throws Exception {

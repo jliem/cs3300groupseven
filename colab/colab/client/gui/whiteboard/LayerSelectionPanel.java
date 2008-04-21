@@ -5,8 +5,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -31,6 +34,8 @@ public class LayerSelectionPanel extends JPanel {
     private final Whiteboard whiteboard;
 
     private final Vector<LayerPanel> layerPanels;
+
+    private final JButton newLayerButton;
 
     public LayerSelectionPanel(final Whiteboard whiteboard) {
 
@@ -77,6 +82,20 @@ public class LayerSelectionPanel extends JPanel {
            }
         });
 
+        newLayerButton = new JButton("New Layer");
+        newLayerButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent arg0) {
+                Layer newLayer = new Layer(new LayerIdentifier(3));
+                newLayer.setLabel("Layer " + newLayer.getId().getValue());
+                whiteboard.insert(0, newLayer);
+
+            }
+
+        });
+
+        add(newLayerButton, BorderLayout.SOUTH);
+
         setPreferredSize(new Dimension(175, 123));
 
     }
@@ -84,6 +103,10 @@ public class LayerSelectionPanel extends JPanel {
     public Layer getActiveLayer() {
 
         LayerPanel layerPanel = (LayerPanel) panelList.getSelectedValue();
+
+        if (layerPanel == null) {
+            return null;
+        }
 
         return layerPanel.getLayer();
 

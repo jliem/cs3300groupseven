@@ -43,6 +43,9 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
             throw new IllegalArgumentException("No layer with id="
                     + layerId + " found!");
         }
+
+        // Fire listener
+        this.fireOnEdit(layerId);
     }
 
     public void insert(final LayerIdentifier previous,
@@ -173,6 +176,14 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
 
         for (final WhiteboardListener listener : whiteboardListeners) {
             listener.onInsert(offset, layer);
+        }
+
+    }
+
+    protected void fireOnEdit(final LayerIdentifier id) {
+
+        for (final WhiteboardListener listener : whiteboardListeners) {
+            listener.onEdit(id);
         }
 
     }

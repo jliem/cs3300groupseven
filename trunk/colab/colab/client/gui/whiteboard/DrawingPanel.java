@@ -50,7 +50,6 @@ public class DrawingPanel extends JPanel {
         if (tool != null) {
             tool.draw(g);
         }
-
     }
 
 }

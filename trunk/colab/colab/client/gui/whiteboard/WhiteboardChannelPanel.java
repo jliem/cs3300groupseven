@@ -17,8 +17,10 @@ import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
+import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
+import colab.common.channel.whiteboard.WhiteboardListener;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
@@ -44,6 +46,29 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         super(name);
 
         this.channel = channel;
+
+        this.channel.getWhiteboard().addWhiteboardListener(new WhiteboardListener() {
+
+            public void onDelete(LayerIdentifier id) {
+                // Nothing
+
+            }
+
+            public void onEdit(LayerIdentifier id) {
+                drawingPanel.repaint();
+            }
+
+            public void onInsert(int offset, Layer layer) {
+                // Nothing
+
+            }
+
+            public void onShift(LayerIdentifier id, int offset) {
+                // Nothing
+
+            }
+
+        });
 
         drawingPanel = new DrawingPanel(this);
         drawingPanel.setPreferredSize(new Dimension(500, 400));
@@ -112,7 +137,17 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     }
 
     public void addToActiveLayer(final Figure figure) {
-        layerPanel.getActiveLayer().addFigure(figure);
+        Layer activeLayer = layerPanel.getActiveLayer();
+
+
+        activeLayer.addFigure(figure);
+
+        // Send figure to server
+        EditLayer edit = new EditLayer(super.getUsername(), new Date(),
+                activeLayer.getId(),
+                figure);
+
+        this.fireOnMessageSent(edit);
     }
 
     public void drawLayers(final Graphics g) {

@@ -4,9 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.rmi.RemoteException;
+import java.util.Date;
 
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 
@@ -14,11 +15,11 @@ import colab.client.ClientWhiteboardChannel;
 import colab.client.gui.ClientChannelPanel;
 import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
-import colab.common.channel.whiteboard.Whiteboard;
+import colab.common.DebugManager;
+import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
-import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
 public class WhiteboardChannelPanel extends ClientChannelPanel {
@@ -55,7 +56,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         colorChooser.removeChooserPanel(crap[1]);
         colorChooser.removeChooserPanel(crap[2]);
 
-        layerPanel = new LayerSelectionPanel(channel.getWhiteboard());
+        layerPanel = new LayerSelectionPanel(this, channel.getWhiteboard());
 
         this.setLayout(new BorderLayout());
         add(toolPanelWrapper, BorderLayout.WEST);
@@ -63,8 +64,34 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         add(colorChooser, BorderLayout.SOUTH);
         add(layerPanel, BorderLayout.EAST);
 
+        // TODO Download existing data
+
+        if (layerPanel.getNumberOfLayers() <= 0) {
+            this.createNewLayer(null);
+        }
+
         this.setVisible(true);
 
+    }
+
+    public void createNewLayer(final LayerIdentifier previous) {
+        InsertLayer insert =
+            new InsertLayer(super.getUsername(), new Date(),
+                    null, new Layer(null));
+
+
+        // TODO Fix me
+        try {
+            channel.add(insert);
+        } catch (RemoteException re) {
+            DebugManager.remote(re);
+        }
+
+
+        //this.fireOnMessageSent(data);
+
+
+        layerPanel.repaint();
     }
 
     public void setTool(final DrawingTool tool) {

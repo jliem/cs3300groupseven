@@ -41,6 +41,12 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable {
         this.listeners = new ArrayList<LayerListener>();
         this.figures = new LinkedList<Figure>();
         this.contentBounds = new java.awt.Rectangle(0, 0, 0, 0);
+
+        if (id != null) {
+            this.label = "Layer " + id.getValue();
+        } else {
+            this.label = "Layer";
+        }
     }
 
     public void addLayerListener(final LayerListener listener) {

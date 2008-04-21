@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -18,10 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
+import colab.common.DebugManager;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardListener;
-import colab.common.channel.whiteboard.draw.Ellipse;
-import colab.common.channel.whiteboard.draw.Point;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 
@@ -37,7 +35,12 @@ public class LayerSelectionPanel extends JPanel {
 
     private final JButton newLayerButton;
 
-    public LayerSelectionPanel(final Whiteboard whiteboard) {
+    private final WhiteboardChannelPanel panel;
+
+    public LayerSelectionPanel(final WhiteboardChannelPanel panel,
+            final Whiteboard whiteboard) {
+
+        this.panel = panel;
 
         setLayout(new BorderLayout());
 
@@ -72,10 +75,15 @@ public class LayerSelectionPanel extends JPanel {
            public void onDelete(final LayerIdentifier id) {
                 // TODO Auto-generated method stub
 
-            }
-           public void onInsert(final int offset, final Layer layer) {
-                layerPanels.insertElementAt(new LayerPanel(panelList, layer), offset);
            }
+           public void onInsert(final int offset, final Layer layer) {
+               DebugManager.debug("Got new layer in layer selection panel");
+
+               layerPanels.insertElementAt(new LayerPanel(panelList, layer), offset);
+               panelList.setListData(layerPanels);
+
+           }
+
            public void onShift(final LayerIdentifier id, final int offset) {
             // TODO Auto-generated method stub
 
@@ -86,8 +94,7 @@ public class LayerSelectionPanel extends JPanel {
         newLayerButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-
-
+                panel.createNewLayer(null);
             }
 
         });
@@ -109,6 +116,15 @@ public class LayerSelectionPanel extends JPanel {
         return layerPanel.getLayer();
 
     }
+
+    /**
+     * Gets the number of layers in this layer selection panel.
+     * @return the number of layers
+     */
+    public int getNumberOfLayers() {
+        return layerPanels.size();
+    }
+
 
     public void drawLayers(final Graphics g) {
         for (LayerPanel layerPanel : layerPanels) {

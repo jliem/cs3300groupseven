@@ -88,6 +88,11 @@ public class LayerSelectionPanel extends JPanel {
             // TODO Auto-generated method stub
 
            }
+
+           public void onEdit(LayerIdentifier id) {
+               // TODO Auto-generated method stub
+
+           }
         });
 
         newLayerButton = new JButton("New Layer");

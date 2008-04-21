@@ -11,4 +11,6 @@ public interface WhiteboardListener {
 
     void onShift(LayerIdentifier id, int offset);
 
+    void onEdit(LayerIdentifier id);
+
 }

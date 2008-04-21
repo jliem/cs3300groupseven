@@ -129,7 +129,8 @@ public class NewChannelDialog extends JDialog {
     private void createChannel() {
 
         if (channelName.getText().length() > 0
-                && typeCombo.getSelectedIndex() > -1) {
+                && typeCombo.getSelectedIndex() > -1 
+                	&& isAllowableName(channelName.getText())) {
 
             ChannelName name = new ChannelName(channelName.getText());
             ChannelType type = (ChannelType)(typeCombo.getSelectedItem());
@@ -166,7 +167,23 @@ public class NewChannelDialog extends JDialog {
         }
     }
 
-    /**
+    private boolean isAllowableName(String text) {
+		// TODO Auto-generated method stub
+    	
+    	for(int i = 0; i < text.length(); i++){
+    		if(text.charAt(i) == '?' || text.charAt(i) == 92 || text.charAt(i) == '/'
+    				|| text.charAt(i) == '%' || text.charAt(i) == '*' || text.charAt(i) == ':'
+    					|| text.charAt(i) == '|' || text.charAt(i) == '"' || text.charAt(i) == '<'
+    						|| text.charAt(i) == '>' || text.charAt(i) == '.' || text.charAt(i) == 39)
+    							showErrorBox("Only the characters A-Z, numeric characters, and underscores are allowed for" +
+    									"channel names", "Invalid character" );
+    							return false;    						
+    	}
+		return true;
+	}
+
+
+	/**
      * Closes this window.
      */
     private void closeWindow() {

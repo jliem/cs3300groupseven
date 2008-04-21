@@ -86,9 +86,7 @@ public class LayerSelectionPanel extends JPanel {
         newLayerButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                Layer newLayer = new Layer(new LayerIdentifier(3));
-                newLayer.setLabel("Layer " + newLayer.getId().getValue());
-                whiteboard.insert(0, newLayer);
+
 
             }
 
@@ -118,52 +116,52 @@ public class LayerSelectionPanel extends JPanel {
         }
     }
 
-    public static void main(final String[] args) {
-
-        Layer layer = new Layer(new LayerIdentifier(45));
-        layer.addFigure(new Ellipse(
-                new Point(0, 0),
-                new Dimension(100, 100),
-                Color.BLACK,
-                5,
-                false));
-        layer.setLabel("Layer title");
-
-        Layer layer2 = new Layer(new LayerIdentifier(4245));
-        layer2.addFigure(new Ellipse(
-                new Point(-50, -50),
-                new Dimension(100, 100),
-                Color.GREEN,
-                5,
-                false));
-        layer2.addFigure(new Ellipse(
-                new Point(50, 50),
-                new Dimension(100, 100),
-                Color.GREEN,
-                5,
-                false));
-        layer2.setLabel("ewgerge");
-
-        Whiteboard whiteboard = new Whiteboard();
-
-        LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
-
-        whiteboard.insert(0, layer);
-        whiteboard.insert(0, layer2);
-        whiteboard.insert(0, layer);
-        whiteboard.insert(0, layer2);
-        whiteboard.insert(0, layer);
-        whiteboard.insert(0, layer2);
-        whiteboard.insert(0, layer);
-        whiteboard.insert(0, layer2);
-
-        JFrame frame = new JFrame();
-        frame.setPreferredSize(new Dimension(400, 600));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(panel);
-        frame.pack();
-        frame.setVisible(true);
-
-    }
+//    public static void main(final String[] args) {
+//
+//        Layer layer = new Layer(new LayerIdentifier(45));
+//        layer.addFigure(new Ellipse(
+//                new Point(0, 0),
+//                new Dimension(100, 100),
+//                Color.BLACK,
+//                5,
+//                false));
+//        layer.setLabel("Layer title");
+//
+//        Layer layer2 = new Layer(new LayerIdentifier(4245));
+//        layer2.addFigure(new Ellipse(
+//                new Point(-50, -50),
+//                new Dimension(100, 100),
+//                Color.GREEN,
+//                5,
+//                false));
+//        layer2.addFigure(new Ellipse(
+//                new Point(50, 50),
+//                new Dimension(100, 100),
+//                Color.GREEN,
+//                5,
+//                false));
+//        layer2.setLabel("ewgerge");
+//
+//        Whiteboard whiteboard = new Whiteboard();
+//
+//        LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
+//
+//        whiteboard.insert(0, layer);
+//        whiteboard.insert(0, layer2);
+//        whiteboard.insert(0, layer);
+//        whiteboard.insert(0, layer2);
+//        whiteboard.insert(0, layer);
+//        whiteboard.insert(0, layer2);
+//        whiteboard.insert(0, layer);
+//        whiteboard.insert(0, layer2);
+//
+//        JFrame frame = new JFrame();
+//        frame.setPreferredSize(new Dimension(400, 600));
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setContentPane(panel);
+//        frame.pack();
+//        frame.setVisible(true);
+//
+//    }
 
 }

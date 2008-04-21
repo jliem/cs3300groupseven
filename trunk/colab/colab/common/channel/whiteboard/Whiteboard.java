@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
@@ -22,6 +23,26 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
             .synchronizedList(new ArrayList<Layer>());
         this.whiteboardListeners = new ArrayList<WhiteboardListener>();
 
+    }
+
+    public void addFigure(final LayerIdentifier layerId,
+            final Figure figure) {
+
+        boolean layerFound = false;
+
+        // Find the right layer
+        for (Layer l : layers) {
+            if (l.getId().equals(layerId)) {
+                l.addFigure(figure);
+                layerFound = true;
+                break;
+            }
+        }
+
+        if (!layerFound) {
+            throw new IllegalArgumentException("No layer with id="
+                    + layerId + " found!");
+        }
     }
 
     public void insert(final LayerIdentifier previous,
@@ -46,7 +67,7 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
         }
     }
 
-    public void insert(final int offset, final Layer layer) {
+    private void insert(final int offset, final Layer layer) {
 
         if (layer == null) {
             throw new IllegalArgumentException("Can't insert a null layer");

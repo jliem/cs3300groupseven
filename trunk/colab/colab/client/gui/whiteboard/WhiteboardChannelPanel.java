@@ -91,24 +91,24 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         layerPanel.drawLayers(g);
     }
 
-    public static void main(final String[] args) throws Exception {
-        JFrame frame = new JFrame("test");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new WhiteboardChannelPanel(new UserName("UserName"),
-                new ClientWhiteboardChannel(new ChannelName("Channel name")) {
-            Whiteboard whiteboard;
-            public Whiteboard getWhiteboard() {
-                if (whiteboard == null) {
-                    whiteboard = new Whiteboard();
-                    Layer defaultLayer = new Layer(new LayerIdentifier(2));
-                    defaultLayer.setLabel("Default Label");
-                    whiteboard.insert(0, defaultLayer);
-                }
-                return whiteboard;
-            }
-        }));
-        frame.pack();
-        frame.setVisible(true);
-    }
+//    public static void main(final String[] args) throws Exception {
+//        JFrame frame = new JFrame("test");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.add(new WhiteboardChannelPanel(new UserName("UserName"),
+//                new ClientWhiteboardChannel(new ChannelName("Channel name")) {
+//            Whiteboard whiteboard;
+//            public Whiteboard getWhiteboard() {
+//                if (whiteboard == null) {
+//                    whiteboard = new Whiteboard();
+//                    Layer defaultLayer = new Layer(new LayerIdentifier(2));
+//                    defaultLayer.setLabel("Default Label");
+//                    whiteboard.insert(0, defaultLayer);
+//                }
+//                return whiteboard;
+//            }
+//        }));
+//        frame.pack();
+//        frame.setVisible(true);
+//    }
 
 }

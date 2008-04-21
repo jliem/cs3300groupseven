@@ -44,6 +44,11 @@ public abstract class Figure implements Drawable,
         this.penThickness = penThickness;
     }
 
+    public static Figure constructFromXml(XmlNode node) {
+        // TODO for Chris
+        return null;
+    }
+
     /** {@inheritDoc} */
     public final void draw(final Graphics g) {
 
@@ -111,7 +116,7 @@ public abstract class Figure implements Drawable,
      * @return a deep copy of this figure
      */
     public abstract Figure copy();
-    
+
     /**
      * @param penThickness the pen thickness
      */

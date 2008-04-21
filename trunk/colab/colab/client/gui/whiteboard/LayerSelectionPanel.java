@@ -62,7 +62,7 @@ public class LayerSelectionPanel extends JPanel {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
         for (Layer layer : whiteboard) {
-            LayerPanel layerPanel = new LayerPanel(layer);
+            LayerPanel layerPanel = new LayerPanel(panelList, layer);
             layerPanels.add(layerPanel);
         }
 
@@ -74,7 +74,7 @@ public class LayerSelectionPanel extends JPanel {
 
             }
            public void onInsert(final int offset, final Layer layer) {
-                layerPanels.insertElementAt(new LayerPanel(layer), offset);
+                layerPanels.insertElementAt(new LayerPanel(panelList, layer), offset);
            }
            public void onShift(final LayerIdentifier id, final int offset) {
             // TODO Auto-generated method stub

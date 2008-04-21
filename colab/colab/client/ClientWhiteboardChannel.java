@@ -30,7 +30,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
         super(name);
 
         whiteboard = new Whiteboard();
-
+        revisions = new ChannelDataSet<WhiteboardChannelData>();
     }
 
     public Whiteboard getWhiteboard() {

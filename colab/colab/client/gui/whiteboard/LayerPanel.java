@@ -76,12 +76,12 @@ public class LayerPanel extends JPanel {
     }
 
     private void setLabelText(final String label) {
-        this.label.setText(label);
+        this.label.setText("  " + label);
     }
 
     public void setSelected(boolean selected) {
         if(selected) {
-            setBackground(Color.BLUE.brighter());
+            setBackground(Color.CYAN);
         } else {
             setBackground(Color.LIGHT_GRAY);
         }

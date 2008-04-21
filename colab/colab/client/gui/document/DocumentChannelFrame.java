@@ -97,6 +97,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         });
 
+        // Download existing data from server
         try {
             List<ChannelData> data = client.getLastData(channel.getId(), -1);
             for (final ChannelData d : data) {

@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JColorChooser;
@@ -17,6 +19,8 @@ import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
+import colab.common.DebugManager;
+import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
@@ -95,8 +99,6 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         add(colorChooser, BorderLayout.SOUTH);
         add(layerPanel, BorderLayout.EAST);
 
-        // TODO Download existing data
-
         this.setVisible(true);
 
     }
@@ -107,6 +109,13 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
      */
     public int getNumberOfLayers() {
         return layerPanel.getNumberOfLayers();
+    }
+
+    /**
+     * Redownloads document from client channel.
+     */
+    public void refreshLayerList() {
+        layerPanel.refresh();
     }
 
     public void createNewLayer(final LayerIdentifier previous) {

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -108,6 +109,19 @@ public class LayerSelectionPanel extends JPanel {
 
         setPreferredSize(new Dimension(175, 123));
 
+    }
+
+    public void refresh() {
+        if (whiteboard != null) {
+
+            layerPanels.clear();
+            Iterator<Layer> layers = whiteboard.iterator();
+
+            while (layers.hasNext()) {
+                layerPanels.add(new LayerPanel(panelList, layers.next()));
+            }
+        }
+        panelList.setListData(layerPanels);
     }
 
     public Layer getActiveLayer() {

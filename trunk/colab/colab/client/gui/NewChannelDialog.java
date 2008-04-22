@@ -24,6 +24,7 @@ import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
+import colab.common.naming.InvalidChannelNameException;
 
 public class NewChannelDialog extends JDialog {
     /** Serialization version number. */
@@ -129,10 +130,16 @@ public class NewChannelDialog extends JDialog {
     private void createChannel() {
 
         if (channelName.getText().length() > 0
-                && typeCombo.getSelectedIndex() > -1 
-                	&& isAllowableName(channelName.getText())) {
+                && typeCombo.getSelectedIndex() > -1) {
 
-            ChannelName name = new ChannelName(channelName.getText());
+            ChannelName name = null;
+            try {
+                name = new ChannelName(channelName.getText());
+            } catch (InvalidChannelNameException ie) {
+                showErrorBox("Only the characters A-Z, numeric characters, and underscores are allowed for" +
+                      "channel names", "Invalid character" );
+                return;
+            }
             ChannelType type = (ChannelType)(typeCombo.getSelectedItem());
 
             ChannelDescriptor desc = new ChannelDescriptor(name, type);
@@ -167,23 +174,7 @@ public class NewChannelDialog extends JDialog {
         }
     }
 
-    private boolean isAllowableName(String text) {
-		// TODO Auto-generated method stub
-    	
-    	for(int i = 0; i < text.length(); i++){
-    		if(text.charAt(i) == '?' || text.charAt(i) == 92 || text.charAt(i) == '/'
-    				|| text.charAt(i) == '%' || text.charAt(i) == '*' || text.charAt(i) == ':'
-    					|| text.charAt(i) == '|' || text.charAt(i) == '"' || text.charAt(i) == '<'
-    						|| text.charAt(i) == '>' || text.charAt(i) == '.' || text.charAt(i) == 39)
-    							showErrorBox("Only the characters A-Z, numeric characters, and underscores are allowed for" +
-    									"channel names", "Invalid character" );
-    							return false;    						
-    	}
-		return true;
-	}
-
-
-	/**
+    /**
      * Closes this window.
      */
     private void closeWindow() {

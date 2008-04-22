@@ -18,6 +18,7 @@ import colab.client.ClientDocumentChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelFrame;
+import colab.client.gui.ExportFrame;
 import colab.client.gui.revision.RevisionDocumentPanel;
 import colab.client.gui.revision.RevisionFrame;
 import colab.common.DebugManager;
@@ -153,7 +154,7 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
         export.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                ExportDocumentFrame frame = new ExportDocumentFrame(channel);
+                ExportFrame frame = new ExportFrame(channel);
                 frame.pack();
                 frame.setVisible(true);
             }

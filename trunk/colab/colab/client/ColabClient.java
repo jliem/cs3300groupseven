@@ -26,12 +26,12 @@ import colab.common.exception.UnableToConnectException;
 import colab.common.exception.UserAlreadyExistsException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
+import colab.common.naming.InvalidChannelNameException;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ColabClientRemote;
 import colab.common.remote.server.ColabServerRemote;
 import colab.common.remote.server.ConnectionRemote;
 import colab.server.user.Password;
-import colab.server.user.User;
 
 /**
  * The CoLab client application which is used to make requests to the server.
@@ -486,7 +486,8 @@ public class ColabClient extends UnicastRemoteObject
      * @throws ConnectionDroppedException if the connection is lost
      */
     public void createChannel(final ChannelDescriptor channelDesc)
-            throws ChannelAlreadyExistsException, ConnectionDroppedException {
+            throws InvalidChannelNameException,
+            ChannelAlreadyExistsException, ConnectionDroppedException {
 
         try {
             connection.createChannel(channelDesc);

@@ -2,6 +2,8 @@ package colab.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -61,6 +63,13 @@ public abstract class ClientChannel<T extends ChannelData>
      * @return the descriptor for this channel.
      */
     public abstract ChannelDescriptor getChannelDescriptor();
+
+    /**
+     * Exports this channel to a file.
+     * @param file the file
+     * @throws IOException if an i/o error occurs
+     */
+    public abstract void export(final File file) throws IOException;
 
     /**
      * Get the channel data.

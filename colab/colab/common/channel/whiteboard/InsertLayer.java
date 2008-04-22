@@ -41,6 +41,26 @@ public class InsertLayer extends WhiteboardChannelData {
         this.layer = layer;
     }
 
+    public InsertLayer copy() {
+        UserName username = (super.getCreator() != null ?
+                new UserName(super.getCreator().getValue()) : null);
+
+        LayerIdentifier li = (layerId != null ?
+                new LayerIdentifier(layerId.getValue()) : null);
+
+        InsertLayer copy = new InsertLayer(new UserName(super.getCreator().getValue()),
+                super.getTimestamp(), li);
+
+        if (layer != null) {
+            copy.setLayer(layer.copy());
+        }
+
+        // Set channel id
+        copy.setId(this.getId());
+
+        return copy;
+    }
+
 
 
 }

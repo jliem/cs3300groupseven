@@ -15,6 +15,7 @@ import colab.common.DebugManager;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.whiteboard.EditLayer;
+import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
 
@@ -96,6 +97,14 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
 
         for (WhiteboardChannelData data : dataSet.getAll()) {
 
+            // If it's an insert, copy the layer first and clear it
+            if (data instanceof InsertLayer) {
+                data = ((InsertLayer)data).copy();
+                ((InsertLayer)data).getLayer().clear();
+            }
+
+            // TODO What about deletes?
+
             try {
                 data.apply(board);
             } catch (Exception e) {
@@ -106,6 +115,8 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
                 break;
             }
         }
+
+        DebugManager.debug("Finished showing revision");
 
         display.setBoard(board);
         repaint();

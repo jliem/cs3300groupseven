@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.identity.Identifiable;
@@ -119,6 +120,13 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
     }
 
     /**
+     * Removes all figures from this Layer.
+     */
+    public void clear() {
+        figures.clear();
+    }
+
+    /**
      * @return a deep copy of this layer
      */
     public Layer copy() {
@@ -133,7 +141,7 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
 
     public void addFigure(final Figure figure) {
 
-        System.out.println("Layer got the figure");
+        DebugManager.debug("Layer got the figure: " + figure);
 
         // Add the figure to the list
         this.figures.add(figure);

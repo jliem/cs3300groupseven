@@ -24,6 +24,10 @@ public abstract class RevisionPanel extends JPanel {
     private JScrollPane revisionScroll;
     private Vector<Revision> revisions;
 
+    public RevisionPanel() {
+
+    }
+
     public RevisionPanel(final ClientChannel channel) {
         this.channel = channel;
 

@@ -1,6 +1,8 @@
 package colab.client;
 
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 
 import colab.common.DebugManager;
@@ -60,6 +62,11 @@ public class ClientWhiteboardChannel extends ClientChannel {
         ActionEvent event = new ActionEvent(
                 this, ActionEvent.ACTION_FIRST, "Message Added");
         fireActionPerformed(event);
+
+    }
+
+    public void export(File file) throws IOException {
+        // TODO Auto-generated method stub
 
     }
 

@@ -1,4 +1,4 @@
-package colab.client.gui.document;
+package colab.client.gui;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -19,16 +19,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import colab.client.ClientDocumentChannel;
+import colab.client.ClientChannel;
 import colab.common.DebugManager;
 import colab.common.naming.ChannelName;
 
-public class ExportDocumentFrame extends JFrame {
+public class ExportFrame extends JFrame {
 
     /** Serialization verson number. */
     public static final long serialVersionUID = 1L;
 
-    private final ClientDocumentChannel channel;
+    private final ClientChannel channel;
 
     private final JFileChooser fileChooser;
 
@@ -48,7 +48,7 @@ public class ExportDocumentFrame extends JFrame {
 
     private File exportFile;
 
-    public ExportDocumentFrame(final ClientDocumentChannel channel) {
+    public ExportFrame(final ClientChannel channel) {
 
         this.channel = channel;
 
@@ -68,7 +68,7 @@ public class ExportDocumentFrame extends JFrame {
 
         browseButton.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                if (fileChooser.showSaveDialog(ExportDocumentFrame.this)
+                if (fileChooser.showSaveDialog(ExportFrame.this)
                         == JFileChooser.APPROVE_OPTION) {
 
                     // Sets the file path in the text box
@@ -175,16 +175,6 @@ public class ExportDocumentFrame extends JFrame {
 
         JOptionPane.showMessageDialog(
                 this, message, title, JOptionPane.ERROR_MESSAGE);
-
-    }
-
-    public static void main(final String[] args) throws Exception {
-
-        ChannelName channelName = new ChannelName("Test");
-        ClientDocumentChannel docChannel =
-            new ClientDocumentChannel(channelName);
-        ExportDocumentFrame frame = new ExportDocumentFrame(docChannel);
-        frame.setVisible(true);
 
     }
 

@@ -19,6 +19,7 @@ import javax.swing.event.ChangeListener;
 import colab.client.ClientChatChannel;
 import colab.client.ColabClient;
 import colab.client.gui.ClientChannelFrame;
+import colab.client.gui.ExportFrame;
 import colab.client.gui.revision.RevisionChatPanel;
 import colab.client.gui.revision.RevisionFrame;
 import colab.common.DebugManager;
@@ -124,7 +125,7 @@ public final class ChatChannelFrame extends ClientChannelFrame {
 
         export.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
-                ExportChatFrame frame = new ExportChatFrame(channel);
+                ExportFrame frame = new ExportFrame(channel);
                 frame.pack();
                 frame.setVisible(true);
             }

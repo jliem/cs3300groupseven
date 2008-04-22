@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import colab.client.ClientChannel;
+import colab.client.ClientChatChannel;
 import colab.common.DebugManager;
 import colab.common.naming.ChannelName;
 
@@ -131,7 +133,7 @@ public class ExportFrame extends JFrame {
         add(exportButton, exportC);
 
         setSize(275, 200);
-        setResizable(false);
+        setResizable(true);
 
         // We don't want closing the export window to close the whole app
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -176,6 +178,12 @@ public class ExportFrame extends JFrame {
         JOptionPane.showMessageDialog(
                 this, message, title, JOptionPane.ERROR_MESSAGE);
 
+    }
+
+    public static void main(String[] args) throws RemoteException {
+        ExportFrame f = new ExportFrame(new ClientChatChannel(new ChannelName("Test")));
+        f.pack();
+        f.setVisible(true);
     }
 
 }

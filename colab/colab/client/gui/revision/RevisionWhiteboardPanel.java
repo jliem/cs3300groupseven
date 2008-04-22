@@ -1,14 +1,12 @@
 package colab.client.gui.revision;
 
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
@@ -16,6 +14,7 @@ import colab.client.ClientChannel;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
+import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
 
@@ -58,6 +57,7 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
         this.setLayout(new GridLayout(2, 1));
         add(revisionScroll);
         add(display);
+
     }
 
     protected ClientChannel getChannel() {
@@ -78,11 +78,11 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
 
             if (data != null && data.getCreator() != null
                     && data.getTimestamp() != null) {
-                // Don't add locks
-//                if (data
-//                    list.add(new Revision(data));
-//                }
-                list.add(new Revision(data));
+
+                // Only add edits
+                if (data instanceof EditLayer) {
+                    list.add(new Revision(data));
+                }
             }
         }
 
@@ -97,7 +97,6 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
         for (WhiteboardChannelData data : dataSet.getAll()) {
 
             try {
-                DebugManager.debug("Applying " + data);
                 data.apply(board);
             } catch (Exception e) {
                 DebugManager.shouldNotHappen(e);
@@ -109,7 +108,7 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
         }
 
         display.setBoard(board);
-        display.repaint();
+        repaint();
 
 
     }

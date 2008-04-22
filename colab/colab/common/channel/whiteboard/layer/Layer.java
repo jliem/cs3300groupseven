@@ -19,7 +19,7 @@ import colab.common.naming.UserName;
 public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializable {
 
     public static final long serialVersionUID = 1L;
-    
+
     private LayerIdentifier id;
 
     /**
@@ -31,7 +31,7 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
     private final List<LayerListener> listeners;
 
     private final List<Figure> figures;
-    
+
     private UserName lockHolder = null;
 
     /** Derived from the figures list. */
@@ -80,19 +80,19 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
            lockHolder = user;
        }
     }
-    
+
     public void unlock() {
         lockHolder = null;
     }
-    
+
     public boolean isUnlocked() {
         return lockHolder == null;
     }
-    
+
     public UserName getLockHolder() {
         return lockHolder;
     }
-    
+
     /** {@inheritDoc} */
     public LayerIdentifier getId() {
         return id;

@@ -1,5 +1,6 @@
 package colab.common.channel.whiteboard;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -222,14 +223,22 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
     }
     
     public BufferedImage exportImage() {
-        java.awt.Rectangle bounds = new java.awt.Rectangle(new Dimension(0, 0));
+        java.awt.Rectangle bounds = null;
         for(Layer layer : layers) {
-            bounds.add(layer.getBounds());
+            if(bounds == null) {
+                java.awt.Rectangle orig = layer.getBounds();
+                bounds = new java.awt.Rectangle(orig.x, orig.y, orig.width, orig.height);
+            } else {
+                bounds.add(layer.getBounds());
+            }
         }
         
         BufferedImage image = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
         
         Graphics graphics = image.getGraphics();
+        
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, bounds.width, bounds.height);
         
         for(Layer layer : layers) {
             layer.draw(graphics);

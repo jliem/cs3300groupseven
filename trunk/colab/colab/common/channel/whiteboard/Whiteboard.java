@@ -1,7 +1,6 @@
 package colab.common.channel.whiteboard;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
@@ -60,15 +60,17 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
 
             int offset = 0;
             if (previous != null) {
-                boolean offsetFound = false;
+                boolean previousLayerFound = false;
                 for (Layer l : layers) {
                     offset++;
                     if (l.getId().equals(previous)) {
-                        offsetFound = true;
+                        previousLayerFound = true;
                         break;
                     }
                 }
-                if (!offsetFound) {
+                if (!previousLayerFound) {
+                    DebugManager.debug("Previoys: " + previous.getValue());
+                    DebugManager.debug("Searches layers:: " + layers.size());
                     throw new NotApplicableException();
                 }
             }
@@ -221,7 +223,7 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
     public void drawLayer(final Graphics graphIn, final LayerIdentifier id) {
         get(id).draw(graphIn);
     }
-    
+
     public BufferedImage exportImage() {
         java.awt.Rectangle bounds = null;
         for(Layer layer : layers) {
@@ -232,18 +234,18 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
                 bounds.add(layer.getBounds());
             }
         }
-        
+
         BufferedImage image = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
-        
+
         Graphics graphics = image.getGraphics();
-        
+
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, bounds.width, bounds.height);
-        
+
         for(Layer layer : layers) {
             layer.draw(graphics);
         }
-        
+
         return image;
     }
 

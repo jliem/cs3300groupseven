@@ -12,8 +12,10 @@ import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.WhiteboardChannelType;
+import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
+import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;
 
@@ -48,7 +50,14 @@ public class ClientWhiteboardChannel extends ClientChannel {
 
     public void add(final ChannelData data) throws RemoteException {
 
-        revisions.add((WhiteboardChannelData) data);
+        WhiteboardChannelData whiteboardData = (WhiteboardChannelData) data;
+
+        if (whiteboardData instanceof InsertLayer) {
+            InsertLayer insert = (InsertLayer) whiteboardData;
+            insert.getLayer().setId(new LayerIdentifier(insert.getId()));
+        }
+
+        revisions.add(whiteboardData);
 
         try {
             ((WhiteboardChannelData) data).apply(whiteboard);

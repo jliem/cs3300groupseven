@@ -104,7 +104,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     public void createNewLayer(final LayerIdentifier previous) {
 
         InsertLayer insert =
-            new InsertLayer(super.getUsername(), new Date(), null);
+            new InsertLayer(super.getUsername(), new Date(), previous);
 
         this.fireOnMessageSent(insert);
 

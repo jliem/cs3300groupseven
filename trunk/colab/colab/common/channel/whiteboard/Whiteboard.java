@@ -1,6 +1,8 @@
 package colab.common.channel.whiteboard;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -17,6 +19,9 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
 
     private List<WhiteboardListener> whiteboardListeners;
 
+    /**
+     * Constructs an empty Whiteboard.
+     */
     public Whiteboard() {
 
         this.layers = Collections
@@ -214,6 +219,23 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
 
     public void drawLayer(final Graphics graphIn, final LayerIdentifier id) {
         get(id).draw(graphIn);
+    }
+    
+    public BufferedImage exportImage() {
+        java.awt.Rectangle bounds = new java.awt.Rectangle(new Dimension(0, 0));
+        for(Layer layer : layers) {
+            bounds.add(layer.getBounds());
+        }
+        
+        BufferedImage image = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+        
+        Graphics graphics = image.getGraphics();
+        
+        for(Layer layer : layers) {
+            layer.draw(graphics);
+        }
+        
+        return image;
     }
 
     /** {@inheritDoc} */

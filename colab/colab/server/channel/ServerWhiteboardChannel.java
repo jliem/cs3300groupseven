@@ -39,14 +39,25 @@ public final class ServerWhiteboardChannel
     }
 
     public ServerWhiteboardChannel(final ChannelName name, final File file)
-    throws IOException {
+            throws IOException {
+
         super(name);
-        // TODO finish this - XML
+        // TODO Bug 80 - Whiteboard XML
+
     }
 
     public void add(final WhiteboardChannelData data) {
 
-        DebugManager.debug("Server received " + data);
+        try {
+
+            // Check for channel data validity
+            // SHOULD take care of bad locks, et cetera
+            data.apply(currentBoard.copy());
+
+        } catch (final NotApplicableException e) {
+            DebugManager.exception(e);
+            return;
+        }
 
         // If this is an insert, set the paragraph id
         if (data instanceof InsertLayer) {
@@ -69,35 +80,11 @@ public final class ServerWhiteboardChannel
             }
         }
 
-        DebugManager.debug(" # Still adding");
-
         try {
-
-            // Check for channel data validity
-            // SHOULD take care of bad locks, et cetera
-            data.apply(currentBoard.copy());
-
-            DebugManager.debug("Server is adding data: " + data.toString());
-
             data.apply(currentBoard);
-
-        } catch (final NotApplicableException ex) {
-
-            // If the apply didn't work, remove the revision
-            // if we added it
-
-            // TODO The code below doesn't work because it uses the
-            // compareTo method in Identifier, which crashes when
-            // the value is null
-
-//            if (revisions.contains(data)) {
-//                revisions.remove(data);
-//            }
-
-            return;
+        } catch (NotApplicableException e) {
+            DebugManager.shouldNotHappen(e);
         }
-
-        DebugManager.debug(" # Applied");
 
         // Store the data, and assign it an identifier
         // Might have already added this if it's an

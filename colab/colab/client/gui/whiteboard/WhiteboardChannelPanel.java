@@ -142,7 +142,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     }
 
     public int getPenThickness() {
-        return 2; // TODO make a ui component for this
+        return 2; // TODO Bug 89 - Changing pen thickness
     }
 
     public void addToActiveLayer(final Figure figure) {

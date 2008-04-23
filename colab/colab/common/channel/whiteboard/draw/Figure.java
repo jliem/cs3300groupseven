@@ -45,7 +45,7 @@ public abstract class Figure implements Drawable,
     }
 
     public static Figure constructFromXml(XmlNode node) {
-        // TODO for Chris
+        // TODO Bug 80 - Whiteboard XML
         return null;
     }
 

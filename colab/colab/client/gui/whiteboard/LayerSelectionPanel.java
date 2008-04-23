@@ -74,32 +74,32 @@ public class LayerSelectionPanel extends JPanel {
 
         whiteboard.addWhiteboardListener(new WhiteboardListener() {
            public void onDelete(final LayerIdentifier id) {
-                // TODO Auto-generated method stub
+                // TODO Bug 86 - Deleting layers
 
            }
            public void onInsert(final int offset, final Layer layer) {
                DebugManager.debug("Got new layer in layer selection panel");
 
-               layerPanels.insertElementAt(new LayerPanel(panelList, layer), offset);
+               layerPanels.insertElementAt(
+                       new LayerPanel(panelList, layer),
+                       offset);
                panelList.setListData(layerPanels);
 
            }
 
            public void onShift(final LayerIdentifier id, final int offset) {
-            // TODO Auto-generated method stub
-
+            // TODO Bug 88 - Shifting layer order
            }
 
-           public void onEdit(LayerIdentifier id) {
-               // TODO Auto-generated method stub
-
+           public void onEdit(final LayerIdentifier id) {
+               // TODO # Is this why thumbs don't refresh?
            }
         });
 
         newLayerButton = new JButton("New Layer");
         newLayerButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 panel.createNewLayer(null);
             }
 

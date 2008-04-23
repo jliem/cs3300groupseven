@@ -9,41 +9,47 @@ import colab.common.naming.UserName;
 
 public class LockLayer extends WhiteboardChannelData {
 
+    /** Serialization version number. */
     public static final long serialVersionUID = 1L;
-    
+
     private UserName lockHolder;
-    
+
     public LockLayer(final UserName creator, final Date timestamp,
             final LayerIdentifier layerId,
             final UserName lockHolder) {
         super(creator, timestamp, layerId);
         this.lockHolder = lockHolder;
     }
-    
+
+    /** {@inheritDoc} */
     @Override
-    public void apply(Whiteboard whiteboard) throws NotApplicableException {
+    public void apply(final Whiteboard whiteboard)
+            throws NotApplicableException {
+
         Layer layer = whiteboard.get(super.layerId);
-        
-        if(layer == null) {
-            throw new NotApplicableException("Layer " + super.layerId.toString() + " was not found in the whiteboard.");
+
+        if (layer == null) {
+            throw new NotApplicableException(
+                    "Layer " + super.layerId.toString()
+                    + " was not found in the whiteboard.");
         }
-        
+
         if(lockHolder != null) {
-            if(!layer.isUnlocked()) {
-                throw new NotApplicableException("Layer " + super.layerId.toString() + " is not unlocked.");
-            }
-            else {
+            if (!layer.isUnlocked()) {
+                throw new NotApplicableException(
+                        "Layer " + super.layerId.toString()
+                        + " is not unlocked.");
+            } else {
                 layer.lock(lockHolder);
             }
-        }
-        else {
+        } else {
             layer.unlock();
         }
     }
 
+    /** {@inheritDoc} */
     public String xmlNodeName() {
-        // TODO Auto-generated method stub
-        return null;
+        return "Lock";
     }
 
 }

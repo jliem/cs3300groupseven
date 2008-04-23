@@ -35,10 +35,8 @@ public class ParagraphChangeMerger implements ParagraphListener {
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.delete(offset, length);
 
-        EditDocChannelData edit = new EditDocChannelData(id,
-                diff,
-                user,
-                new Date());
+        EditDocChannelData edit = new EditDocChannelData(
+                id, diff, user, new Date());
 
         panel.fireOnMessageSent(edit);
 
@@ -46,8 +44,6 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
 
     public void onHeaderChange(final int headerLevel) {
-        // TODO Auto-generated method stub
-
     }
 
 
@@ -63,19 +59,14 @@ public class ParagraphChangeMerger implements ParagraphListener {
                 user,
                 new Date());
 
-        DebugManager.debug("^^^^^^^^^^^^^^^^^^^^^^^^");
-
         panel.fireOnMessageSent(edit);
-
-        DebugManager.debug("vvvvvvvvvvvvvvvvvvvvvvvv");
 
     }
 
 
     public void onLock(final UserName newOwner) {
 
-        LockDocChannelData lock = new LockDocChannelData(newOwner,
-                id);
+        LockDocChannelData lock = new LockDocChannelData(newOwner, id);
 
         panel.fireOnMessageSent(lock);
 
@@ -84,10 +75,10 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
     public void onUnlock() {
 
-        LockDocChannelData lock = new LockDocChannelData(null,
-                id);
+        LockDocChannelData lock = new LockDocChannelData(null, id);
 
         panel.fireOnMessageSent(lock);
+
     }
 
 }

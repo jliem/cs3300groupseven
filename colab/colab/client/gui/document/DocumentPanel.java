@@ -126,7 +126,7 @@ public final class DocumentPanel extends ClientChannelPanel {
         editors = Collections.synchronizedList(
                 new ArrayList<ParagraphEditor>());
 
-        /* TODO potential sync issues (what if something
+        /* Potential sync issues (what if something
          * is added while the window is being built?) */
         Iterator<DocumentParagraph> iter = this.document.paragraphIterator();
         int paragraphCount = 0;

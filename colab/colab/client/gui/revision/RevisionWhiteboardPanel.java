@@ -103,7 +103,7 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
                 ((InsertLayer)data).getLayer().clear();
             }
 
-            // TODO What about deletes?
+            // TODO Bug 86 - Deleting layers
 
             try {
                 data.apply(board);

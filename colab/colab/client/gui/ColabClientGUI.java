@@ -283,7 +283,7 @@ class ColabClientGUI extends JFrame {
         // On error, return to login screen and pray that the server will
         // be restarted into a clean state
 
-        // TODO If the server is not restarted, we could get
+        // Fix this: If the server is not restarted, we could get
         // into an inconsistent state when we try to log back in.
         this.gotoUserLoginView(true);
     }

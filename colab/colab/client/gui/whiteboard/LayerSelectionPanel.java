@@ -26,7 +26,8 @@ import colab.common.channel.whiteboard.layer.LayerIdentifier;
 
 public class LayerSelectionPanel extends JPanel {
 
-    public static final long serialVersionUID = 1;
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private final JList panelList;
 
@@ -78,11 +79,10 @@ public class LayerSelectionPanel extends JPanel {
 
            }
            public void onInsert(final int offset, final Layer layer) {
-               DebugManager.debug("Got new layer in layer selection panel");
 
                layerPanels.insertElementAt(
                        new LayerPanel(panelList, layer),
-                       offset);
+                       layerPanels.size() - offset);
                panelList.setListData(layerPanels);
 
            }
@@ -100,7 +100,14 @@ public class LayerSelectionPanel extends JPanel {
         newLayerButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(final ActionEvent arg0) {
-                panel.createNewLayer(null);
+                Layer activeLayer = getActiveLayer();
+                LayerIdentifier previousLayer;
+                if (activeLayer == null) {
+                    previousLayer = null;
+                } else {
+                    previousLayer = activeLayer.getId();
+                }
+                panel.createNewLayer(previousLayer);
             }
 
         });

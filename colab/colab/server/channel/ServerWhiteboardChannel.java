@@ -86,24 +86,17 @@ public final class ServerWhiteboardChannel
             return;
         }
 
-        // If this is an insert, set the paragraph id
+        // If this is an insert, set the layer id
         if (data instanceof InsertLayer) {
 
-            InsertLayer insertData = ((InsertLayer)data);
+            InsertLayer insertData = ((InsertLayer) data);
 
             revisions.addAndAssignId(data);
 
-            // If we don't have a layer already, create it
-            if (insertData.getLayer() == null) {
-                LayerIdentifier layerId =
-                    new LayerIdentifier(data.getId());
+            LayerIdentifier layerId = new LayerIdentifier(data.getId());
 
-                // Create a blank layer with no lock holder
-                Layer layer = new Layer(layerId);
-                layer.setId(layerId);
+            insertData.getLayer().setId(layerId);
 
-                insertData.setLayer(layer);
-            }
         }
 
         try {

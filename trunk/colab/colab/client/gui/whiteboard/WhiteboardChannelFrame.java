@@ -87,9 +87,9 @@ public class WhiteboardChannelFrame extends ClientChannelFrame {
 
         whiteboardPanel.refreshLayerList();
 
-        if (whiteboardPanel.getNumberOfLayers() <= 0) {
-            whiteboardPanel.createNewLayer(null);
-        }
+//        if (whiteboardPanel.getNumberOfLayers() == 0) {
+//            whiteboardPanel.createNewLayer(null);
+//        }
 
         // Menu
         JMenuBar menu = new JMenuBar();

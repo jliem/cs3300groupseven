@@ -346,6 +346,12 @@ public class ColabClient extends UnicastRemoteObject
     public void add(final ChannelName channelName, final ChannelData data)
             throws ConnectionDroppedException {
 
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         ChannelDataIdentifier id;
         try {
            id = connection.add(channelName, data);

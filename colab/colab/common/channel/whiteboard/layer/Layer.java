@@ -105,6 +105,13 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
     }
 
     /**
+     * @return the minimum rectangle that contains every stroke in this layer
+     */
+    public java.awt.Rectangle getBounds() {
+        return contentBounds;
+    }
+    
+    /**
      * @return the label for this layer
      */
     public String getLabel() {

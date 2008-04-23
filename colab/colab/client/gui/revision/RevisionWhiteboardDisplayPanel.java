@@ -6,10 +6,11 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import colab.common.channel.whiteboard.Whiteboard;
-import colab.common.channel.whiteboard.layer.LayerIdentifier;
 
 public class RevisionWhiteboardDisplayPanel extends JPanel {
 
+    public static final long serialVersionUID = 1;
+    
     private Whiteboard board;
 
     public RevisionWhiteboardDisplayPanel() {

@@ -5,14 +5,13 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
+import javax.imageio.ImageIO;
+
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.document.DocumentChannelData;
-import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.type.WhiteboardChannelType;
-import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
 import colab.common.exception.NotApplicableException;
@@ -66,7 +65,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
     }
 
     public void export(File file) throws IOException {
-        // TODO Bug 83 - Exporting whiteboard image
+        ImageIO.write(whiteboard.exportImage(), "png", file);
     }
 
 }

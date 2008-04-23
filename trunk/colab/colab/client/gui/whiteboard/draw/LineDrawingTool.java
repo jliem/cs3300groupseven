@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import colab.client.gui.whiteboard.WhiteboardChannelPanel;
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.draw.Path;
 
 public class LineDrawingTool extends DrawingTool {
@@ -34,14 +35,18 @@ public class LineDrawingTool extends DrawingTool {
     @Override
     public void mouseReleased(final MouseEvent e) {
         super.mouseReleased(e);
-        drawFigure(line);
+        Figure toDraw = line;
+        line = null;
+        drawFigure(toDraw);
     }
 
     /** {@inheritDoc} */
     @Override
     public void draw(final Graphics g) {
         super.draw(g);
-        line.draw(g);
+        if (line != null) {
+            line.draw(g);
+        }
     }
 
 }

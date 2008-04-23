@@ -48,8 +48,6 @@ public class ClientWhiteboardChannel extends ClientChannel {
 
     public void add(final ChannelData data) throws RemoteException {
 
-        DebugManager.debug("New channel data added " + data.toString());
-
         revisions.add((WhiteboardChannelData) data);
 
         try {

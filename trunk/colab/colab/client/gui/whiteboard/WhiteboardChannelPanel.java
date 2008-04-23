@@ -3,11 +3,8 @@ package colab.client.gui.whiteboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JColorChooser;
@@ -19,12 +16,11 @@ import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
-import colab.common.DebugManager;
-import colab.common.channel.document.DocumentParagraph;
 import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
+import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
-import colab.common.channel.whiteboard.WhiteboardListener;
+import colab.common.channel.whiteboard.WhiteboardListenerAdapter;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
@@ -36,6 +32,8 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     public static final long serialVersionUID = 1L;
 
     private final ClientWhiteboardChannel channel;
+
+    private Whiteboard whiteboard;
 
     private ToolPanel toolPanel;
     private DrawingPanel drawingPanel;
@@ -51,27 +49,12 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
         this.channel = channel;
 
-        this.channel.getWhiteboard().addWhiteboardListener(new WhiteboardListener() {
-
-            public void onDelete(LayerIdentifier id) {
-                // Nothing
-
-            }
-
-            public void onEdit(LayerIdentifier id) {
+        this.whiteboard = this.channel.getWhiteboard();
+        whiteboard.addWhiteboardListener(
+                new WhiteboardListenerAdapter() {
+            public void onEdit(final LayerIdentifier id) {
                 drawingPanel.repaint();
             }
-
-            public void onInsert(int offset, Layer layer) {
-                // Nothing
-
-            }
-
-            public void onShift(LayerIdentifier id, int offset) {
-                // Nothing
-
-            }
-
         });
 
         drawingPanel = new DrawingPanel(this);
@@ -144,9 +127,13 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         return 2; // TODO Bug 89 - Changing pen thickness
     }
 
-    public void addToActiveLayer(final Figure figure) {
-        Layer activeLayer = layerPanel.getActiveLayer();
+    public Layer getActiveLayer() {
+        return layerPanel.getActiveLayer();
+    }
 
+    public void addToActiveLayer(final Figure figure) {
+
+        Layer activeLayer = getActiveLayer();
 
         activeLayer.addFigure(figure);
 
@@ -156,10 +143,13 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
                 figure);
 
         this.fireOnMessageSent(edit);
+
+        this.drawingPanel.repaint();
+
     }
 
-    public void drawLayers(final Graphics g) {
-        layerPanel.drawLayers(g);
+    public Whiteboard getWhiteboard() {
+        return whiteboard;
     }
 
     public void addChannelPanelListener(

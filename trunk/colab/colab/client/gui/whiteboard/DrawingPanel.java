@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import colab.client.gui.whiteboard.draw.DrawingTool;
+import colab.common.channel.whiteboard.layer.Layer;
 
 /**
  * Drawing panel for whiteboard.
@@ -28,6 +29,13 @@ public class DrawingPanel extends JPanel {
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void update(final Graphics g) {
+        // Force repainting of the whole thing
+        paintComponent(g);
+    }
+
     public void setTool(final DrawingTool newTool) {
 
         if (tool != null) {
@@ -45,11 +53,15 @@ public class DrawingPanel extends JPanel {
 
         super.paintComponent(g);
 
-        parentPanel.drawLayers(g);
-
-        if (tool != null) {
-            tool.draw(g);
+        Layer activeLayer = parentPanel.getActiveLayer();
+        for (Layer layer : parentPanel.getWhiteboard()) {
+            layer.draw(g);
+            if (tool != null && activeLayer == layer) {
+                tool.draw(g);
+            }
         }
+
+
     }
 
 }

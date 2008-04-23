@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import colab.client.gui.whiteboard.WhiteboardChannelPanel;
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.draw.Path;
 import colab.common.channel.whiteboard.draw.Point;
 
@@ -36,14 +37,18 @@ public class PathDrawingTool extends DrawingTool {
     @Override
     public void mouseReleased(final MouseEvent e) {
         super.mouseReleased(e);
-        drawFigure(path);
+        Figure toDraw = path;
+        path = null;
+        drawFigure(toDraw);
     }
 
     /** {@inheritDoc} */
     @Override
     public void draw(final Graphics g) {
         super.draw(g);
-        path.draw(g);
+        if (path != null) {
+            path.draw(g);
+        }
     }
 
 }

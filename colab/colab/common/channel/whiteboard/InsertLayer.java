@@ -26,7 +26,8 @@ public class InsertLayer extends WhiteboardChannelData {
         super(creator, timestamp, previous);
 
         this.layerId = previous;
-        this.layer = null;
+        this.layer = new Layer(new LayerIdentifier((Integer) null));
+
     }
 
     /** {@inheritDoc} */
@@ -35,7 +36,8 @@ public class InsertLayer extends WhiteboardChannelData {
     }
 
     /** {@inheritDoc} */
-    public void apply(Whiteboard whiteboard) throws NotApplicableException {
+    public void apply(final Whiteboard whiteboard)
+            throws NotApplicableException {
         whiteboard.insert(layerId, layer);
     }
 
@@ -43,7 +45,7 @@ public class InsertLayer extends WhiteboardChannelData {
         return layer;
     }
 
-    public void setLayer(Layer layer) {
+    public void setLayer(final Layer layer) {
         this.layer = layer;
     }
 

@@ -130,9 +130,9 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
      * @return a deep copy of this layer
      */
     public Layer copy() {
-        Layer layer = new Layer(new LayerIdentifier(new Integer(getId().getValue().intValue())));
+        Layer layer = new Layer(new LayerIdentifier(getId()));
 
-        for(Figure figure : figures) {
+        for (Figure figure : figures) {
             layer.addFigure(figure.copy());
         }
 

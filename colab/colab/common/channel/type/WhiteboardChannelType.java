@@ -39,8 +39,7 @@ public class WhiteboardChannelType extends ChannelType {
             final UserName currentUser) throws RemoteException {
 
         return new WhiteboardChannelFrame(
-                client, (ClientWhiteboardChannel)channel,
-                currentUser);
+                client, (ClientWhiteboardChannel) channel, currentUser);
 
     }
 

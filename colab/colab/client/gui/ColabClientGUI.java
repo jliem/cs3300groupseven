@@ -365,17 +365,18 @@ class ColabClientGUI extends JFrame {
     }
 
     /**
-     * Helper method to create a new ClientChannelFrame.
-     * @param desc the descriptor
-     * @return a new ClientChannelFrame
+     * Creates a new ClientChannelFrame.
+     *
+     * @param descriptor the descriptor
+     * @return the newly-constructed channel frame
      * @throws RemoteException if an rmi error occurs
      */
     private ClientChannelFrame createNewChannelFrame(
-            final ChannelDescriptor desc) throws RemoteException {
+            final ChannelDescriptor descriptor) throws RemoteException {
 
-        ClientChannel channel = client.joinChannel(desc);
+        ClientChannel channel = client.joinChannel(descriptor);
 
-        ChannelType type = desc.getType();
+        ChannelType type = descriptor.getType();
         ClientChannelFrame frame = type.createClientChannelFrame(
                 client, channel, currentUser);
 

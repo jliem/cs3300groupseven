@@ -80,12 +80,21 @@ public final class ServerDocumentChannel
     @Override
     public void add(final DocumentChannelData data) {
 
-        DebugManager.debug(" # Adding");
+        try {
+
+            // Check for channel data validity
+            // SHOULD take care of bad locks, et cetera
+            data.apply(currentDocument.copy());
+
+        } catch (final NotApplicableException e) {
+            DebugManager.exception(e);
+            return;
+        }
 
         // If this is an insert, set the paragraph id
         if (data instanceof InsertDocChannelData) {
 
-            InsertDocChannelData insertData = ((InsertDocChannelData)data);
+            InsertDocChannelData insertData = ((InsertDocChannelData) data);
 
             revisions.addAndAssignId(data);
 
@@ -104,44 +113,19 @@ public final class ServerDocumentChannel
             }
         }
 
-        DebugManager.debug(" # Still adding");
-
         try {
-
-            // Check for channel data validity
-            // SHOULD take care of bad locks, et cetera
-            data.apply(currentDocument.copy());
-
-            DebugManager.debug("Server is adding data: " + data.toString());
-
             data.apply(currentDocument);
-
-        } catch (final NotApplicableException ex) {
-
-            // If the apply didn't work, remove the revision
-            // if we added it
-
-            // TODO The code below doesn't work because it uses the
-            // compareTo method in Identifier, which crashes when
-            // the value is null
-
-//            if (revisions.contains(data)) {
-//                revisions.remove(data);
-//            }
-
-            return;
+        } catch (final NotApplicableException e) {
+            DebugManager.shouldNotHappen(e);
         }
-
-        DebugManager.debug(" # Applied");
 
         // Store the data, and assign it an identifier
         // Might have already added this if it's an
         // InsertDocChannelData but that's ok
-        if (!(data instanceof LockDocChannelData) && !(data instanceof InsertDocChannelData)) {
+        if (!(data instanceof LockDocChannelData)
+                && !(data instanceof InsertDocChannelData)) {
             revisions.addAndAssignId(data);
         }
-
-        DebugManager.debug(" # Stored");
 
         // Forward it to all clients, regardless of the creator
         (new Thread() {
@@ -149,8 +133,6 @@ public final class ServerDocumentChannel
                 sendToAllRegardless(data);
             }
         }).start();
-
-        DebugManager.debug(" # Sent");
 
     }
 

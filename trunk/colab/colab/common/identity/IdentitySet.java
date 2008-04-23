@@ -123,7 +123,6 @@ public class IdentitySet<K extends Identifier, V extends Identifiable<K>>
 
     /** {@inheritDoc} */
     public final boolean retainAll(final Collection<?> arg0) {
-        // TODO Not implemented
         throw new UnsupportedOperationException();
     }
 

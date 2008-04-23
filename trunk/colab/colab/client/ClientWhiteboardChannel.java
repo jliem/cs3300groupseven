@@ -66,8 +66,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
     }
 
     public void export(File file) throws IOException {
-        // TODO Auto-generated method stub
-
+        // TODO Bug 83 - Exporting whiteboard image
     }
 
 }

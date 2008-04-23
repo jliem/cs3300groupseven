@@ -66,7 +66,7 @@ public class CommunityPasswordDialog extends JDialog {
 
                 if (!changeOK) {
 
-                    // TODO Handle this in parent
+                    // Should handle this in parent
                     JOptionPane.showMessageDialog(CommunityPasswordDialog.this,
                             "The connection to the server was lost. "
                             + "Double-check that the server is running.",

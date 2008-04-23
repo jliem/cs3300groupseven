@@ -14,6 +14,12 @@ public class LockLayer extends WhiteboardChannelData {
 
     private UserName lockHolder;
 
+    /**
+     * Constructs an empty LockLayer.
+     */
+    public LockLayer() {
+    }
+
     public LockLayer(final UserName creator, final Date timestamp,
             final LayerIdentifier layerId,
             final UserName lockHolder) {

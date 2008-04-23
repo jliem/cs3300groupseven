@@ -3,10 +3,14 @@ package colab.common.channel.whiteboard;
 import java.util.Date;
 
 import colab.common.channel.ChannelData;
-import colab.common.channel.document.DocumentChannelData.DocumentChannelDataType;
+import colab.common.channel.document.DeleteDocChannelData;
+import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
+import colab.common.xml.XmlConstructor;
+import colab.common.xml.XmlNode;
+import colab.common.xml.XmlParseException;
 
 /**
  * Represents a revision to a whiteboard channel.
@@ -15,8 +19,14 @@ public abstract class WhiteboardChannelData extends ChannelData {
 
     protected LayerIdentifier layerId;
 
-    protected WhiteboardChannelData(final UserName creator, final Date timestamp,
-            final LayerIdentifier layerId) {
+    /**
+     * Constructs an empty WhiteboardChannelData.
+     */
+    protected WhiteboardChannelData() {
+    }
+
+    protected WhiteboardChannelData(final UserName creator,
+            final Date timestamp, final LayerIdentifier layerId) {
         super(creator, timestamp);
         this.layerId = layerId;
     }
@@ -42,5 +52,61 @@ public abstract class WhiteboardChannelData extends ChannelData {
      */
     public abstract void apply(final Whiteboard whiteboard)
         throws NotApplicableException;
+
+    public static XmlConstructor<WhiteboardChannelData> getXmlConstructor() {
+        return XML_CONSTRUCTOR;
+    }
+
+    private static final XmlConstructor<WhiteboardChannelData> XML_CONSTRUCTOR =
+        new XmlConstructor<WhiteboardChannelData>() {
+            public WhiteboardChannelData fromXml(final XmlNode node)
+                    throws XmlParseException {
+                return constructFromXml(node);
+            }
+        };
+
+    private static WhiteboardChannelData constructFromXml(final XmlNode node)
+            throws XmlParseException {
+
+        WhiteboardChannelData data = instantiateFromXmlType(node.getType());
+        data.fromXml(node);
+        return data;
+
+    }
+
+    private static WhiteboardChannelData instantiateFromXmlType(
+            final String type) throws XmlParseException {
+
+        WhiteboardChannelData data;
+
+        //Delete, edit, insert, lock, move
+        data = new DeleteLayer();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        data = new EditLayer();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        data = new InsertLayer();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        data = new LockLayer();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        data = new MoveLayer();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        throw new XmlParseException();
+
+    }
 
 }

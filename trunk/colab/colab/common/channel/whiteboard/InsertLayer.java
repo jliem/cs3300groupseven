@@ -14,6 +14,12 @@ public class InsertLayer extends WhiteboardChannelData {
 
     private Layer layer;
 
+    /**
+     * Constructs an empty InsertLayer.
+     */
+    public InsertLayer() {
+    }
+
     public InsertLayer(final UserName creator, final Date timestamp,
             final LayerIdentifier previous) {
 

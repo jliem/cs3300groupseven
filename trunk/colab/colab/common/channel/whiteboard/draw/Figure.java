@@ -8,6 +8,10 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
 
+import colab.common.channel.document.DeleteDocChannelData;
+import colab.common.channel.document.DocumentChannelData;
+import colab.common.channel.document.EditDocChannelData;
+import colab.common.channel.document.InsertDocChannelData;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
@@ -44,9 +48,39 @@ public abstract class Figure implements Drawable,
         this.penThickness = penThickness;
     }
 
-    public static Figure constructFromXml(XmlNode node) {
-        // TODO Bug 80 - Whiteboard XML
-        return null;
+    public static Figure constructFromXml(final XmlNode node)
+            throws XmlParseException {
+
+        Figure figure = instantiateFromXmlType(node.getType());
+
+        figure.fromXml(node);
+
+        return figure;
+
+    }
+
+    private static Figure instantiateFromXmlType(
+            final String type) throws XmlParseException {
+
+        Figure data;
+
+        data = new Ellipse();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        data = new Path();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        data = new Rectangle();
+        if (type.equals(data.xmlNodeName())) {
+            return data;
+        }
+
+        throw new XmlParseException();
+
     }
 
     /** {@inheritDoc} */

@@ -9,7 +9,6 @@ import colab.common.DebugManager;
 import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDataStore;
 import colab.common.channel.ChannelDescriptor;
-import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.Whiteboard;
@@ -18,6 +17,7 @@ import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;
+import colab.server.file.ChannelFile;
 
 /**
  * ServerDocumentChannel is a type of {@link ServerChannel} which
@@ -30,6 +30,11 @@ public final class ServerWhiteboardChannel
 
     private Whiteboard currentBoard;
 
+    /**
+     * Constructs a new server-side whiteboard channel.
+     *
+     * @param name the name of the channel
+     */
     public ServerWhiteboardChannel(final ChannelName name) {
         super(name);
 
@@ -38,14 +43,36 @@ public final class ServerWhiteboardChannel
         this.currentBoard = new Whiteboard();
     }
 
+    /**
+     * Constructs a new server-side whiteboard channel.
+     *
+     * @param name the name of the channel
+     * @param file the file to use for data storage
+     * @throws IOException if a file storage error occurs
+     */
     public ServerWhiteboardChannel(final ChannelName name, final File file)
             throws IOException {
 
         super(name);
-        // TODO Bug 80 - Whiteboard XML
+
+        ChannelFile<WhiteboardChannelData> channelFile =
+            new ChannelFile<WhiteboardChannelData>(
+                file, WhiteboardChannelData.getXmlConstructor());
+        this.revisions = channelFile;
+
+        this.currentBoard = new Whiteboard();
+        for (WhiteboardChannelData data : revisions.getAll()) {
+            try {
+                data.apply(currentBoard);
+            } catch (final NotApplicableException e) {
+                DebugManager.exception(e);
+            }
+        }
 
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void add(final WhiteboardChannelData data) {
 
         try {
@@ -72,8 +99,7 @@ public final class ServerWhiteboardChannel
                     new LayerIdentifier(data.getId());
 
                 // Create a blank layer with no lock holder
-                Layer layer =
-                    new Layer(layerId);
+                Layer layer = new Layer(layerId);
                 layer.setId(layerId);
 
                 insertData.setLayer(layer);
@@ -93,8 +119,6 @@ public final class ServerWhiteboardChannel
             revisions.addAndAssignId(data);
         }
 
-        DebugManager.debug(" # Stored");
-
         // Forward it to all clients, regardless of the creator
         (new Thread() {
             public void run() {
@@ -102,10 +126,10 @@ public final class ServerWhiteboardChannel
             }
         }).start();
 
-        DebugManager.debug(" # Sent");
-
     }
 
+    /** {@inheritDoc} */
+    @Override
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
@@ -113,10 +137,12 @@ public final class ServerWhiteboardChannel
     /** {@inheritDoc} */
     @Override
     public List<WhiteboardChannelData> getLastData(final int count) {
-        List<WhiteboardChannelData> list = new ArrayList<WhiteboardChannelData>();
+        List<WhiteboardChannelData> list =
+            new ArrayList<WhiteboardChannelData>();
         for(WhiteboardChannelData wcd : revisions.getLast(count)) {
             list.add(wcd);
         }
         return list;
     }
+
 }

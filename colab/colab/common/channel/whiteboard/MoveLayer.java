@@ -11,7 +11,13 @@ public class MoveLayer extends WhiteboardChannelData {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
-    protected MoveLayer(final UserName creator, final Date timestamp,
+    /**
+     * Constructs an empty MoveLayer.
+     */
+    public MoveLayer() {
+    }
+
+    public MoveLayer(final UserName creator, final Date timestamp,
             final LayerIdentifier layerId) {
 
         super(creator, timestamp, layerId);

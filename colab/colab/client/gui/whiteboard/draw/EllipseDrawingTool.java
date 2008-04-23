@@ -6,8 +6,8 @@ import java.awt.event.MouseEvent;
 
 import colab.client.gui.whiteboard.WhiteboardChannelPanel;
 import colab.common.channel.whiteboard.draw.Ellipse;
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.draw.Point;
-import colab.common.channel.whiteboard.draw.Rectangle;
 
 public class EllipseDrawingTool extends DrawingTool {
 
@@ -15,7 +15,14 @@ public class EllipseDrawingTool extends DrawingTool {
 
     private boolean filled;
 
-    public EllipseDrawingTool(final WhiteboardChannelPanel parentPanel,
+    /**
+     * Constructs a new EllipseDrawingTool.
+     *
+     * @param parentPanel the panel to draw on
+     * @param filled whether the ellipse is filled with color
+     */
+    public EllipseDrawingTool(
+            final WhiteboardChannelPanel parentPanel,
             final boolean filled) {
         super(parentPanel);
         this.filled = filled;
@@ -47,14 +54,18 @@ public class EllipseDrawingTool extends DrawingTool {
     @Override
     public void mouseReleased(final MouseEvent e) {
         super.mouseReleased(e);
-        drawFigure(ellipse);
+        Figure toDraw = ellipse;
+        ellipse = null;
+        drawFigure(toDraw);
     }
 
     /** {@inheritDoc} */
     @Override
     public void draw(final Graphics g) {
         super.draw(g);
-        ellipse.draw(g);
+        if (ellipse != null) {
+            ellipse.draw(g);
+        }
     }
 
 }

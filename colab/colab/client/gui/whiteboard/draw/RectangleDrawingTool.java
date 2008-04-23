@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
 import colab.client.gui.whiteboard.WhiteboardChannelPanel;
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.draw.Point;
 import colab.common.channel.whiteboard.draw.Rectangle;
 
@@ -46,14 +47,18 @@ public class RectangleDrawingTool extends DrawingTool {
     @Override
     public void mouseReleased(final MouseEvent e) {
         super.mouseReleased(e);
-        drawFigure(rectangle);
+        Figure toDraw = rectangle;
+        rectangle = null;
+        drawFigure(toDraw);
     }
 
     /** {@inheritDoc} */
     @Override
     public void draw(final Graphics g) {
         super.draw(g);
-        rectangle.draw(g);
+        if (rectangle != null) {
+            rectangle.draw(g);
+        }
     }
 
 }

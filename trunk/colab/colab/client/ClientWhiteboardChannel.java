@@ -19,6 +19,9 @@ import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;
 
+/**
+ * A ClientChannel that handles whiteboard-protocol channels.
+ */
 public class ClientWhiteboardChannel extends ClientChannel {
 
     /** Serialization version number. */
@@ -27,6 +30,12 @@ public class ClientWhiteboardChannel extends ClientChannel {
     private Whiteboard whiteboard;
     private ChannelDataSet<WhiteboardChannelData> revisions;
 
+    /**
+     * Constructs a new ClientWhiteboardChannel.
+     *
+     * @param name the name of the channel
+     * @throws RemoteException if an rmi error occurs
+     */
     public ClientWhiteboardChannel(final ChannelName name)
             throws RemoteException {
 
@@ -36,18 +45,26 @@ public class ClientWhiteboardChannel extends ClientChannel {
         revisions = new ChannelDataSet<WhiteboardChannelData>();
     }
 
+    /**
+     * @return the whiteboard represented by this channel
+     */
     public Whiteboard getWhiteboard() {
         return whiteboard;
     }
 
+    /**
+     * @return all of the revision data
+     */
     public ChannelDataSet getChannelData() {
         return revisions;
     }
 
+    /** {@inheritDoc} */
     public ChannelDescriptor getChannelDescriptor() {
         return new ChannelDescriptor(this.getId(), new WhiteboardChannelType());
     }
 
+    /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
 
         WhiteboardChannelData whiteboardData = (WhiteboardChannelData) data;
@@ -71,6 +88,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
 
     }
 
+    /** {@inheritDoc} */
     public void export(final File file) throws IOException {
         ImageIO.write(whiteboard.exportImage(), "png", file);
     }

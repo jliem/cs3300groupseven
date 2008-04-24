@@ -38,6 +38,7 @@ public final class ClientChatChannel extends ClientChannel<ChatChannelData> {
         messages = new ChannelDataSet<ChatChannelData>();
     }
 
+    /** {@inheritDoc} */
     public ChannelDataSet<ChatChannelData> getChannelData() {
         return messages;
     }
@@ -64,20 +65,35 @@ public final class ClientChatChannel extends ClientChannel<ChatChannelData> {
         return new ChannelDescriptor(this.getId(), new ChatChannelType());
     }
 
+    /**
+     * @return all of the messages stored locally
+     */
     public List<ChatChannelData> getLocalMessages() {
         return messages.getLast(-1);
     }
 
+    /**
+     * @return the number of messages stored locally
+     */
     public int getLocalNumMessages() {
         return messages.size();
     }
 
+    /**
+     * @return messages that have recently been added
+     */
     public List<ChatChannelData> getNewMessages() {
-        List <ChatChannelData> list = messages.getLast(newMessages);
+        List<ChatChannelData> list = messages.getLast(newMessages);
         newMessages = 0;
         return list;
     }
 
+    /**
+     * Exports the local contents of the channel as a text file.
+     *
+     * @param file the file to write output to
+     * @throws IOException if an I/O error occurs in writing to the file
+     */
     public void export(final File file) throws IOException {
 
         PrintWriter writer = new PrintWriter(new FileOutputStream(file));

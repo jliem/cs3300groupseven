@@ -41,6 +41,12 @@ public class LayerTester extends TestCase {
 
     }
 
+    /**
+     * Adds some figures to a layer, fetches a cropped image of
+     * the layer, and checks to see that its size is as expected.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testCroppedImage() throws Exception {
 
         Layer layer = new Layer(new LayerIdentifier(4));

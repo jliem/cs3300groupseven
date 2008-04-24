@@ -42,6 +42,12 @@ public class StringChangeBufferTester extends TestCase {
 
     }
 
+    /**
+     * Performs a number of inserts which can all form one contiguous
+     * insert, and checks that they are aggregated into a single insert.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testContiguousInsert() throws Exception {
 
         TestStringChangeBufferListener listener =
@@ -80,6 +86,11 @@ public class StringChangeBufferTester extends TestCase {
 
     }
 
+    /**
+     * Performs a simple delete.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testSingleDelete() throws Exception {
 
         TestStringChangeBufferListener listener =
@@ -111,6 +122,12 @@ public class StringChangeBufferTester extends TestCase {
 
     }
 
+    /**
+     * Performs an insert, then a delete.
+     * Both updates should fire.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testInsertThenDelete() throws Exception {
 
         TestStringChangeBufferListener listener =

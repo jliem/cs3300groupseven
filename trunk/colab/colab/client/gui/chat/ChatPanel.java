@@ -103,6 +103,9 @@ final class ChatPanel extends ClientChannelPanel {
 
     }
 
+    /**
+     * @return the outgoing message to send to the server, if any
+     */
     public ChatChannelData dequeuePendingMessage() {
 
         if (pendingMessages.size() > 0) {
@@ -113,19 +116,31 @@ final class ChatPanel extends ClientChannelPanel {
 
     }
 
+    /**
+     * @return true if timestamps are displayed
+     */
     public boolean isTimestampEnabled() {
 
         return timestampEnabled;
 
     }
 
+    /**
+     * @param timestampEnabled whether timestamps should be displayed
+     */
     public void setTimestampEnabled(final boolean timestampEnabled) {
 
         this.timestampEnabled = timestampEnabled;
 
     }
 
-    public static void main(final String[] args) {
+    /**
+     * A main method for testing this panel.
+     *
+     * @param args unused
+     * @throws Exception if any exception is thrown
+     */
+    public static void main(final String[] args) throws Exception {
 
         JFrame f = new JFrame();
         f.setSize(320, 300);

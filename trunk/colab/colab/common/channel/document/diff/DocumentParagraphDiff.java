@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
-import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;

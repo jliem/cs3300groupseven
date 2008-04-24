@@ -17,7 +17,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import colab.client.ClientDocumentChannel;
-import colab.common.DebugManager;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.event.document.ParagraphListener;
@@ -25,6 +24,10 @@ import colab.common.naming.UserName;
 import colab.common.util.StringChangeBuffer;
 import colab.common.util.StringChangeBufferListener;
 
+/**
+ * A text area which is specialized to sit in a DocumentPanel
+ * and edit a paragraph.
+ */
 class ParagraphEditor extends JTextArea {
 
     /** Serialization verion number. */
@@ -58,10 +61,17 @@ class ParagraphEditor extends JTextArea {
     /** Timer delay in ms. */
     private static final int TIMER_DELAY = 2000000;
 
+    /**
+     * Constructs a new ParagraphEditor.
+     *
+     * @param channel the channel for the document
+     * @param documentPanel the document panel in which this editor resides
+     * @param paragraph the paragraph being edited
+     * @param user the name of the user doing the editing
+     */
     public ParagraphEditor(final ClientDocumentChannel channel,
             final DocumentPanel documentPanel,
-            final DocumentParagraph paragraph,
-            final UserName user) {
+            final DocumentParagraph paragraph, final UserName user) {
 
         this.channel = channel;
         this.documentPanel = documentPanel;
@@ -70,8 +80,6 @@ class ParagraphEditor extends JTextArea {
         this.defaultFont = getFont();
         this.defaultFG = getForeground();
         this.defaultBG = getBackground();
-
-        //this.setBorder();
 
         this.changeBuffer = new StringChangeBuffer(
                 new StringChangeBufferListener() {
@@ -217,7 +225,7 @@ class ParagraphEditor extends JTextArea {
      * Deletes this paragraph.
      */
     public void delete() {
-        documentPanel.deleteParagraph(paragraph.getId(), user);
+        documentPanel.deleteParagraph(paragraph.getId());
     }
 
     /**
@@ -303,11 +311,17 @@ class ParagraphEditor extends JTextArea {
 
     }
 
+    /**
+     * @param listener a listener to add
+     */
     public void addParagraphListener(
             final ParagraphListener listener) {
         paragraphListeners.add(listener);
     }
 
+    /**
+     * @param listener a listener to remove
+     */
     public void removeParagraphListener(
             final ParagraphListener listener) {
         paragraphListeners.remove(listener);
@@ -355,18 +369,12 @@ class ParagraphEditor extends JTextArea {
 
     }
 
-    public void sendHeaderChange(final int headerLevel) {
-        this.fireHeaderChange(headerLevel);
-    }
-
     private void showLock(final UserName newOwner) {
 
         if (newOwner != null) {
 
             if (newOwner.equals(ParagraphEditor.this.user)) {
 
-                //setBackground(Color.BLUE.brighter());
-                //setForeground(Color.WHITE);
                 setBackground(Color.CYAN);
 
                 setToolTipText(null);
@@ -399,12 +407,20 @@ class ParagraphEditor extends JTextArea {
 
     }
 
+    /**
+     * @return the paragraph object which this editor is editing
+     */
     public DocumentParagraph getParagraph() {
 
         return paragraph;
 
     }
 
+    /**
+     * Forces the height to be as small as possible.
+     *
+     * {@inheritDoc}
+     */
     @Override
     public Dimension getMaximumSize() {
         return new Dimension(
@@ -417,6 +433,11 @@ class ParagraphEditor extends JTextArea {
         return lockHolder;
     }
 
+    /**
+     * Sets the text of the editor without firing any events.
+     *
+     * @param text the new contents
+     */
     public void setTextWithoutEvent(final String text) {
         if (!isLockedByMe()) {
             synchronized(documentListener) {
@@ -427,6 +448,11 @@ class ParagraphEditor extends JTextArea {
         }
     }
 
+    /**
+     * Inserts some text at the caret position.
+     *
+     * @param str the text to insert
+     */
     public void insertAtCaret(final String str) {
         int position = getCaretPosition();
         insert(str, position);
@@ -470,7 +496,7 @@ class ParagraphEditor extends JTextArea {
                 DocumentParagraph p = getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()+1);
 
-                sendHeaderChange(p.getHeaderLevel());
+                fireHeaderChange(p.getHeaderLevel());
             }
 
             break;
@@ -486,7 +512,7 @@ class ParagraphEditor extends JTextArea {
                 DocumentParagraph p = getParagraph();
                 p.setHeaderLevel(p.getHeaderLevel()-1);
 
-                sendHeaderChange(p.getHeaderLevel());
+                fireHeaderChange(p.getHeaderLevel());
 
             }
 

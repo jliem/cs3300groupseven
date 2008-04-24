@@ -2,7 +2,6 @@ package colab.client.gui.document;
 
 import java.util.Date;
 
-import colab.common.DebugManager;
 import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.document.diff.DocumentParagraphDiff;

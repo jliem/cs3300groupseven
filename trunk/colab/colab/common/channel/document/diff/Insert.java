@@ -1,6 +1,5 @@
 package colab.common.channel.document.diff;
 
-import colab.common.DebugManager;
 import colab.common.channel.document.DocumentParagraph;
 import colab.common.exception.NotApplicableException;
 import colab.common.xml.XmlNode;

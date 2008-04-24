@@ -39,6 +39,7 @@ public final class XmlReader {
      * Parses the content.
      *
      * @return a list of xml nodes represented by the string content
+     * @throws XmlParseException if the xml content is improperly formatted
      */
     public List<XmlNode> getXml() throws XmlParseException {
         Stack<XmlNode> stack = new Stack<XmlNode>();

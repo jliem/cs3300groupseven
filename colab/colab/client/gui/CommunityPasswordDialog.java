@@ -24,6 +24,9 @@ import colab.server.user.Password;
 
 public class CommunityPasswordDialog extends JDialog {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     private final ColabClient client;
 
     private final CommunityName communityName;
@@ -32,7 +35,7 @@ public class CommunityPasswordDialog extends JDialog {
     private JPasswordField confirmCommPass;
 
     public CommunityPasswordDialog(final ColabClient client,
-            CommunityName communityName) {
+            final CommunityName communityName) {
 
 
         this.client = client;
@@ -116,7 +119,8 @@ public class CommunityPasswordDialog extends JDialog {
     }
 
     private void handleChange(final ActionEvent e) throws NetworkException,
-    RemoteException, CommunityAlreadyExistsException, CommunityDoesNotExistException {
+            RemoteException, CommunityAlreadyExistsException,
+            CommunityDoesNotExistException {
 
         if (commPass.getPassword().length == 0
                 || confirmCommPass.getPassword().length == 0) {
@@ -130,8 +134,9 @@ public class CommunityPasswordDialog extends JDialog {
                 confirmCommPass.getPassword())) {
 
             showErrorBox(
-                    "The password fields do not agree. Please enter the "
-                    + "desired password again. (The password is case sensitive!)",
+                    "The password fields do not agree. "
+                    + "Please enter the desired password again. "
+                    + "(The password is case sensitive!)",
             "Password Error");
 
             commPass.setText("");

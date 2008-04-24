@@ -9,10 +9,19 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 
-public class ImageUtils {
+/**
+ * Utility methods for dealing with images.
+ */
+public final class ImageUtils {
+
+    /**
+     * Hidden default constructor.
+     */
+    private ImageUtils() {
+    }
 
     public static Image scaleToFit(final BufferedImage image,
-            final Dimension maxSize, Component component) {
+            final Dimension maxSize, final Component component) {
 
         double maxRatio = maxSize.getWidth() / maxSize.getHeight();
         double imgRatio = ((double) image.getWidth()) / image.getHeight();
@@ -28,8 +37,8 @@ public class ImageUtils {
 
     }
 
-    public static Image scaleRatio(final BufferedImage image, final double ratio,
-            Component component) {
+    public static Image scaleRatio(final BufferedImage image,
+            final double ratio, final Component component) {
 
         Dimension size = new Dimension((int) (image.getWidth() * ratio),
                                        (int) (image.getHeight() * ratio));
@@ -39,7 +48,7 @@ public class ImageUtils {
     }
 
     public static Image scaleExact(final Image image, final Dimension size,
-            Component component) {
+            final Component component) {
 
         ImageFilter filter =
             new AreaAveragingScaleFilter(size.width, size.height);

@@ -229,13 +229,15 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
         for(Layer layer : layers) {
             if(bounds == null) {
                 java.awt.Rectangle orig = layer.getBounds();
-                bounds = new java.awt.Rectangle(orig.x, orig.y, orig.width, orig.height);
+                bounds = new java.awt.Rectangle(
+                        orig.x, orig.y, orig.width, orig.height);
             } else {
                 bounds.add(layer.getBounds());
             }
         }
 
-        BufferedImage image = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(
+                bounds.width, bounds.height, BufferedImage.TYPE_INT_RGB);
 
         Graphics graphics = image.getGraphics();
 

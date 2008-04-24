@@ -17,8 +17,10 @@ import colab.common.naming.UserName;
  * A layer is a 2-dimensional image.  Multiple layers can be
  * overlayed upon each other within a whiteboard channel.
  */
-public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializable {
+public class Layer
+        implements Identifiable<LayerIdentifier>, Drawable, Serializable {
 
+    /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
     private LayerIdentifier id;
@@ -76,8 +78,8 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
         }
     }
 
-    public void lock(UserName user) {
-       if(isUnlocked()) {
+    public void lock(final UserName user) {
+       if (isUnlocked()) {
            lockHolder = user;
        }
     }
@@ -110,7 +112,7 @@ public class Layer implements Identifiable<LayerIdentifier>, Drawable, Serializa
     public java.awt.Rectangle getBounds() {
         return contentBounds;
     }
-    
+
     /**
      * @return the label for this layer
      */

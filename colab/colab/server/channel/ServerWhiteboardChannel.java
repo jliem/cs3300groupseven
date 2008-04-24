@@ -13,7 +13,6 @@ import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
-import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.ChannelName;

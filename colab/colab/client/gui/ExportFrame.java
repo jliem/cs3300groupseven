@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -180,8 +179,9 @@ public class ExportFrame extends JFrame {
 
     }
 
-    public static void main(String[] args) throws RemoteException {
-        ExportFrame f = new ExportFrame(new ClientChatChannel(new ChannelName("Test")));
+    public static void main(final String[] args) throws Exception {
+        ExportFrame f = new ExportFrame(new ClientChatChannel(
+                new ChannelName("Test")));
         f.pack();
         f.setVisible(true);
     }

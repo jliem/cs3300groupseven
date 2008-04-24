@@ -9,6 +9,13 @@ import colab.common.remote.server.ConnectionRemote;
  */
 public final class ColabServerTester extends TestCase {
 
+    /**
+     * Creates a server, creates a client.  When the client
+     * to connects to the server, make sure it receives a
+     * remote reference to a ConnectionRemote.
+     *
+     * @throws Exception if any exception is thrown
+     */
     public void testCreateServerandConnect() throws Exception {
 
         ColabServer server = new MockColabServer();

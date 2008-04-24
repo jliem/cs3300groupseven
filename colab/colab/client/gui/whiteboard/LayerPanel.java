@@ -8,20 +8,19 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-import colab.common.channel.whiteboard.draw.Ellipse;
 import colab.common.channel.whiteboard.draw.Figure;
-import colab.common.channel.whiteboard.draw.Point;
 import colab.common.channel.whiteboard.layer.Layer;
-import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.channel.whiteboard.layer.LayerListener;
 import colab.common.util.ImageUtils;
 
 public class LayerPanel extends JPanel {
+
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
 
     private final Layer layer;
 
@@ -79,8 +78,8 @@ public class LayerPanel extends JPanel {
         this.label.setText("  " + label);
     }
 
-    public void setSelected(boolean selected) {
-        if(selected) {
+    public void setSelected(final boolean selected) {
+        if (selected) {
             setBackground(Color.CYAN);
         } else {
             setBackground(Color.LIGHT_GRAY);

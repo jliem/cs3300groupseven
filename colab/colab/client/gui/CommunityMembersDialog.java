@@ -24,6 +24,9 @@ import colab.common.naming.UserName;
 
 public class CommunityMembersDialog extends JDialog {
 
+    /** Serialization version number. */
+    public static final long serialVersionUID = 1L;
+
     /** Scroll pane for the user list. */
     private final JScrollPane scroll;
 
@@ -42,9 +45,9 @@ public class CommunityMembersDialog extends JDialog {
 
     private final UserName currentUser;
 
-    public CommunityMembersDialog(ColabClient client,
-            CommunityName communityName,
-            UserName currentUser) {
+    public CommunityMembersDialog(final ColabClient client,
+            final CommunityName communityName,
+            final UserName currentUser) {
 
         this.client = client;
         this.communityName = communityName;
@@ -56,7 +59,8 @@ public class CommunityMembersDialog extends JDialog {
 
         userList = new JList(listModel);
 
-        userList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        userList.setSelectionMode(
+                ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         userList.setListData(getMembers());
 
@@ -67,7 +71,7 @@ public class CommunityMembersDialog extends JDialog {
         JButton doneButton = new JButton("Done");
         doneButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 dispose();
             }
 
@@ -76,7 +80,7 @@ public class CommunityMembersDialog extends JDialog {
         JButton selectAllButton = new JButton("Select All");
         selectAllButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 userList.setSelectionInterval(0, users.size()-1);
             }
 
@@ -85,7 +89,7 @@ public class CommunityMembersDialog extends JDialog {
         JButton deselectAllButton = new JButton("Deselect All");
         deselectAllButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
                 userList.clearSelection();
             }
 
@@ -94,19 +98,21 @@ public class CommunityMembersDialog extends JDialog {
         JButton removeButton = new JButton("Remove Selected");
         removeButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
+            public void actionPerformed(final ActionEvent arg0) {
 
                 if (JOptionPane.showConfirmDialog(CommunityMembersDialog.this,
                         "Remove selected users?",
                         "Confirm Removal",
-                        JOptionPane.YES_NO_CANCEL_OPTION) == JOptionPane.YES_OPTION) {
+                        JOptionPane.YES_NO_CANCEL_OPTION)
+                            == JOptionPane.YES_OPTION) {
 
                     Object[] array = userList.getSelectedValues();
                     for (Object o : array) {
                         UserName user = (UserName)o;
 
                         try {
-                            CommunityMembersDialog.this.client.removeMember(user,
+                            CommunityMembersDialog.this.client.removeMember(
+                                    user,
                                     CommunityMembersDialog.this.communityName);
 
                         } catch (CommunityDoesNotExistException e) {

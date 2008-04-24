@@ -69,6 +69,7 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
         return display.add(c);
     }
 
+    @SuppressWarnings("unchecked")
     protected Vector<Revision> buildRevisionList() {
         Vector<Revision> list = new Vector<Revision>();
 

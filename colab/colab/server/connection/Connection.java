@@ -317,7 +317,8 @@ public final class Connection extends UnicastRemoteObject
 
     /** {@inheritDoc} */
     public void changePassword(final CommunityName communityName,
-            final Password password) throws CommunityDoesNotExistException, RemoteException {
+            final Password password)
+            throws CommunityDoesNotExistException, RemoteException {
 
         // Check state
         if (!this.state.hasCommunityLogin()) {
@@ -330,7 +331,8 @@ public final class Connection extends UnicastRemoteObject
         if (server.isModerator(this.username, communityName)) {
             server.changePassword(communityName, password);
         } else {
-            throw new IllegalStateException("Could not change password--not a moderator");
+            throw new IllegalStateException(
+                    "Could not change password - not a moderator");
         }
 
     }

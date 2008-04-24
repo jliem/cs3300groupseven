@@ -171,6 +171,22 @@ public final class Connection extends UnicastRemoteObject
 
     }
 
+    /**
+     * Checks whether the remote reference to the
+     * client is still valid.  If not, disconnect.
+     *
+     * @return true if the connection is still up
+     */
+    public boolean ping() {
+        try {
+            this.client.ping();
+            return true;
+        } catch (final RemoteException remoteException) {
+            this.disconnect(remoteException);
+            return false;
+        }
+    }
+
     /** {@inheritDoc} */
     public void logIn(final UserName username, final char[] password)
             throws RemoteException {

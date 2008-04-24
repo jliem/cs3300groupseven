@@ -22,4 +22,12 @@ public interface ColabClientRemote extends Remote {
     void channelAdded(ChannelDescriptor channelDescriptor)
             throws RemoteException;
 
+    /**
+     * Does nothing.  Used to check if the
+     * connection to the client is still up.
+     *
+     * @throws RemoteException if an rmi error occurs
+     */
+    void ping() throws RemoteException;
+
 }

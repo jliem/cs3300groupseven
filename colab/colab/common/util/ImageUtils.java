@@ -27,7 +27,7 @@ public final class ImageUtils {
         double imgRatio = ((double) image.getWidth()) / image.getHeight();
 
         double scaleRatio;
-        if (maxRatio > imgRatio) {
+        if (maxRatio < imgRatio) {
             scaleRatio = maxSize.getWidth() / image.getWidth();
         } else {
             scaleRatio = maxSize.getHeight() / image.getHeight();

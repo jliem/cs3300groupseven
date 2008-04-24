@@ -69,8 +69,6 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
                     }
                 }
                 if (!previousLayerFound) {
-                    DebugManager.debug("Previoys: " + previous.getValue());
-                    DebugManager.debug("Searches layers:: " + layers.size());
                     throw new NotApplicableException();
                 }
             }

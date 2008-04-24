@@ -66,10 +66,6 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
             public void actionPerformed(final ActionEvent arg0) {
                 if (arg0.getActionCommand().equals("panels arranged")) {
-
-                    DebugManager.debug(
-                            "Panels were re-arranged, frame is repainting");
-
                     pack();
                     repaint();
                 }
@@ -80,19 +76,12 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
             public void onMessageSent(final ChannelData data) {
 
-                DebugManager.debug("CALL TO SERVER ...");
-
                 try {
                     client.add(channel.getId(), data);
                 } catch (ConnectionDroppedException cde) {
-
-                    DebugManager.debug("... FAILED");
-
                     DebugManager.connectionDropped(cde);
                     System.exit(1);
                 }
-
-                DebugManager.debug("... RESPONDED");
 
             }
 

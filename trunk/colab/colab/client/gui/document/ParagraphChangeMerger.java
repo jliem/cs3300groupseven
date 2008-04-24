@@ -49,15 +49,11 @@ public class ParagraphChangeMerger implements ParagraphListener {
 
     public void onInsert(final int offset, final String hunk) {
 
-        DebugManager.debug(" * nabbed it!");
-
         DocumentParagraphDiff diff = new DocumentParagraphDiff();
         diff.insert(offset, hunk);
 
-        EditDocChannelData edit = new EditDocChannelData(id,
-                diff,
-                user,
-                new Date());
+        EditDocChannelData edit =
+            new EditDocChannelData(id, diff, user, new Date());
 
         panel.fireOnMessageSent(edit);
 

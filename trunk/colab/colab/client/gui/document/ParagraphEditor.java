@@ -119,7 +119,6 @@ class ParagraphEditor extends JTextArea {
                 if (para != null) {
                     // If we had a lock, release it
                     if (isLockedByMe()) {
-                        DebugManager.debug("Releasing lock");
                         requestUnlock();
                     }
                 }
@@ -153,10 +152,6 @@ class ParagraphEditor extends JTextArea {
             }
             public void onLock(final UserName newOwner) {
 
-                DebugManager.debug(newOwner
-                        + " has just gained a lock on paragraph "
-                        + paragraph.getId());
-
                 // If this paragraph was just locked and we didn't do it,
                 // undo any changes that we might have made
                 if (!newOwner.equals(user)) {
@@ -177,7 +172,7 @@ class ParagraphEditor extends JTextArea {
         documentListener = new DocumentListener() {
 
             public void changedUpdate(final DocumentEvent e) {
-                DebugManager.debug(e.toString()); // probably never happens
+                // probably never happens
             }
 
             public void insertUpdate(final DocumentEvent e) {

@@ -133,8 +133,6 @@ public final class DocumentPanel extends ClientChannelPanel {
         while (iter.hasNext()) {
             DocumentParagraph para = iter.next();
             insertParagraphEditor(paragraphCount, para);
-            DebugManager.debug("Paragraph contents: "
-                    + para.getContents() + ", id is " + para.getId());
             paragraphCount++;
         }
     }

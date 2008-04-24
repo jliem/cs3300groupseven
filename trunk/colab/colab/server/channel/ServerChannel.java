@@ -217,9 +217,7 @@ public abstract class ServerChannel<T extends ChannelData>
                     client.getChannelInterface();
 
                 try {
-                    DebugManager.debug("I'M WAITING FOR YOU");
                     channelInterface.add(data);
-                    DebugManager.debug("OKAY, RESPONDED.");
                 } catch (final RemoteException re) {
                     connection.disconnect(re);
                 }
@@ -247,9 +245,7 @@ public abstract class ServerChannel<T extends ChannelData>
                 client.getChannelInterface();
 
             try {
-                DebugManager.debug("I'M WAITING FOR YOU");
                 channelInterface.add(data);
-                DebugManager.debug("OKAY, RESPONDED.");
             } catch (final RemoteException re) {
                 connection.disconnect(re);
             }

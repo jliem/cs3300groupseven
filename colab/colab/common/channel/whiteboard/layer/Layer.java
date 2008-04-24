@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import colab.common.DebugManager;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.identity.Identifiable;
@@ -150,13 +149,15 @@ public class Layer
 
     public void addFigure(final Figure figure) {
 
-        DebugManager.debug("Layer got the figure: " + figure);
-
         // Add the figure to the list
         this.figures.add(figure);
 
         // Expands the bounds if necessary to contain the new figure
-        this.contentBounds.add(figure.getBounds());
+        if (this.contentBounds.height * this.contentBounds.width == 0) {
+            this.contentBounds.setBounds(figure.getBounds());
+        } else {
+            this.contentBounds.add(figure.getBounds());
+        }
 
         // Notify listeners
         this.fireOnFigureAdded(figure);

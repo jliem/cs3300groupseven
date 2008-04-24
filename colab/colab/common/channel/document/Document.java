@@ -7,12 +7,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import colab.common.DebugManager;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.DocumentListener;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 
+/**
+ * A document is a logical ordered collection of paragraphs.
+ */
 public final class Document {
 
     /**
@@ -40,8 +42,9 @@ public final class Document {
     /**
      * Inserts a {@link DocumentParagraph} into this document.
      *
-     * @param paragraph
-     *            a paragraph to be inserted into the document
+     * @param previous the id of the paragraph after which to insert
+     * @param paragraph a paragraph to be inserted into the document
+     * @throws NotApplicableException if the insert fails
      */
     public void insert(final ParagraphIdentifier previous,
             final DocumentParagraph paragraph) throws NotApplicableException {
@@ -64,6 +67,12 @@ public final class Document {
 
     }
 
+    /**
+     * Inserts a paragraph into the document at a given offset.
+     *
+     * @param offset the offset at which to insert
+     * @param paragraph the paragraph to insert
+     */
     public void insert(final int offset, final DocumentParagraph paragraph) {
 
         if (paragraph == null) {
@@ -121,35 +130,29 @@ public final class Document {
     }
 
     /**
-     * Applies a {@link DocumentParagraphDiff} to a paragraph matching
-     * <code>id</code>.
+     * Applies a {@link DocumentParagraphDiff} to a paragraph matching id.
      *
-     * @param id
-     *            the paragraph id of a paragraph in this document
-     * @param diff
-     *            a change intended for the paragraph matching <code>id</code>
-     * @throws NotApplicableException
+     * @param id the paragraph id of a paragraph in this document
+     * @param diff a change intended for the paragraph matching id
+     * @throws NotApplicableException if the insert fails
      */
     public void applyEdit(final ParagraphIdentifier id,
             final DocumentParagraphDiff diff) throws NotApplicableException {
 
         for (DocumentParagraph par : paragraphs) {
-            DebugManager.debug(" -- check");
             if (id.equals(par.getId())) {
-                DebugManager.debug(" -- apply");
                 diff.apply(par);
                 break;
             }
         }
-        DebugManager.debug(" -- done");
+
     }
 
     /**
-     * Retrieves the <code>(index+1)</code>th paragaph of this document.
+     * Retrieves the (index+1)th paragaph of this document.
      *
-     * @param index
-     *            the position of the paragraph
-     * @return the <code>(index+1)</code>th paragraph
+     * @param index the position of the paragraph
+     * @return the (index+1)th paragraph
      */
     public DocumentParagraph get(final int index) {
 
@@ -199,17 +202,23 @@ public final class Document {
         return para;
     }
 
+    /**
+     * @param listener a listener to add
+     */
     public void addDocumentListener(final DocumentListener listener) {
 
         documentListeners.add(listener);
 
     }
 
+    /**
+     * @param listener a listener to remove
+     */
     public void removeDocumentListener(final DocumentListener listener) {
         documentListeners.remove(listener);
     }
 
-    protected void fireOnInsert(final int offset,
+    private void fireOnInsert(final int offset,
             final DocumentParagraph paragraph) {
 
         for (final DocumentListener listener : documentListeners) {
@@ -218,7 +227,7 @@ public final class Document {
 
     }
 
-    protected void fireOnDelete(final ParagraphIdentifier id) {
+    private void fireOnDelete(final ParagraphIdentifier id) {
 
         for (final DocumentListener listener : documentListeners) {
             listener.onDelete(id);
@@ -226,6 +235,13 @@ public final class Document {
 
     }
 
+    /**
+     * Converts the document contents to html form, and writes it
+     * onto the given writer.
+     *
+     * @param writer the writer onto which to write html
+     * @throws IOException if an I/O error occurs in writing the html
+     */
     public void export(final PrintWriter writer) throws IOException {
 
         for (final DocumentParagraph paragraph: this.paragraphs) {

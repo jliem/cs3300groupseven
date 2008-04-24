@@ -37,12 +37,8 @@ public class LayerSelectionPanel extends JPanel {
 
     private final JButton newLayerButton;
 
-    private final WhiteboardChannelPanel panel;
-
     public LayerSelectionPanel(final WhiteboardChannelPanel panel,
             final Whiteboard whiteboard) {
-
-        this.panel = panel;
 
         setLayout(new BorderLayout());
 

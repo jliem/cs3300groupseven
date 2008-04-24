@@ -32,8 +32,8 @@ public class Path extends Figure {
      * Constructs a new path.
      *
      * @param position the position of this shape on its layer
-     * @param color
-     * @param penThickness
+     * @param color the color of the path
+     * @param penThickness the thickness of the path
      */
     public Path(final Point position, final Color color,
             final int penThickness) {
@@ -41,6 +41,14 @@ public class Path extends Figure {
         clearPoints();
     }
 
+    /**
+     * Constructs a new path.
+     *
+     * @param a the first point in the path
+     * @param b the second point in the path
+     * @param color the color of the path
+     * @param penThickness the thickness of the path
+     */
     public Path(final java.awt.Point a, final java.awt.Point b,
             final Color color, final int penThickness) {
         clearPoints();

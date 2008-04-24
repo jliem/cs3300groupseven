@@ -71,9 +71,7 @@ public class InsertLayer extends WhiteboardChannelData {
             li = new LayerIdentifier(getLayerId().getValue());
         }
 
-        InsertLayer copy = new InsertLayer(
-                new UserName(super.getCreator().getValue()),
-                super.getTimestamp(), li);
+        InsertLayer copy = new InsertLayer(username, super.getTimestamp(), li);
 
         if (layer != null) {
             copy.setLayer(layer.copy());

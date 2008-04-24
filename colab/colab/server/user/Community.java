@@ -65,10 +65,16 @@ public final class Community implements Identifiable<CommunityName>,
 
     private Set<CommunityListener> listeners = new HashSet<CommunityListener>();
 
+    /**
+     * @param listener a listener to add
+     */
     public void addListener(final CommunityListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * @param listener a listener to remove
+     */
     public void removeListener(final CommunityListener listener) {
         listeners.remove(listener);
     }
@@ -177,6 +183,7 @@ public final class Community implements Identifiable<CommunityName>,
      * Removes a member from this community's member list.
      *
      * @param username the name of the user to remove
+     * @return true if the member list collection was modified
      */
     public boolean removeMember(final UserName username) {
 

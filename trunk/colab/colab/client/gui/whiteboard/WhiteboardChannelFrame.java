@@ -51,19 +51,13 @@ public class WhiteboardChannelFrame extends ClientChannelFrame {
 
             public void onMessageSent(final ChannelData data) {
 
-                DebugManager.debug("CALL TO SERVER ...");
-
                 try {
                     client.add(channel.getId(), data);
                 } catch (ConnectionDroppedException cde) {
 
-                    DebugManager.debug("... FAILED");
-
                     DebugManager.connectionDropped(cde);
                     System.exit(1);
                 }
-
-                DebugManager.debug("... RESPONDED");
 
             }
 

@@ -72,7 +72,7 @@ public class EditLayer extends WhiteboardChannelData {
     public void apply(final Whiteboard whiteboard)
             throws NotApplicableException {
 
-        whiteboard.addFigure(layerId, figure);
+        whiteboard.addFigure(getLayerId(), figure);
 
     }
 

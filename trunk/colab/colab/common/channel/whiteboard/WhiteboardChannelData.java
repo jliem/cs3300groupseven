@@ -3,8 +3,6 @@ package colab.common.channel.whiteboard;
 import java.util.Date;
 
 import colab.common.channel.ChannelData;
-import colab.common.channel.document.DeleteDocChannelData;
-import colab.common.channel.document.EditDocChannelData;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
@@ -17,7 +15,7 @@ import colab.common.xml.XmlParseException;
  */
 public abstract class WhiteboardChannelData extends ChannelData {
 
-    protected LayerIdentifier layerId;
+    private LayerIdentifier layerId;
 
     /**
      * Constructs an empty WhiteboardChannelData.
@@ -52,6 +50,33 @@ public abstract class WhiteboardChannelData extends ChannelData {
      */
     public abstract void apply(final Whiteboard whiteboard)
         throws NotApplicableException;
+
+    /** {@inheritDoc} */
+    @Override
+    public XmlNode toXml() {
+
+        XmlNode node = super.toXml();
+
+        node.setAttribute("layerId", this.layerId.toString());
+
+        return node;
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void fromXml(final XmlNode node) throws XmlParseException {
+
+        super.fromXml(node);
+
+        try {
+            this.layerId = new LayerIdentifier(
+                    Integer.parseInt(node.getAttribute("layerId")));
+        } catch (final NumberFormatException e) {
+            throw new XmlParseException(e);
+        }
+
+    }
 
     public static XmlConstructor<WhiteboardChannelData> getXmlConstructor() {
         return XML_CONSTRUCTOR;

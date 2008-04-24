@@ -91,12 +91,19 @@ public class ColabClient extends UnicastRemoteObject
 
     }
 
+    /** {@inheritDoc} */
+    public void ping() throws RemoteException {
+    }
+
     /**
-     * Receives the username and password from the GUI fields and checks to see
-     * if there is an existing corresponding pair. If the username exists but
-     * the password is incorrect, a ValidationException is thrown. If the
-     * username does not exist, then the GUI asks the user if a new user should
-     * be added.
+     * Receives the username and password from the GUI fields and
+     * checks to see if there is an existing corresponding pair.
+     *
+     * If the username exists but the password is incorrect, a
+     * ValidationException is thrown.
+     *
+     * If the username does not exist, then the GUI asks the user
+     * if a new user should be added.
      *
      * @param username received from the GUI text field
      * @param password received from the GUI password field

@@ -21,6 +21,10 @@ import colab.common.DebugManager;
 import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
 
+/**
+ * Panel which presents a list of communities, allows the user
+ * to join a community, or create a new commmunity.
+ */
 public class ChooseCommunityPanel extends JPanel {
 
     /** Serialization version number. */
@@ -40,6 +44,11 @@ public class ChooseCommunityPanel extends JPanel {
      */
     private boolean showAllCommunities = false;
 
+    /**
+     * Constructs a new ChooseCommunityPanel.
+     *
+     * @param client the client
+     */
     public ChooseCommunityPanel(final ColabClient client) {
 
         this.client = client;

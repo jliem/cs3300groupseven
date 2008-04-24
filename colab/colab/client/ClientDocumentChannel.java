@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.util.List;
 
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
@@ -14,14 +13,13 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
-import colab.common.channel.document.EditDocChannelData;
-import colab.common.channel.document.LockDocChannelData;
 import colab.common.channel.type.DocumentChannelType;
 import colab.common.exception.NotApplicableException;
-import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.ChannelName;
-import colab.common.naming.UserName;
 
+/**
+ * A ClientChannel that handles document-protocol channels.
+ */
 public final class ClientDocumentChannel extends ClientChannel {
 
     /** Serialization version number. */
@@ -33,6 +31,12 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     private Document currentDocument;
 
+    /**
+     * Constructs a new ClientDocumentChannel.
+     *
+     * @param name the name of the channel
+     * @throws RemoteException if an rmi error occurs
+     */
     public ClientDocumentChannel(final ChannelName name)
             throws RemoteException {
 
@@ -48,9 +52,6 @@ public final class ClientDocumentChannel extends ClientChannel {
         newRevisions++;
 
         try {
-            if (data instanceof EditDocChannelData) {
-                EditDocChannelData edit = (EditDocChannelData)data;
-            }
             ((DocumentChannelData) data).apply(currentDocument);
         } catch (NotApplicableException e) {
             DebugManager.shouldNotHappen(e);
@@ -64,58 +65,22 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     /** {@inheritDoc} */
     public ChannelDescriptor getChannelDescriptor() {
-
         return new ChannelDescriptor(this.getId(), new DocumentChannelType());
-
     }
 
-    public List<DocumentChannelData> getLocalMessages() {
-
-        return revisions.getLast(-1);
-
-    }
-
-    public int getLocalNumMessages() {
-
-        return revisions.size();
-
-    }
-
-    public List<DocumentChannelData> getNewMessages() {
-        List<DocumentChannelData> list = revisions.getLast(newRevisions);
-        newRevisions = 0;
-        return list;
-    }
-
+    /**
+     * @return the document represented by this channel
+     */
     public Document getCurrentDocument() {
         return currentDocument;
     }
 
+    /** {@inheritDoc} */
     public ChannelDataSet<DocumentChannelData> getChannelData() {
         return revisions;
     }
 
-
-    public void deleteParagraph(final ParagraphIdentifier id)
-            throws RemoteException {
-        currentDocument.delete(id);
-    }
-
-    public void changeHeaderLevel(final int headerLevel,
-            final ParagraphIdentifier id) throws RemoteException {
-        currentDocument.get(id).setHeaderLevel(headerLevel);
-    }
-
-    public void requestLock(final UserName lockHolder,
-            final ParagraphIdentifier id) throws RemoteException {
-        add(new LockDocChannelData(lockHolder, id));
-    }
-
-    public void requestUnlock(final ParagraphIdentifier id)
-            throws RemoteException {
-        add(new LockDocChannelData(null, id));
-    }
-
+    /** {@inheritDoc} */
     public void export(final File file) throws IOException {
 
         PrintWriter writer = new PrintWriter(new FileOutputStream(file));

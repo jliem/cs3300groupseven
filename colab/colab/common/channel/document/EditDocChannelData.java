@@ -34,7 +34,7 @@ public final class EditDocChannelData extends DocumentChannelData {
     @Override
     public void apply(final Document doc) throws NotApplicableException {
         doc.applyEdit(paragraphID, differences);
-        DocumentParagraph para = doc.get(paragraphID);
+        doc.get(paragraphID);
     }
 
     public void apply(final DocumentParagraph para)

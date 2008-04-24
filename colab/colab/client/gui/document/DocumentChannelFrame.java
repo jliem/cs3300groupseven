@@ -167,6 +167,12 @@ public class DocumentChannelFrame extends ClientChannelFrame {
 
     }
 
+    /**
+     * A main method for testing this frame.
+     *
+     * @param args unused
+     * @throws Exception if any exception is thrown
+     */
     public static void main(final String[] args) throws Exception {
 
         ColabClient client = new ColabClient() {

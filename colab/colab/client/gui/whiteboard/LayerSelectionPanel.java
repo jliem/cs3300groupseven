@@ -18,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
-import colab.common.DebugManager;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardListener;
 import colab.common.channel.whiteboard.layer.Layer;

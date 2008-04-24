@@ -3,7 +3,6 @@ package colab.client.gui.chat;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +28,9 @@ import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
+/**
+ * A chat window.
+ */
 public final class ChatChannelFrame extends ClientChannelFrame {
 
     private final ClientChatChannel channel;
@@ -45,6 +47,13 @@ public final class ChatChannelFrame extends ClientChannelFrame {
 
     private static final long serialVersionUID = 1;
 
+    /**
+     * Constructs a new ChatChannelFrame.
+     *
+     * @param client the client
+     * @param clientChannel the client channel
+     * @param name the channel name
+     */
     public ChatChannelFrame(final ColabClient client,
             final ClientChatChannel clientChannel, final UserName name) {
 
@@ -158,7 +167,13 @@ public final class ChatChannelFrame extends ClientChannelFrame {
         add(chatPanel);
     }
 
-    public static void main(final String[] args) throws RemoteException {
+    /**
+     * A main method for testing this window.
+     *
+     * @param args unused
+     * @throws Exception if any exception is thrown
+     */
+    public static void main(final String[] args) throws Exception {
 
         ColabClient client = new ColabClient() {
 

@@ -179,11 +179,19 @@ public class ExportFrame extends JFrame {
 
     }
 
+    /**
+     * A main method for testing this frame.
+     *
+     * @param args unused
+     * @throws Exception if any exception is thrown
+     */
     public static void main(final String[] args) throws Exception {
+
         ExportFrame f = new ExportFrame(new ClientChatChannel(
                 new ChannelName("Test")));
         f.pack();
         f.setVisible(true);
+
     }
 
 }

@@ -29,9 +29,11 @@ public class MoveLayer extends WhiteboardChannelData {
     }
 
     /** {@inheritDoc} */
-    public void apply(Whiteboard whiteboard) throws NotApplicableException {
+    public void apply(final Whiteboard whiteboard)
+            throws NotApplicableException {
 
-        throw new UnsupportedOperationException("MoveLayer's apply not supported");
+        throw new UnsupportedOperationException(
+                "MoveLayer's apply not supported");
 
     }
 

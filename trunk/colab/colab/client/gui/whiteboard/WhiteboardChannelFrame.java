@@ -92,7 +92,7 @@ public class WhiteboardChannelFrame extends ClientChannelFrame {
 
         JMenuItem revisionMode = new JMenuItem("Revision mode");
         revisionMode.addActionListener(new ActionListener() {
-
+            @SuppressWarnings("unchecked")
             public void actionPerformed(final ActionEvent arg0) {
                 RevisionFrame frame = new RevisionFrame(
                         new RevisionWhiteboardPanel(channel,

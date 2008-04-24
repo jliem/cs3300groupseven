@@ -134,7 +134,7 @@ public final class Community implements Identifiable<CommunityName>,
      *
      * @param password the password
      */
-    public void setPassword(Password password) {
+    public void setPassword(final Password password) {
         this.password = password;
     }
 
@@ -152,8 +152,9 @@ public final class Community implements Identifiable<CommunityName>,
      * Adds a user as a moderator. The user must already
      * be a member of the community.
      *
+     * Throws IllegalStateException if the user is not a member
+     *
      * @param username the name of the user to add
-     * @throws IllegalStateException if the user is not a member
      */
     public void setAsModerator(final UserName username) {
         // Check whether this user is a member

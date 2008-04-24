@@ -13,9 +13,7 @@ import colab.common.naming.ChannelName;
 import colab.common.naming.CommunityName;
 import colab.common.naming.UserName;
 import colab.common.remote.client.ChannelRemote;
-import colab.server.user.Community;
 import colab.server.user.Password;
-import colab.server.user.User;
 
 /**
  * A remote object on the server which represents a client's session.
@@ -89,8 +87,9 @@ public interface ConnectionRemote extends Remote {
      * @param communityName the name of the community
      * @return a collection containing every user of this community
      * @throws CommunityDoesNotExistException if the community did not exist
+     * @throws RemoteException if an rmi error occurs
      */
-    public Collection<UserName> getMembers(final CommunityName communityName)
+    Collection<UserName> getMembers(final CommunityName communityName)
         throws CommunityDoesNotExistException, RemoteException;
 
     /**
@@ -100,8 +99,9 @@ public interface ConnectionRemote extends Remote {
      * @param communityName the name of the community
      * @return true if the remove was successful, false otherwise.
      * @throws CommunityDoesNotExistException if the community does not exist
+     * @throws RemoteException if an rmi error occurs
      */
-    public boolean removeMember(final UserName userName,
+    boolean removeMember(final UserName userName,
             final CommunityName communityName)
         throws CommunityDoesNotExistException, RemoteException;
 
@@ -150,11 +150,13 @@ public interface ConnectionRemote extends Remote {
 
     /**
      * Changes the password of a community.
+     *
      * @param communityName the community name
      * @param password the new password
      * @throws CommunityDoesNotExistException if the community does not exist
+     * @throws RemoteException if an rmi error occurs
      */
-    public void changePassword(final CommunityName communityName,
+    void changePassword(final CommunityName communityName,
             final Password password)
         throws CommunityDoesNotExistException, RemoteException;
 

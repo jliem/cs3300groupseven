@@ -8,10 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
 
-import colab.common.channel.document.DeleteDocChannelData;
-import colab.common.channel.document.DocumentChannelData;
-import colab.common.channel.document.EditDocChannelData;
-import colab.common.channel.document.InsertDocChannelData;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;

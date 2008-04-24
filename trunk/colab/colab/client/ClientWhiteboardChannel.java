@@ -71,7 +71,7 @@ public class ClientWhiteboardChannel extends ClientChannel {
 
     }
 
-    public void export(File file) throws IOException {
+    public void export(final File file) throws IOException {
         ImageIO.write(whiteboard.exportImage(), "png", file);
     }
 

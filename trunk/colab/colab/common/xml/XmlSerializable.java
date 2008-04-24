@@ -5,6 +5,9 @@ package colab.common.xml;
  */
 public interface XmlSerializable {
 
+    /**
+     * @return the name of the node produced by toXml()
+     */
     String xmlNodeName();
 
     /**

@@ -59,11 +59,16 @@ public class InsertLayer extends WhiteboardChannelData {
     }
 
     public InsertLayer copy() {
-        UserName username = (super.getCreator() != null
-                ? new UserName(super.getCreator().getValue()) : null);
 
-        LayerIdentifier li = (getLayerId() != null
-                ? new LayerIdentifier(getLayerId().getValue()) : null);
+        UserName username = null;
+        if (super.getCreator() != null) {
+            username = new UserName(super.getCreator().getValue());
+        }
+
+        LayerIdentifier li = null;
+        if (getLayerId() != null) {
+            li = new LayerIdentifier(getLayerId().getValue());
+        }
 
         InsertLayer copy = new InsertLayer(
                 new UserName(super.getCreator().getValue()),
@@ -79,6 +84,7 @@ public class InsertLayer extends WhiteboardChannelData {
         return copy;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void fromXml(final XmlNode node) throws XmlParseException {
 

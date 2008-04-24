@@ -11,9 +11,17 @@ public class XmlParseException extends Exception {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs an empty XmlParseException.
+     */
     public XmlParseException() {
     }
 
+    /**
+     * Constructs an XmlParseException with the specified cause.
+     *
+     * @param cause the exception that caused this one to be thrown
+     */
     public XmlParseException(final Throwable cause) {
         super(cause);
     }

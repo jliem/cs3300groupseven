@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import colab.common.DebugManager;
 import colab.common.channel.document.diff.DocumentParagraphDiff;
 import colab.common.event.document.ParagraphListener;
 import colab.common.identity.Identifiable;
@@ -50,19 +49,18 @@ public final class DocumentParagraph implements Serializable,
      * Constructs a DocumentParagaph with an identifier, contents,
      * a header level, and a creation date.
      *
-     * @param cont          the textual contents of the paragraph
-     * @param head          the header level of this paragrap, starting at 0
-     * @param creator       the creator of the paragraph, to become the
-     *                      first lock holder
-     * @param id            an object identifying this paragraph with a document
-     * @param date          the creation date of the paragraph
+     * @param contents the textual contents of the paragraph
+     * @param head the header level of this paragrap, starting at 0
+     * @param creator the creator of the paragraph, to be the first lock holder
+     * @param id an object identifying this paragraph with a document
+     * @param date the creation date of the paragraph
      */
-    public DocumentParagraph(final String cont, final int head,
+    public DocumentParagraph(final String contents, final int head,
             final UserName creator, final ParagraphIdentifier id,
             final Date date) {
 
         this.headerLevel = head;
-        this.contents = new StringBuffer(cont);
+        this.contents = new StringBuffer(contents);
         this.lockHolder = creator;
         this.id = id;
 
@@ -81,24 +79,19 @@ public final class DocumentParagraph implements Serializable,
     }
 
     public void insert(final int offset, final String hunk) {
-        DebugManager.debug(" * inserting...");
+
         contents.insert(offset, hunk);
 
-        DebugManager.debug(" * inserted.");
-        DebugManager.debug("ID is " + id + ", contents: " + contents
-                + ", hashcode is " + hashCode());
-        DebugManager.debug(" * firing event...");
         fireOnInsert(offset, hunk);
-        DebugManager.debug(" * fired.");
+
     }
 
     public void delete(final int offset, final int length) {
-        DebugManager.debug("Contents: " + contents);
-        DebugManager.debug("Offset: " + offset);
-        DebugManager.debug("Length: " + length);
+
         contents.delete(offset, (length + offset));
-        DebugManager.debug("Done.");
+
         fireOnDelete(offset, length);
+
     }
 
     public int getLength() {
@@ -231,47 +224,83 @@ public final class DocumentParagraph implements Serializable,
         return differences.hasChanges();
     }
 
+    /** {@inheritDoc} */
     public ParagraphIdentifier getId() {
         return id;
     }
 
+    /**
+     * Set's the paragraph's id.
+     *
+     * @param id the id to set
+     */
     public void setId(final ParagraphIdentifier id) {
         this.id = id;
     }
 
+    /**
+     * @param listener a listener to add
+     */
     public void addParagraphListener(final ParagraphListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * @param listener a listener to remove
+     */
     public void removeParagraphListener(final ParagraphListener listener) {
         listeners.remove(listener);
     }
 
+    /**
+     * Notifies all listeners that a user has a lock on this paragraph.
+     *
+     * @param newOwner the user with the lock
+     */
     protected void fireOnLock(final UserName newOwner) {
         for (ParagraphListener listener : listeners) {
             listener.onLock(newOwner);
         }
     }
 
+    /**
+     * Notifies all listeners that no user has a lock on this paragraph.
+     */
     protected void fireOnUnlock() {
         for (ParagraphListener listener : listeners) {
             listener.onUnlock();
         }
     }
 
+    /**
+     * Notifies all listeners that the header level has changed.
+     *
+     * @param headerLevel the new header level
+     */
     protected void fireHeaderChange(final int headerLevel) {
         for (ParagraphListener listener : listeners) {
             listener.onHeaderChange(headerLevel);
         }
     }
 
+    /**
+     * Notifies all listeners that text has been inserted into this paragraph.
+     *
+     * @param offset the insertion position
+     * @param hunk the text which was inserted
+     */
     protected void fireOnInsert(final int offset, final String hunk) {
-        DebugManager.debug(" * sending event to listeners " + listeners.size());
         for (ParagraphListener listener : listeners) {
             listener.onInsert(offset, hunk);
         }
     }
 
+    /**
+     * Notifies all listeners that text has been removed from this paragraph.
+     *
+     * @param offset the beginning index of the delete
+     * @param length the number of deleted characters
+     */
     protected void fireOnDelete(final int offset, final int length) {
         for (ParagraphListener listener : listeners) {
             listener.onDelete(offset, length);
@@ -306,6 +335,9 @@ public final class DocumentParagraph implements Serializable,
 
     }
 
+    /**
+     * @return this paragraph, formatted as an html entity
+     */
     public String toHtml() {
 
         StringBuilder str = new StringBuilder();

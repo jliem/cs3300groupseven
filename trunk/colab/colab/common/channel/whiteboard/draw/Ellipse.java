@@ -18,6 +18,19 @@ public class Ellipse extends Shape {
     public Ellipse() {
     }
 
+    /**
+     * Constructs a new Ellipse with a position and size, without caring
+     * about the color, pen thickness, or filledness.  This is intended
+     * only for bounds testing, when the figure never needs to actually
+     * get rendered.
+     *
+     * @param position the top-left position of the ellipse
+     * @param size the width and height of the ellipse
+     */
+    public Ellipse(final java.awt.Point position, final Dimension size) {
+        this(new Point(position), size, Color.BLUE, 2, false);
+    }
+
     public Ellipse(final Point position,
             final Dimension size,
             final Color color,

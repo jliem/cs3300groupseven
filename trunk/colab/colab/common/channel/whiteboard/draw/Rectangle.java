@@ -21,8 +21,11 @@ public class Rectangle extends Shape {
     /**
      * Constructs a new Rectangle.
      *
+     * @param position where to position this rectangle on a layer
      * @param size the size of the object
      * @param filled whether the object is filled with color
+     * @param color the color of the rectangle's fill or border
+     * @param penThickness the thickness of the rectangle's border
      */
     public Rectangle(final Point position,
             final Dimension size,

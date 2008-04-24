@@ -35,6 +35,8 @@ public abstract class Figure implements Drawable,
      * Constructs a new Shape.
      *
      * @param position the position of this shape on its layer
+     * @param color the color of the figure's fill or border
+     * @param penThickness the thickness of the figure's border
      */
     public Figure(final Point position, final Color color,
             final int penThickness) {
@@ -44,6 +46,13 @@ public abstract class Figure implements Drawable,
         this.penThickness = penThickness;
     }
 
+    /**
+     * Constructs a new Figure from an xml node.
+     *
+     * @param node the node containing the data
+     * @return a Figure constructed from the given data
+     * @throws XmlParseException if the xml node is improperly formatted
+     */
     public static Figure constructFromXml(final XmlNode node)
             throws XmlParseException {
 
@@ -91,14 +100,33 @@ public abstract class Figure implements Drawable,
 
     }
 
+    /**
+     * Actually performs the function of draw().
+     *
+     * @param g the graphics object to draw onto
+     */
     protected abstract void doDrawing(final Graphics g);
 
+    /**
+     * @return the dimensions of the figure
+     */
     abstract Dimension getSize();
 
+    /**
+     * @return a rectangle which spans the bounds of this figure on a layer
+     */
     public java.awt.Rectangle getBounds() {
         return new java.awt.Rectangle(getPosition(), getSize());
     }
 
+    /**
+     * Determines whether the figure is within the clipping bounds of
+     * a graphics object, to decide whether it needs to be painted.
+     *
+     * @param graphics the graphics object
+     * @return true if any portion of the figure is visible
+     *         in the clipped region, false otherwise
+     */
     protected boolean inClippedRegion(final Graphics graphics) {
         java.awt.Rectangle clipBounds = graphics.getClipBounds();
         if (clipBounds == null) {

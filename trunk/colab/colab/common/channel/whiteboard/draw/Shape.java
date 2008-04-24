@@ -24,17 +24,14 @@ public abstract class Shape extends Figure {
     /**
      * Constructs a new Shape.
      *
-     * @param position
-     * @param size
-     * @param color
-     * @param penThickness
-     * @param filled
+     * @param position where to position this shape on a layer
+     * @param size the width and height of the shape
+     * @param color the color of the shape's fill or border
+     * @param penThickness the thickness of the shape's border
+     * @param filled whether the shape is filled with color
      */
-    public Shape(final Point position,
-            final Dimension size,
-            final Color color,
-            final int penThickness,
-            final boolean filled) {
+    public Shape(final Point position, final Dimension size, final Color color,
+            final int penThickness, final boolean filled) {
 
         super(position, color, penThickness);
 

@@ -138,7 +138,8 @@ public class Path extends Figure {
 
         super.fromXml(node);
 
-        points.clear();
+        clearPoints();
+
         for (XmlNode child : node.getChildren()) {
             Point point = new Point();
             point.fromXml(child);

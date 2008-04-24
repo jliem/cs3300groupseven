@@ -44,15 +44,12 @@ public final class ClientDocumentChannel extends ClientChannel {
     /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
 
-        DebugManager.debug("New channel data added " + data.toString());
-
         revisions.add((DocumentChannelData) data);
         newRevisions++;
 
         try {
             if (data instanceof EditDocChannelData) {
                 EditDocChannelData edit = (EditDocChannelData)data;
-                DebugManager.debug("Applying " + edit.toString());
             }
             ((DocumentChannelData) data).apply(currentDocument);
         } catch (NotApplicableException e) {

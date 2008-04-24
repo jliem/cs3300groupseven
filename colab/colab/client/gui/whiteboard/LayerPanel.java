@@ -87,10 +87,8 @@ public class LayerPanel extends JPanel {
     }
 
     private void refreshThumb() {
-        System.out.println("Refreshing thumb");
         BufferedImage image = layer.croppedImage();
         if (image != null) {
-            System.out.println("Image is displaying");
             Image scaledImage = ImageUtils.scaleToFit(
                     image, PREVIEW_SIZE, this);
             preview.setImage(scaledImage);

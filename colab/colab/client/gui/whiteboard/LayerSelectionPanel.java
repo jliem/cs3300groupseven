@@ -99,11 +99,8 @@ public class LayerSelectionPanel extends JPanel {
                 Layer activeLayer = getActiveLayer();
                 LayerIdentifier previousLayer;
                 if (activeLayer == null) {
-                    DebugManager.debug("ACTIVE LAYER IS NULL");
                     previousLayer = null;
                 } else {
-                    DebugManager.debug("ACTIVE LAYER IS "
-                            + activeLayer.getId().toString());
                     previousLayer = activeLayer.getId();
                 }
                 panel.createNewLayer(previousLayer);

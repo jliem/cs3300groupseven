@@ -31,8 +31,6 @@ public class Insert implements Applicable {
                     "Insert outside of range of paragraph.");
         } else {
 
-            DebugManager.debug("Inserting: " + contents);
-
             para.insert(offset, contents);
         }
     }

@@ -117,8 +117,6 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
             }
         }
 
-        DebugManager.debug("Finished showing revision");
-
         display.setBoard(board);
         repaint();
 

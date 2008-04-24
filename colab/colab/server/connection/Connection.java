@@ -420,17 +420,17 @@ public final class Connection extends UnicastRemoteObject
 
         // Check whether the user is already part of the channel
         if (!serverChannel.contains(username)) {
-            ChannelConnection client = new ChannelConnection(
-                    this, clientChannel);
+
+            ChannelConnection client =
+                new ChannelConnection(this, clientChannel);
             serverChannel.addClient(client);
 
             joinedChannels.add(channelName);
 
             log(this.username + " joined channel " + channelName);
-        } else {
-            DebugManager.debug(this.username + " tried to join channel "
-                    + channelName + "but was already a member.");
+
         }
+
     }
 
     /** {@inheritDoc} */
@@ -464,10 +464,6 @@ public final class Connection extends UnicastRemoteObject
                         + this + " is not part of the channel, but the channel "
                         + "is in the joined channels list in Connection");
             }
-
-
-            DebugManager.debug(this.username + " tried to leave a channel "
-                    + "but was not a member.");
 
         }
     }

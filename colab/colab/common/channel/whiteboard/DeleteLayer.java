@@ -30,8 +30,9 @@ public class DeleteLayer extends WhiteboardChannelData {
     }
 
     /** {@inheritDoc} */
-    public void apply(Whiteboard whiteboard) throws NotApplicableException {
-        whiteboard.delete(layerId);
+    public void apply(final Whiteboard whiteboard)
+            throws NotApplicableException {
+        whiteboard.delete(getLayerId());
     }
 
 }

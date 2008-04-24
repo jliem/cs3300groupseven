@@ -32,18 +32,18 @@ public class LockLayer extends WhiteboardChannelData {
     public void apply(final Whiteboard whiteboard)
             throws NotApplicableException {
 
-        Layer layer = whiteboard.get(super.layerId);
+        Layer layer = whiteboard.get(getLayerId());
 
         if (layer == null) {
             throw new NotApplicableException(
-                    "Layer " + super.layerId.toString()
+                    "Layer " + getLayerId().toString()
                     + " was not found in the whiteboard.");
         }
 
         if(lockHolder != null) {
             if (!layer.isUnlocked()) {
                 throw new NotApplicableException(
-                        "Layer " + super.layerId.toString()
+                        "Layer " + getLayerId().toString()
                         + " is not unlocked.");
             } else {
                 layer.lock(lockHolder);

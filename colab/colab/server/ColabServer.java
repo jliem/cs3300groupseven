@@ -16,6 +16,7 @@ import colab.common.channel.ChannelDescriptor;
 import colab.common.channel.type.ChannelType;
 import colab.common.channel.type.ChatChannelType;
 import colab.common.channel.type.DocumentChannelType;
+import colab.common.channel.type.WhiteboardChannelType;
 import colab.common.exception.AuthenticationException;
 import colab.common.exception.ChannelAlreadyExistsException;
 import colab.common.exception.ChannelDoesNotExistException;
@@ -49,6 +50,7 @@ public class ColabServer extends UnicastRemoteObject
     static {
         ChannelType.registerType("Chat", new ChatChannelType());
         ChannelType.registerType("Document", new DocumentChannelType());
+        ChannelType.registerType("Whiteboard", new WhiteboardChannelType());
     }
 
     /**

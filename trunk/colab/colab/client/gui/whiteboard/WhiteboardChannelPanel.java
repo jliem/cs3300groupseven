@@ -135,6 +135,10 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
         Layer activeLayer = getActiveLayer();
 
+        if (activeLayer == null) {
+            return;
+        }
+
         activeLayer.addFigure(figure);
 
         // Send figure to server

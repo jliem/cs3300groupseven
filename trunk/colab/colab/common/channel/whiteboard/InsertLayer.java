@@ -7,6 +7,7 @@ import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
+import colab.common.util.StringUtils;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
 
@@ -86,9 +87,35 @@ public class InsertLayer extends WhiteboardChannelData {
 
     /** {@inheritDoc} */
     @Override
+    public XmlNode toXml() {
+
+        XmlNode node = super.toXml();
+
+        String prevStr = "";
+        if (previous != null) {
+            prevStr = previous.toString();
+        }
+        node.setAttribute("previous", prevStr);
+
+        return node;
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void fromXml(final XmlNode node) throws XmlParseException {
 
         super.fromXml(node);
+
+        String prevStr = node.getAttribute("previous");
+        if (!StringUtils.isEmptyOrNull(prevStr)) {
+            try {
+                this.previous = new LayerIdentifier(
+                        Integer.parseInt(prevStr));
+            } catch (final NumberFormatException e) {
+                throw new XmlParseException(e);
+            }
+        }
 
         this.layer = new Layer(new LayerIdentifier(this.getId()));
 

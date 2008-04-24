@@ -162,6 +162,12 @@ public abstract class Figure implements Drawable,
         node.setAttribute("posX", Integer.toString(position.x));
         node.setAttribute("posY", Integer.toString(position.y));
 
+        node.setAttribute("red", Integer.toString(color.getRed()));
+        node.setAttribute("green", Integer.toString(color.getGreen()));
+        node.setAttribute("blue", Integer.toString(color.getBlue()));
+
+        node.setAttribute("penThickness", Integer.toString(penThickness));
+
         return node;
 
     }
@@ -169,14 +175,27 @@ public abstract class Figure implements Drawable,
     /** {@inheritDoc} */
     public void fromXml(final XmlNode node) throws XmlParseException {
 
-        int x, y;
+        int x, y, red, green, blue;
         try {
+
             x = Integer.parseInt(node.getAttribute("posX"));
             y = Integer.parseInt(node.getAttribute("posY"));
+
+            red = Integer.parseInt(node.getAttribute("red"));
+            green = Integer.parseInt(node.getAttribute("green"));
+            blue = Integer.parseInt(node.getAttribute("blue"));
+
+            this.penThickness = Integer.parseInt(
+                    node.getAttribute("penThickness"));
+
         } catch (final NumberFormatException e) {
             throw new XmlParseException(e);
+
         }
+
         this.position = new Point(x, y);
+
+        this.color = new Color(red, green, blue);
 
     }
 

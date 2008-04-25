@@ -47,7 +47,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     private final JColorChooser colorChooser;
     private final LayerSelectionPanel layerPanel;
     
-    private final Timer lockTimer;
+    //private final Timer lockTimer;
 
     private final List<ChannelPanelListener> channelListeners;
 
@@ -88,23 +88,23 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         layerPanel = new LayerSelectionPanel(this, channel.getWhiteboard());
         layerPanel.addLayerSelectionPanelListener(new LayerSelectionPanelListener() {
         	public void onLockRequest(Layer requested, UserName requester) {
-        		LockLayer lockReq = new LockLayer(name, new Date(), requested.getId(), requester);
-        		fireOnMessageSent(lockReq);
+//        		LockLayer lockReq = new LockLayer(name, new Date(), requested.getId(), requester);
+//        		fireOnMessageSent(lockReq);
         	}
         	public void onDelete(LayerIdentifier id) {
-        		DeleteLayer delete = new DeleteLayer(name, new Date(), id);
-        		fireOnMessageSent(delete);
+//        		DeleteLayer delete = new DeleteLayer(name, new Date(), id);
+//        		fireOnMessageSent(delete);
         	}
         });
 
-        lockTimer = new Timer(1000 * UNLOCK_DELAY, new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if(layerPanel.getLockedLayer() != null) {
-	        		LockLayer lockReq = new LockLayer(name, new Date(), layerPanel.getLockedLayer().getId(), null);
-	        		fireOnMessageSent(lockReq);
-        		}
-        	}
-        });
+//        lockTimer = new Timer(1000 * UNLOCK_DELAY, new ActionListener() {
+//        	public void actionPerformed(ActionEvent e) {
+////        		if(layerPanel.getLockedLayer() != null) {
+////	        		LockLayer lockReq = new LockLayer(name, new Date(), layerPanel.getLockedLayer().getId(), null);
+////	        		fireOnMessageSent(lockReq);
+////        		}
+//        	}
+//        });
         
         this.setLayout(new BorderLayout());
         add(toolPanelWrapper, BorderLayout.WEST);
@@ -114,7 +114,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
         this.setVisible(true);
         
-        lockTimer.start();
+        //lockTimer.start();
     }
 
     /**
@@ -211,9 +211,9 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         }
     }
 
-    public void retainLock() {
-    	lockTimer.restart();
-    }
+//    public void retainLock() {
+//    	lockTimer.restart();
+//    }
     public static void main(final String[] args) throws Exception {
         JFrame frame = new JFrame("test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

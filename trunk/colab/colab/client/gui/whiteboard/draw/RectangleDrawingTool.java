@@ -49,7 +49,7 @@ public class RectangleDrawingTool extends DrawingTool {
         super.mouseReleased(e);
         Figure toDraw = rectangle;
         rectangle = null;
-        drawFigure(toDraw);
+    	drawFigure(toDraw);
     }
 
     /** {@inheritDoc} */

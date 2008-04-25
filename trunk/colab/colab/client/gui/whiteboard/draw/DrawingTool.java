@@ -35,7 +35,9 @@ public abstract class DrawingTool
      * @param figure the figure to draw
      */
     protected final void drawFigure(final Figure figure) {
-        parentPanel.addToActiveLayer(figure);
+    	if(figure != null) {
+    		parentPanel.addToActiveLayer(figure);
+    	}
     }
 
     /**

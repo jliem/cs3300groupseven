@@ -3,21 +3,24 @@ package colab.client.gui.whiteboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JColorChooser;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 import javax.swing.Timer;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 
 import colab.client.ClientWhiteboardChannel;
 import colab.client.gui.ChannelPanelListener;
 import colab.client.gui.ClientChannelPanel;
 import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
+import colab.common.channel.whiteboard.DeleteLayer;
 import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.LockLayer;
@@ -27,6 +30,7 @@ import colab.common.channel.whiteboard.WhiteboardListenerAdapter;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
+import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
 public class WhiteboardChannelPanel extends ClientChannelPanel {
@@ -87,9 +91,13 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         		LockLayer lockReq = new LockLayer(name, new Date(), requested.getId(), requester);
         		fireOnMessageSent(lockReq);
         	}
+        	public void onDelete(LayerIdentifier id) {
+        		DeleteLayer delete = new DeleteLayer(name, new Date(), id);
+        		fireOnMessageSent(delete);
+        	}
         });
 
-        timer = new Timer(1000 * UNLOCK_DELAY, new ActionListener() {
+        lockTimer = new Timer(1000 * UNLOCK_DELAY, new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		if(layerPanel.getLockedLayer() != null) {
 	        		LockLayer lockReq = new LockLayer(name, new Date(), layerPanel.getLockedLayer().getId(), null);
@@ -105,7 +113,8 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         add(layerPanel, BorderLayout.EAST);
 
         this.setVisible(true);
-
+        
+        lockTimer.start();
     }
 
     /**
@@ -203,26 +212,26 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     }
 
     public void retainLock() {
-    	timer.restart();
+    	lockTimer.restart();
     }
-//    public static void main(final String[] args) throws Exception {
-//        JFrame frame = new JFrame("test");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.add(new WhiteboardChannelPanel(new UserName("UserName"),
-//                new ClientWhiteboardChannel(new ChannelName("Channel name")) {
-//            Whiteboard whiteboard;
-//            public Whiteboard getWhiteboard() {
-//                if (whiteboard == null) {
-//                    whiteboard = new Whiteboard();
-//                    Layer defaultLayer = new Layer(new LayerIdentifier(2));
-//                    defaultLayer.setLabel("Default Label");
-//                    whiteboard.insert(0, defaultLayer);
-//                }
-//                return whiteboard;
-//            }
-//        }));
-//        frame.pack();
-//        frame.setVisible(true);
-//    }
+    public static void main(final String[] args) throws Exception {
+        JFrame frame = new JFrame("test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new WhiteboardChannelPanel(new UserName("UserName"),
+                new ClientWhiteboardChannel(new ChannelName("Channel name")) {
+            Whiteboard whiteboard;
+            public Whiteboard getWhiteboard() {
+                if (whiteboard == null) {
+                    whiteboard = new Whiteboard();
+                    Layer defaultLayer = new Layer(new LayerIdentifier(2));
+                    defaultLayer.setLabel("Default Label");
+                    whiteboard.insert(0, defaultLayer);
+                }
+                return whiteboard;
+            }
+        }));
+        frame.pack();
+        frame.setVisible(true);
+    }
 
 }

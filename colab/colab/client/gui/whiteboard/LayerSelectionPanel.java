@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -52,7 +53,7 @@ public class LayerSelectionPanel extends JPanel {
     
     private Layer lockedLayer = null;
     
-    private final JButton newLayerButton;
+    private final JButton newLayerButton, deleteLayerButton;
 
     public LayerSelectionPanel(final WhiteboardChannelPanel panel,
             final Whiteboard whiteboard) {
@@ -82,7 +83,7 @@ public class LayerSelectionPanel extends JPanel {
         add(new JScrollPane(panelList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
         
-        for (Layer layer : whiteboard) {
+        for (final Layer layer : whiteboard) {
             LayerPanel layerPanel = new LayerPanel(panelList, layer, panel.getUsername());
             layer.addLayerListener(new LayerListener() {
             	public void onLabelChange(final String newLabel) {
@@ -107,8 +108,16 @@ public class LayerSelectionPanel extends JPanel {
 
         whiteboard.addWhiteboardListener(new WhiteboardListener() {
            public void onDelete(final LayerIdentifier id) {
-                // TODO Bug 86 - Deleting layers
-
+                for(LayerPanel panel : layerPanels) {
+                	if(panel.getLayer().getId().equals(id)) {
+                		layerPanels.remove(panel);
+                		if(lockedLayer != null &&
+                				lockedLayer.getId().equals(id)) {
+                			lockedLayer = null;
+                		}
+                		break;
+                	}
+                }
            }
            public void onInsert(final int offset, final Layer layer) {
 
@@ -143,6 +152,9 @@ public class LayerSelectionPanel extends JPanel {
         	}
         });
         
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        
         newLayerButton = new JButton("New Layer");
         newLayerButton.addActionListener(new ActionListener() {
 
@@ -158,11 +170,22 @@ public class LayerSelectionPanel extends JPanel {
             }
 
         });
+        
+        deleteLayerButton = new JButton("Delete Layer");
+        deleteLayerButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if(getActiveLayer().getId().equals(lockedLayer.getId())) {
+        			fireOnDelete(lockedLayer.getId());
+        		}
+        	}
+        });
 
-        add(newLayerButton, BorderLayout.SOUTH);
+        buttonPanel.add(newLayerButton);
+        buttonPanel.add(deleteLayerButton);
+        
+        add(buttonPanel, BorderLayout.SOUTH);
 
         setPreferredSize(new Dimension(175, 123));
-
         
     }
 
@@ -220,6 +243,12 @@ public class LayerSelectionPanel extends JPanel {
     	}
     }
     
+    protected void fireOnDelete(LayerIdentifier id) {
+    	for(LayerSelectionPanelListener l : listeners) {
+    		l.onDelete(id);
+    	}
+    }
+    
     public static void main(final String[] args) throws Exception{
         Layer layer = new Layer(new LayerIdentifier(45));
         layer.addFigure(new Ellipse(
@@ -247,7 +276,8 @@ public class LayerSelectionPanel extends JPanel {
 
         Whiteboard whiteboard = new Whiteboard();
 
-        LayerSelectionPanel panel = new LayerSelectionPanel(new WhiteboardChannelPanel(new UserName("Matt"), new ClientWhiteboardChannel(new ChannelName("Jolly"))), whiteboard);
+        LayerSelectionPanel panel = new LayerSelectionPanel(
+        		new WhiteboardChannelPanel(new UserName("Matt"), new ClientWhiteboardChannel(new ChannelName("Jolly"))), whiteboard);
 
         whiteboard.insert(0, layer);
         whiteboard.insert(0, layer2);

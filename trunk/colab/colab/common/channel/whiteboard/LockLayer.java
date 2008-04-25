@@ -58,4 +58,26 @@ public class LockLayer extends WhiteboardChannelData {
         return "Lock";
     }
 
+    public LockLayer copy() {
+        UserName username = null;
+        if (super.getCreator() != null) {
+            username = new UserName(super.getCreator().getValue());
+        }
+
+        UserName lockHolder = null;
+        if (this.lockHolder != null) {
+            lockHolder = new UserName(this.lockHolder.getValue());
+        }
+
+        LayerIdentifier li = null;
+        if (getLayerId() != null) {
+            li = new LayerIdentifier(getLayerId().getValue());
+        }
+
+        LockLayer copy = new LockLayer(username, super.getTimestamp(),
+                li, lockHolder);
+
+        return copy;
+    }
+
 }

@@ -51,6 +51,8 @@ public abstract class WhiteboardChannelData extends ChannelData {
     public abstract void apply(final Whiteboard whiteboard)
         throws NotApplicableException;
 
+    public abstract WhiteboardChannelData copy();
+
     /** {@inheritDoc} */
     @Override
     public XmlNode toXml() {

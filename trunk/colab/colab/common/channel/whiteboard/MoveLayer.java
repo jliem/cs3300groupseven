@@ -37,4 +37,20 @@ public class MoveLayer extends WhiteboardChannelData {
 
     }
 
+    public MoveLayer copy() {
+        UserName username = null;
+        if (super.getCreator() != null) {
+            username = new UserName(super.getCreator().getValue());
+        }
+
+        LayerIdentifier li = null;
+        if (getLayerId() != null) {
+            li = new LayerIdentifier(getLayerId().getValue());
+        }
+
+        MoveLayer copy = new MoveLayer(username, super.getTimestamp(), li);
+
+        return copy;
+    }
+
 }

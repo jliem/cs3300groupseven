@@ -53,7 +53,7 @@ public class LayerSelectionPanel extends JPanel {
     
     private Layer lockedLayer = null;
     
-    private final JButton newLayerButton;//, deleteLayerButton;
+    private final JButton newLayerButton, deleteLayerButton;
 
     public LayerSelectionPanel(final WhiteboardChannelPanel panel,
             final Whiteboard whiteboard) {
@@ -108,17 +108,18 @@ public class LayerSelectionPanel extends JPanel {
 
         whiteboard.addWhiteboardListener(new WhiteboardListener() {
            public void onDelete(final LayerIdentifier id) {
-//                for(LayerPanel panel : layerPanels) {
-//                	if(panel.getLayer().getId().equals(id)) {
-//                		layerPanels.remove(panel);
+                for(LayerPanel panel : layerPanels) {
+                	if(panel.getLayer().getId().equals(id)) {
+                		layerPanels.remove(panel);
 //                		if(lockedLayer != null &&
 //                				lockedLayer.getId().equals(id)) {
 //                			lockedLayer = null;
 //                		}
-//                		panel.repaint();
-//                		break;
-//                	}
-//                }
+                		panel.repaint();
+                		break;
+                	}
+                }
+                panelList.repaint();
            }
            public void onInsert(final int offset, final Layer layer) {
 
@@ -172,18 +173,18 @@ public class LayerSelectionPanel extends JPanel {
 
         });
         
-        //deleteLayerButton = new JButton("Delete Layer");
-        //deleteLayerButton.addActionListener(new ActionListener() {
-        	//public void actionPerformed(ActionEvent e) {
+        deleteLayerButton = new JButton("Delete Layer");
+        deleteLayerButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
 //        		if(getActiveLayer().getId().equals(lockedLayer.getId())) {
 //        			fireOnDelete(lockedLayer.getId());
 //        		}
-        		//fireOnDelete(getActiveLayer().getId());
-//        	}
-//        });
+        		fireOnDelete(getActiveLayer().getId());
+        	}
+        });
 
         buttonPanel.add(newLayerButton);
-        //buttonPanel.add(deleteLayerButton);
+        buttonPanel.add(deleteLayerButton);
         
         add(buttonPanel, BorderLayout.SOUTH);
 

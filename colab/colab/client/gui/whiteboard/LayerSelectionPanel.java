@@ -51,8 +51,6 @@ public class LayerSelectionPanel extends JPanel {
 
     private List<LayerSelectionPanelListener> listeners;
     
-    private Layer lockedLayer = null;
-    
     private final JButton newLayerButton, deleteLayerButton;
 
     public LayerSelectionPanel(final WhiteboardChannelPanel panel,
@@ -120,6 +118,7 @@ public class LayerSelectionPanel extends JPanel {
                 	}
                 }
                 panelList.repaint();
+                
            }
            public void onInsert(final int offset, final Layer layer) {
 

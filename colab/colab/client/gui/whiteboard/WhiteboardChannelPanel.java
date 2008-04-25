@@ -66,6 +66,9 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
             public void onEdit(final LayerIdentifier id) {
                 drawingPanel.repaint();
             }
+            public void onDelete(final LayerIdentifier id) {
+            	drawingPanel.repaint();
+            }
         });
 
         drawingPanel = new DrawingPanel(this);

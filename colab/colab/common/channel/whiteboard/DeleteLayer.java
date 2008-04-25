@@ -45,4 +45,21 @@ public class DeleteLayer extends WhiteboardChannelData {
         whiteboard.delete(getLayerId());
     }
 
+    public DeleteLayer copy() {
+
+        UserName username = null;
+        if (super.getCreator() != null) {
+            username = new UserName(super.getCreator().getValue());
+        }
+
+        LayerIdentifier li = null;
+        if (getLayerId() != null) {
+            li = new LayerIdentifier(getLayerId().getValue());
+        }
+
+        DeleteLayer copy = new DeleteLayer(username, super.getTimestamp(), li);
+
+        return copy;
+    }
+
 }

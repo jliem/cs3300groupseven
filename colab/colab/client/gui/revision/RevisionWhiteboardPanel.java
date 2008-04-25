@@ -112,8 +112,6 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
                 data = insert;
             }
 
-            // TODO Bug 86 - Deleting layers
-
             try {
                 data.apply(board);
             } catch (Exception e) {

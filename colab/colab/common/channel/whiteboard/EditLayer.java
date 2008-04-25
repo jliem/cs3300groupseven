@@ -76,5 +76,27 @@ public class EditLayer extends WhiteboardChannelData {
 
     }
 
+    public EditLayer copy() {
+        UserName username = null;
+        if (super.getCreator() != null) {
+            username = new UserName(super.getCreator().getValue());
+        }
+
+        LayerIdentifier li = null;
+        if (getLayerId() != null) {
+            li = new LayerIdentifier(getLayerId().getValue());
+        }
+
+        Figure fig = null;
+        if (this.figure != null) {
+            fig = this.figure.copy();
+        }
+
+        EditLayer copy = new EditLayer(username, super.getTimestamp(),
+                li, fig);
+
+        return copy;
+    }
+
 }
 

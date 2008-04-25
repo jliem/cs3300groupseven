@@ -170,7 +170,6 @@ class ParagraphEditor extends JTextArea {
                 // Update GUI
                 showLock(newOwner);
 
-
             }
             public void onUnlock() {
                 showUnlock();
@@ -517,6 +516,26 @@ class ParagraphEditor extends JTextArea {
             }
 
             break;
+
+        case KeyEvent.VK_DELETE:
+        case KeyEvent.VK_BACK_SPACE:
+            // Delete event
+
+            // If we don't have a lock, request it
+            // if appropriate
+            if (isUnlocked()) {
+                requestLock();
+            }
+
+            if (getText().length() == 0
+                    && this.documentPanel.getNumberOfEditors() != 1) {
+
+                // This is an empty paragraph, and it's not the only one
+
+                sendPendingChange();
+                delete();
+
+            }
 
         default:
 

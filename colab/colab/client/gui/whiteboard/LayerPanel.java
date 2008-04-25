@@ -17,6 +17,11 @@ import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerListener;
 import colab.common.util.ImageUtils;
 
+/**
+ * A small panel reprenting a whiteboard layer.
+ *
+ * It shows a thumbnail, and the layer name.
+ */
 public class LayerPanel extends JPanel {
 
     /** Serialization version number. */
@@ -32,8 +37,14 @@ public class LayerPanel extends JPanel {
 
     private static final Dimension PREVIEW_SIZE = new Dimension(50, 50);
 
-    JButton previewButton;
+    private JButton previewButton;
 
+    /**
+     * Constructs a new LayerPanel.
+     *
+     * @param list the list which contains this panel
+     * @param layer the layer this panel represents
+     */
     public LayerPanel(final JList list,
             final Layer layer) {
 
@@ -80,6 +91,9 @@ public class LayerPanel extends JPanel {
         this.label.setText("  " + label);
     }
 
+    /**
+     * @param selected whether the panel is currently selected
+     */
     public void setSelected(final boolean selected) {
         if (selected) {
             setBackground(Color.CYAN);
@@ -100,6 +114,9 @@ public class LayerPanel extends JPanel {
         list.repaint();
     }
 
+    /**
+     * @return the layer represented by this panel
+     */
     public Layer getLayer() {
         return layer;
     }

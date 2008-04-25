@@ -9,7 +9,12 @@ import colab.common.naming.UserName;
  */
 public final class UserManagerTest extends TestCase {
 
-    public void testUserManagerCreationandAddCommunity() throws Exception {
+    /**
+     * Adds a community to a UserManager, and retrieves it.
+     *
+     * @throws Exception if any exception is thrown
+     */
+    public void testAddCommunity() throws Exception {
 
         UserManager um = new UserManager();
         um.addCommunity(new Community(
@@ -22,7 +27,12 @@ public final class UserManagerTest extends TestCase {
 
     }
 
-    public void testUserManagerCreationandAddUser() throws Exception {
+    /**
+     * Adds a user to a UserManager, and retrieves it.
+     *
+     * @throws Exception if any exception is thrown
+     */
+    public void testAddUser() throws Exception {
 
         UserManager um = new UserManager();
         um.addUser(new User(

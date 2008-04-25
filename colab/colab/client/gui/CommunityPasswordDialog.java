@@ -22,6 +22,10 @@ import colab.common.exception.NetworkException;
 import colab.common.naming.CommunityName;
 import colab.server.user.Password;
 
+/**
+ * A dialog that allows a community moderator
+ * to change the community password.
+ */
 public class CommunityPasswordDialog extends JDialog {
 
     /** Serialization version number. */
@@ -34,9 +38,13 @@ public class CommunityPasswordDialog extends JDialog {
     private JPasswordField commPass;
     private JPasswordField confirmCommPass;
 
+    /**
+     * Constructs a new CommunityPasswordDialog.
+     * @param client the client
+     * @param communityName the name of the community
+     */
     public CommunityPasswordDialog(final ColabClient client,
             final CommunityName communityName) {
-
 
         this.client = client;
         this.communityName = communityName;

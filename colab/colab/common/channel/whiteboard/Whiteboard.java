@@ -45,8 +45,8 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
         }
 
         if (!layerFound) {
-            throw new IllegalArgumentException("No layer with id="
-                    + layerId + " found!");
+            throw new IllegalArgumentException(
+                    "No layer with id=" + layerId + " found!");
         }
 
         // Fire listener

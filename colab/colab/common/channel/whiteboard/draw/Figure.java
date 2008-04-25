@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.Serializable;
 
+import colab.common.DebugManager;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
@@ -90,6 +91,8 @@ public abstract class Figure implements Drawable,
 
     /** {@inheritDoc} */
     public final void draw(final Graphics g) {
+
+        DebugManager.debug("Drawing a " + xmlNodeName() + "...");
 
         ((Graphics2D) g).setPaint(color);
         ((Graphics2D) g).setStroke(new BasicStroke(penThickness));

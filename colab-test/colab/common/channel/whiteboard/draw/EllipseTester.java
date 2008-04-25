@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 public class EllipseTester extends TestCase {
 
     /**
-     * Creates a new Ellipse, an checks that its
+     * Creates a new Ellipse, and checks that its
      * bounds are calculated correctly.
      */
     public void testGetBounds() {
@@ -22,7 +22,8 @@ public class EllipseTester extends TestCase {
 
         assertEquals(
                 new java.awt.Rectangle(12, 17, 34, 81),
-                ellipse.getBounds());
+                ellipse.getBounds()
+        );
 
     }
 

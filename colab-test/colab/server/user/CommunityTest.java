@@ -1,27 +1,50 @@
 package colab.server.user;
 
 import junit.framework.TestCase;
+import colab.client.ColabClient;
+import colab.common.naming.CommunityName;
+import colab.common.naming.UserName;
 
 /**
  * Test cases for {@link Community}.
  */
 public final class CommunityTest extends TestCase {
 
-    /*
-    public void testCommunityCreationandClientAddition() throws Exception {
 
+    /**
+     * Tests community password.
+     *
+     * @throws Exception
+     */
+    public void testCommunityPassword() throws Exception {
+
+        CommunityName name = new CommunityName("TestComm");
+        Password pass = new Password("TestPass");
         Community community = new Community(
-                new CommunityName("TestComm"),
-                new Password("TestPass"));
+                name, pass);
 
-        ColabClient client = new ColabClient();
 
-        community.addClient(new UserName("TestUser"), client);
-
-        assertSame(comm.getClients().get(new UserName("TestUser")), client);
+        assertEquals(community.getPassword(), pass);
 
     }
-    */
+
+    /**
+     * Tests community name.
+     *
+     * @throws Exception
+     */
+    public void testCommunityName() throws Exception {
+
+        CommunityName name = new CommunityName("TestComm");
+        Password pass = new Password("TestPass");
+        Community community = new Community(
+                name, pass);
+
+
+        assertEquals(community.getId(), name);
+
+    }
+
 
 /*
     public void testCommunityCreationandClientRemoval() throws RemoteException {

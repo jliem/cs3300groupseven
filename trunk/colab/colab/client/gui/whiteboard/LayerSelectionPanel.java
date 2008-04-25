@@ -7,7 +7,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -18,14 +20,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import colab.client.ClientWhiteboardChannel;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardListener;
 import colab.common.channel.whiteboard.draw.Ellipse;
+import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.channel.whiteboard.draw.Point;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
+import colab.common.channel.whiteboard.layer.LayerListener;
 import colab.common.naming.ChannelName;
 import colab.common.naming.UserName;
 
@@ -42,6 +48,10 @@ public class LayerSelectionPanel extends JPanel {
 
     private final Vector<LayerPanel> layerPanels;
 
+    private List<LayerSelectionPanelListener> listeners;
+    
+    private Layer lockedLayer = null;
+    
     private final JButton newLayerButton;
 
     public LayerSelectionPanel(final WhiteboardChannelPanel panel,
@@ -52,7 +62,8 @@ public class LayerSelectionPanel extends JPanel {
         add(new JLabel("Layers"), BorderLayout.NORTH);
 
         this.panel = panel;
-
+        listeners = new ArrayList<LayerSelectionPanelListener>();
+        
         layerPanels = new Vector<LayerPanel>();
 
         panelList = new JList(layerPanels);
@@ -70,9 +81,25 @@ public class LayerSelectionPanel extends JPanel {
 
         add(new JScrollPane(panelList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
-
+        
         for (Layer layer : whiteboard) {
             LayerPanel layerPanel = new LayerPanel(panelList, layer, panel.getUsername());
+            layer.addLayerListener(new LayerListener() {
+            	public void onLabelChange(final String newLabel) {
+                }
+                public void onFigureAdded(final Figure figure) {
+                }
+                public void onLockChange(UserName lockHolder) {
+                	if(lockHolder == null &&
+                			lockedLayer!= null &&
+                			layer.getId().equals(lockedLayer.getId())) {
+                		lockedLayer = null;
+                	}
+                	else if(lockHolder != null && lockHolder.equals(panel.getUsername())) {
+                        lockedLayer = layer;
+                    }
+                }
+            });
             layerPanels.add(layerPanel);
         }
 
@@ -100,6 +127,22 @@ public class LayerSelectionPanel extends JPanel {
            }
         });
 
+        panelList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        	public void valueChanged(ListSelectionEvent e) {
+        		
+        		if(lockedLayer != null) {
+    				fireOnLockRequest(lockedLayer, null);
+    			}
+        		
+        		if(!e.getValueIsAdjusting()) {
+        			int index = panelList.getSelectionModel().getMinSelectionIndex();
+        			Layer l = layerPanels.elementAt(index).getLayer();
+        			
+        			fireOnLockRequest(l, panel.getUsername());
+        		}
+        	}
+        });
+        
         newLayerButton = new JButton("New Layer");
         newLayerButton.addActionListener(new ActionListener() {
 
@@ -120,6 +163,7 @@ public class LayerSelectionPanel extends JPanel {
 
         setPreferredSize(new Dimension(175, 123));
 
+        
     }
 
     public void refresh() {
@@ -156,13 +200,26 @@ public class LayerSelectionPanel extends JPanel {
         return layerPanels.size();
     }
 
-
+    public Layer getLockedLayer() {
+    	return lockedLayer;
+    }
+    
     public void drawLayers(final Graphics g) {
         for (LayerPanel layerPanel : layerPanels) {
             layerPanel.getLayer().draw(g);
         }
     }
 
+    public void addLayerSelectionPanelListener(LayerSelectionPanelListener listener) {
+    	listeners.add(listener);
+    }
+    
+    protected void fireOnLockRequest(Layer requested, UserName requester) {
+    	for(LayerSelectionPanelListener l : listeners) {
+    		l.onLockRequest(requested, requester);
+    	}
+    }
+    
     public static void main(final String[] args) throws Exception{
         Layer layer = new Layer(new LayerIdentifier(45));
         layer.addFigure(new Ellipse(

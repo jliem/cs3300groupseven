@@ -3,6 +3,7 @@ package colab.client.gui.whiteboard;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
+import javax.swing.Timer;
 
 import colab.client.ClientWhiteboardChannel;
 import colab.client.gui.ChannelPanelListener;
@@ -18,6 +20,7 @@ import colab.client.gui.FixedSizePanel;
 import colab.client.gui.whiteboard.draw.DrawingTool;
 import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
+import colab.common.channel.whiteboard.LockLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
 import colab.common.channel.whiteboard.WhiteboardListenerAdapter;
@@ -33,22 +36,26 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
     private final ClientWhiteboardChannel channel;
 
-    private Whiteboard whiteboard;
+    private final Whiteboard whiteboard;
 
-    private ToolPanel toolPanel;
-    private DrawingPanel drawingPanel;
-    private JColorChooser colorChooser;
-    private LayerSelectionPanel layerPanel;
+    private final ToolPanel toolPanel;
+    private final DrawingPanel drawingPanel;
+    private final JColorChooser colorChooser;
+    private final LayerSelectionPanel layerPanel;
+    
+    private final Timer lockTimer;
 
-    private List<ChannelPanelListener> channelListeners;
+    private final List<ChannelPanelListener> channelListeners;
 
+    private static final int UNLOCK_DELAY = 15; /*delay to automatically yield lock, in seconds*/
+    
     public WhiteboardChannelPanel(final UserName name,
             final ClientWhiteboardChannel channel) {
 
         super(name);
 
         this.channel = channel;
-
+        
         this.whiteboard = this.channel.getWhiteboard();
         whiteboard.addWhiteboardListener(
                 new WhiteboardListenerAdapter() {
@@ -75,7 +82,22 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
         colorChooser.removeChooserPanel(crap[2]);
 
         layerPanel = new LayerSelectionPanel(this, channel.getWhiteboard());
+        layerPanel.addLayerSelectionPanelListener(new LayerSelectionPanelListener() {
+        	public void onLockRequest(Layer requested, UserName requester) {
+        		LockLayer lockReq = new LockLayer(name, new Date(), requested.getId(), requester);
+        		fireOnMessageSent(lockReq);
+        	}
+        });
 
+        timer = new Timer(1000 * UNLOCK_DELAY, new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if(layerPanel.getLockedLayer() != null) {
+	        		LockLayer lockReq = new LockLayer(name, new Date(), layerPanel.getLockedLayer().getId(), null);
+	        		fireOnMessageSent(lockReq);
+        		}
+        	}
+        });
+        
         this.setLayout(new BorderLayout());
         add(toolPanelWrapper, BorderLayout.WEST);
         add(drawingPanel, BorderLayout.CENTER);
@@ -174,12 +196,15 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
     }
 
-    public void fireOnMessageSent(final WhiteboardChannelData wcd) {
+    protected void fireOnMessageSent(final WhiteboardChannelData wcd) {
         for (final ChannelPanelListener l : channelListeners) {
             l.onMessageSent(wcd);
         }
     }
 
+    public void retainLock() {
+    	timer.restart();
+    }
 //    public static void main(final String[] args) throws Exception {
 //        JFrame frame = new JFrame("test");
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

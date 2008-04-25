@@ -44,10 +44,9 @@ public class LayerPanel extends JPanel {
 
     private final UserName user;
 
-    private static final Dimension PREVIEW_SIZE = new Dimension(50, 50);
-    private static final Dimension STATUS_SIZE = new Dimension(50, 50);
+    private static final Dimension PREVIEW_SIZE = new Dimension(50, 50), STATUS_SIZE = new Dimension(50, 50);
 
-    private JButton previewButton;//, statusButton;
+    private JButton previewButton, statusButton;
 
     /**
      * Constructs a new LayerPanel.
@@ -71,16 +70,15 @@ public class LayerPanel extends JPanel {
             public void onFigureAdded(final Figure figure) {
                 refreshThumb();
             }
-            public void onLockChange(final UserName lockHolder) {
-                /*
+            public void onLockChange(UserName lockHolder) {
                 if(lockHolder == null) {
-                    statusButton.setIcon(new ImageIcon(clear));
-                } else if(lockHolder.equals(user)) {
-                    statusButton.setIcon(new ImageIcon(active));
-                } else {
-                    statusButton.setIcon(new ImageIcon(locked));
+                    status.setImage(clear);
                 }
-                */
+                else if(lockHolder.equals(user)) {
+                    status.setImage(active);
+                } else {
+                    status.setImage(locked);
+                }
             }
         });
 
@@ -90,29 +88,26 @@ public class LayerPanel extends JPanel {
 
         try {
             locked = ImageIO.read(new File("whiteboard_layer_lock.png"));
-        } catch(IOException ex) {
+        }
+        catch(IOException ex) {
             DebugManager.exception(ex);
-            locked = new BufferedImage(
-                    STATUS_SIZE.width, STATUS_SIZE.height,
-                    BufferedImage.TYPE_INT_RGB);
+            locked = new BufferedImage(STATUS_SIZE.width, STATUS_SIZE.height, BufferedImage.TYPE_INT_RGB);
         }
 
         try {
             active = ImageIO.read(new File("whiteboard_layer_active.png"));
-        } catch(IOException ex) {
+        }
+        catch(IOException ex) {
             DebugManager.exception(ex);
-            active = new BufferedImage(
-                    STATUS_SIZE.width, STATUS_SIZE.height,
-                    BufferedImage.TYPE_INT_RGB);
+            active = new BufferedImage(STATUS_SIZE.width, STATUS_SIZE.height, BufferedImage.TYPE_INT_RGB);
         }
 
         try {
             clear = ImageIO.read(new File("whiteboard_layer_clear.png"));
-        } catch(IOException ex) {
+        }
+        catch(IOException ex) {
             DebugManager.exception(ex);
-            clear = new BufferedImage(
-                    STATUS_SIZE.width, STATUS_SIZE.height,
-                    BufferedImage.TYPE_INT_RGB);
+            clear = new BufferedImage(STATUS_SIZE.width, STATUS_SIZE.height, BufferedImage.TYPE_INT_RGB);
         }
 
         preview = new ImageIcon();
@@ -130,8 +125,6 @@ public class LayerPanel extends JPanel {
         previewButton.setBorderPainted(false);
 
         status = new ImageIcon();
-
-        /*
         statusButton = new JButton(status);
         statusButton.setMaximumSize(STATUS_SIZE);
         statusButton.setOpaque(false);
@@ -141,13 +134,13 @@ public class LayerPanel extends JPanel {
                 new Dimension(STATUS_SIZE.width + 20,
                         STATUS_SIZE.height + 20));
         statusPanel.setBackground(Color.LIGHT_GRAY);
+
         statusButton.setBackground(Color.LIGHT_GRAY);
         statusButton.setBorderPainted(false);
-        */
 
         add(BorderLayout.WEST, previewPanel);
         add(BorderLayout.CENTER, label);
-        //add(BorderLayout.EAST, statusPanel);
+        add(BorderLayout.EAST, statusPanel);
 
         refreshThumb();
 

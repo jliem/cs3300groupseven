@@ -59,7 +59,7 @@ class ParagraphEditor extends JTextArea {
     private Timer timer;
 
     /** Timer delay in ms. */
-    private static final int TIMER_DELAY = 2000000;
+    private static final int TIMER_DELAY = 2000;
 
     /**
      * Constructs a new ParagraphEditor.
@@ -100,6 +100,7 @@ class ParagraphEditor extends JTextArea {
         this.timer = new Timer(TIMER_DELAY, new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 sendPendingChange();
+                requestUnlock();
             }
         });
 

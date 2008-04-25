@@ -11,8 +11,9 @@ import colab.common.channel.ChannelDataSet;
 import colab.common.channel.document.Document;
 import colab.common.channel.document.DocumentChannelData;
 import colab.common.channel.document.DocumentParagraph;
-import colab.common.channel.document.DocumentChannelData
-                                    .DocumentChannelDataType;
+import colab.common.channel.document.InsertDocChannelData;
+import colab.common.channel.document.DocumentChannelData.DocumentChannelDataType;
+import colab.common.channel.whiteboard.layer.LayerIdentifier;
 
 public class RevisionDocumentPanel extends RevisionPanel {
 
@@ -29,6 +30,8 @@ public class RevisionDocumentPanel extends RevisionPanel {
         super(channel);
 
         this.dataSet = dataSet;
+
+        DebugManager.debug("Revision panel has " + dataSet.getAll().size() + " revisions");
 
         text = new JTextArea();
         text.setWrapStyleWord(true);
@@ -63,7 +66,24 @@ public class RevisionDocumentPanel extends RevisionPanel {
 
         Document doc = new Document();
 
+
+
         for (DocumentChannelData data : dataSet.getAll()) {
+
+            // If it's an insert, copy the layer first and clear it
+            if (data instanceof InsertDocChannelData) {
+                InsertDocChannelData insert = ((InsertDocChannelData)data);
+
+                // Create a copy of the paragraph, then clear it
+                insert = insert.copy();
+                //insert.getParagraph().clear();
+
+                data = insert;
+
+                DebugManager.debug("Got insert: " + insert.getId());
+            }
+
+            DebugManager.debug("Applying " + data);
 
             try {
                 data.apply(doc);

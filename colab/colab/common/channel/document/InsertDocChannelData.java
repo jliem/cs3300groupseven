@@ -3,6 +3,8 @@ package colab.common.channel.document;
 import java.util.Date;
 
 import colab.common.channel.ChannelDataIdentifier;
+import colab.common.channel.whiteboard.InsertLayer;
+import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.identity.ParagraphIdentifier;
 import colab.common.naming.UserName;
@@ -128,6 +130,39 @@ public final class InsertDocChannelData extends DocumentChannelData {
         this.paragraph = new DocumentParagraph();
         this.paragraph.fromXml(node.getChildren().get(0));
 
+    }
+
+    public InsertDocChannelData copy() {
+
+        UserName username = null;
+        if (super.getCreator() != null) {
+            username = new UserName(super.getCreator().getValue());
+        }
+
+        ParagraphIdentifier li = null;
+        if (this.getId() != null) {
+            li = new ParagraphIdentifier(this.getId().getValue());
+        }
+
+
+        InsertDocChannelData copy =
+            new InsertDocChannelData(li, username);
+
+        if (paragraph != null) {
+            copy.setParagraph(paragraph.copy());
+        }
+
+        // Set channel id
+        copy.setId(this.getId());
+
+        // Set previous
+        if (previous != null) {
+            copy.previous = new ParagraphIdentifier(previous);
+        } else {
+            copy.previous = null;
+        }
+
+        return copy;
     }
 
 }

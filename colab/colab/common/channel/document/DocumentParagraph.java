@@ -29,7 +29,7 @@ public final class DocumentParagraph implements Serializable,
 
     private int headerLevel;
 
-    private final StringBuffer contents;
+    private StringBuffer contents;
 
     private UserName lockHolder;
 
@@ -177,6 +177,12 @@ public final class DocumentParagraph implements Serializable,
                 new ParagraphIdentifier(this.id),
                 this.differences.copy());
 
+    }
+
+    public void clear() {
+
+        contents = new StringBuffer();
+        differences = new DocumentParagraphDiff();
     }
 
     /**

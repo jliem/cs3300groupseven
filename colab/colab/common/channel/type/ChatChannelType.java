@@ -23,16 +23,21 @@ public class ChatChannelType extends ChannelType {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new ChatChannelType.
+     */
     public ChatChannelType() {
         super("Chat");
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClientChannel createClientChannel(final ChannelName name)
             throws RemoteException {
         return new ClientChatChannel(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClientChannelFrame createClientChannelFrame(
             final ColabClient client, final ClientChannel channel,
@@ -43,11 +48,13 @@ public class ChatChannelType extends ChannelType {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServerChannel createServerChannel(final ChannelName name) {
         return new ServerChatChannel(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException {

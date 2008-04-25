@@ -88,6 +88,9 @@ public final class ChatChannelData extends ChannelData {
         return start + end;
     }
 
+    /**
+     * @return a closure which can constuct a ChatChannelData from an XmlNode.
+     */
     public static XmlConstructor<ChatChannelData> getXmlConstructor() {
         return (new XmlConstructor<ChatChannelData>() {
             public ChatChannelData fromXml(final XmlNode node)

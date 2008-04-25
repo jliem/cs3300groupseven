@@ -23,16 +23,21 @@ public class DocumentChannelType extends ChannelType {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new DocumentChannelType.
+     */
     public DocumentChannelType() {
         super("Document");
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClientChannel createClientChannel(final ChannelName name)
             throws RemoteException {
         return new ClientDocumentChannel(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClientChannelFrame createClientChannelFrame(
             final ColabClient client, final ClientChannel channel,
@@ -44,11 +49,13 @@ public class DocumentChannelType extends ChannelType {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServerChannel createServerChannel(final ChannelName name) {
         return new ServerDocumentChannel(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException {
@@ -56,6 +63,5 @@ public class DocumentChannelType extends ChannelType {
         return new ServerDocumentChannel(name, file);
 
     }
-
 
 }

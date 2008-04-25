@@ -11,6 +11,9 @@ import colab.common.util.StringUtils;
 import colab.common.xml.XmlNode;
 import colab.common.xml.XmlParseException;
 
+/**
+ * A command to insert a new blank layer into a whiteboard.
+ */
 public class InsertLayer extends WhiteboardChannelData {
 
     /** Serialization version number. */
@@ -26,6 +29,14 @@ public class InsertLayer extends WhiteboardChannelData {
     public InsertLayer() {
     }
 
+    /**
+     * Constructs a new InsertLayer.
+     *
+     * @param creator the user who drew the figure
+     * @param timestamp the time at which the figure was drawn
+     * @param previous the id of another layer in the whiteboard,
+     *                after which this one should be inserted
+     */
     public InsertLayer(final UserName creator, final Date timestamp,
             final LayerIdentifier previous) {
 
@@ -36,6 +47,9 @@ public class InsertLayer extends WhiteboardChannelData {
 
     }
 
+    /**
+     * @return the id of the previous layer in the whiteboard
+     */
     public LayerIdentifier getPrevious() {
         return previous;
     }
@@ -51,14 +65,23 @@ public class InsertLayer extends WhiteboardChannelData {
         whiteboard.insert(getPrevious(), layer);
     }
 
+    /**
+     * @return the inserted layer
+     */
     public Layer getLayer() {
         return layer;
     }
 
+    /**
+     * @param layer the inserted layer
+     */
     public void setLayer(final Layer layer) {
         this.layer = layer;
     }
 
+    /**
+     * @return a deep copy
+     */
     public InsertLayer copy() {
 
         UserName username = null;

@@ -6,6 +6,9 @@ import colab.common.channel.whiteboard.layer.LayerIdentifier;
 import colab.common.exception.NotApplicableException;
 import colab.common.naming.UserName;
 
+/**
+ * A command to delete a layer from a whiteboard.
+ */
 public class DeleteLayer extends WhiteboardChannelData {
 
     /** Serialization version number. */
@@ -17,6 +20,13 @@ public class DeleteLayer extends WhiteboardChannelData {
     public DeleteLayer() {
     }
 
+    /**
+     * Constructs a new DeleteLayer.
+     *
+     * @param creator the user performing the action
+     * @param timestamp the time at which it is deleted
+     * @param layerId the id of the layer to delete
+     */
     public DeleteLayer(final UserName creator, final Date timestamp,
             final LayerIdentifier layerId) {
 

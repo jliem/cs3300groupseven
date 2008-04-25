@@ -57,40 +57,70 @@ public class Layer
         }
     }
 
+    /**
+     * @param listener a listener to add
+     */
     public void addLayerListener(final LayerListener listener) {
         this.listeners.add(listener);
     }
 
+    /**
+     * @param listener a listener to remove
+     */
     public void removeLayerListener(final LayerListener listener) {
         this.listeners.remove(listener);
     }
 
+    /**
+     * Informs listeners that the layer's name has changed.
+     *
+     * @param newLabel the new name
+     */
     protected void fireOnLabelChange(final String newLabel) {
         for (LayerListener listener : listeners) {
             listener.onLabelChange(newLabel);
         }
     }
 
+    /**
+     * Informs listeners that a figure has been added to this layer.
+     *
+     * @param figure the new figure
+     */
     protected void fireOnFigureAdded(final Figure figure) {
         for (LayerListener listener : listeners) {
             listener.onFigureAdded(figure);
         }
     }
 
+    /**
+     * Sets the lock holder.
+     *
+     * @param user the name of the user with a lock
+     */
     public void lock(final UserName user) {
        if (isUnlocked()) {
            lockHolder = user;
        }
     }
 
+    /**
+     * Clears the lock holder.
+     */
     public void unlock() {
         lockHolder = null;
     }
 
+    /**
+     * @return false if the layer is locked, true otherwise
+     */
     public boolean isUnlocked() {
         return lockHolder == null;
     }
 
+    /**
+     * @return the name of the user who holds a lock on this layer
+     */
     public UserName getLockHolder() {
         return lockHolder;
     }
@@ -147,6 +177,11 @@ public class Layer
         return layer;
     }
 
+    /**
+     * Adds a figure to this layer.
+     *
+     * @param figure the figure to add
+     */
     public void addFigure(final Figure figure) {
 
         // Add the figure to the list
@@ -164,12 +199,21 @@ public class Layer
 
     }
 
+    /**
+     * Draws this layer's contents.
+     *
+     * @param graphIn a graphics object to draw on
+     */
     public void draw(final Graphics graphIn) {
         for (Figure figure : figures) {
             figure.draw(graphIn);
         }
     }
 
+    /**
+     * @return an image which displays all of this layer's figures
+     *         painted onto a tightly-cropped region
+     */
     public BufferedImage croppedImage() {
 
         if (contentBounds.width == 0 || contentBounds.height == 0) {

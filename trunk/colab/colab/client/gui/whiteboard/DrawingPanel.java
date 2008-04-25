@@ -29,14 +29,14 @@ public class DrawingPanel extends JPanel {
 
         setBackground(Color.WHITE);
         
-        addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseReleased(MouseEvent e) {
-        		super.mouseReleased(e);
-        		
-        		parentPanel.retainLock();
-        	}
-        });
+//        addMouseListener(new MouseAdapter() {
+//        	@Override
+//        	public void mouseReleased(MouseEvent e) {
+//        		super.mouseReleased(e);
+//        		
+//        		parentPanel.retainLock();
+//        	}
+//        });
 
     }
 

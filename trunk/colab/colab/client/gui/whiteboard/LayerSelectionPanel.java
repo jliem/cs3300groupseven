@@ -53,7 +53,7 @@ public class LayerSelectionPanel extends JPanel {
     
     private Layer lockedLayer = null;
     
-    private final JButton newLayerButton, deleteLayerButton;
+    private final JButton newLayerButton;//, deleteLayerButton;
 
     public LayerSelectionPanel(final WhiteboardChannelPanel panel,
             final Whiteboard whiteboard) {
@@ -91,14 +91,14 @@ public class LayerSelectionPanel extends JPanel {
                 public void onFigureAdded(final Figure figure) {
                 }
                 public void onLockChange(UserName lockHolder) {
-                	if(lockHolder == null &&
-                			lockedLayer!= null &&
-                			layer.getId().equals(lockedLayer.getId())) {
-                		lockedLayer = null;
-                	}
-                	else if(lockHolder != null && lockHolder.equals(panel.getUsername())) {
-                        lockedLayer = layer;
-                    }
+//                	if(lockHolder == null &&
+//                			lockedLayer!= null &&
+//                			layer.getId().equals(lockedLayer.getId())) {
+//                		lockedLayer = null;
+//                	}
+//                	else if(lockHolder != null && lockHolder.equals(panel.getUsername())) {
+//                        lockedLayer = layer;
+//                    }
                 }
             });
             layerPanels.add(layerPanel);
@@ -108,16 +108,17 @@ public class LayerSelectionPanel extends JPanel {
 
         whiteboard.addWhiteboardListener(new WhiteboardListener() {
            public void onDelete(final LayerIdentifier id) {
-                for(LayerPanel panel : layerPanels) {
-                	if(panel.getLayer().getId().equals(id)) {
-                		layerPanels.remove(panel);
-                		if(lockedLayer != null &&
-                				lockedLayer.getId().equals(id)) {
-                			lockedLayer = null;
-                		}
-                		break;
-                	}
-                }
+//                for(LayerPanel panel : layerPanels) {
+//                	if(panel.getLayer().getId().equals(id)) {
+//                		layerPanels.remove(panel);
+//                		if(lockedLayer != null &&
+//                				lockedLayer.getId().equals(id)) {
+//                			lockedLayer = null;
+//                		}
+//                		panel.repaint();
+//                		break;
+//                	}
+//                }
            }
            public void onInsert(final int offset, final Layer layer) {
 
@@ -138,17 +139,17 @@ public class LayerSelectionPanel extends JPanel {
 
         panelList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         	public void valueChanged(ListSelectionEvent e) {
-        		
-        		if(lockedLayer != null) {
-    				fireOnLockRequest(lockedLayer, null);
-    			}
-        		
-        		if(!e.getValueIsAdjusting()) {
-        			int index = panelList.getSelectionModel().getMinSelectionIndex();
-        			Layer l = layerPanels.elementAt(index).getLayer();
-        			
-        			fireOnLockRequest(l, panel.getUsername());
-        		}
+//        		
+//        		if(lockedLayer != null) {
+//    				fireOnLockRequest(lockedLayer, null);
+//    			}
+//        		
+//        		if(!e.getValueIsAdjusting()) {
+//        			int index = panelList.getSelectionModel().getMinSelectionIndex();
+//        			Layer l = layerPanels.elementAt(index).getLayer();
+//        			
+//        			fireOnLockRequest(l, panel.getUsername());
+//        		}
         	}
         });
         
@@ -171,17 +172,18 @@ public class LayerSelectionPanel extends JPanel {
 
         });
         
-        deleteLayerButton = new JButton("Delete Layer");
-        deleteLayerButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		if(getActiveLayer().getId().equals(lockedLayer.getId())) {
-        			fireOnDelete(lockedLayer.getId());
-        		}
-        	}
-        });
+        //deleteLayerButton = new JButton("Delete Layer");
+        //deleteLayerButton.addActionListener(new ActionListener() {
+        	//public void actionPerformed(ActionEvent e) {
+//        		if(getActiveLayer().getId().equals(lockedLayer.getId())) {
+//        			fireOnDelete(lockedLayer.getId());
+//        		}
+        		//fireOnDelete(getActiveLayer().getId());
+//        	}
+//        });
 
         buttonPanel.add(newLayerButton);
-        buttonPanel.add(deleteLayerButton);
+        //buttonPanel.add(deleteLayerButton);
         
         add(buttonPanel, BorderLayout.SOUTH);
 
@@ -223,9 +225,9 @@ public class LayerSelectionPanel extends JPanel {
         return layerPanels.size();
     }
 
-    public Layer getLockedLayer() {
-    	return lockedLayer;
-    }
+//    public Layer getLockedLayer() {
+//    	return lockedLayer;
+//    }
     
     public void drawLayers(final Graphics g) {
         for (LayerPanel layerPanel : layerPanels) {

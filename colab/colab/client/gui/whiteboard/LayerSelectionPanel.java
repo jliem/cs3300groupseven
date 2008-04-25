@@ -87,7 +87,6 @@ public class LayerSelectionPanel extends JPanel {
            }
 
            public void onEdit(final LayerIdentifier id) {
-               // TODO # Is this why thumbs don't refresh?
            }
         });
 

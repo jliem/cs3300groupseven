@@ -32,6 +32,8 @@ public class LayerPanel extends JPanel {
 
     private static final Dimension PREVIEW_SIZE = new Dimension(50, 50);
 
+    JButton previewButton;
+
     public LayerPanel(final JList list,
             final Layer layer) {
 
@@ -54,7 +56,7 @@ public class LayerPanel extends JPanel {
         setLayout(new BorderLayout());
 
         preview = new ImageIcon();
-        JButton previewButton = new JButton(preview);
+        previewButton = new JButton(preview);
         previewButton.setMaximumSize(PREVIEW_SIZE);
         previewButton.setOpaque(false);
         JPanel previewPanel = new JPanel();
@@ -91,7 +93,8 @@ public class LayerPanel extends JPanel {
         if (image != null) {
             Image scaledImage = ImageUtils.scaleToFit(
                     image, PREVIEW_SIZE, this);
-            preview.setImage(scaledImage);
+            previewButton.setIcon(new ImageIcon(scaledImage));
+
         }
 
         list.repaint();

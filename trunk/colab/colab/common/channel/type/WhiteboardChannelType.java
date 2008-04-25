@@ -23,16 +23,21 @@ public class WhiteboardChannelType extends ChannelType {
     /** Serialization version number. */
     public static final long serialVersionUID = 1L;
 
+    /**
+     * Constructs a new WhiteboardChannelType.
+     */
     public WhiteboardChannelType() {
         super("Whiteboard");
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClientChannel createClientChannel(final ChannelName name)
             throws RemoteException {
         return new ClientWhiteboardChannel(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ClientChannelFrame createClientChannelFrame(
             final ColabClient client, final ClientChannel channel,
@@ -43,11 +48,13 @@ public class WhiteboardChannelType extends ChannelType {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServerChannel createServerChannel(final ChannelName name) {
         return new ServerWhiteboardChannel(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ServerChannel createServerChannel(final ChannelName name,
             final File file) throws IOException {
@@ -55,6 +62,5 @@ public class WhiteboardChannelType extends ChannelType {
         return new ServerWhiteboardChannel(name, file);
 
     }
-
 
 }

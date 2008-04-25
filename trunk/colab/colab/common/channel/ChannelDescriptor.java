@@ -43,7 +43,14 @@ public final class ChannelDescriptor implements Serializable,
 
     }
 
-    public ChannelDescriptor(final ChannelName channelName, final String type) {
+    /**
+     * Constructs a new ChannelDescriptor.
+     *
+     * @param channelName the name of the channel
+     * @param type the channel type
+     */
+    public ChannelDescriptor(
+            final ChannelName channelName, final String type) {
 
         this(channelName, ChannelType.get(type));
 

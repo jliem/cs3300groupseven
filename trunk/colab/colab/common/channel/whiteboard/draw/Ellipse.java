@@ -31,6 +31,15 @@ public class Ellipse extends Shape {
         this(new Point(position), size, Color.BLUE, 2, false);
     }
 
+    /**
+     * Constructs a new Ellipse.
+     *
+     * @param position where to position this ellipse on a layer
+     * @param size the size of the object
+     * @param filled whether the object is filled with color
+     * @param color the color of the ellipse's fill or border
+     * @param penThickness the thickness of the ellipse's border
+     */
     public Ellipse(final Point position,
             final Dimension size,
             final Color color,

@@ -155,6 +155,10 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
     public Whiteboard getWhiteboard() {
         return whiteboard;
     }
+    
+    public ClientWhiteboardChannel getChannel() {
+        return channel;
+    }
 
     public void addChannelPanelListener(
             final ChannelPanelListener listener) {

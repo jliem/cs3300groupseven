@@ -1,6 +1,7 @@
 package colab.common.channel.whiteboard.layer;
 
 import colab.common.channel.whiteboard.draw.Figure;
+import colab.common.naming.UserName;
 
 /**
  * An object which observes a Layer.
@@ -21,4 +22,5 @@ public interface LayerListener {
      */
     void onFigureAdded(Figure figure);
 
+    void onLockChange(UserName lockHolder);
 }

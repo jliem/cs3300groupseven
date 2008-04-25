@@ -36,7 +36,7 @@ public class LayerPanel extends JPanel {
 
     private ImageIcon preview, status;
 
-    private Image locked, active;
+    private Image locked, active, clear;
     
     private final JLabel label;
 
@@ -72,7 +72,7 @@ public class LayerPanel extends JPanel {
             }
             public void onLockChange(UserName lockHolder) {
                 if(lockHolder == null) {
-                    status.setImage(new BufferedImage(0, 0, BufferedImage.TYPE_INT_RGB));
+                    status.setImage(clear);
                 }
                 else if(lockHolder.equals(user)) {
                     status.setImage(active);
@@ -91,7 +91,7 @@ public class LayerPanel extends JPanel {
         }
         catch(IOException ex) {
             DebugManager.exception(ex);
-            locked = new BufferedImage(0, 0, BufferedImage.TYPE_INT_RGB);
+            locked = new BufferedImage(STATUS_SIZE.width, STATUS_SIZE.height, BufferedImage.TYPE_INT_RGB);
         }
         
         try {
@@ -99,7 +99,15 @@ public class LayerPanel extends JPanel {
         }
         catch(IOException ex) {
             DebugManager.exception(ex);
-            active = new BufferedImage(0, 0, BufferedImage.TYPE_INT_RGB);
+            active = new BufferedImage(STATUS_SIZE.width, STATUS_SIZE.height, BufferedImage.TYPE_INT_RGB);
+        }
+        
+        try {
+            clear = ImageIO.read(new File("whiteboard_layer_clear.png"));
+        }
+        catch(IOException ex) {
+            DebugManager.exception(ex);
+            clear = new BufferedImage(STATUS_SIZE.width, STATUS_SIZE.height, BufferedImage.TYPE_INT_RGB);
         }
         
         preview = new ImageIcon();

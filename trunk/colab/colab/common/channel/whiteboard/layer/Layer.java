@@ -93,6 +93,12 @@ public class Layer
         }
     }
 
+    protected void fireOnLock(final UserName name) {
+    	for (LayerListener listener : listeners) {
+    		listener.onLockChange(name);
+    	}
+    }
+    
     /**
      * Sets the lock holder.
      *
@@ -101,6 +107,7 @@ public class Layer
     public void lock(final UserName user) {
        if (isUnlocked()) {
            lockHolder = user;
+           fireOnLock(user);
        }
     }
 
@@ -109,6 +116,7 @@ public class Layer
      */
     public void unlock() {
         lockHolder = null;
+        fireOnLock(null);
     }
 
     /**

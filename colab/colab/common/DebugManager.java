@@ -109,6 +109,16 @@ public final class DebugManager {
     }
 
     /**
+     * Handle runtime exceptions.
+     * @param t the Throwable
+     */
+    public static void runtime(final Throwable t) {
+        if (exceptions) {
+            t.printStackTrace();
+        }
+    }
+
+    /**
      * Handles exceptions which occur while a window is closing.
      * @param t the Throwable
      */

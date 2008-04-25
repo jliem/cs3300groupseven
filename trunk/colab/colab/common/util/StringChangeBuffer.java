@@ -1,6 +1,10 @@
 package colab.common.util;
 
-
+/**
+ * A string change buffer is used to consolidate multiple small
+ * inserts/deletes on some text into larger inserts/deletes whenever
+ * possible (when the edits are contiguous).
+ */
 public class StringChangeBuffer {
 
     private enum State { INSERT, DELETE, NIL };
@@ -15,14 +19,28 @@ public class StringChangeBuffer {
 
     private StringChangeBufferListener listener;
 
+    /**
+     * Constructs a new StringChangeBuffer.
+     *
+     * @param listener the listener to use
+     */
     public StringChangeBuffer(final StringChangeBufferListener listener) {
         setListener(listener);
     }
 
+    /**
+     * @param listener the listener to use
+     */
     void setListener(final StringChangeBufferListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Adds some insertion to the buffer.
+     *
+     * @param offset the position of the insert
+     * @param str the inserted text
+     */
     public void insert(final int offset, final String str) {
 
         switch (state) {
@@ -47,6 +65,12 @@ public class StringChangeBuffer {
         }
     }
 
+    /**
+     * Adds some deletion to the buffer.
+     *
+     * @param offset the starting position of the delete
+     * @param length the number of deleted characters
+     */
     public void delete(final int offset, final int length) {
 
         switch (state) {
@@ -73,6 +97,9 @@ public class StringChangeBuffer {
 
     }
 
+    /**
+     * Fires any pending event, and resets the state.
+     */
     public void update() {
 
         switch (state) {

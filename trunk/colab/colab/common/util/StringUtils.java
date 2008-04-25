@@ -100,12 +100,25 @@ public final class StringUtils {
         return out.toString();
     }
 
+    /**
+     * Picks a random character out of a string.
+     *
+     * @param charSet the string of characters to choose from
+     * @return a randomly chosen character
+     */
     public static char random(final String charSet) {
         int index = RANDOM.nextInt(charSet.length());
         char character = charSet.charAt(index);
         return character;
     }
 
+    /**
+     * Generates a random string using the specified character set.
+     *
+     * @param count the desired string length
+     * @param charSet the characters to choose from
+     * @return a randomly generated string
+     */
     public static String random(final int count, final String charSet) {
 
         StringBuilder str = new StringBuilder();
@@ -118,6 +131,12 @@ public final class StringUtils {
 
     }
 
+    /**
+     * Generates a random alphanumeric string.
+     *
+     * @param count the desired string length
+     * @return a random alphanumeric string
+     */
     public static String randomAlphanumeric(final int count) {
 
         return random(count, ALPHANUMERIC);

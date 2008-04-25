@@ -20,7 +20,7 @@ public class Path extends Figure {
     private List<Point> points;
 
     /** Derived from points list. */
-    private Dimension size;
+    private java.awt.Rectangle bounds;
 
     /**
      * Constructs an empty Path.
@@ -65,12 +65,16 @@ public class Path extends Figure {
      */
     public void addPoint(final java.awt.Point point) {
 
-        if (point.x > size.width + getPosition().x) {
-            size.width = point.x;
-        }
-
-        if (point.y > size.height + getPosition().y) {
-            size.height = point.y;
+        if (points.size() == 1) {
+            Point a = new Point(
+                    Math.min(points.get(0).x, point.x),
+                    Math.min(points.get(0).y, point.y));
+            Dimension d = new Dimension(
+                    Math.abs(points.get(0).x - point.x),
+                    Math.abs(points.get(0).y - point.y));
+            bounds.setBounds(new java.awt.Rectangle(a, d));
+        } else {
+            bounds.add(point);
         }
 
         points.add(new Point(point));
@@ -99,7 +103,7 @@ public class Path extends Figure {
 
     private void clearPoints() {
         this.points = new ArrayList<Point>();
-        this.size = new Dimension(0, 0);
+        this.bounds = new java.awt.Rectangle(0, 0, 0, 0);
     }
 
     /**
@@ -143,7 +147,7 @@ public class Path extends Figure {
         for (XmlNode child : node.getChildren()) {
             Point point = new Point();
             point.fromXml(child);
-            this.points.add(point);
+            addPoint(point);
         }
 
     }
@@ -153,27 +157,24 @@ public class Path extends Figure {
     public void doDrawing(final Graphics g) {
 
         for (int i = 0; i < points.size() - 1; i++) {
-            Point one = points.get(i);
-            Point two = points.get(i+1);
-            java.awt.Rectangle clipBounds = g.getClipBounds();
-            if (clipBounds == null || containsLine(clipBounds, one, two)) {
-                g.drawLine(one.x, one.y, two.x, two.y);
-            }
+            java.awt.Point one = new java.awt.Point(points.get(i));
+            java.awt.Point two = new java.awt.Point(points.get(i+1));
+            // Should only draw the lines which fall into the clip rectangle
+            g.drawLine(one.x, one.y, two.x, two.y);
         }
-
-    }
-
-    private boolean containsLine(final java.awt.Rectangle rectangle,
-            final Point one, final Point two) {
-
-        return rectangle.contains(one) || rectangle.contains(two);
 
     }
 
     /** {@inheritDoc} */
     @Override
     public Dimension getSize() {
-        return size;
+        return bounds.getSize();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public java.awt.Rectangle getBounds() {
+        return bounds;
     }
 
 }

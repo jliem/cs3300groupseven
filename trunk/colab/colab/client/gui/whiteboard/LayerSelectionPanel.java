@@ -123,7 +123,8 @@ public class LayerSelectionPanel extends JPanel {
             Iterator<Layer> layers = whiteboard.iterator();
 
             while (layers.hasNext()) {
-                layerPanels.add(new LayerPanel(panelList, layers.next(), panel.getUsername()));
+                // Insert newer layers at the front
+                layerPanels.add(0, new LayerPanel(panelList, layers.next(), panel.getUsername()));
             }
         }
         panelList.setListData(layerPanels);

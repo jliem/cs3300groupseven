@@ -21,6 +21,7 @@ import colab.client.gui.revision.RevisionFrame;
 import colab.client.gui.revision.RevisionWhiteboardPanel;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelData;
+import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.exception.ConnectionDroppedException;
 import colab.common.naming.UserName;
 
@@ -68,7 +69,6 @@ public class WhiteboardChannelFrame extends ClientChannelFrame {
         try {
             List<ChannelData> data = client.getLastData(channel.getId(), -1);
             for (final ChannelData d : data) {
-                //if (!(d instanceof EditDocChannelData)) {
                 channel.add(d);
             }
         } catch (final ConnectionDroppedException cde) {

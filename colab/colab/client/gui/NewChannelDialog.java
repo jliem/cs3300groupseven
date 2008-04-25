@@ -137,7 +137,7 @@ public class NewChannelDialog extends JDialog {
                 name = new ChannelName(channelName.getText());
             } catch (InvalidChannelNameException ie) {
                 showErrorBox("Only the characters A-Z, numeric characters, "
-                        + "and underscores are allowed for"
+                        + "and underscores are allowed for "
                         + "channel names", "Invalid character");
                 return;
             }

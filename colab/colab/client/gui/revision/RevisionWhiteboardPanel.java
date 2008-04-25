@@ -14,6 +14,7 @@ import colab.client.ClientChannel;
 import colab.common.DebugManager;
 import colab.common.channel.ChannelDataIdentifier;
 import colab.common.channel.ChannelDataSet;
+import colab.common.channel.whiteboard.DeleteLayer;
 import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.Whiteboard;
@@ -82,8 +83,8 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
             if (data != null && data.getCreator() != null
                     && data.getTimestamp() != null) {
 
-                // Only add edits
-                if (data instanceof EditLayer) {
+                // Only add edits and deletes
+                if (data instanceof EditLayer || data instanceof DeleteLayer) {
                     list.add(new Revision(data));
                 }
             }

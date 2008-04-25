@@ -14,12 +14,12 @@ public final class DebugManager {
      * normal or high priority. When possible, use the
      * priority flags instead of switching this one off.
      */
-    private static boolean exceptions = true;
+    private static boolean exceptions = false;
 
     /**
      * Flag for printing debug messages.
      */
-    private static final boolean PRINT_DEBUG_MESSAGES = true;
+    private static final boolean PRINT_DEBUG_MESSAGES = false;
 
     /**
      * Flag for printing any exception stack trace (it will probably

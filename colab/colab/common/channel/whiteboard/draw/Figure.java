@@ -92,7 +92,7 @@ public abstract class Figure implements Drawable,
     /** {@inheritDoc} */
     public final void draw(final Graphics g) {
 
-        DebugManager.debug("Drawing a " + xmlNodeName() + "...");
+        //DebugManager.debug("Drawing a " + xmlNodeName() + "...");
 
         ((Graphics2D) g).setPaint(color);
         ((Graphics2D) g).setStroke(new BasicStroke(penThickness));

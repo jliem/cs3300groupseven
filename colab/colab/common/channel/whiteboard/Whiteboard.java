@@ -68,7 +68,7 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
                     }
                 }
                 if (!previousLayerFound) {
-                    throw new NotApplicableException();
+                    throw new NotApplicableException("No previous layer with id=" + previous);
                 }
             }
             insert(offset, layer);

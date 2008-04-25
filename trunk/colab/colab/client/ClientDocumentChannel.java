@@ -48,6 +48,7 @@ public final class ClientDocumentChannel extends ClientChannel {
     /** {@inheritDoc} */
     public void add(final ChannelData data) throws RemoteException {
 
+        DebugManager.debug("Channel got " + data);
         revisions.add((DocumentChannelData) data);
         newRevisions++;
 
@@ -56,6 +57,8 @@ public final class ClientDocumentChannel extends ClientChannel {
         } catch (NotApplicableException e) {
             DebugManager.shouldNotHappen(e);
         }
+
+        DebugManager.debug("Channel currently has " + revisions.size() + " revisions");
 
         ActionEvent event = new ActionEvent(
                 this, ActionEvent.ACTION_FIRST, "Message Added");
@@ -77,6 +80,7 @@ public final class ClientDocumentChannel extends ClientChannel {
 
     /** {@inheritDoc} */
     public ChannelDataSet<DocumentChannelData> getChannelData() {
+        DebugManager.debug("Returning " + revisions.size() + " revisions");
         return revisions;
     }
 

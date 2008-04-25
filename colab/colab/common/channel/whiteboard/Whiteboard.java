@@ -75,7 +75,7 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
         }
     }
 
-    private void insert(final int offset, final Layer layer) {
+    public void insert(final int offset, final Layer layer) {
 
         if (layer == null) {
             throw new IllegalArgumentException("Can't insert a null layer");

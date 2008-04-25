@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -18,10 +19,15 @@ import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
+import colab.client.ClientWhiteboardChannel;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardListener;
+import colab.common.channel.whiteboard.draw.Ellipse;
+import colab.common.channel.whiteboard.draw.Point;
 import colab.common.channel.whiteboard.layer.Layer;
 import colab.common.channel.whiteboard.layer.LayerIdentifier;
+import colab.common.naming.ChannelName;
+import colab.common.naming.UserName;
 
 public class LayerSelectionPanel extends JPanel {
 
@@ -157,53 +163,54 @@ public class LayerSelectionPanel extends JPanel {
         }
     }
 
-//    public static void main(final String[] args) {
-//
-//        Layer layer = new Layer(new LayerIdentifier(45));
-//        layer.addFigure(new Ellipse(
-//                new Point(0, 0),
-//                new Dimension(100, 100),
-//                Color.BLACK,
-//                5,
-//                false));
-//        layer.setLabel("Layer title");
-//
-//        Layer layer2 = new Layer(new LayerIdentifier(4245));
-//        layer2.addFigure(new Ellipse(
-//                new Point(-50, -50),
-//                new Dimension(100, 100),
-//                Color.GREEN,
-//                5,
-//                false));
-//        layer2.addFigure(new Ellipse(
-//                new Point(50, 50),
-//                new Dimension(100, 100),
-//                Color.GREEN,
-//                5,
-//                false));
-//        layer2.setLabel("ewgerge");
-//
-//        Whiteboard whiteboard = new Whiteboard();
-//
-//        LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
-//
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        //whiteboard.
-//
-//        JFrame frame = new JFrame();
-//        frame.setPreferredSize(new Dimension(400, 600));
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setContentPane(panel);
-//        frame.pack();
-//        frame.setVisible(true);
-//
-//    }
+    public static void main(final String[] args) throws Exception{
+        Layer layer = new Layer(new LayerIdentifier(45));
+        layer.addFigure(new Ellipse(
+                new Point(0, 0),
+                new Dimension(100, 100),
+                Color.BLACK,
+                5,
+                false));
+        layer.setLabel("Layer title");
+
+        Layer layer2 = new Layer(new LayerIdentifier(4245));
+        layer2.addFigure(new Ellipse(
+                new Point(-50, -50),
+                new Dimension(100, 100),
+                Color.GREEN,
+                5,
+                false));
+        layer2.addFigure(new Ellipse(
+                new Point(50, 50),
+                new Dimension(100, 100),
+                Color.GREEN,
+                5,
+                false));
+        layer2.setLabel("ewgerge");
+
+        Whiteboard whiteboard = new Whiteboard();
+
+        LayerSelectionPanel panel = new LayerSelectionPanel(new WhiteboardChannelPanel(new UserName("Matt"), new ClientWhiteboardChannel(new ChannelName("Jolly"))), whiteboard);
+
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        layer2.lock(new UserName("Steve"));
+        layer.lock(new UserName("Matt"));
+        layer.unlock();
+        
+        JFrame frame = new JFrame();
+        frame.setPreferredSize(new Dimension(400, 600));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.pack();
+        frame.setVisible(true);
+
+    }
 
 }

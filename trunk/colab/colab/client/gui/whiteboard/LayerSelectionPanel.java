@@ -32,6 +32,8 @@ public class LayerSelectionPanel extends JPanel {
 
     private final Whiteboard whiteboard;
 
+    private final WhiteboardChannelPanel panel;
+    
     private final Vector<LayerPanel> layerPanels;
 
     private final JButton newLayerButton;
@@ -43,6 +45,8 @@ public class LayerSelectionPanel extends JPanel {
 
         add(new JLabel("Layers"), BorderLayout.NORTH);
 
+        this.panel = panel;
+        
         layerPanels = new Vector<LayerPanel>();
 
         panelList = new JList(layerPanels);
@@ -62,7 +66,7 @@ public class LayerSelectionPanel extends JPanel {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
         for (Layer layer : whiteboard) {
-            LayerPanel layerPanel = new LayerPanel(panelList, layer);
+            LayerPanel layerPanel = new LayerPanel(panelList, layer, panel.getUsername());
             layerPanels.add(layerPanel);
         }
 
@@ -76,7 +80,7 @@ public class LayerSelectionPanel extends JPanel {
            public void onInsert(final int offset, final Layer layer) {
 
                layerPanels.insertElementAt(
-                       new LayerPanel(panelList, layer),
+                       new LayerPanel(panelList, layer, panel.getUsername()),
                        layerPanels.size() - offset);
                panelList.setListData(layerPanels);
 
@@ -119,7 +123,7 @@ public class LayerSelectionPanel extends JPanel {
             Iterator<Layer> layers = whiteboard.iterator();
 
             while (layers.hasNext()) {
-                layerPanels.add(new LayerPanel(panelList, layers.next()));
+                layerPanels.add(new LayerPanel(panelList, layers.next(), panel.getUsername()));
             }
         }
         panelList.setListData(layerPanels);
@@ -152,52 +156,53 @@ public class LayerSelectionPanel extends JPanel {
         }
     }
 
-//    public static void main(final String[] args) {
-//
-//        Layer layer = new Layer(new LayerIdentifier(45));
-//        layer.addFigure(new Ellipse(
-//                new Point(0, 0),
-//                new Dimension(100, 100),
-//                Color.BLACK,
-//                5,
-//                false));
-//        layer.setLabel("Layer title");
-//
-//        Layer layer2 = new Layer(new LayerIdentifier(4245));
-//        layer2.addFigure(new Ellipse(
-//                new Point(-50, -50),
-//                new Dimension(100, 100),
-//                Color.GREEN,
-//                5,
-//                false));
-//        layer2.addFigure(new Ellipse(
-//                new Point(50, 50),
-//                new Dimension(100, 100),
-//                Color.GREEN,
-//                5,
-//                false));
-//        layer2.setLabel("ewgerge");
-//
-//        Whiteboard whiteboard = new Whiteboard();
-//
-//        LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
-//
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//        whiteboard.insert(0, layer);
-//        whiteboard.insert(0, layer2);
-//
-//        JFrame frame = new JFrame();
-//        frame.setPreferredSize(new Dimension(400, 600));
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setContentPane(panel);
-//        frame.pack();
-//        frame.setVisible(true);
-//
-//    }
+    public static void main(final String[] args) {
+
+        Layer layer = new Layer(new LayerIdentifier(45));
+        layer.addFigure(new Ellipse(
+                new Point(0, 0),
+                new Dimension(100, 100),
+                Color.BLACK,
+                5,
+                false));
+        layer.setLabel("Layer title");
+
+        Layer layer2 = new Layer(new LayerIdentifier(4245));
+        layer2.addFigure(new Ellipse(
+                new Point(-50, -50),
+                new Dimension(100, 100),
+                Color.GREEN,
+                5,
+                false));
+        layer2.addFigure(new Ellipse(
+                new Point(50, 50),
+                new Dimension(100, 100),
+                Color.GREEN,
+                5,
+                false));
+        layer2.setLabel("ewgerge");
+
+        Whiteboard whiteboard = new Whiteboard();
+
+        LayerSelectionPanel panel = new LayerSelectionPanel(whiteboard);
+
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        whiteboard.insert(0, layer);
+        whiteboard.insert(0, layer2);
+        //whiteboard.
+
+        JFrame frame = new JFrame();
+        frame.setPreferredSize(new Dimension(400, 600));
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.pack();
+        frame.setVisible(true);
+
+    }
 
 }

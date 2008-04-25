@@ -223,8 +223,8 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
 
     public BufferedImage exportImage() {
         java.awt.Rectangle bounds = null;
-        for(Layer layer : layers) {
-            if(bounds == null) {
+        for (Layer layer : layers) {
+            if (bounds == null) {
                 java.awt.Rectangle orig = layer.getBounds();
                 bounds = new java.awt.Rectangle(
                         orig.x, orig.y, orig.width, orig.height);
@@ -241,9 +241,13 @@ public class Whiteboard implements Drawable, Iterable<Layer> {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, bounds.width, bounds.height);
 
-        for(Layer layer : layers) {
+        graphics.translate(-bounds.x, -bounds.y);
+
+        for (Layer layer : layers) {
             layer.draw(graphics);
         }
+
+        graphics.translate(bounds.x, bounds.y);
 
         return image;
     }

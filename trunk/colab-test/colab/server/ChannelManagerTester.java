@@ -7,6 +7,20 @@ import colab.server.channel.ChannelManager;
  * Test cases for {@link ChannelManager}.
  */
 public final class ChannelManagerTester extends TestCase {
+
+    /**
+     * Tests creation of channel manager.
+     *
+     * @throws Exception
+     */
+    public void testCreateChannelManager() throws Exception {
+
+        ColabServer server = new MockColabServer();
+
+        ChannelManager cm = new ChannelManager(server);
+
+        assertNotNull(cm);
+    }
 /*
     private ChannelManager cm;
 

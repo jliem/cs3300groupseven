@@ -4,9 +4,11 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 
+import colab.common.DebugManager;
 import colab.common.channel.whiteboard.Drawable;
 import colab.common.channel.whiteboard.draw.Figure;
 import colab.common.identity.Identifiable;
@@ -94,11 +96,11 @@ public class Layer
     }
 
     protected void fireOnLock(final UserName name) {
-    	for (LayerListener listener : listeners) {
-    		listener.onLockChange(name);
-    	}
+        for (LayerListener listener : listeners) {
+            listener.onLockChange(name);
+        }
     }
-    
+
     /**
      * Sets the lock holder.
      *
@@ -213,8 +215,12 @@ public class Layer
      * @param graphIn a graphics object to draw on
      */
     public void draw(final Graphics graphIn) {
-        for (Figure figure : figures) {
-            figure.draw(graphIn);
+        try {
+            for (Figure figure : figures) {
+                figure.draw(graphIn);
+            }
+        } catch (ConcurrentModificationException cme) {
+            DebugManager.runtime(cme);
         }
     }
 

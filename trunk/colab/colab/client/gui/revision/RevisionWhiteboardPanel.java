@@ -18,6 +18,7 @@ import colab.common.channel.whiteboard.EditLayer;
 import colab.common.channel.whiteboard.InsertLayer;
 import colab.common.channel.whiteboard.Whiteboard;
 import colab.common.channel.whiteboard.WhiteboardChannelData;
+import colab.common.channel.whiteboard.layer.LayerIdentifier;
 
 public class RevisionWhiteboardPanel extends RevisionPanel {
 
@@ -100,8 +101,15 @@ public class RevisionWhiteboardPanel extends RevisionPanel {
 
             // If it's an insert, copy the layer first and clear it
             if (data instanceof InsertLayer) {
-                data = ((InsertLayer)data).copy();
-                ((InsertLayer)data).getLayer().clear();
+                InsertLayer insert = ((InsertLayer)data);
+
+                // Create a copy of the layer, then clear it
+                insert = insert.copy();
+                insert.getLayer().clear();
+
+                insert.getLayer().setId(new LayerIdentifier(insert.getId()));
+
+                data = insert;
             }
 
             // TODO Bug 86 - Deleting layers

@@ -103,6 +103,13 @@ public class InsertLayer extends WhiteboardChannelData {
         // Set channel id
         copy.setId(this.getId());
 
+        // Set previous
+        if (previous != null) {
+            copy.previous = new LayerIdentifier(previous);
+        } else {
+            copy.previous = null;
+        }
+
         return copy;
     }
 

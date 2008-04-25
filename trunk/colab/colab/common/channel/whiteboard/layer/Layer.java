@@ -50,7 +50,7 @@ public class Layer
         this.figures = new LinkedList<Figure>();
         this.contentBounds = new java.awt.Rectangle(0, 0, 0, 0);
 
-        if (id != null) {
+        if (id != null && id.getValue() != null) {
             this.label = "Layer " + id.getValue();
         } else {
             this.label = "Layer";

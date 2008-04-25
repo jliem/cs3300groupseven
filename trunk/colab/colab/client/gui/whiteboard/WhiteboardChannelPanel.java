@@ -51,7 +51,7 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 
     private final List<ChannelPanelListener> channelListeners;
 
-    private static final int UNLOCK_DELAY = 15; /*delay to automatically yield lock, in seconds*/
+//    private static final int UNLOCK_DELAY = 15; /*delay to automatically yield lock, in seconds*/
     
     public WhiteboardChannelPanel(final UserName name,
             final ClientWhiteboardChannel channel) {
@@ -92,8 +92,8 @@ public class WhiteboardChannelPanel extends ClientChannelPanel {
 //        		fireOnMessageSent(lockReq);
         	}
         	public void onDelete(LayerIdentifier id) {
-//        		DeleteLayer delete = new DeleteLayer(name, new Date(), id);
-//        		fireOnMessageSent(delete);
+        		DeleteLayer delete = new DeleteLayer(name, new Date(), id);
+        		fireOnMessageSent(delete);
         	}
         });
 

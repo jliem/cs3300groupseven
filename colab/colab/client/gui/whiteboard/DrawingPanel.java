@@ -3,6 +3,8 @@ package colab.client.gui.whiteboard;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -26,6 +28,15 @@ public class DrawingPanel extends JPanel {
         this.parentPanel = parentPanel;
 
         setBackground(Color.WHITE);
+        
+        addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseReleased(MouseEvent e) {
+        		super.mouseReleased(e);
+        		
+        		parentPanel.retainLock();
+        	}
+        });
 
     }
 
